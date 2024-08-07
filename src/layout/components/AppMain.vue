@@ -36,6 +36,8 @@ export default {
   overflow: hidden;
   background-color: #efefef;
   margin-left: 128px;
+  padding-left: 32px;
+  padding-right: 6px;
 }
 
 </style>
