@@ -1,6 +1,44 @@
 <template>
   <div class="flight-table">
     <common-table :tableList="mockTableList" :columns="columns">
+      <!-- 自定义表头 -->
+      <template #taskName-header>
+        <span>任务名称/类型</span>
+        <el-dropdown>
+          <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>黄金糕</el-dropdown-item>
+            <el-dropdown-item>狮子头</el-dropdown-item>
+            <el-dropdown-item>螺蛳粉</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </template>
+      <template #airPort-header>
+        <span>机场</span>
+        <el-dropdown>
+          <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>黄金糕</el-dropdown-item>
+            <el-dropdown-item>狮子头</el-dropdown-item>
+            <el-dropdown-item>螺蛳粉</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </template>
+      <template #status-header>
+        <span>本轮状态</span>
+        <el-dropdown>
+          <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>黄金糕</el-dropdown-item>
+            <el-dropdown-item>狮子头</el-dropdown-item>
+            <el-dropdown-item>螺蛳粉</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </template>
+      <!-- 内容插槽 -->
       <template #taskName="{ row }">
         <table-name-info :row="row"></table-name-info>
       </template>
@@ -23,8 +61,6 @@
               <el-dropdown-item>黄金糕</el-dropdown-item>
               <el-dropdown-item>狮子头</el-dropdown-item>
               <el-dropdown-item>螺蛳粉</el-dropdown-item>
-              <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-              <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <el-button
@@ -49,7 +85,7 @@
 
 <script>
 import CommonTable from "./CommonTable.vue";
-import mockList from "@/utils/mock.js";
+import { mockList } from "@/utils/mock.js";
 import TableNameInfo from "./Template/TableNameInfo.vue";
 export default {
   name: "FlightTable",
@@ -116,12 +152,20 @@ export default {
   },
   components: {
     CommonTable,
-    TableNameInfo
+    TableNameInfo,
   },
 };
 </script>
 
 <style lang="scss">
 .flight-table {
+  .filter-icon {
+    margin-left: 5px;
+    vertical-align: text-top;
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.3);
+    }
+  }
 }
 </style>

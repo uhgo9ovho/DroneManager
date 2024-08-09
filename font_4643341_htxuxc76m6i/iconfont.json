@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "77156",
+      "name": "微信",
+      "font_class": "weixin",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "6684308",
+      "name": "微信",
+      "font_class": "weixin1",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "35744970",
+      "name": "浙政钉-copy",
+      "font_class": "zhezhengding",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "37079954",
+      "name": "浙政钉",
+      "font_class": "zhezhengding1",
+      "unicode": "ea22",
+      "unicode_decimal": 59938
+    },
+    {
       "icon_id": "1126",
       "name": "文件夹",
       "font_class": "wenjianjia",

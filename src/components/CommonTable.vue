@@ -10,7 +10,7 @@
           :width="item.width"
           :min-width="item.minWidth"
           :show-overflow-tooltip="item.showOverflowTooltip"
-        >
+          >
         <!-- 表头 slot -->
         <template
               slot="header"

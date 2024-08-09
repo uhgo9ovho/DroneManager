@@ -20,7 +20,7 @@ import { getDicts } from "@/api/system/dict/data";
 import { getConfigKey } from "@/api/system/config";
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree } from "@/utils/ruoyi";
 //引入自定义icon
-import '../font_4643341_ly8newqfq1b/iconfont.css'
+import '../font_4643341_htxuxc76m6i/iconfont.css'
 
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts
