@@ -11,6 +11,23 @@
           :min-width="item.minWidth"
           :show-overflow-tooltip="item.showOverflowTooltip"
         >
+        <!-- 表头 slot -->
+        <template
+              slot="header"
+              slot-scope="{ row }"
+            >
+              <slot
+                :name="`${item.prop || item.key}-header`"
+                :row="row"
+              >
+                <div
+                  v-if="item.renderHeader"
+                  style="padding: 0;line-height: 23px"
+                  v-html="item.renderHeader()"
+                />
+                <template v-else>{{ item.label || item.prop }}</template>
+              </slot>
+            </template>
           <template v-if="item.slot" v-slot:default="scope">
             <slot
               :name="item.prop"
@@ -27,7 +44,21 @@
       </el-table>
     </div>
     <!-- 分页 -->
-    <div class="pagination">分页</div>
+    <div class="pagination">
+      <el-pagination
+        class="xm-table-pagination"
+        background
+        :total="+total"
+        :layout="pagerLayout"
+        :page-size="pageSize"
+        :page-sizes="pageSizes"
+        :current-page="curPage"
+        @size-change="handleSizeChange"
+        @current-change="handlePageChange"
+        @prev-click="handlePageChange"
+        @next-change="handlePageChange"
+      />
+    </div>
   </div>
 </template>
 
@@ -42,6 +73,61 @@ export default {
     columns: {
       type: Array,
       default: () => [],
+    },
+    total: {
+      type: [Number, String], //正常情况下应该是Number，但是不排除有字符串的情况（防止出现警告）
+      default: 0,
+    },
+    //每页条数
+    pageSize: {
+      type: Number,
+      default: 10,
+    },
+    //页码
+    pageNum: {
+      type: Number,
+      default: 1,
+    },
+    //分页布局
+    pagerLayout: {
+      type: String,
+      default: "total, sizes, prev, pager, next, jumper",
+    },
+    // 分页选择器的选项设置
+    pageSizes: {
+      type: Array,
+      default() {
+        return [20, 30, 50, 80, 100];
+      },
+    },
+  },
+  data() {
+    return {
+      curPage: 1, //当前页
+    };
+  },
+  methods: {
+    /**
+     * 改变页数
+     */
+    handlePageChange(page) {
+      const { pageSize, sortBy, sortOrder } = this;
+      this.$emit("pageChange", {
+        pageNum: page,
+        pageSize,
+        sorter: { prop: sortBy, order: sortOrder },
+      });
+    },
+    /**
+     * 改变每页显示的条数
+     */
+    handleSizeChange(size) {
+      const { sortBy, sortOrder } = this;
+      this.$emit("sizeChange", {
+        pageNum: 1,
+        pageSize: size,
+        sorter: { prop: sortBy, order: sortOrder },
+      });
     },
   },
 };
@@ -59,7 +145,7 @@ export default {
     -ms-flex-align: center;
     align-items: center;
     padding: 0 !important;
-    text-align: center;
+    justify-content: right;
   }
 }
 </style>

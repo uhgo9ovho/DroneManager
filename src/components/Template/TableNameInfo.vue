@@ -106,7 +106,7 @@ export default {
     .right-bottom {
       font-size: 13px;
       display: flex;
-      justify-content: start;
+      justify-content: flex-start;
       align-items: center;
     }
   }
