@@ -16,7 +16,7 @@ function activePath(path) {
 
   routeList.forEach((element, idx) => {
     element.active = false;
-    if (element.path == path) {
+    if (element.path == path || (element.path == 'flight' && path == 'openMap')) {
       element.active = true;
     }
   });

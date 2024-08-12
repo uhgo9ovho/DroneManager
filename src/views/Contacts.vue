@@ -4,7 +4,6 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="部门" name="department"> </el-tab-pane>
         <el-tab-pane label="成员" name="member"></el-tab-pane>
-        <el-tab-pane label="角色" name="role"></el-tab-pane>
       </el-tabs>
       <div class="operate-box">
         <div
@@ -127,7 +126,8 @@ export default {
 <style lang="scss">
 .contacts {
   margin-top: 20px;
-  padding-right: 20px;
+  padding-right: 26px;
+  padding-left: 32px;
   .top {
     width: 100%;
     display: flex;

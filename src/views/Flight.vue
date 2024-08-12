@@ -22,7 +22,7 @@
           ></el-input>
         </div>
         <div class="create-task-btn" v-if="currentTab == 'flightTask'">
-          <el-button round icon="el-icon-plus">新建任务</el-button>
+          <el-button round icon="el-icon-plus" @click="addTask">新建任务</el-button>
         </div>
       </div>
     </div>
@@ -96,6 +96,9 @@ export default {
     handleClick(tab) {
       this.currentTab = tab.name;
     },
+    addTask() {
+      this.$router.push('/openMap')
+    }
   },
 };
 </script>
@@ -103,7 +106,8 @@ export default {
 <style lang="scss">
 .flight {
   margin-top: 20px;
-  padding-right: 20px;
+  padding-right: 26px;
+  padding-left: 32px;
   .top {
     width: 100%;
     display: flex;
