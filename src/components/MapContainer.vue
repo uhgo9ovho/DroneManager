@@ -42,13 +42,13 @@ export default {
           });
           map.add(traffic);
           AMap.plugin(
-            ["AMap.Scale", "AMap.MapType", "AMap.Geolocation"],
+            ["AMap.Scale", "AMap.Geolocation"],
             function () {
               let toolbar = new AMap.Scale();
-              let MapType = new AMap.MapType();
+              // let MapType = new AMap.MapType();
               let Geolocation = new AMap.Geolocation();
               map.addControl(toolbar);
-              map.addControl(MapType);
+              // map.addControl(MapType);
               map.addControl(Geolocation);
             }
           );
