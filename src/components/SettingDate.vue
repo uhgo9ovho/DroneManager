@@ -25,22 +25,66 @@
             </el-option>
           </el-select>
           <span
-            >执行<i>{{ ruleForm.checkedTimes.length }}</i
+            >执行<i>{{ frequencyLength }}</i
             >次</span
           >
         </div>
-        <el-checkbox-group v-model="ruleForm.checkedTimes" size="small" class="time-group">
-          <el-checkbox v-for="item in times" :label="item" :key="item" border>{{
-            item
-          }}</el-checkbox>
-        </el-checkbox-group>
+        <div class="week" v-if="ruleForm.frequency == '周'">
+          <div
+            class="week-item"
+            :class="{ 'is-active': item.checked }"
+            v-for="item in characters"
+            :key="item.value"
+            @click="checkedItem(item)"
+          >
+            {{ item.label }}
+          </div>
+        </div>
+        <div class="moon" v-if="ruleForm.frequency == '月'">
+          <div
+            class="moon-item"
+            :class="{ 'is-active': item.checked }"
+            v-for="item in moonList"
+            :key="item.value"
+            @click="checkedMoonItem(item)"
+          >
+            {{ item.label }}
+          </div>
+        </div>
+      </el-form-item>
+      <el-form-item
+        label="巡检时段"
+        prop="inspection"
+        v-if="ruleForm.frequency == '天'"
+      >
+        <el-select
+          v-model="ruleForm.inspection"
+          placeholder="请选择"
+          class="inspection-select"
+        >
+          <el-option
+            v-for="item in inspectionTimes"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="开始日期" prop="startDate">
-        <el-date-picker v-model="ruleForm.startDate" type="date" placeholder="选择开始日期">
+        <el-date-picker
+          v-model="ruleForm.startDate"
+          type="date"
+          placeholder="选择开始日期"
+        >
         </el-date-picker>
       </el-form-item>
       <el-form-item label="结束日期" prop="endDate">
-        <el-date-picker v-model="ruleForm.endDate" type="date" placeholder="选择结束日期">
+        <el-date-picker
+          v-model="ruleForm.endDate"
+          type="date"
+          placeholder="选择结束日期"
+        >
         </el-date-picker>
       </el-form-item>
     </el-form>
@@ -53,10 +97,50 @@ export default {
   name: "SettingDate",
   data() {
     return {
+      characters: [
+        {
+          value: "一",
+          label: "一",
+          checked: false,
+        },
+        {
+          value: "二",
+          label: "二",
+          checked: false,
+        },
+        {
+          value: "三",
+          label: "三",
+          checked: false,
+        },
+        {
+          value: "四",
+          label: "四",
+          checked: false,
+        },
+        {
+          value: "五",
+          label: "五",
+          checked: false,
+        },
+        {
+          value: "六",
+          label: "六",
+          checked: false,
+        },
+        {
+          value: "日",
+          label: "日",
+          checked: false,
+        },
+      ],
       ruleForm: {
         frequency: "天",
-        checkedTimes: [],
-        startDate: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+        inspection: "",
+        checkedCharacters: [],
+        startDate: `${now.getFullYear()}-${
+          now.getMonth() + 1
+        }-${now.getDate()}`,
         endDate: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
       },
       options: [
@@ -74,6 +158,25 @@ export default {
         },
       ],
       rules: {},
+      inspectionTimes: [
+        {
+          value: "全天",
+          label: "全天",
+        },
+        {
+          value: "9:00-12:00",
+          label: "9:00-12:00",
+        },
+        {
+          value: "12:00-17:00",
+          label: "12:00-17:00",
+        },
+        {
+          value: "17:00-21:00",
+          label: "17:00-21:00",
+        },
+      ],
+      moonList: [],
     };
   },
   computed: {
@@ -103,6 +206,39 @@ export default {
         startHour += 1;
       }
       return times;
+    },
+    frequencyLength() {
+      switch (this.ruleForm.frequency) {
+        case "天":
+          return 1;
+        case "周":
+          let charactersLength = this.characters.filter(item => item.checked).length;
+          return charactersLength;
+        case "月":
+          let moonListLength = this.moonList.filter(item => item.checked).length;
+          return moonListLength;
+      }
+    },
+  },
+  created() {
+    this.getMoons();
+  },
+  methods: {
+    getMoons() {
+      this.moonList = [];
+      for (let i = 1; i <= 31; i++) {
+        this.moonList.push({
+          value: i,
+          label: i,
+          checked: false,
+        });
+      }
+    },
+    checkedItem(item) {
+      item.checked = !item.checked;
+    },
+    checkedMoonItem(item) {
+      item.checked = !item.checked;
     },
   },
 };
@@ -150,12 +286,83 @@ export default {
       color: rgba(2, 113, 227, 1);
     }
   }
-  .el-checkbox-group {
-    margin-top: 18px;
+  .characters-group {
     .el-checkbox {
-      margin-right: 20px;
+      margin-right: 27px;
       margin-left: 0 !important;
       margin-bottom: 10px;
+    }
+  }
+  .el-checkbox-group {
+    margin-top: 18px;
+  }
+  .inspection-select {
+    .el-input {
+      width: 220px;
+      .el-input__inner {
+        width: 220px;
+      }
+    }
+  }
+  .week {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    .week-item {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid #d3d3d3;
+      font-family: Alibaba PuHuiTi 3, Alibaba PuHuiTi 30;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 24px;
+      text-align: center;
+      font-style: normal;
+      text-transform: none;
+      color: #000;
+      cursor: pointer;
+    }
+    .is-active {
+      width: 24px;
+      height: 24px;
+      background: #0271e3;
+      border-radius: 50%;
+      color: #fff;
+    }
+  }
+  .moon {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 24px;
+    .moon-item {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid #d3d3d3;
+      font-family: Alibaba PuHuiTi 3, Alibaba PuHuiTi 30;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 24px;
+      text-align: center;
+      font-style: normal;
+      text-transform: none;
+      color: #000;
+      cursor: pointer;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    .is-active {
+      width: 24px;
+      height: 24px;
+      background: #0271e3;
+      border-radius: 50%;
+      color: #fff;
     }
   }
 }

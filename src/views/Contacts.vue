@@ -21,7 +21,7 @@
           ></el-input>
         </div>
         <div class="create-task-btn" v-if="currentTab == 'department'">
-          <el-button round icon="el-icon-plus">添加部门</el-button>
+          <el-button round icon="el-icon-plus" @click="addDepartment">添加部门</el-button>
         </div>
         <div class="btn-group" v-if="currentTab == 'member'">
           <el-dropdown style="margin-right: 15px;">
@@ -45,7 +45,7 @@
     </div>
     <div class="task-list-grid" v-if="currentTab == 'department'">
       <!-- <filght-table></filght-table> -->
-       <contacts-table></contacts-table>
+       <contacts-table ref="contactsRef"></contacts-table>
     </div>
     <!-- 飞行记录 -->
     <div class="flight-log" v-if="currentTab == 'member'">
@@ -119,6 +119,10 @@ export default {
     handleClick(tab) {
       this.currentTab = tab.name;
     },
+    addDepartment() {
+      this.$refs.contactsRef.title = "新建部门";
+      this.$refs.contactsRef.drawer = true;
+    }
   },
 };
 </script>
