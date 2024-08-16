@@ -37,7 +37,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="飞行排期" prop="date">
-          <el-button class="date-btn">排期设置</el-button>
+          <el-button class="date-btn" @click="openSettingDate">排期设置</el-button>
           <div class="date-box">
             <div class="date">{{ ruleForm.date }}</div>
             <el-button type="text">修改</el-button>
@@ -81,6 +81,11 @@ export default {
       },
     };
   },
+  methods: {
+    openSettingDate() {
+      this.$emit('openSettingDate')
+    }
+  }
 };
 </script>
 

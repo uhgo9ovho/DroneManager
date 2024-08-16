@@ -1,23 +1,23 @@
 <template>
   <div class="contacts-table">
-    <common-table :columns="columns" :tableList="departmentList">
-      <template #dept_name="{ row }">
+    <common-table :columns="columns" :tableList="list" :total="total" @pageChange="pageChange" @sizeChange="sizeChange" :pageSize="page.pageSize" :pageNum="page.pageNum">
+      <template #taskName="{ row }">
         <div class="dept_name_box">
-          <div class="dept_first_letter">{{ row.dept_name.slice(0, 2) }}</div>
+          <div class="dept_first_letter">{{ row.taskName.slice(0, 2) }}</div>
           <div class="dept_full_name">
-            {{ row.dept_name }}
-            <span class="org_tips" v-if="row.dept_name == '西安集贤工业园区'"
+            {{ row.taskName }}
+            <span class="org_tips" v-if="row.isOrg"
               >组织</span
             >
           </div>
         </div>
       </template>
       <template #operate="{ row }">
-        <div v-if="row.dept_name == '西安集贤工业园区'">
+        <div v-if="row.isOrg">
           <el-button type="text">个性化</el-button>
         </div>
         <div class="edit-btns" v-else>
-          <el-button type="text" @click="openEditDialog">编辑</el-button>
+          <el-button type="text" @click="openEditDialog(row)">编辑</el-button>
           <el-button type="text" @click="openMigrateDialog">迁移</el-button>
           <el-button type="text">权限</el-button>
           <el-button type="text" style="color: red">删除</el-button>
@@ -30,11 +30,13 @@
         @handleClose="handleClose"
         :drawer="drawer"
         :title="title"
+        :itemRow="itemRow"
+        @updateList="updateList"
       ></add-and-edit-department>
     </div>
     <!-- 迁移成员dialog组件 -->
      <div v-if="mirgrateVisible">
-      <MigrateDialog :mirgrateVisible="mirgrateVisible" @mirgrateHandle="mirgrateHandle"></MigrateDialog>
+      <MigrateDialog :mirgrateVisible="mirgrateVisible" @mirgrateHandle="mirgrateHandle" :data="departmentList"></MigrateDialog>
      </div>
   </div>
 </template>
@@ -44,6 +46,7 @@ import { mockList2 } from "@/utils/mock.js";
 import CommonTable from "./CommonTable.vue";
 import AddAndEditDepartment from "./Template/AddAndEditDepartment.vue";
 import MigrateDialog from './Template/MigrateDialog.vue';
+import { getDepartmentList, getDeptList } from '@/api/user.js';
 export default {
   name: "ContactsTable",
   data() {
@@ -53,24 +56,24 @@ export default {
       title: "123",
       columns: [
         {
-          prop: "dept_name",
+          prop: "taskName",
           label: "部门",
           showOverflowTooltip: true,
           slot: true,
           minWidth: "200",
         },
         {
-          prop: "user_count",
+          prop: "member",
           label: "成员数",
           showOverflowTooltip: true,
         },
         {
-          prop: "create_by",
+          prop: "createBy",
           label: "创建人",
           showOverflowTooltip: false,
         },
         {
-          prop: "create_time",
+          prop: "createTime",
           label: "创建日期",
           showOverflowTooltip: false,
         },
@@ -82,6 +85,13 @@ export default {
           slot: true,
         },
       ],
+      page: {
+        pageNum: 1,
+        pageSize: 1
+      },
+      list: [],
+      itemRow: null,
+      total: 0
     };
   },
   computed: {
@@ -93,16 +103,48 @@ export default {
     handleClose() {
       this.drawer = false;
     },
-    openEditDialog() {
+    openEditDialog(row) {
       this.drawer = true;
       this.title = "编辑部门";
+      console.log(row);
+      this.itemRow = row;
+      
     },
     openMigrateDialog() {
       this.mirgrateVisible = true;
     },
     mirgrateHandle() {
       this.mirgrateVisible = false;
-    }
+    },
+    getDepartment() {
+      const deptList = getDeptList(this.page);
+      const organizeList = getDepartmentList(this.page);
+      Promise.all([deptList, organizeList]).then(values => {
+        let list1 = values[0].rows;
+        let list2 = values[1].rows;
+        this.list = [...list1, ...list2]
+        this.list.forEach(item => {
+          item.taskName = item.orgDeptName || item.platformName;
+        });
+        this.total = values[0].total + values[1].total;
+      })
+    },
+    updateList() {
+      this.getDepartment()
+    },
+    sizeChange({ pageNum, pageSize }) {
+      this.page.pageSize = pageSize;
+      this.page.pageNum = pageNum;
+      this.getDepartment();
+    },
+    pageChange({ pageNum, pageSize }) {
+      this.page.pageSize = pageSize;
+      this.page.pageNum = pageNum;
+      this.getDepartment();
+    },
+  },
+  mounted() {
+    this.getDepartment()
   },
   components: {
     CommonTable,

@@ -3,22 +3,37 @@
     <!-- 地图组件 -->
     <map-container></map-container>
     <!-- 编辑框 -->
-    <create-task></create-task>
+    <create-task @openSettingDate="openSettingDate"></create-task>
     <!-- 排期设置 -->
-    <setting-date></setting-date>
+    <div v-if="showSetting">
+      <setting-date @closeSettingDate="closeSettingDate"></setting-date>
+    </div>
   </div>
 </template>
 
 <script>
 import CreateTask from "../components/CreateTask.vue";
 import MapContainer from "../components/MapContainer.vue";
-import SettingDate from '../components/SettingDate.vue';
+import SettingDate from "../components/SettingDate.vue";
 export default {
   name: "OpenMap",
   components: {
     MapContainer,
     CreateTask,
-    SettingDate
+    SettingDate,
+  },
+  data() {
+    return {
+      showSetting: false,
+    };
+  },
+  methods: {
+    openSettingDate() {
+      this.showSetting = true;
+    },
+    closeSettingDate() {
+      this.showSetting = false;
+    }
   },
 };
 </script>

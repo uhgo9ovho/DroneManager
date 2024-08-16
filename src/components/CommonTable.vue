@@ -81,7 +81,7 @@ export default {
     //每页条数
     pageSize: {
       type: Number,
-      default: 10,
+      default: 5,
     },
     //页码
     pageNum: {
@@ -97,7 +97,7 @@ export default {
     pageSizes: {
       type: Array,
       default() {
-        return [20, 30, 50, 80, 100];
+        return [1, 10, 50, 80, 100];
       },
     },
   },

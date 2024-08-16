@@ -2,7 +2,7 @@
   <div class="setting-date">
     <div class="setting-title">
       <div class="title">飞行排期设置</div>
-      <i class="el-icon-close"></i>
+      <i class="el-icon-close" @click="closeSettingDate"></i>
     </div>
     <el-form
       :model="ruleForm"
@@ -213,9 +213,11 @@ export default {
           return 1;
         case "周":
           let charactersLength = this.characters.filter(item => item.checked).length;
+          if(charactersLength < 1) charactersLength = 1;
           return charactersLength;
         case "月":
           let moonListLength = this.moonList.filter(item => item.checked).length;
+          if(moonListLength < 1) moonListLength = 1;
           return moonListLength;
       }
     },
@@ -224,6 +226,9 @@ export default {
     this.getMoons();
   },
   methods: {
+    closeSettingDate() {
+      this.$emit('closeSettingDate')
+    },
     getMoons() {
       this.moonList = [];
       for (let i = 1; i <= 31; i++) {

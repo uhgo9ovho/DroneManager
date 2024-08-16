@@ -21,23 +21,31 @@
           ></el-input>
         </div>
         <div class="create-task-btn" v-if="currentTab == 'department'">
-          <el-button round icon="el-icon-plus" @click="addDepartment">添加部门</el-button>
+          <el-button round icon="el-icon-plus" @click="addDepartment"
+            >添加部门</el-button
+          >
         </div>
         <div class="btn-group" v-if="currentTab == 'member'">
-          <el-dropdown style="margin-right: 15px;">
-            <el-button round>批量操作<i class="el-icon-caret-bottom el-icon--right"></i></el-button>
+          <el-dropdown style="margin-right: 15px">
+            <el-button round
+              >批量操作<i class="el-icon-caret-bottom el-icon--right"></i
+            ></el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>黄金糕</el-dropdown-item>
-              <el-dropdown-item>狮子头</el-dropdown-item>
-              <el-dropdown-item>螺蛳粉</el-dropdown-item>
+              <el-dropdown-item @click="BatchImport">批量导入</el-dropdown-item>
+              <el-dropdown-item>调整部门</el-dropdown-item>
+              <el-dropdown-item>批量删除</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <el-dropdown>
-            <el-button round icon="el-icon-plus" style="background-color: #000; color: #fff;">添加成员<i class="el-icon-caret-bottom el-icon--right"></i></el-button>
+          <el-dropdown @command="handleCommand">
+            <el-button
+              round
+              icon="el-icon-plus"
+              style="background-color: #000; color: #fff"
+              >添加成员<i class="el-icon-caret-bottom el-icon--right"></i
+            ></el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>黄金糕</el-dropdown-item>
-              <el-dropdown-item>狮子头</el-dropdown-item>
-              <el-dropdown-item>螺蛳粉</el-dropdown-item>
+              <el-dropdown-item command="manually">手动添加</el-dropdown-item>
+              <el-dropdown-item command="invite">邀请添加</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -45,20 +53,27 @@
     </div>
     <div class="task-list-grid" v-if="currentTab == 'department'">
       <!-- <filght-table></filght-table> -->
-       <contacts-table ref="contactsRef"></contacts-table>
+      <contacts-table ref="contactsRef"></contacts-table>
     </div>
-    <!-- 飞行记录 -->
     <div class="flight-log" v-if="currentTab == 'member'">
-      <member-table></member-table>
+      <member-table @editMember="editMember"></member-table>
     </div>
-    <!-- 飞行排期 -->
     <div class="flight-date" v-if="currentTab == 'role'">飞行排期</div>
+    <!-- 手动添加dialog组件 -->
+    <div v-if="manuallyVisible">
+      <ManuallyAddEditDialog
+        :manuallyVisible="manuallyVisible"
+        @menuallyClose="menuallyClose"
+        :title="title"
+      ></ManuallyAddEditDialog>
+    </div>
   </div>
 </template>
 
 <script>
-import ContactsTable from '../components/ContactsTable.vue';
-import MemberTable from '../components/MemberTable.vue';
+import ContactsTable from "../components/ContactsTable.vue";
+import MemberTable from "../components/MemberTable.vue";
+import ManuallyAddEditDialog from "../components/Template/ManuallyAddEditDialog.vue";
 export default {
   name: "Contacts",
   data() {
@@ -66,44 +81,20 @@ export default {
       activeName: "department",
       checked: false,
       searchText: "",
-      tableList: [
-        {
-          taskName: "【全景】比亚迪一期",
-          airPort: "西安-周至",
-          creater: "侯哥哥",
-          status: "待执行",
-          round_all: 5,
-          round_complete: 2,
-          ticket_create_time: "2024-08-01 11:16:04",
-          airLine: [
-            {
-              lineName: "【全景】比亚迪一期",
-              lineStatus: "待执行",
-            },
-            {
-              lineName: "【全景】比亚迪二期",
-              lineStatus: "已执行",
-            },
-            {
-              lineName: "【全景】比亚迪三期",
-              lineStatus: "执行失败",
-            },
-          ],
-          cycle_detail: "周期循环，每1周四执行,生效日期2024-08-01",
-        },
-      ],
-
+      manuallyVisible: false,
       currentTab: "department",
+      title: "",
     };
   },
   components: {
     ContactsTable,
-    MemberTable
+    MemberTable,
+    ManuallyAddEditDialog,
   },
   computed: {
     checkedTip() {
       if (this.checked) {
-        if(this.currentTab == 'department') return '搜索部门名称'
+        if (this.currentTab == "department") return "搜索部门名称";
         return "搜索成员名称";
       }
       return "搜索";
@@ -122,7 +113,24 @@ export default {
     addDepartment() {
       this.$refs.contactsRef.title = "新建部门";
       this.$refs.contactsRef.drawer = true;
-    }
+    },
+    BatchImport() {
+      //批量导入
+    },
+    handleCommand(commond) {
+      //手动添加
+      if (commond == "manually") {
+        this.manuallyVisible = true;
+        this.title = "添加成员";
+      }
+    },
+    editMember() {
+      this.manuallyVisible = true;
+      this.title = "编辑成员";
+    },
+    menuallyClose() {
+      this.manuallyVisible = false;
+    },
   },
 };
 </script>

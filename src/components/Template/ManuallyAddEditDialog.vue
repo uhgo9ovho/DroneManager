@@ -1,10 +1,9 @@
 <template>
   <el-drawer
     :title="title"
-    :visible.sync="drawer"
-    direction="rtl"
+    :visible.sync="manuallyVisible"
     :before-close="handleClose"
-    custom-class="department-dialog"
+    custom-class="manually-dialog"
   >
     <el-form
       :model="ruleForm"
@@ -12,92 +11,78 @@
       label-position="top"
       height="500px"
     >
-      <el-form-item label="部门名称" prop="name">
+      <el-form-item label="姓名" prop="name">
         <el-input
-          placeholder="请输入活动名称"
+          placeholder="请输入名称"
           v-model="ruleForm.name"
         ></el-input>
       </el-form-item>
-      <el-form-item label="备注" prop="desc">
+      <el-form-item label="联系方式" prop="phone">
         <el-input
-          type="textarea"
-          placeholder="请输入内容"
-          v-model="ruleForm.desc"
-        >
-        </el-input>
+          placeholder="请输入联系方式"
+          v-model="ruleForm.phone"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input
+          placeholder="请输入密码"
+          v-model="ruleForm.password"
+          show-password
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="部门" prop="department">
+        <el-input
+          placeholder="请输入部门"
+          v-model="ruleForm.department"
+        ></el-input>
       </el-form-item>
     </el-form>
     <div class="btn">
       <el-button class="clear-btn">取消</el-button>
-      <el-button class="save-btn" @click="saveBtn">保存</el-button>
+      <el-button class="save-btn">保存</el-button>
     </div>
   </el-drawer>
 </template>
 
 <script>
-import { addDept, editDeptInfo } from "@/api/user.js";
 export default {
-  name: "AddAndEditDepartment",
+  name: "ManuallyAddDialog",
   props: {
-    drawer: {
+    manuallyVisible: {
       type: Boolean,
       default: false,
     },
     title: {
       type: String,
-      default: "新建部门",
-    },
-    itemRow: {
-      type: Object,
-      default: () => null,
-    },
+      default: ""
+    }
   },
   data() {
     return {
       ruleForm: {
         name: "",
-        desc: "",
+        phone: "",
+        department: "",
+        password: ""
       },
       rules: {
-        name: [{ required: true, message: "请输入部门名称", trigger: "blur" }],
+        name: [{ required: true, message: "请输入名称", trigger: "blur" }],
+        phone: [{ required: true, message: "请输入手机号", trigger: "blur" }],
+        department: [{ required: true, message: "请输入部门", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
       },
     };
   },
   methods: {
     handleClose() {
-      this.$emit("handleClose");
+      this.$emit("menuallyClose");
     },
-    saveBtn() {
-      if (this.title == "新建部门") {
-        const params = {
-          orgDeptName: this.ruleForm.name,
-          isOrg: 0,
-          orgId: 7
-        }
-        addDept(params).then((res) => {
-          console.log(res);
-          if(res.code == 200) {
-            this.$message.success(res.msg);
-            this.$emit('updateList')
-            this.handleClose();
-          }
-          
-        });
-      } else {
-        //编辑保存
-      }
-    },
-  },
-  mounted() {
-    if (this.title == "编辑部门") {
-      this.ruleForm.name = this.itemRow.taskName;
-    }
   },
 };
 </script>
 
 <style lang="scss">
-.department-dialog {
+.manually-dialog {
   width: 420px;
   .el-drawer__header {
     color: #000;

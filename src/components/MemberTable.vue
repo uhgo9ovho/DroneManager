@@ -102,9 +102,12 @@
         </el-switch>
       </template>
       <template #operate="{ row }">
-        <el-button type="text">编辑</el-button>
-        <el-button type="text">调岗</el-button>
-        <el-button type="text" style="color: red">删除</el-button>
+        <el-button type="text" @click="editBtn(row)">编辑</el-button>
+        <el-button type="text" style="margin-right: 10px;">调岗</el-button>
+        
+        <el-popconfirm title="你确定要删除吗？">
+          <el-button type="text" style="color: red" slot="reference">删除</el-button>
+        </el-popconfirm>
       </template>
     </common-table>
   </div>
@@ -174,8 +177,12 @@ export default {
   },
   computed: {
     memberList() {
-      console.log(mockList3);
       return mockList3;
+    },
+  },
+  methods: {
+    editBtn(row) {
+      this.$emit("editMember");
     },
   },
 };
