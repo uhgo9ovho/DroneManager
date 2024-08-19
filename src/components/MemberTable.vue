@@ -1,6 +1,6 @@
 <template>
   <div class="member-table">
-    <common-table :tableList="memberList" :columns="columns">
+    <common-table :tableList="memberList" :columns="columns" :total="total">
       <template #dept-header>
         <span>所属部门</span>
         <el-dropdown>
@@ -36,22 +36,23 @@
           <i class="el-icon-warning"></i>
         </el-tooltip>
       </template>
-      <template #nick_name="{ row }">
+      <template #userName="{ row }">
         <div class="user_info_box">
           <div class="user_headimg">
-            <img :src="row.head_url" alt="" />
+            <!-- <img :src="row.head_url" alt="" /> -->
+            <img src="../assets/images/w700d1q75cms.jpg" alt="" />
           </div>
           <div class="user_name_phone">
-            <div class="user_name">{{ row.nick_name }}</div>
-            <div class="user_tel">{{ row.tel }}</div>
+            <div class="user_name">{{ row.userName }}</div>
+            <div class="user_tel">{{ row.phonenumber }}</div>
           </div>
         </div>
       </template>
-      <template #auth="{ row }">
-        {{ row.auth.join("") }}
+      <template #roleName="{ row }">
+        {{ row.roleName }}
       </template>
-      <template #dept="{ row }">
-        {{ row.dept.join("") }}
+      <template #orgName="{ row }">
+        {{ row.orgName }}
       </template>
       <template #bind="{ row }">
         <div class="bind_icon">
@@ -116,37 +117,38 @@
 <script>
 import { mockList3 } from "@/utils/mock.js";
 import CommonTable from "./CommonTable.vue";
+import { getUserList } from '@/api/user.js';
 export default {
   name: "MemberTable",
   data() {
     return {
       columns: [
         {
-          prop: "nick_name",
+          prop: "userName",
           label: "姓名",
           showOverflowTooltip: true,
           slot: true,
           minWidth: "100",
         },
         {
-          prop: "dept",
+          prop: "orgName",
           label: "所在部门",
           slot: true,
           showOverflowTooltip: true,
         },
         {
-          prop: "auth",
+          prop: "roleName",
           label: "所属角色",
           slot: true,
           showOverflowTooltip: false,
         },
         {
-          prop: "create_by",
+          prop: "nickName",
           label: "添加/邀请人",
           showOverflowTooltip: false,
         },
         {
-          prop: "create_time",
+          prop: "createTime",
           label: "创建日期",
           showOverflowTooltip: true,
         },
@@ -170,21 +172,30 @@ export default {
           slot: true,
         },
       ],
+      memberList: [],
+      total: 0,
     };
   },
   components: {
     CommonTable,
   },
-  computed: {
-    memberList() {
-      return mockList3;
-    },
-  },
   methods: {
     editBtn(row) {
-      this.$emit("editMember");
+      this.$emit("editMember", row);
     },
+    getList() {
+      const orgId = this.$store.getters.orgId;
+      getUserList(orgId).then(res => {
+        if(res.code === 200) {
+          this.memberList = res.rows;
+          this.total = res.total;
+        }
+      })
+    }
   },
+  mounted() {
+    this.getList()
+  }
 };
 </script>
 

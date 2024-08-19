@@ -56,7 +56,7 @@
       <contacts-table ref="contactsRef"></contacts-table>
     </div>
     <div class="flight-log" v-if="currentTab == 'member'">
-      <member-table @editMember="editMember"></member-table>
+      <member-table @editMember="editMember" ref="member"></member-table>
     </div>
     <div class="flight-date" v-if="currentTab == 'role'">飞行排期</div>
     <!-- 手动添加dialog组件 -->
@@ -65,6 +65,8 @@
         :manuallyVisible="manuallyVisible"
         @menuallyClose="menuallyClose"
         :title="title"
+        :itemRow="itemRow"
+        @updateList="updateList"
       ></ManuallyAddEditDialog>
     </div>
   </div>
@@ -84,6 +86,7 @@ export default {
       manuallyVisible: false,
       currentTab: "department",
       title: "",
+      itemRow: null,
     };
   },
   components: {
@@ -124,13 +127,18 @@ export default {
         this.title = "添加成员";
       }
     },
-    editMember() {
+    editMember(row) {      
       this.manuallyVisible = true;
       this.title = "编辑成员";
+      this.itemRow = row;
     },
     menuallyClose() {
       this.manuallyVisible = false;
     },
+    updateList() {
+      this.menuallyClose();
+      this.$refs.member.getList();
+    }
   },
 };
 </script>
