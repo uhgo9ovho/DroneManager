@@ -8,7 +8,8 @@ const user = {
     name: '',
     avatar: '',
     roles: [],
-    permissions: []
+    permissions: [],
+    orgId: localStorage.getItem('org_id') || 0
   },
 
   mutations: {
@@ -29,6 +30,10 @@ const user = {
     },
     SET_PERMISSIONS: (state, permissions) => {
       state.permissions = permissions
+    },
+    SET_ORG_ID(state, id) {
+      state.orgId = id;
+      localStorage.setItem('org_id', id);
     }
   },
 

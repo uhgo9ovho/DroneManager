@@ -5,7 +5,7 @@
       :model="loginForm"
       :rules="loginRules"
       class="login-form"
-      v-if="true"
+      v-if="!showOrg"
     >
       <h3 class="title">若依后台管理系统</h3>
       <el-form-item prop="username">
@@ -89,12 +89,13 @@ import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from "@/utils/jsencrypt";
 import SvgIcon from "@/components/SvgIcon/index.vue";
-import OrgList from '../components/OrgList.vue';
+import OrgList from "../components/OrgList.vue";
 export default {
   name: "Login",
   data() {
     return {
       codeUrl: "",
+      showOrg: false,
       loginForm: {
         username: "admin",
         password: "admin123",
@@ -121,7 +122,7 @@ export default {
   },
   components: {
     SvgIcon,
-    OrgList
+    OrgList,
   },
   watch: {
     $route: {
@@ -177,7 +178,7 @@ export default {
           this.$store
             .dispatch("Login", this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || "/" }).catch(() => {});
+              this.showOrg = true;
             })
             .catch(() => {
               this.loading = false;

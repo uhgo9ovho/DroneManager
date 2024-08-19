@@ -57,7 +57,7 @@ export const addDept = (params) => {
 
 /**
  * 修改部门信息
- * @param { id: 10, orgDeptName: "质量管理部门", createId: 1, marker: null } params 
+ * @param { id: 10, orgDeptName: "质量管理部门", createId: 1, marker: "备注" } params 
  * @returns 
  */
 export const editDeptInfo = (params) => {

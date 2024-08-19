@@ -1,14 +1,20 @@
 <template>
   <div class="contacts-table">
-    <common-table :columns="columns" :tableList="list" :total="total" @pageChange="pageChange" @sizeChange="sizeChange" :pageSize="page.pageSize" :pageNum="page.pageNum">
+    <common-table
+      :columns="columns"
+      :tableList="list"
+      :total="total"
+      @pageChange="pageChange"
+      @sizeChange="sizeChange"
+      :pageSize="page.pageSize"
+      :pageNum="page.pageNum"
+    >
       <template #taskName="{ row }">
         <div class="dept_name_box">
-          <div class="dept_first_letter">{{ row.taskName.slice(0, 2) }}</div>
+          <div class="dept_first_letter">{{ row.orgDeptName.slice(0, 2) }}</div>
           <div class="dept_full_name">
-            {{ row.taskName }}
-            <span class="org_tips" v-if="row.isOrg"
-              >组织</span
-            >
+            {{ row.orgDeptName }}
+            <span class="org_tips" v-if="row.isOrg">组织</span>
           </div>
         </div>
       </template>
@@ -20,7 +26,9 @@
           <el-button type="text" @click="openEditDialog(row)">编辑</el-button>
           <el-button type="text" @click="openMigrateDialog">迁移</el-button>
           <el-button type="text">权限</el-button>
-          <el-button type="text" style="color: red">删除</el-button>
+          <el-button type="text" style="color: red" @click="delBtn(row.id)"
+            >删除</el-button
+          >
         </div>
       </template>
     </common-table>
@@ -32,12 +40,17 @@
         :title="title"
         :itemRow="itemRow"
         @updateList="updateList"
+        @editSuccess="editSuccess"
       ></add-and-edit-department>
     </div>
     <!-- 迁移成员dialog组件 -->
-     <div v-if="mirgrateVisible">
-      <MigrateDialog :mirgrateVisible="mirgrateVisible" @mirgrateHandle="mirgrateHandle" :data="departmentList"></MigrateDialog>
-     </div>
+    <div v-if="mirgrateVisible">
+      <MigrateDialog
+        :mirgrateVisible="mirgrateVisible"
+        @mirgrateHandle="mirgrateHandle"
+        :data="departmentList"
+      ></MigrateDialog>
+    </div>
   </div>
 </template>
 
@@ -45,8 +58,8 @@
 import { mockList2 } from "@/utils/mock.js";
 import CommonTable from "./CommonTable.vue";
 import AddAndEditDepartment from "./Template/AddAndEditDepartment.vue";
-import MigrateDialog from './Template/MigrateDialog.vue';
-import { getDepartmentList, getDeptList } from '@/api/user.js';
+import MigrateDialog from "./Template/MigrateDialog.vue";
+import { getDeptList, delDept } from "@/api/user.js";
 export default {
   name: "ContactsTable",
   data() {
@@ -68,7 +81,7 @@ export default {
           showOverflowTooltip: true,
         },
         {
-          prop: "createBy",
+          prop: "nickName",
           label: "创建人",
           showOverflowTooltip: false,
         },
@@ -87,11 +100,11 @@ export default {
       ],
       page: {
         pageNum: 1,
-        pageSize: 1
+        pageSize: 10,
       },
       list: [],
       itemRow: null,
-      total: 0
+      total: 0,
     };
   },
   computed: {
@@ -106,9 +119,7 @@ export default {
     openEditDialog(row) {
       this.drawer = true;
       this.title = "编辑部门";
-      console.log(row);
       this.itemRow = row;
-      
     },
     openMigrateDialog() {
       this.mirgrateVisible = true;
@@ -117,20 +128,18 @@ export default {
       this.mirgrateVisible = false;
     },
     getDepartment() {
-      const deptList = getDeptList(this.page);
-      const organizeList = getDepartmentList(this.page);
-      Promise.all([deptList, organizeList]).then(values => {
-        let list1 = values[0].rows;
-        let list2 = values[1].rows;
-        this.list = [...list1, ...list2]
-        this.list.forEach(item => {
-          item.taskName = item.orgDeptName || item.platformName;
+      getDeptList(this.page).then((res) => {
+        let org_id = this.$store.getters.orgId;
+        let filters = []; //这个数组存放的是被过滤的数据，主要用来计算总数的
+        this.list = res.rows.filter((item) => {
+          if (item.orgId == org_id) return item;
+          filters.push(item);
         });
-        this.total = values[0].total + values[1].total;
-      })
+        this.total = res.total - filters.length;
+      });
     },
     updateList() {
-      this.getDepartment()
+      this.getDepartment();
     },
     sizeChange({ pageNum, pageSize }) {
       this.page.pageSize = pageSize;
@@ -142,9 +151,37 @@ export default {
       this.page.pageNum = pageNum;
       this.getDepartment();
     },
+    editSuccess() {
+      this.drawer = false;
+      this.getDepartment();
+    },
+    delBtn(id) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          delDept(id).then((res) => {
+            if (res.code === 200) {
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+              this.getDepartment();
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
   },
   mounted() {
-    this.getDepartment()
+    this.getDepartment();
   },
   components: {
     CommonTable,

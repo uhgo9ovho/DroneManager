@@ -97,7 +97,7 @@ export default {
     pageSizes: {
       type: Array,
       default() {
-        return [1, 10, 50, 80, 100];
+        return [10, 15, 50, 80, 100];
       },
     },
   },

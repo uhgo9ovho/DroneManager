@@ -28,7 +28,7 @@
       </el-form-item>
     </el-form>
     <div class="btn">
-      <el-button class="clear-btn">取消</el-button>
+      <el-button class="clear-btn" @click="handleClose">取消</el-button>
       <el-button class="save-btn" @click="saveBtn">保存</el-button>
     </div>
   </el-drawer>
@@ -85,12 +85,25 @@ export default {
         });
       } else {
         //编辑保存
+        const params = {
+          id: this.itemRow.id,
+          createId: this.itemRow.createId,
+          orgDeptName: this.ruleForm.name,
+          marker: this.ruleForm.desc
+        }
+        editDeptInfo(params).then(res => {
+          if(res.code == 200) {
+            this.$message.success(res.msg);
+            this.$emit('editSuccess');
+          }
+        })
       }
     },
   },
   mounted() {
     if (this.title == "编辑部门") {
-      this.ruleForm.name = this.itemRow.taskName;
+      this.ruleForm.name = this.itemRow.orgDeptName;
+      this.ruleForm.desc = this.itemRow.marker;
     }
   },
 };

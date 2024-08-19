@@ -14,25 +14,35 @@
       <div class="icon el-icon-arrow-right"></div>
     </div>
     <div v-else class="list-box">
-        <div class="org-list" v-for="(item,index) in orgList" :key="index">
-      <div class="tx">西</div>
-      <div class="title-tip">
-        <div class="title-item">西安集贤工业园区</div>
-        <div class="tip">陕西省/西安市/周至县</div>
+      <div
+        class="org-list"
+        v-for="(item, index) in orgList"
+        :key="index"
+        @click="selectOrg(item)"
+      >
+        <div class="tx">{{ item.orgName.slice(0, 2) }}</div>
+        <div class="title-tip">
+          <div class="title-item">{{ item.orgName }}</div>
+          <div class="tip">{{ item.ad }}</div>
+        </div>
+        <div class="icon el-icon-arrow-right"></div>
       </div>
-      <div class="icon el-icon-arrow-right"></div>
-    </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getDepartmentList } from "@/api/user.js";
 export default {
   name: "OrgList",
   data() {
     return {
       hasOrg: true,
-      orgList: [1,2,3]
+      orgList: [],
+      page: {
+        pageNum: 1,
+        pageSize: 10,
+      },
     };
   },
   computed: {
@@ -44,6 +54,21 @@ export default {
       if (this.hasOrg) return "**** 已在以下企业或组织绑定了账号";
       return "**** 暂未绑定任何企业或组织，你可以申请加入企业或组织";
     },
+  },
+  methods: {
+    getOrgList() {
+      //获取组织列表
+      getDepartmentList(this.page).then((res) => {
+        this.orgList = res.rows;
+      });
+    },
+    selectOrg(row) {
+      this.$store.commit("SET_ORG_ID", row.orgId);
+      this.$router.push({ path: this.redirect || "/" }).catch(() => {});
+    },
+  },
+  mounted() {
+    this.getOrgList();
   },
 };
 </script>
@@ -75,7 +100,8 @@ export default {
     text-align: center;
     color: #747377;
   }
-  .un-org,.org-list {
+  .un-org,
+  .org-list {
     width: 350px;
     height: 100px;
     background-color: #ecdfec;
@@ -113,7 +139,7 @@ export default {
     width: 100%;
     overflow: auto;
     &::-webkit-scrollbar {
-        display: none;
+      display: none;
     }
   }
 }
