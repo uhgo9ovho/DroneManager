@@ -20,7 +20,7 @@
       </template>
       <template #operate="{ row }">
         <div v-if="row.isOrg">
-          <el-button type="text">个性化</el-button>
+          <el-button type="text" @click="openPersonalization(row)">个性化</el-button>
         </div>
         <div class="edit-btns" v-else>
           <el-button type="text" @click="openEditDialog(row)">编辑</el-button>
@@ -51,6 +51,15 @@
         :data="departmentList"
       ></MigrateDialog>
     </div>
+    <!-- 个性化dialog组件 -->
+    <div v-if="personalizationShow">
+      <personalization-dialog
+        :itemRow="itemRow"
+        :personalizationShow="personalizationShow"
+        @personalizationHandle="personalizationHandle"
+        @editGXH="editGXH"
+      ></personalization-dialog>
+    </div>
   </div>
 </template>
 
@@ -60,12 +69,14 @@ import CommonTable from "./CommonTable.vue";
 import AddAndEditDepartment from "./Template/AddAndEditDepartment.vue";
 import MigrateDialog from "./Template/MigrateDialog.vue";
 import { getDeptList, delDept } from "@/api/user.js";
+import PersonalizationDialog from "./Template/PersonalizationDialog.vue";
 export default {
   name: "ContactsTable",
   data() {
     return {
       drawer: false,
       mirgrateVisible: false,
+      personalizationShow: false,
       title: "123",
       columns: [
         {
@@ -113,6 +124,13 @@ export default {
     },
   },
   methods: {
+    editGXH() {
+      this.personalizationShow = false;
+      this.getDepartment()
+    },
+    personalizationHandle() {
+      this.personalizationShow = false;
+    },
     handleClose() {
       this.drawer = false;
     },
@@ -179,6 +197,10 @@ export default {
           });
         });
     },
+    openPersonalization(row) {
+      this.personalizationShow = true;
+      this.itemRow = row;
+    },
   },
   mounted() {
     this.getDepartment();
@@ -187,6 +209,7 @@ export default {
     CommonTable,
     AddAndEditDepartment,
     MigrateDialog,
+    PersonalizationDialog,
   },
 };
 </script>

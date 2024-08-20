@@ -133,3 +133,21 @@ export const getUserList = (orgId) => {
         method: "get"
     })
 };
+
+//删除成员
+export const deleteUser = (id) => {
+    return request({
+        url: `/wrj/user/${id}`,
+        method: 'delete'
+    })
+}
+
+//静态资源携带token
+
+export const imgUrl = (url) => {
+    return request({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+    })
+}

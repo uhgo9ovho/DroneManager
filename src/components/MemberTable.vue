@@ -76,7 +76,7 @@
               <i class="iconfont el-icon-weixin1"></i>
             </el-tooltip>
           </div>
-          <div class="zzd_icon">
+          <!-- <div class="zzd_icon">
             <el-tooltip
               class="item"
               effect="dark"
@@ -95,7 +95,7 @@
             >
               <i class="iconfont el-icon-zhezhengding1"></i>
             </el-tooltip>
-          </div>
+          </div> -->
         </div>
       </template>
       <template #status="{ row }">
@@ -106,7 +106,7 @@
         <el-button type="text" @click="editBtn(row)">编辑</el-button>
         <el-button type="text" style="margin-right: 10px;">调岗</el-button>
         
-        <el-popconfirm title="你确定要删除吗？">
+        <el-popconfirm title="你确定要删除吗？" @confirm="confirm(row)">
           <el-button type="text" style="color: red" slot="reference">删除</el-button>
         </el-popconfirm>
       </template>
@@ -117,7 +117,7 @@
 <script>
 import { mockList3 } from "@/utils/mock.js";
 import CommonTable from "./CommonTable.vue";
-import { getUserList } from '@/api/user.js';
+import { getUserList, deleteUser } from '@/api/user.js';
 export default {
   name: "MemberTable",
   data() {
@@ -154,7 +154,7 @@ export default {
         },
         {
           prop: "bind",
-          label: "微信/浙政钉",
+          label: "微信",
           showOverflowTooltip: false,
           slot: true,
         },
@@ -180,6 +180,16 @@ export default {
     CommonTable,
   },
   methods: {
+    confirm(row) {
+      deleteUser(row.id).then(res => {
+        if(res.code === 200) {
+          this.$message.success(res.msg);
+          this.getList()
+        } else {
+          this.$message.error(res.msg);
+        }
+      })
+    },
     editBtn(row) {
       this.$emit("editMember", row);
     },

@@ -21,7 +21,7 @@
           v-model="ruleForm.phone"
         ></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
+      <el-form-item label="密码" prop="password" v-if="title == '添加成员'">
         <el-input
           placeholder="请输入密码"
           v-model="ruleForm.password"
@@ -29,10 +29,13 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="部门" prop="department">
-        <el-input
+        <!-- <el-input
           placeholder="请输入部门"
           v-model="ruleForm.department"
-        ></el-input>
+        ></el-input> -->
+        <el-select v-model="ruleForm.department">
+          <el-option v-for="(item, index) in options" :key="index" :value="item.value" :label="item.label"></el-option>
+        </el-select>
       </el-form-item>
     </el-form>
     <div class="btn">
@@ -43,7 +46,7 @@
 </template>
 
 <script>
-import { addUser, editUserInfo } from "@/api/user.js";
+import { addUser, editUserInfo, getDeptList } from "@/api/user.js";
 export default {
   name: "ManuallyAddDialog",
   props: {
@@ -68,6 +71,7 @@ export default {
         department: "",
         password: "",
       },
+      options: [],
       rules: {
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
         phone: [{ required: true, message: "请输入手机号", trigger: "blur" }],
@@ -76,9 +80,26 @@ export default {
         ],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
       },
+      page: {
+        pageNum: 1,
+        pageSize: 10
+      }
     };
   },
   methods: {
+    getOrgList() {
+      getDeptList(this.page).then(res => {
+        if(res.code === 200) {
+          this.options = res.rows.map(item => {
+            return {
+              value: item.id,
+              label: item.orgDeptName
+            }
+          })
+          
+        }
+      })
+    },
     handleClose() {
       this.$emit("menuallyClose");
     },
@@ -92,7 +113,7 @@ export default {
               phonenumber: this.ruleForm.phone,
               password: this.ruleForm.password,
               orgId: +this.$store.getters.orgId,
-              roleIds: [2]
+              roleIds: [2],
             }
             addUser(params).then((res) => {
               if (res.code == 200) {
@@ -102,6 +123,23 @@ export default {
                 this.$message.error(res.msg);
               }
             });
+          } else {
+            //编辑
+            const params = {
+              userId: this.itemRow.userId,
+              orgId: this.itemRow.orgId,
+              phonenumber: this.ruleForm.phone,
+              orgDeptId: this.itemRow.orgDeptId,
+              orgDeptIdTo: this.ruleForm.department
+            }
+            editUserInfo(params).then(res => {
+              if(res.code === 200) {
+                this.$message.success(res.msg);
+                this.$emit('updateList');
+              } else {
+                this.$message.error(res.msg);
+              }
+            })
           }
         } else {
           console.log("error submit!!");
@@ -111,12 +149,13 @@ export default {
     },
   },
   mounted() {
+    this.getOrgList()
     if (this.title == "编辑成员") {
       console.log(this.itemRow);
       this.ruleForm.name = this.itemRow.userName;
       this.ruleForm.phone = this.itemRow.phonenumber;
-      this.ruleForm.department = this.itemRow.orgName;
-    }
+      this.ruleForm.department = this.itemRow.orgDeptId;
+    };
   },
 };
 </script>
@@ -136,6 +175,9 @@ export default {
   }
   .el-form {
     flex: 1;
+  }
+  .el-select {
+    width: 100%;
   }
   .el-input {
     .el-input__inner {
