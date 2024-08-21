@@ -1,7 +1,8 @@
 <template>
   <div class="common-table">
     <div class="table-box">
-      <el-table :data="tableList" style="width: 100%" height="100%">
+      <el-table :data="tableList" style="width: 100%" height="100%" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55" v-if="showSelection"></el-table-column>
         <el-table-column
           v-for="(item, index) in columns"
           :key="index"
@@ -100,6 +101,11 @@ export default {
         return [10, 15, 50, 80, 100];
       },
     },
+    //是否显示多选框
+    showSelection: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -129,6 +135,12 @@ export default {
         sorter: { prop: sortBy, order: sortOrder },
       });
     },
+    /**
+     * 多选的数据
+     */
+     handleSelectionChange(e) {
+      this.$emit('handleSelectionChange', e)
+     }
   },
 };
 </script>

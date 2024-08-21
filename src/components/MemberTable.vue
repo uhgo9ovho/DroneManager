@@ -1,6 +1,16 @@
 <template>
   <div class="member-table">
-    <common-table :tableList="memberList" :columns="columns" :total="total">
+    <common-table
+      :tableList="memberList"
+      :columns="columns"
+      :total="total"
+      :showSelection="true"
+      @handleSelectionChange="handleSelectionChange"
+      @pageChange="pageChange"
+      @sizeChange="sizeChange"
+      :pageSize="params.pageSize"
+      :pageNum="params.pageNum"
+    >
       <template #dept-header>
         <span>所属部门</span>
         <el-dropdown>
@@ -102,12 +112,17 @@
         <el-switch v-model="row.status" active-value="0" inactive-value="1">
         </el-switch>
       </template>
+      <template #createTime="{ row }">
+        {{ row.createTime | filterTime }}
+      </template>
       <template #operate="{ row }">
         <el-button type="text" @click="editBtn(row)">编辑</el-button>
-        <el-button type="text" style="margin-right: 10px;">调岗</el-button>
-        
+        <el-button type="text" style="margin-right: 10px">调岗</el-button>
+
         <el-popconfirm title="你确定要删除吗？" @confirm="confirm(row)">
-          <el-button type="text" style="color: red" slot="reference">删除</el-button>
+          <el-button type="text" style="color: red" slot="reference"
+            >删除</el-button
+          >
         </el-popconfirm>
       </template>
     </common-table>
@@ -115,9 +130,8 @@
 </template>
 
 <script>
-import { mockList3 } from "@/utils/mock.js";
 import CommonTable from "./CommonTable.vue";
-import { getUserList, deleteUser } from '@/api/user.js';
+import { getUserList, deleteUser, searchUser } from "@/api/user.js";
 export default {
   name: "MemberTable",
   data() {
@@ -128,7 +142,7 @@ export default {
           label: "姓名",
           showOverflowTooltip: true,
           slot: true,
-          minWidth: "100",
+          minWidth: "200",
         },
         {
           prop: "orgName",
@@ -150,6 +164,7 @@ export default {
         {
           prop: "createTime",
           label: "创建日期",
+          slot: true,
           showOverflowTooltip: true,
         },
         {
@@ -158,12 +173,12 @@ export default {
           showOverflowTooltip: false,
           slot: true,
         },
-        {
-          prop: "status",
-          label: "账号状态",
-          showOverflowTooltip: false,
-          slot: true,
-        },
+        // {
+        //   prop: "status",
+        //   label: "账号状态",
+        //   showOverflowTooltip: false,
+        //   slot: true,
+        // },
         {
           prop: "operate",
           label: "操作",
@@ -174,38 +189,83 @@ export default {
       ],
       memberList: [],
       total: 0,
+      params: {
+        pageSize: 10,
+        pageNum: 1,
+        orgId: this.$store.getters.orgId,
+        nickName: "",
+      },
     };
+  },
+  filters: {
+    filterTime(e) {
+      const date = new Date(e);
+
+      // 提取各个部分
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始，所以加 1
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const seconds = String(date.getSeconds()).padStart(2, "0");
+
+      // 组合成所需格式
+      const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      
+      return formattedDate
+    },
   },
   components: {
     CommonTable,
   },
   methods: {
     confirm(row) {
-      deleteUser(row.id).then(res => {
-        if(res.code === 200) {
+      deleteUser(row.id).then((res) => {
+        if (res.code === 200) {
           this.$message.success(res.msg);
-          this.getList()
+          this.getList();
         } else {
           this.$message.error(res.msg);
         }
-      })
+      });
     },
     editBtn(row) {
       this.$emit("editMember", row);
     },
     getList() {
-      const orgId = this.$store.getters.orgId;
-      getUserList(orgId).then(res => {
-        if(res.code === 200) {
+      getUserList(this.params).then((res) => {
+        if (res.code === 200) {
           this.memberList = res.rows;
           this.total = res.total;
         }
-      })
-    }
+      });
+    },
+    pageChange({ pageNum, pageSize }) {
+      this.params.pageSize = pageSize;
+      this.params.pageNum = pageNum;
+      this.getList();
+    },
+    sizeChange({ pageNum, pageSize }) {
+      this.params.pageSize = pageSize;
+      this.params.pageNum = pageNum;
+      this.getList();
+    },
+    searchList() {
+      searchUser(this.params).then((res) => {
+        if (res.code === 200) {
+          this.memberList = res.rows;
+          this.total = res.total;
+        }
+      });
+    },
+    handleSelectionChange(ids) {
+      const idStr = ids.map((item) => item.id).join(',');
+      this.$emit('deleteIds',idStr);
+    },
   },
   mounted() {
-    this.getList()
-  }
+    this.getList();
+  },
 };
 </script>
 

@@ -13,6 +13,7 @@ import router from './router'
 import directive from './directive' // directive
 import plugins from './plugins' // plugins
 import { download } from '@/utils/request'
+import { debounce } from '@/utils/index.js'
 
 import './assets/icons' // icon
 import './permission' // permission control
@@ -29,10 +30,6 @@ Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
 
-// 全局组件挂载
-
-
-Vue.use(directive)
 Vue.use(plugins)
 
 /**

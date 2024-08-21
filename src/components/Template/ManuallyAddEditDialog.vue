@@ -82,7 +82,9 @@ export default {
       },
       page: {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        orgId: this.$store.getters.orgId,
+        orgDeptName: ""
       }
     };
   },

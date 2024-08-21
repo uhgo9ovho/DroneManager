@@ -87,7 +87,7 @@ export const delDept = (id) => {
 //获取部门列表
 export const getDeptList = (params) => {
     return request({
-        url: `/wrj/dept/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}`,
+        url: `/wrj/dept/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${params.orgId}&orgDeptName=${params.orgDeptName}`,
         method: "get"
     })
 };
@@ -127,9 +127,17 @@ export const editUserInfo = (params) => {
 };
 
 //获取组织成员列表
-export const getUserList = (orgId) => {
+export const getUserList = (params) => {
     return request({
-        url: `/wrj/user/list?orgId=${orgId}`,
+        url: `/wrj/user/list?orgId=${params.orgId}&pageNum=${params.pageNum}&pageSize=${params.pageSize}`,
+        method: "get"
+    })
+};
+
+//成员搜索接口（只要是给后端传了nickName为空的时候返回的不是所有而是空）
+export const searchUser = (params) => {
+    return request({
+        url: `/wrj/user/list?orgId=${params.orgId}&pageNum=${params.pageNum}&pageSize=${params.pageSize}&nickName=${params.nickName}`,
         method: "get"
     })
 };
@@ -139,6 +147,14 @@ export const deleteUser = (id) => {
     return request({
         url: `/wrj/user/${id}`,
         method: 'delete'
+    })
+}
+
+//批量删除成员
+export const deleteAllUser = (ids) => {
+    return request({
+        url: `/wrj/user/removeByIds/${ids}`,
+        method: "delete"
     })
 }
 

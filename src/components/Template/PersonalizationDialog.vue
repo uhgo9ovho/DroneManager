@@ -65,7 +65,7 @@
 
 <script>
 import { getToken } from "@/utils/auth";
-import { imgUrl, editOrgInfo } from "@/api/user.js";
+import { imgUrl, editOrgInfo, getDepartmentList } from "@/api/user.js";
 export default {
   name: "PersonalizationDialog",
   props: {
@@ -86,6 +86,8 @@ export default {
         webLogo: "",
         platformLogo: "",
       },
+      webUrl: "",
+      palteUrl: "",
       rules: {},
       myHeaders: {
         Authorization: "Bearer " + getToken(),
@@ -100,14 +102,17 @@ export default {
     handleSave() {
       const params = {
         id: this.itemRow.id,
+        orgId: this.itemRow.orgId,
         createId: this.itemRow.createId,
         orgDeptName: this.ruleForm.orgName,
-        // webLogo:
+        webLogo: this.webUrl,
+        platformLogo: this.palteUrl,
+        platformName: this.ruleForm.orgName,
       };
-      editDeptInfo(params).then((res) => {
+      editOrgInfo(params).then((res) => {
         if (res.code == 200) {
           this.$message.success(res.msg);
-          this.$emit("editSuccess");
+          this.$emit("editGXH");
         } else {
           this.$message.error(res.msg);
         }
@@ -115,22 +120,54 @@ export default {
     },
     beforeAvatarUpload() {},
     handleAvatarSuccess(res) {
-      console.log(res);
+      this.webUrl = res.url;
       if (res.code == 200) {
         imgUrl(res.url).then((re) => {
-          this.$message.success("上传成功");
+          console.log(re);
           this.ruleForm.webLogo = URL.createObjectURL(re);
+          this.$message.success("上传成功");
         });
       }
     },
     handleAvatarSuccess2(res) {
-        console.log(res);
-        
+      this.palteUrl = res.url;
+      if (res.code == 200) {
+        imgUrl(res.url).then((re) => {
+          this.$message.success("上传成功");
+          this.ruleForm.platformLogo = URL.createObjectURL(re);
+        });
+      }
     },
     beforeAvatarUpload2() {},
+    //获取组织列表
+    getorgList() {
+      let _this = this;
+      const params = {
+        pageSize: 10,
+        pageNum: 1,
+      };
+      getDepartmentList(params).then((res) => {
+        if (res.code === 200) {
+          const rows = res.rows;
+          let currentOrg = rows.filter(
+            (item) => item.orgId == this.itemRow.orgId
+          )[0];
+          _this.webUrl = currentOrg.webLogo;
+          _this.palteUrl = currentOrg.platformLogo;
+          const getWebUrl = imgUrl(currentOrg.webLogo);
+          const getPlateFormUrl = imgUrl(currentOrg.platformLogo);
+          Promise.all([getWebUrl, getPlateFormUrl]).then((values) => {
+            _this.ruleForm.webLogo = URL.createObjectURL(values[0]);
+            _this.ruleForm.platformLogo = URL.createObjectURL(values[1]);
+          });
+        }
+      });
+    },
   },
   mounted() {
     this.ruleForm.orgName = this.itemRow.orgDeptName;
+
+    this.getorgList();
   },
 };
 </script>

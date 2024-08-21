@@ -18,6 +18,7 @@
             @blur="blur"
             v-model="searchText"
             clearable
+            @input="handleSearch"
           ></el-input>
         </div>
         <div class="create-task-btn" v-if="currentTab == 'department'">
@@ -26,14 +27,14 @@
           >
         </div>
         <div class="btn-group" v-if="currentTab == 'member'">
-          <el-dropdown style="margin-right: 15px">
+          <el-dropdown style="margin-right: 15px" @command="deleteAll">
             <el-button round
               >批量操作<i class="el-icon-caret-bottom el-icon--right"></i
             ></el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click="BatchImport">批量导入</el-dropdown-item>
-              <el-dropdown-item>调整部门</el-dropdown-item>
-              <el-dropdown-item>批量删除</el-dropdown-item>
+              <el-dropdown-item :disabled="!idStr" command="deleteAll"
+                >批量删除</el-dropdown-item
+              >
             </el-dropdown-menu>
           </el-dropdown>
           <el-dropdown @command="handleCommand">
@@ -56,7 +57,11 @@
       <contacts-table ref="contactsRef"></contacts-table>
     </div>
     <div class="flight-log" v-if="currentTab == 'member'">
-      <member-table @editMember="editMember" ref="member"></member-table>
+      <member-table
+        @editMember="editMember"
+        ref="member"
+        @deleteIds="deleteIds"
+      ></member-table>
     </div>
     <div class="flight-date" v-if="currentTab == 'role'">飞行排期</div>
     <!-- 手动添加dialog组件 -->
@@ -75,6 +80,7 @@
 <script>
 import ContactsTable from "../components/ContactsTable.vue";
 import MemberTable from "../components/MemberTable.vue";
+import { deleteAllUser } from "@/api/user.js";
 import ManuallyAddEditDialog from "../components/Template/ManuallyAddEditDialog.vue";
 export default {
   name: "Contacts",
@@ -87,6 +93,8 @@ export default {
       currentTab: "department",
       title: "",
       itemRow: null,
+      timer: null,
+      idStr: "",
     };
   },
   components: {
@@ -104,6 +112,26 @@ export default {
     },
   },
   methods: {
+    handleSearch(e) {
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      this.timer = setTimeout(() => {
+        if (this.currentTab == "department") {
+          //部门搜索
+          this.$refs.contactsRef.page.orgDeptName = e;
+          this.$refs.contactsRef.getDepartment();
+        } else {
+          //成员搜索
+          if (e) {
+            this.$refs.member.params.nickName = e;
+            this.$refs.member.searchList();
+          } else {
+            this.$refs.member.getList();
+          }
+        }
+      }, 500);
+    },
     focus() {
       this.checked = true;
     },
@@ -120,6 +148,36 @@ export default {
     BatchImport() {
       //批量导入
     },
+    deleteAll(e) {
+      if (e == "deleteAll") {
+        this.$confirm("此操作将永久删除, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+          .then(() => {
+            //批量删除
+            deleteAllUser(this.idStr).then((res) => {
+              if (res.code == 200) {
+                //删除成功
+                this.$message.success(res.msg);
+                this.$refs.member.getList();
+              } else {
+                this.$message.error("删除失败");
+              }
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消删除",
+            });
+          });
+      }
+    },
+    deleteIds(idStr) {
+      this.idStr = idStr;
+    },
     handleCommand(commond) {
       //手动添加
       if (commond == "manually") {
@@ -127,7 +185,7 @@ export default {
         this.title = "添加成员";
       }
     },
-    editMember(row) {      
+    editMember(row) {
       this.manuallyVisible = true;
       this.title = "编辑成员";
       this.itemRow = row;
@@ -138,7 +196,7 @@ export default {
     updateList() {
       this.menuallyClose();
       this.$refs.member.getList();
-    }
+    },
   },
 };
 </script>

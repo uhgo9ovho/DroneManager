@@ -20,7 +20,9 @@
       </template>
       <template #operate="{ row }">
         <div v-if="row.isOrg">
-          <el-button type="text" @click="openPersonalization(row)">个性化</el-button>
+          <el-button type="text" @click="openPersonalization(row)"
+            >个性化</el-button
+          >
         </div>
         <div class="edit-btns" v-else>
           <el-button type="text" @click="openEditDialog(row)">编辑</el-button>
@@ -40,7 +42,6 @@
         :title="title"
         :itemRow="itemRow"
         @updateList="updateList"
-        @editSuccess="editSuccess"
       ></add-and-edit-department>
     </div>
     <!-- 迁移成员dialog组件 -->
@@ -112,6 +113,8 @@ export default {
       page: {
         pageNum: 1,
         pageSize: 10,
+        orgId: this.$store.getters.orgId,
+        orgDeptName: "",
       },
       list: [],
       itemRow: null,
@@ -126,7 +129,7 @@ export default {
   methods: {
     editGXH() {
       this.personalizationShow = false;
-      this.getDepartment()
+      this.getDepartment();
     },
     personalizationHandle() {
       this.personalizationShow = false;
@@ -147,13 +150,8 @@ export default {
     },
     getDepartment() {
       getDeptList(this.page).then((res) => {
-        let org_id = this.$store.getters.orgId;
-        let filters = []; //这个数组存放的是被过滤的数据，主要用来计算总数的
-        this.list = res.rows.filter((item) => {
-          if (item.orgId == org_id) return item;
-          filters.push(item);
-        });
-        this.total = res.total - filters.length;
+        this.list = res.rows;
+        this.total = res.total;
       });
     },
     updateList() {
