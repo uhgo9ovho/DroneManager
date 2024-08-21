@@ -32,6 +32,8 @@
 <script>
 import InviteDialog from "@/components/InviteDialog.vue";
 import { mapMutations } from "vuex";
+import { logout } from "@/api/login.js";
+import { removeToken } from '@/utils/auth.js'
 export default {
   name: "Details",
   data() {
@@ -60,10 +62,17 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "退出成功!",
+          logout().then((res) => {
+            if (res.code === 200) {
+              removeToken('Admin-Token');
+              this.$router.push('/login')
+              this.$message({
+                type: "success",
+                message: "退出成功!",
+              });
+            }
           });
+
           this.SET_FILTER_BULR(false);
         })
         .catch(() => {
