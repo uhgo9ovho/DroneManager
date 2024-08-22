@@ -2,7 +2,7 @@
   <div class="flight">
     <div class="top">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="飞行任务" name="flightTask"> </el-tab-pane>
+        <el-tab-pane label="飞行任务" name="flightTask"></el-tab-pane>
         <el-tab-pane label="飞行排期" name="flightDate"></el-tab-pane>
         <el-tab-pane label="飞行记录" name="flightLog"></el-tab-pane>
       </el-tabs>

@@ -4,13 +4,11 @@
       <!-- 自定义表头 -->
       <template #taskName-header>
         <span>任务名称/类型</span>
-        <el-dropdown>
+        <el-dropdown @command="nameCommand">
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>黄金糕</el-dropdown-item>
-            <el-dropdown-item>狮子头</el-dropdown-item>
-            <el-dropdown-item>螺蛳粉</el-dropdown-item>
+            <el-dropdown-item v-for="(item, index) in nameOptions" :key="index" :command="item">{{ item }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </template>
@@ -28,13 +26,11 @@
       </template>
       <template #status-header>
         <span>本轮状态</span>
-        <el-dropdown>
+        <el-dropdown @command="statusCommand">
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>黄金糕</el-dropdown-item>
-            <el-dropdown-item>狮子头</el-dropdown-item>
-            <el-dropdown-item>螺蛳粉</el-dropdown-item>
+            <el-dropdown-item v-for="(item, index) in statusOptions" :key="index" :command="item">{{ item }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </template>
@@ -54,13 +50,11 @@
       </template>
       <template #operate>
         <div class="operate-box">
-          <el-button type="text">详情</el-button>
-          <el-dropdown>
-            <span class="el-dropdown-link el-icon-more"> </span>
+          <el-button type="text" @click="detailsBtn">详情</el-button>
+          <el-dropdown @command="operateCommand">
+            <span class="el-dropdown-link el-icon-more"></span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>黄金糕</el-dropdown-item>
-              <el-dropdown-item>狮子头</el-dropdown-item>
-              <el-dropdown-item>螺蛳粉</el-dropdown-item>
+              <el-dropdown-item v-for="(item, index) in operateOptions" :key="index" :command="item.label" :style="{color: item.color}"><i class="iconfont" :class="item.icon"></i> {{ item.label }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <el-button
@@ -80,6 +74,10 @@
         </div>
       </template>
     </common-table>
+    <!-- 弹窗 -->
+     <div v-if="flightVisible">
+      <flight-dialog></flight-dialog>
+     </div>
   </div>
 </template>
 
@@ -87,11 +85,13 @@
 import CommonTable from "./CommonTable.vue";
 import { mockList } from "@/utils/mock.js";
 import TableNameInfo from "./Template/TableNameInfo.vue";
+import FlightDialog from './Template/FlightDialog.vue';
 export default {
   name: "FlightTable",
   props: {},
   data() {
     return {
+      flightVisible: true,
       columns: [
         {
           prop: "taskName",
@@ -125,6 +125,27 @@ export default {
           slot: true,
         },
       ],
+      nameOptions: ["全部类型", "拍照", "直播", "全景", "三维", "正射", "全覆盖"],
+      statusOptions: ["全部状态", "已挂起", "执行终止", "待审核", "审核中", "待执行", "执行中", "制作中", "制作失败", "已完成", "已过期", "执行失败"],
+      operateOptions: [
+        {
+          label: "成果",
+          icon: "el-icon-zhaochengguo"
+        },
+        {
+          label: "排期",
+          icon: "el-icon-paiqi"
+        },
+        {
+          label: "挂起",
+          icon: "el-icon-3duihuacopy"
+        },
+        {
+          label: "删除",
+          icon: "el-icon-shanchu",
+          color: "red"
+        }
+      ]
     };
   },
   computed: {
@@ -150,9 +171,20 @@ export default {
       };
     },
   },
+  methods: {
+    nameCommand(itemCommand) {
+      console.log(itemCommand);
+    },
+    statusCommand(itemCommand) {},
+    operateCommand(itemCommand) {},
+    detailsBtn() {
+
+    },
+  },
   components: {
     CommonTable,
     TableNameInfo,
+    FlightDialog
   },
 };
 </script>

@@ -41,5 +41,6 @@ export default {
 <style lang="scss">
 .open-map {
   position: relative;
+  height: calc(100vh - 52px);
 }
 </style>

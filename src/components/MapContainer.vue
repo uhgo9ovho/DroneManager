@@ -20,7 +20,7 @@ export default {
       AMapLoader.load({
         key: "60a7b380499a4ebc6f8c004ec6f303e1", // 申请好的Web端开发者Key，首次调用 load 时必填
         version: "2.0", // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
-        plugins: ["AMap.Scale"], //需要使用的的插件列表，如比例尺'AMap.Scale'，支持添加多个如：['...','...']
+        // plugins: ["AMap.Scale"], //需要使用的的插件列表，如比例尺'AMap.Scale'，支持添加多个如：['...','...']
       })
         .then((AMap) => {
           const layer = new AMap.createDefaultLayer({
@@ -41,17 +41,17 @@ export default {
             interval: 180, //刷新间隔时间 默认180s
           });
           map.add(traffic);
-          AMap.plugin(
-            ["AMap.Scale", "AMap.Geolocation"],
-            function () {
-              let toolbar = new AMap.Scale();
-              // let MapType = new AMap.MapType();
-              let Geolocation = new AMap.Geolocation();
-              map.addControl(toolbar);
-              // map.addControl(MapType);
-              map.addControl(Geolocation);
-            }
-          );
+          // AMap.plugin(
+          //   ["AMap.Scale", "AMap.Geolocation"],
+          //   function () {
+          //     let toolbar = new AMap.Scale();
+          //     // let MapType = new AMap.MapType();
+          //     let Geolocation = new AMap.Geolocation();
+          //     map.addControl(toolbar);
+          //     // map.addControl(MapType);
+          //     map.addControl(Geolocation);
+          //   }
+          // );
           //自定义marker（标记点）
           const markerContent = `<div class="custom-content-marker">
 <img src="//a.amap.com/jsapi_demos/static/demo-center/icons/dir-via-marker.png">
@@ -120,7 +120,7 @@ export default {
   <style lang="scss">
 #container {
   width: 100%;
-  height: calc(100vh - 52px);
+  height: 100%;
   .amap-logo,
   .amap-copyright {
     display: none !important;
