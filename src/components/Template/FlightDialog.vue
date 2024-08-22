@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="task_info">
-        <div class="task_back">
+        <div class="task_back" @click="closeDialog">
           <i class="el-icon-close"></i>
         </div>
         <div class="task-info-wrap">
@@ -145,6 +145,11 @@ export default {
       ],
     };
   },
+  methods: {
+    closeDialog() {
+      this.$emit("closeDialog");
+    },
+  },
 };
 </script>
 
@@ -239,8 +244,8 @@ export default {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 18px;
       position: absolute;
-      right: -40px;
-      top: -40px;
+      right: -50px;
+      top: 0px;
       display: flex;
       -webkit-box-pack: center;
       justify-content: center;

@@ -8,7 +8,12 @@
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(item, index) in nameOptions" :key="index" :command="item">{{ item }}</el-dropdown-item>
+            <el-dropdown-item
+              v-for="(item, index) in nameOptions"
+              :key="index"
+              :command="item"
+              >{{ item }}</el-dropdown-item
+            >
           </el-dropdown-menu>
         </el-dropdown>
       </template>
@@ -30,7 +35,12 @@
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(item, index) in statusOptions" :key="index" :command="item">{{ item }}</el-dropdown-item>
+            <el-dropdown-item
+              v-for="(item, index) in statusOptions"
+              :key="index"
+              :command="item"
+              >{{ item }}</el-dropdown-item
+            >
           </el-dropdown-menu>
         </el-dropdown>
       </template>
@@ -54,7 +64,14 @@
           <el-dropdown @command="operateCommand">
             <span class="el-dropdown-link el-icon-more"></span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-for="(item, index) in operateOptions" :key="index" :command="item.label" :style="{color: item.color}"><i class="iconfont" :class="item.icon"></i> {{ item.label }}</el-dropdown-item>
+              <el-dropdown-item
+                v-for="(item, index) in operateOptions"
+                :key="index"
+                :command="item.label"
+                :style="{ color: item.color }"
+                ><i class="iconfont" :class="item.icon"></i>
+                {{ item.label }}</el-dropdown-item
+              >
             </el-dropdown-menu>
           </el-dropdown>
           <el-button
@@ -75,9 +92,9 @@
       </template>
     </common-table>
     <!-- 弹窗 -->
-     <div v-if="flightVisible">
-      <flight-dialog></flight-dialog>
-     </div>
+    <div v-if="flightVisible">
+      <flight-dialog @closeDialog="closeDialog"></flight-dialog>
+    </div>
   </div>
 </template>
 
@@ -85,13 +102,13 @@
 import CommonTable from "./CommonTable.vue";
 import { mockList } from "@/utils/mock.js";
 import TableNameInfo from "./Template/TableNameInfo.vue";
-import FlightDialog from './Template/FlightDialog.vue';
+import FlightDialog from "./Template/FlightDialog.vue";
 export default {
   name: "FlightTable",
   props: {},
   data() {
     return {
-      flightVisible: true,
+      flightVisible: false,
       columns: [
         {
           prop: "taskName",
@@ -125,27 +142,48 @@ export default {
           slot: true,
         },
       ],
-      nameOptions: ["全部类型", "拍照", "直播", "全景", "三维", "正射", "全覆盖"],
-      statusOptions: ["全部状态", "已挂起", "执行终止", "待审核", "审核中", "待执行", "执行中", "制作中", "制作失败", "已完成", "已过期", "执行失败"],
+      nameOptions: [
+        "全部类型",
+        "拍照",
+        "直播",
+        "全景",
+        "三维",
+        "正射",
+        "全覆盖",
+      ],
+      statusOptions: [
+        "全部状态",
+        "已挂起",
+        "执行终止",
+        "待审核",
+        "审核中",
+        "待执行",
+        "执行中",
+        "制作中",
+        "制作失败",
+        "已完成",
+        "已过期",
+        "执行失败",
+      ],
       operateOptions: [
         {
           label: "成果",
-          icon: "el-icon-zhaochengguo"
+          icon: "el-icon-zhaochengguo",
         },
         {
           label: "排期",
-          icon: "el-icon-paiqi"
+          icon: "el-icon-paiqi",
         },
         {
           label: "挂起",
-          icon: "el-icon-3duihuacopy"
+          icon: "el-icon-3duihuacopy",
         },
         {
           label: "删除",
           icon: "el-icon-shanchu",
-          color: "red"
-        }
-      ]
+          color: "red",
+        },
+      ],
     };
   },
   computed: {
@@ -178,13 +216,16 @@ export default {
     statusCommand(itemCommand) {},
     operateCommand(itemCommand) {},
     detailsBtn() {
-
+      this.flightVisible = true;
+    },
+    closeDialog() {
+      this.flightVisible = false;
     },
   },
   components: {
     CommonTable,
     TableNameInfo,
-    FlightDialog
+    FlightDialog,
   },
 };
 </script>
