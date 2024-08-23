@@ -92,9 +92,17 @@
         </div>
       </template>
     </common-table>
-    <!-- 弹窗 -->
+    <!-- 详情弹窗、飞行弹窗 -->
     <div v-if="flightVisible">
-      <flight-dialog @closeDialog="closeDialog" :detailsShow="detailsShow" :filghtShow="filghtShow"></flight-dialog>
+      <flight-dialog
+        @closeDialog="closeDialog"
+        :detailsShow="detailsShow"
+        :filghtShow="filghtShow"
+      ></flight-dialog>
+    </div>
+    <!-- 全景预览弹窗 -->
+    <div v-if="panoramicVisible">
+      <PanoramicDialog @closeQJDialog="closeQJDialog"></PanoramicDialog>
     </div>
   </div>
 </template>
@@ -104,6 +112,7 @@ import CommonTable from "./CommonTable.vue";
 import { mockList } from "@/utils/mock.js";
 import TableNameInfo from "./Template/TableNameInfo.vue";
 import FlightDialog from "./Template/FlightDialog.vue";
+import PanoramicDialog from "./Template/PanoramicDialog.vue";
 export default {
   name: "FlightTable",
   props: {},
@@ -112,6 +121,7 @@ export default {
       detailsShow: false,
       flightVisible: false,
       filghtShow: false,
+      panoramicVisible: false,
       columns: [
         {
           prop: "taskName",
@@ -217,7 +227,12 @@ export default {
       console.log(itemCommand);
     },
     statusCommand(itemCommand) {},
-    operateCommand(itemCommand) {},
+    operateCommand(itemCommand) {
+      console.log(itemCommand);
+      if (itemCommand === "成果") {
+        this.panoramicVisible = true;
+      }
+    },
     detailsBtn() {
       this.flightVisible = true;
       this.filghtShow = false;
@@ -231,11 +246,15 @@ export default {
     closeDialog() {
       this.flightVisible = false;
     },
+    closeQJDialog() {
+      this.panoramicVisible = false;
+    }
   },
   components: {
     CommonTable,
     TableNameInfo,
     FlightDialog,
+    PanoramicDialog,
   },
 };
 </script>

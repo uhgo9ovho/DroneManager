@@ -83,7 +83,7 @@ export default {
       width: 920px;
       height: 100%;
       box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 24px 0px;
-      border-radius: 12px;
+      border-radius: 12px 0 0 12px;
       position: relative;
       .task_name {
         height: 28px;
