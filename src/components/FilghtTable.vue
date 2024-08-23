@@ -86,6 +86,7 @@
               line-height: 32px;
               font-size: 14px;
             "
+            @click="flightBtn"
             >飞行</el-button
           >
         </div>
@@ -93,7 +94,7 @@
     </common-table>
     <!-- 弹窗 -->
     <div v-if="flightVisible">
-      <flight-dialog @closeDialog="closeDialog"></flight-dialog>
+      <flight-dialog @closeDialog="closeDialog" :detailsShow="detailsShow" :filghtShow="filghtShow"></flight-dialog>
     </div>
   </div>
 </template>
@@ -108,7 +109,9 @@ export default {
   props: {},
   data() {
     return {
+      detailsShow: false,
       flightVisible: false,
+      filghtShow: false,
       columns: [
         {
           prop: "taskName",
@@ -217,6 +220,13 @@ export default {
     operateCommand(itemCommand) {},
     detailsBtn() {
       this.flightVisible = true;
+      this.filghtShow = false;
+      this.detailsShow = true;
+    },
+    flightBtn() {
+      this.flightVisible = true;
+      this.detailsShow = false;
+      this.filghtShow = true;
     },
     closeDialog() {
       this.flightVisible = false;
