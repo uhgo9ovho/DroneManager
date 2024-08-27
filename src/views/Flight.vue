@@ -32,12 +32,15 @@
     <!-- 飞行记录 -->
     <div class="flight-log" v-if="currentTab == 'flightLog'">飞行记录</div>
     <!-- 飞行排期 -->
-    <div class="flight-date" v-if="currentTab == 'flightDate'">飞行排期</div>
+    <div class="flight-date" v-if="currentTab == 'flightDate'">
+      <flight-date></flight-date>
+    </div>
   </div>
 </template>
 
 <script>
 import FilghtTable from "../components/FilghtTable.vue";
+import FlightDate from "../components/FlightDate.vue";
 export default {
   name: "Flight",
   data() {
@@ -77,6 +80,7 @@ export default {
   },
   components: {
     FilghtTable,
+    FlightDate
   },
   computed: {
     checkedTip() {

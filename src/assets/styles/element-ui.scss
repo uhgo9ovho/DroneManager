@@ -45,7 +45,9 @@
     }
   }
 }
-
+.el-tooltip__popper {
+  width: 397px;
+}
 // to fixed https://github.com/ElemeFE/element/issues/2461
 .el-dialog {
   transform: none;

@@ -104,6 +104,13 @@
     <div v-if="panoramicVisible">
       <PanoramicDialog @closeQJDialog="closeQJDialog"></PanoramicDialog>
     </div>
+    <!-- 飞行排期弹窗 -->
+    <div v-if="flyDateVisible">
+      <FlightDataDialog
+        :flyDateVisible="flyDateVisible"
+        @closeFlightDateDialog="closeFlightDateDialog"
+      ></FlightDataDialog>
+    </div>
   </div>
 </template>
 
@@ -113,6 +120,7 @@ import { mockList } from "@/utils/mock.js";
 import TableNameInfo from "./Template/TableNameInfo.vue";
 import FlightDialog from "./Template/FlightDialog.vue";
 import PanoramicDialog from "./Template/PanoramicDialog.vue";
+import FlightDataDialog from "./Template/FlightDataDialog.vue";
 export default {
   name: "FlightTable",
   props: {},
@@ -122,6 +130,7 @@ export default {
       flightVisible: false,
       filghtShow: false,
       panoramicVisible: false,
+      flyDateVisible: false,
       columns: [
         {
           prop: "taskName",
@@ -231,6 +240,8 @@ export default {
       console.log(itemCommand);
       if (itemCommand === "成果") {
         this.panoramicVisible = true;
+      } else if (itemCommand === "排期") {
+        this.flyDateVisible = true;
       }
     },
     detailsBtn() {
@@ -248,13 +259,17 @@ export default {
     },
     closeQJDialog() {
       this.panoramicVisible = false;
-    }
+    },
+    closeFlightDateDialog() {
+      this.flyDateVisible = false;
+    },
   },
   components: {
     CommonTable,
     TableNameInfo,
     FlightDialog,
     PanoramicDialog,
+    FlightDataDialog
   },
 };
 </script>
