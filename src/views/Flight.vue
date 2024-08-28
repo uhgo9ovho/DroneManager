@@ -32,7 +32,7 @@
     <!-- 飞行记录 -->
     <div class="flight-log" v-if="currentTab == 'flightLog'">飞行记录</div>
     <!-- 飞行排期 -->
-    <div class="flight-date" v-if="currentTab == 'flightDate'">
+    <div v-if="currentTab == 'flightDate'">
       <flight-date></flight-date>
     </div>
   </div>

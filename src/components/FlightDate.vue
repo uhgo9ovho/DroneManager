@@ -35,7 +35,9 @@
             </div>
           </div>
         </div>
-        <div class="sort-day" v-if="true"></div>
+        <div class="sort-day" v-if="true">
+          <sort-day-list></sort-day-list>
+        </div>
         <div class="sort-month" v-else></div>
       </div>
     </div>
@@ -44,10 +46,12 @@
 
 <script>
 import DateTitle from "./Template/DateTitle.vue";
+import SortDayList from "./Template/SortDayList.vue";
 export default {
   name: "FlightDate",
   components: {
     DateTitle,
+    SortDayList,
   },
 };
 </script>
@@ -61,6 +65,7 @@ export default {
     caret-color: transparent;
     flex-direction: column;
     height: 100%;
+    display: flex;
     .sort-menu {
       display: flex;
       justify-content: space-between;
@@ -127,6 +132,15 @@ export default {
           }
         }
       }
+    }
+    .sort-day {
+      overflow: scroll;
+      position: relative;
+      overflow-y: scroll;
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      height: calc(100vh - 200px);
     }
   }
 }
