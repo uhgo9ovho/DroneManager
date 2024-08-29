@@ -23,7 +23,7 @@
                     class="task-past-card"
                     v-if="formatTime(item2.plan_window[0]) === item.time"
                   >
-                  <AirItemInfo :info="item2"></AirItemInfo>
+                    <AirItemInfo :info="item2"></AirItemInfo>
                   </div>
                 </div>
                 <div v-if="!item.airline_name">
@@ -36,17 +36,21 @@
           </div>
         </div>
       </div>
+      <div class="time-line-wrap" :style="topPX">
+        <div class="time-text">{{ currentTime }}</div>
+        <div class="time-line"></div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mockList4 } from "@/utils/mock.js";
-import AirItemInfo from './AirItemInfo.vue';
+import AirItemInfo from "./AirItemInfo.vue";
 export default {
   name: "DayList",
   components: {
-    AirItemInfo
+    AirItemInfo,
   },
   data() {
     return {
@@ -98,9 +102,60 @@ export default {
         },
       ],
       airInfos: [],
+      currentTime: "",
+      timer: null,
+      top: 0,
+      shouldMove: false, //是否开始移动
     };
   },
+  computed: {
+    topPX() {
+      return {
+        top: `${this.top}px`
+      }
+    }
+  },
   methods: {
+    checkTimeAndStart() {
+      const now = new Date();
+      const nineAM = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+
+      if (now >= nineAM) {
+        this.shouldMove = true;
+        // 计算已经过去的分钟数
+        const minutesPastNine = Math.floor((now - nineAM) / 60000) * 1.22;
+        console.log(minutesPastNine);
+        
+        this.top = minutesPastNine; // 根据过去的分钟数设置初始 top 值
+        this.startMoving();
+      } else {
+        const timeUntilNineAM = nineAM - now;
+        setTimeout(() => {
+          this.shouldMove = true;
+          this.top = 0; // 9点的时候从top: 0px开始
+          this.startMoving();
+        }, timeUntilNineAM);
+      }
+    },
+    startMoving() {
+      this.shouldMove = true;
+      setInterval(() => {
+        this.top += 1.22;
+      }, 60000); // 每60,000毫秒(1分钟) 增加1px
+    },
+    updateTime() {
+      var now = new Date();
+      var hours = now.getHours();
+      var minutes = now.getMinutes();
+      var seconds = now.getSeconds();
+
+      // 格式化时间，确保分钟和秒钟总是两位数
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      // 显示当前时间
+      this.currentTime = hours + ':' + minutes;
+    },
     formatTime(timeStr) {
       return timeStr.replace(/^0/, "").replace(/:00$/, "");
     },
@@ -122,8 +177,14 @@ export default {
     },
   },
   mounted() {
+    this.updateTime();
     this.getAirLines();
     this.airInfos = mockList4;
+    this.timer = setInterval(this.updateTime, 1000);
+    this.checkTimeAndStart();
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
 };
 </script>
@@ -142,7 +203,7 @@ export default {
       padding: 2px 0;
       display: flex;
       flex-direction: row;
-      align-items: start;
+      align-items: flex-start;
       justify-content: center;
       width: 100%;
       position: relative;
@@ -221,6 +282,34 @@ export default {
           }
         }
       }
+    }
+  }
+  .time-line-wrap {
+    position: absolute;
+    left: 0;
+    top: 100px;
+    pointer-events: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-right: 20px;
+    padding-left: 0;
+    .time-text {
+      width: 75px;
+      height: 24px;
+      background: #1d1d1f;
+      border-radius: 12px;
+      color: #fff;
+      text-align: center;
+      line-height: 24px;
+    }
+    .time-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 5px 1px #fff;
     }
   }
 }
