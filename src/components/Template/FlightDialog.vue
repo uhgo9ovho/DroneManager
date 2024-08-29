@@ -15,7 +15,7 @@
       </div>
       <!-- 飞行任务info -->
       <div v-if="detailsShow">
-        <FilghtTaskInfo @closeDialog="closeDialog"></FilghtTaskInfo>
+        <FilghtTaskInfo @closeDialog="closeDialog" :taskDetails="taskDetails"></FilghtTaskInfo>
       </div>
       <!-- 飞行info -->
       <div v-if="filghtShow">
@@ -40,6 +40,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    taskDetails: {
+      type: Boolean,
+      default: false,
+    }
   },
   components: {
     MapContainer,

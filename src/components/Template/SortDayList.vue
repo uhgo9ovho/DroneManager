@@ -1,45 +1,54 @@
 <template>
-  <div class="day-list">
-    <div style="margin: auto; position: relative; width: 1248px">
-      <div class="task-table">
-        <div></div>
-        <div id="id_taskList1">
-          <div
-            class="task-item-day"
-            v-for="(item, index) in airLines"
-            :key="index"
-          >
-            <div class="time-flag">
-              <div class="time-text">{{ item.time }}</div>
-            </div>
-            <div class="item-container" style="flex: 1 1 0%">
-              <div class="task-item">
-                <div
-                  v-for="(item2, index) in airInfos"
-                  :key="index"
-                  v-show="item.airline_name"
-                >
+  <div>
+    <div class="day-list">
+      <div style="margin: auto; position: relative; width: 1248px">
+        <div class="task-table">
+          <div></div>
+          <div id="id_taskList1">
+            <div
+              class="task-item-day"
+              v-for="(item, index) in airLines"
+              :key="index"
+            >
+              <div class="time-flag">
+                <div class="time-text">{{ item.time }}</div>
+              </div>
+              <div class="item-container" style="flex: 1 1 0%">
+                <div class="task-item">
                   <div
-                    class="task-past-card"
-                    v-if="formatTime(item2.plan_window[0]) === item.time"
+                    v-for="(item2, index) in airInfos"
+                    :key="index"
+                    v-show="item.airline_name"
                   >
-                    <AirItemInfo :info="item2"></AirItemInfo>
+                    <div
+                      class="task-past-card"
+                      v-if="formatTime(item2.plan_window[0]) === item.time"
+                    >
+                      <AirItemInfo
+                        :info="item2"
+                        @openDialog="openDialog"
+                      ></AirItemInfo>
+                    </div>
                   </div>
-                </div>
-                <div v-if="!item.airline_name">
-                  <div class="task-card3">
-                    <div class="icon-add">+</div>
+                  <div v-if="!item.airline_name">
+                    <div class="task-card3">
+                      <div class="icon-add">+</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <div class="time-line-wrap" :style="topPX">
+          <div class="time-text">{{ currentTime }}</div>
+          <div class="time-line"></div>
+        </div>
       </div>
-      <div class="time-line-wrap" :style="topPX">
-        <div class="time-text">{{ currentTime }}</div>
-        <div class="time-line"></div>
-      </div>
+    </div>
+    <!--  详情弹窗 -->
+    <div v-if="visible">
+      <FlightDialog @closeDialog="closeDialog" :detailsShow="true" :taskDetails="true"></FlightDialog>
     </div>
   </div>
 </template>
@@ -47,10 +56,12 @@
 <script>
 import { mockList4 } from "@/utils/mock.js";
 import AirItemInfo from "./AirItemInfo.vue";
+import FlightDialog from "./FlightDialog.vue";
 export default {
   name: "DayList",
   components: {
     AirItemInfo,
+    FlightDialog,
   },
   data() {
     return {
@@ -106,26 +117,40 @@ export default {
       timer: null,
       top: 0,
       shouldMove: false, //是否开始移动
+      visible: false,
     };
   },
   computed: {
     topPX() {
       return {
-        top: `${this.top}px`
-      }
-    }
+        top: `${this.top}px`,
+      };
+    },
   },
   methods: {
+    openDialog() {
+      this.visible = true;
+    },
+    closeDialog() {
+      this.visible = false;
+    },
     checkTimeAndStart() {
       const now = new Date();
-      const nineAM = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+      const nineAM = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        9,
+        0,
+        0
+      );
 
       if (now >= nineAM) {
         this.shouldMove = true;
         // 计算已经过去的分钟数
-        const minutesPastNine = Math.floor((now - nineAM) / 60000) * 1.22;
+        const minutesPastNine = Math.floor((now - nineAM) / 60000) * 1.16;
         console.log(minutesPastNine);
-        
+
         this.top = minutesPastNine; // 根据过去的分钟数设置初始 top 值
         this.startMoving();
       } else {
@@ -140,7 +165,7 @@ export default {
     startMoving() {
       this.shouldMove = true;
       setInterval(() => {
-        this.top += 1.22;
+        this.top += 1.16;
       }, 60000); // 每60,000毫秒(1分钟) 增加1px
     },
     updateTime() {
@@ -154,7 +179,7 @@ export default {
       seconds = seconds < 10 ? "0" + seconds : seconds;
 
       // 显示当前时间
-      this.currentTime = hours + ':' + minutes;
+      this.currentTime = hours + ":" + minutes;
     },
     formatTime(timeStr) {
       return timeStr.replace(/^0/, "").replace(/:00$/, "");

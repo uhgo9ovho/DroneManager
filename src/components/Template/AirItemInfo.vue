@@ -9,33 +9,70 @@
       {{ info.schedule_text }}
       <span class="task-num-error">(未飞行)</span>
     </div>
-    <div class="task-change" :class="[info.operator ? '' : 'hidden']">排期调整({{ info.operator }})</div>
-    <div class="task-btn">
+    <div class="task-change" :class="[info.operator ? '' : 'hidden']">
+      排期调整({{ info.operator }})
+    </div>
+    <div class="task-btn" @click="takeOffBtn">
       <div>起飞</div>
-      <div class="iconfont el-icon-guijifeihang" style="font-size: 12px; margin-left: 5px;"></div>
+      <div
+        class="iconfont el-icon-guijifeihang"
+        style="font-size: 12px; margin-left: 5px"
+      ></div>
     </div>
     <div class="task-menu">
-      <el-dropdown>
+      <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link">
           <i class="el-icon-more"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>查看详情</el-dropdown-item>
-          <el-dropdown-item>删除</el-dropdown-item>
+          <el-dropdown-item command="details">查看详情</el-dropdown-item>
+          <el-dropdown-item command="delete">删除</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+    </div>
+    <!-- 起飞和删除弹窗 -->
+    <div v-if="dialogVisible">
+      <TakeOffDialog @handleClose="handleClose" :dialogVisible="dialogVisible" :isDel="isDel"></TakeOffDialog>
     </div>
   </div>
 </template>
 
 <script>
+import TakeOffDialog from "./TakeOffDialog.vue";
 export default {
   name: "AirItemInfo",
+  components: {
+    TakeOffDialog,
+  },
   props: {
     info: {
       type: Object,
       default: () => {},
     },
+  },
+  data() {
+    return {
+      dialogVisible: false,
+      isDel: false,
+    };
+  },
+  methods: {
+    handleCommand(command) {
+      if (command == "details") {
+        this.$emit("openDialog");
+      } else {
+        //删除
+        this.dialogVisible = true;
+        this.isDel = true;
+      }
+    },
+    takeOffBtn() {
+      this.dialogVisible = true;
+      this.isDel = false;
+    },
+    handleClose() {
+      this.dialogVisible = false;
+    }
   },
 };
 </script>

@@ -7,9 +7,9 @@
       <div class="state">已完成</div>
       <div class="title_wrap">
         <div class="tag">任务</div>
-        <div class="title">【全景】比亚迪一期</div>
+        <div class="titles">【全景】比亚迪一期</div>
       </div>
-      <div class="nest">
+      <div class="nest" v-if="!taskDetails">
         <div class="task-name-type">
           <el-popover placement="bottom-start" trigger="click">
             <span slot="reference"
@@ -52,8 +52,11 @@
         <div class="data">西安-周至</div>
       </div>
       <div class="item">
-        <i class="iconfont el-icon-dikuai"></i>
-        <div class="msg">地块信息</div>
+        <i
+          class="iconfont"
+          :class="[taskDetails ? 'el-icon-xiazai20' : 'el-icon-dikuai']"
+        ></i>
+        <div class="msg">{{ taskDetails ? "任务信息" : "地块信息" }}</div>
         <el-divider></el-divider>
       </div>
       <div class="plot">
@@ -93,18 +96,39 @@
 
 <script>
 export default {
+  props: {
+    taskDetails: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    plotOptions() {
+      if (this.taskDetails) {
+        //任务信息
+        return [
+          {
+            label: '所属任务',
+            value: '【拍照】集贤初中东边污水巡查01'
+          }
+        ]
+      } else {
+        //地块信息
+        return [
+          {
+            label: "地块形状",
+            value: "面状地块",
+          },
+          {
+            label: "地块半径",
+            value: "-米",
+          },
+        ];
+      }
+    },
+  },
   data() {
     return {
-      plotOptions: [
-        {
-          label: "地块形状",
-          value: "面状地块",
-        },
-        {
-          label: "地块半径",
-          value: "-米",
-        },
-      ],
       detailOptions: [
         {
           label: "预计耗时",
@@ -125,7 +149,7 @@ export default {
     closeDialog() {
       this.$emit("closeDialog");
     },
-  }
+  },
 };
 </script>
 
@@ -202,7 +226,7 @@ export default {
         line-height: 22px;
         margin-right: 4px;
       }
-      .title {
+      .titles {
         max-width: 296px;
         font-weight: 500;
         font-size: 16px;
@@ -291,7 +315,7 @@ export default {
       display: flex;
       height: 60px;
       .item {
-        width: 60px;
+        // width: 60px;
         display: flex;
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
