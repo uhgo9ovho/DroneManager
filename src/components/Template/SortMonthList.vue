@@ -1,0 +1,216 @@
+<template>
+  <div class="month-list">
+    <table class="table-head">
+      <thead>
+        <th v-for="(item, index) in weekOptions" :key="index">{{ item }}</th>
+      </thead>
+    </table>
+    <el-calendar v-model="value" :first-day-of-week="7">
+      <template slot="dateCell" slot-scope="{ data }">
+        <p :class="data.isSelected ? 'is-selected' : ''" @click="sss(data)">
+          {{ data.day.split("-").slice(1).join("-") }}
+        </p>
+        <div
+          v-for="(item, index) in dayList"
+          :key="index"
+          v-show="data.day == item.date"
+        >
+          <div
+            class="item-month-title"
+            v-for="(it, idx) in item.airlines"
+            :key="idx"
+          >
+            <div class="month-task-item" :style="{background: changeBg(it.airline_name, it.state), color: changeColor(it.state, it.airline_name)}">
+              <i class="el-icon-close"></i>
+              <div class="task-name" :title="it.airline_name">
+                {{ it.airline_name }}
+              </div>
+              <div class="task-time">{{ it.time }}</div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </el-calendar>
+    <div class="state-info">
+      <div class="info-item" v-for="(item, index) in infoOptions" :key="index">
+        <div
+          class="state-circle"
+          :style="{ background: item.color, 'box-shadow': item.shadow }"
+        ></div>
+        <div class="state-text">{{ item.label }}</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mockList5 } from "@/utils/mock.js";
+export default {
+  name: "MonthList",
+  data() {
+    return {
+      value: new Date(),
+      weekOptions: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+      infoOptions: [
+        {
+          label: "拍照",
+          color: "rgb(61, 186, 222)",
+          shadow: "rgba(61, 186, 222, 0.42) 0px 2px 6px 0px",
+        },
+        {
+          label: "全景",
+          color: "rgb(160, 98, 202)",
+          shadow: "rgba(160, 98, 202, 0.35) 0px 2px 6px 0px",
+        },
+        {
+          label: "正射",
+          color: "rgb(234, 75, 131)",
+          shadow: "rgba(234, 75, 131, 0.45) 0px 2px 6px 0px",
+        },
+        {
+          label: "三维",
+          color: "rgb(246, 169, 31)",
+          shadow: "rgba(246, 169, 31, 0.6) 0px 2px 6px 0px",
+        },
+        {
+          label: "直播",
+          color: "rgb(52, 198, 66)",
+          shadow: "rgba(52, 198, 66, 0.5) 0px 2px 6px 0px",
+        },
+      ],
+      dayList: [],
+    };
+  },
+  computed: {
+    changeBg() {
+        return function(name, state) {
+            if(state) return ''; //已经飞过了
+            if(name.includes('全景')) return 'rgb(160, 98, 202)';
+            if(name.includes('拍照')) return 'rgb(61, 186, 222)';
+            if(name.includes('正射')) return 'rgb(234, 75, 131)';
+            if(name.includes('三维')) return 'rgb(246, 169, 31)';
+            if(name.includes('直播')) return 'rgb(52, 198, 66)';
+        }
+    },
+    changeColor() {
+        return function(state, name) {
+            if(!state && (name.includes('全景') || name.includes('拍照') || name.includes('正射') || name.includes('三维') || name.includes('直播'))) {
+                return '#fff'
+            } else {
+                return ''
+            }
+        }
+    }
+  },
+  methods: {
+    sss(data) {
+      console.log(data);
+    },
+  },
+  mounted() {
+    console.log(mockList5);
+    this.dayList = mockList5;
+  },
+};
+</script>
+
+<style lang="scss">
+.month-list {
+  margin-left: 7px;
+  margin-right: 8px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  .table-head {
+    width: 100%;
+    background: #fff;
+    height: 4.4444444444vh;
+    border-radius: 0.4166666667vw 0.4166666667vw 0 0;
+    user-select: none;
+    th {
+      font-weight: 550;
+      font-size: 1.4814814815vh;
+      color: #1d1d1f;
+      text-align: center;
+      line-height: 2.2222222222vh;
+    }
+  }
+  .el-calendar {
+    flex: 1 1 0%;
+    overflow: auto;
+    background: none !important;
+
+    .el-calendar__header {
+      display: none;
+    }
+    .el-calendar__body {
+      padding: 0;
+      thead {
+        display: none;
+      }
+      .el-calendar-day {
+        min-height: 13.8888888889vh;
+        height: auto !important;
+        .month-task-item {
+          height: 26px;
+          background: rgba(0, 0, 0, 0.0392156862745098);
+          border-radius: 14px;
+          font-weight: 400;
+          font-size: 13px;
+          color: #86868c;
+          line-height: 26px;
+          margin-top: 2px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          padding-left: 11px;
+          padding-right: 8px;
+          .task-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+            font-size: 13px;
+            line-height: 13px;
+            margin-left: 3px;
+          }
+        }
+      }
+    }
+  }
+  .state-info {
+    height: 48px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 32px;
+    background: #f5f5f6;
+    .info-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .state-circle {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      margin-left: 28px;
+    }
+    .state-text {
+      font-weight: 400;
+      font-size: 14px;
+      color: #6e6e73;
+      letter-spacing: 0;
+      text-align: center;
+      line-height: 14px;
+      margin-left: 4px;
+    }
+  }
+}
+</style>

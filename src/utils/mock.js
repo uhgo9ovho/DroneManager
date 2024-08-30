@@ -3092,3 +3092,8550 @@ export const mockList4 = [
     "total_time": 2945.5454334887418
   }
 ]
+
+export const mockList5 = [
+  {
+    "airlines": [
+      {
+        "aim": 4,
+        "airline_id": "aad872e2-95b1-44ae-bfef-6a946f09c435",
+        "airline_name": "【全景】比亚迪一期",
+        "index": 1,
+        "out_airline_id": "DJI_4916614141646475265",
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 5,
+        "state": 2,
+        "t1": "09:11:34",
+        "t2": "09:06:59",
+        "task_id": "d1b9f85b-58c7-4ebc-9f48-cc8646931604",
+        "ticket_id": "12194",
+        "time": "09:11:34"
+      },
+      {
+        "aim": 4,
+        "airline_id": "eb4cf4da-d9fb-49b0-b6dc-3ddb142d2795",
+        "airline_name": "【全景】比亚迪二期",
+        "index": 2,
+        "out_airline_id": "DJI_4916568834925662209",
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 7,
+        "state": 2,
+        "t1": "10:06:06",
+        "t2": "10:04:57",
+        "task_id": "4911dad1-a2fc-4379-b8b3-1a96959ffc90",
+        "ticket_id": "12183",
+        "time": "10:06:06"
+      },
+      {
+        "aim": 4,
+        "airline_id": "e015229a-dd53-464d-b901-c327d361295c",
+        "airline_name": "【全景】陕西宏开新型节能环保建筑材料",
+        "index": 3,
+        "out_airline_id": "DJI_4916566912046993409",
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 5,
+        "state": 2,
+        "t1": "11:01:40",
+        "t2": "11:01:38",
+        "task_id": "50b716f3-0972-424c-ae3a-52297d30b123",
+        "ticket_id": "12181",
+        "time": "11:01:40"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 4,
+        "out_airline_id": "DJI_4913663541292044289",
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "12:25:22",
+        "t2": "12:24:20",
+        "task_id": null,
+        "ticket_id": "12042",
+        "time": "12:25:22"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 6,
+        "out_airline_id": "",
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "12:54:03",
+        "t2": "12:53:04",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "12:54:03"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 7,
+        "out_airline_id": "",
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "13:39:52",
+        "t2": "13:38:53",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "13:39:52"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 8,
+        "out_airline_id": "",
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "14:13:46",
+        "t2": "14:12:52",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:13:46"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 9,
+        "out_airline_id": "",
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "15:08:22",
+        "t2": "15:08:22",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:08:22"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 10,
+        "out_airline_id": "",
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "15:13:09",
+        "t2": "15:11:57",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:13:09"
+      },
+      {
+        "aim": 3,
+        "airline_id": "8cbba57b-5198-41b9-b68a-9300e1d8c8be",
+        "airline_name": "【全覆盖】西安-周至-3000mB10",
+        "index": 5,
+        "out_airline_id": "DJI_4881023792073150465",
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "17:24:21",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "17:24:21"
+      }
+    ],
+    "date": "2024-08-30"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 9,
+        "state": 0,
+        "t1": "",
+        "t2": "09:01:49",
+        "task_id": "40cfb055-1414-4210-a415-5b32f58190b1",
+        "ticket_id": "10229",
+        "time": "09:01:49"
+      },
+      {
+        "aim": 4,
+        "airline_id": "9cec074a-8ad4-4fe9-8d50-c6776b57b0e4",
+        "airline_name": "【全景】金凤村11组东112米附近1",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 2,
+        "state": 0,
+        "t1": "",
+        "t2": "10:06:43",
+        "task_id": "7320a7a0-2727-4356-b9fd-b187ff27a176",
+        "ticket_id": "12075",
+        "time": "10:06:43"
+      },
+      {
+        "aim": 4,
+        "airline_id": "3cfa7e9a-6417-4d7d-94cd-88ce2f20b236",
+        "airline_name": "【全景】金凤村11组东112米附近2",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 2,
+        "state": 0,
+        "t1": "",
+        "t2": "11:09:15",
+        "task_id": "7320a7a0-2727-4356-b9fd-b187ff27a176",
+        "ticket_id": "12075",
+        "time": "11:09:15"
+      },
+      {
+        "aim": 1,
+        "airline_id": "00941e6c-cb75-4b3c-8313-99c1fe26f0de",
+        "airline_name": "【拍照】（三公里外）比亚迪二期01",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 9,
+        "state": 0,
+        "t1": "",
+        "t2": "12:00:10",
+        "task_id": "8a3ff029-157b-4dba-9607-7304144f47a0",
+        "ticket_id": "10228",
+        "time": "12:00:10"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 9,
+        "state": 0,
+        "t1": "",
+        "t2": "13:07:31",
+        "task_id": "e75b948a-8441-47ef-8064-09989710ab32",
+        "ticket_id": "10227",
+        "time": "13:07:31"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": 5,
+        "state": 3,
+        "t1": "17:39:34",
+        "t2": "14:06:05",
+        "task_id": "3863b1a0-57b8-4d9b-8831-2560319390b9",
+        "ticket_id": "12039",
+        "time": "17:39:34"
+      },
+      {
+        "aim": 3,
+        "airline_id": "b9c7c006-756d-41d9-8b26-2fe186f6db6f",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B04",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 12,
+        "state": 0,
+        "t1": "",
+        "t2": "15:00:34",
+        "task_id": "2e8df82a-f24e-4371-8b57-6a156940766f",
+        "ticket_id": "8728",
+        "time": "15:00:34"
+      },
+      {
+        "aim": 3,
+        "airline_id": "3294e4e7-fa62-4850-a9b2-6a7d2489c8d6",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B05",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 12,
+        "state": 0,
+        "t1": "",
+        "t2": "16:00:10",
+        "task_id": "2e8df82a-f24e-4371-8b57-6a156940766f",
+        "ticket_id": "8728",
+        "time": "16:00:10"
+      }
+    ],
+    "date": "2024-07-28"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 10,
+        "state": 0,
+        "t1": "",
+        "t2": "09:08:31",
+        "task_id": "38154d19-9ef7-4f54-bfff-e9a52269e66b",
+        "ticket_id": "10229",
+        "time": "09:08:31"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 6,
+        "state": 0,
+        "t1": "",
+        "t2": "10:03:05",
+        "task_id": "407e33fe-ab25-4d44-ab9b-ceeb040c0ce6",
+        "ticket_id": "12039",
+        "time": "10:03:05"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "11:04:11",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "11:04:11"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 10,
+        "state": 0,
+        "t1": "",
+        "t2": "12:06:24",
+        "task_id": "2dcea273-c746-4d15-8edd-c0fb52232bbe",
+        "ticket_id": "10227",
+        "time": "12:06:24"
+      },
+      {
+        "aim": 1,
+        "airline_id": "00941e6c-cb75-4b3c-8313-99c1fe26f0de",
+        "airline_name": "【拍照】（三公里外）比亚迪二期01",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 10,
+        "state": 0,
+        "t1": "",
+        "t2": "13:03:01",
+        "task_id": "a71dc66b-6692-46c4-afc7-abc89f1667ec",
+        "ticket_id": "10228",
+        "time": "13:03:01"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "09:25:22",
+        "t2": "14:03:46",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "09:25:22"
+      },
+      {
+        "aim": 3,
+        "airline_id": "b9c7c006-756d-41d9-8b26-2fe186f6db6f",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B04",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 12,
+        "state": 0,
+        "t1": "",
+        "t2": "15:00:59",
+        "task_id": "2e8df82a-f24e-4371-8b57-6a156940766f",
+        "ticket_id": "8728",
+        "time": "15:00:59"
+      },
+      {
+        "aim": 3,
+        "airline_id": "3294e4e7-fa62-4850-a9b2-6a7d2489c8d6",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B05",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 12,
+        "state": 0,
+        "t1": "",
+        "t2": "16:00:48",
+        "task_id": "2e8df82a-f24e-4371-8b57-6a156940766f",
+        "ticket_id": "8728",
+        "time": "16:00:48"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "16:35:35",
+        "t2": "16:34:37",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "16:35:35"
+      }
+    ],
+    "date": "2024-07-29"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 10,
+        "state": 0,
+        "t1": "",
+        "t2": "09:00:37",
+        "task_id": "38154d19-9ef7-4f54-bfff-e9a52269e66b",
+        "ticket_id": "10229",
+        "time": "09:00:37"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "09:46:31",
+        "t2": "09:45:31",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:46:31"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 7,
+        "state": 3,
+        "t1": "10:35:33",
+        "t2": "10:24:14",
+        "task_id": "93da31ac-c5e4-43c8-b2a1-e0394fa9c151",
+        "ticket_id": "12039",
+        "time": "10:35:33"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "11:29:53",
+        "t2": "11:28:55",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:29:53"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 10,
+        "state": 0,
+        "t1": "",
+        "t2": "12:19:27",
+        "task_id": "2dcea273-c746-4d15-8edd-c0fb52232bbe",
+        "ticket_id": "10227",
+        "time": "12:19:27"
+      },
+      {
+        "aim": 1,
+        "airline_id": "00941e6c-cb75-4b3c-8313-99c1fe26f0de",
+        "airline_name": "【拍照】（三公里外）比亚迪二期01",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 10,
+        "state": 2,
+        "t1": "13:52:43",
+        "t2": "13:22:52",
+        "task_id": "a71dc66b-6692-46c4-afc7-abc89f1667ec",
+        "ticket_id": "10228",
+        "time": "13:52:43"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "09:21:21",
+        "t2": "14:00:03",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "09:21:21"
+      },
+      {
+        "aim": 3,
+        "airline_id": "b9c7c006-756d-41d9-8b26-2fe186f6db6f",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B04",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 12,
+        "state": 2,
+        "t1": "15:01:38",
+        "t2": "15:00:48",
+        "task_id": "2e8df82a-f24e-4371-8b57-6a156940766f",
+        "ticket_id": "8728",
+        "time": "15:01:38"
+      },
+      {
+        "aim": 3,
+        "airline_id": "3294e4e7-fa62-4850-a9b2-6a7d2489c8d6",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B05",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 12,
+        "state": 2,
+        "t1": "16:01:14",
+        "t2": "16:00:16",
+        "task_id": "2e8df82a-f24e-4371-8b57-6a156940766f",
+        "ticket_id": "8728",
+        "time": "16:01:14"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0c009bbe-4d0b-4adf-ad4f-751c6394381e",
+        "airline_name": "【拍照】恒怡、天亿每周安全生产巡查01",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 12,
+        "state": 2,
+        "t1": "16:38:56",
+        "t2": "16:37:55",
+        "task_id": "1e347caa-ed29-42f0-8a4a-2f78822b4bf4",
+        "ticket_id": "10116",
+        "time": "16:38:56"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "16:58:32",
+        "t2": "16:57:37",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "16:58:32"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "17:41:14",
+        "t2": "17:40:15",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "17:41:14"
+      }
+    ],
+    "date": "2024-07-30"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 10,
+        "state": 2,
+        "t1": "09:09:46",
+        "t2": "09:08:56",
+        "task_id": "38154d19-9ef7-4f54-bfff-e9a52269e66b",
+        "ticket_id": "10229",
+        "time": "09:09:46"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 8,
+        "state": 3,
+        "t1": "14:06:46",
+        "t2": "10:31:38",
+        "task_id": "4f99f17e-1af6-4119-acd1-276d689b2d0a",
+        "ticket_id": "12039",
+        "time": "14:06:46"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "11:16:58",
+        "t2": "11:16:02",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:16:58"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "10:44:52",
+        "t2": "11:30:35",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "10:44:52"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 10,
+        "state": 0,
+        "t1": "",
+        "t2": "12:20:14",
+        "task_id": "2dcea273-c746-4d15-8edd-c0fb52232bbe",
+        "ticket_id": "10227",
+        "time": "12:20:14"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "09:53:18",
+        "t2": "13:01:14",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "09:53:18"
+      },
+      {
+        "aim": 3,
+        "airline_id": "1db93242-a5d2-4743-bb9a-517c5b32af1d",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B06",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 12,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:51",
+        "task_id": "2e8df82a-f24e-4371-8b57-6a156940766f",
+        "ticket_id": "8728",
+        "time": "14:00:51"
+      },
+      {
+        "aim": 3,
+        "airline_id": "6bff9c05-3998-427f-b646-9bc4c5e87778",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B07",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 12,
+        "state": 0,
+        "t1": "",
+        "t2": "15:00:37",
+        "task_id": "2e8df82a-f24e-4371-8b57-6a156940766f",
+        "ticket_id": "8728",
+        "time": "15:00:37"
+      },
+      {
+        "aim": 4,
+        "airline_id": "b03adb34-57f1-49b3-90ba-1b0aa092295d",
+        "airline_name": "【全景】比亚迪高端智能产业园项目(组装)",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 3,
+        "state": 2,
+        "t1": "16:37:00",
+        "t2": "16:40:18",
+        "task_id": "c54ecd9d-f548-4f3e-a646-da0902939f31",
+        "ticket_id": "12166",
+        "time": "16:37:00"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": 1,
+        "state": 2,
+        "t1": "17:03:08",
+        "t2": "16:52:08",
+        "task_id": "b0df8a5e-8a88-43f7-8ba9-078901d18dae",
+        "ticket_id": "12167",
+        "time": "17:03:08"
+      },
+      {
+        "aim": 4,
+        "airline_id": "5474158b-e365-44b2-bbe7-c873d11f9732",
+        "airline_name": "【全景】集贤佳苑项目",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": 2,
+        "state": 2,
+        "t1": "17:17:32",
+        "t2": "17:37:33",
+        "task_id": "12c94016-ff62-40e3-959f-75fd826daf9f",
+        "ticket_id": "12168",
+        "time": "17:17:32"
+      }
+    ],
+    "date": "2024-07-31"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 9,
+        "state": 3,
+        "t1": "15:22:51",
+        "t2": "09:02:38",
+        "task_id": "45e11f89-66db-44ce-bafd-e2a815921df9",
+        "ticket_id": "12039",
+        "time": "15:22:51"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 2,
+        "state": 2,
+        "t1": "11:49:11",
+        "t2": "11:34:17",
+        "task_id": "fc65f3d1-4068-4066-aa48-5bc0cf8ab00c",
+        "ticket_id": "12167",
+        "time": "11:49:11"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 10,
+        "state": 0,
+        "t1": "",
+        "t2": "12:18:42",
+        "task_id": "2dcea273-c746-4d15-8edd-c0fb52232bbe",
+        "ticket_id": "10227",
+        "time": "12:18:42"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "12:18:42",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "12:18:42"
+      },
+      {
+        "aim": 4,
+        "airline_id": "e015229a-dd53-464d-b901-c327d361295c",
+        "airline_name": "【全景】陕西宏开新型节能环保建筑材料",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "12:19:41",
+        "t2": "12:18:42",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "12:19:41"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "09:53:19",
+        "t2": "13:01:34",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "09:53:19"
+      },
+      {
+        "aim": 4,
+        "airline_id": "a731d738-df51-4910-80ea-eb7b0e479ce5",
+        "airline_name": "【全景】西安应真阁家俱生产基地改建项目",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 1,
+        "state": 2,
+        "t1": "13:23:03",
+        "t2": "13:22:07",
+        "task_id": "cfbb7f41-0770-456f-9d59-17e6f62f3c10",
+        "ticket_id": "12174",
+        "time": "13:23:03"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "14:30:43",
+        "t2": "14:29:45",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:30:43"
+      },
+      {
+        "aim": 4,
+        "airline_id": "80a22ea5-b047-47c3-b8ac-79a717de2ede",
+        "airline_name": "【全景】西安金凤水厂一期工程",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 1,
+        "state": 3,
+        "t1": "",
+        "t2": "14:34:20",
+        "task_id": "1fc85a32-e124-4274-bb6d-c4ae2bb0acdb",
+        "ticket_id": "12177",
+        "time": "14:34:20"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "16:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "16:00:00"
+      },
+      {
+        "aim": 4,
+        "airline_id": "dc356572-dd46-46b5-a776-089598e3ef2e",
+        "airline_name": "【全景】西安高新区集贤电子智能制造产业园项目",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 1,
+        "state": 0,
+        "t1": "",
+        "t2": "16:37:56",
+        "task_id": "87dacf87-dfed-4ecd-a80c-2bbffc9a5ca0",
+        "ticket_id": "12178",
+        "time": "16:37:56"
+      },
+      {
+        "aim": 4,
+        "airline_id": "aaf930d2-fbcb-41cd-ae16-a041dba34d24",
+        "airline_name": "【全景】航投项目",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "14:08:57",
+        "t2": "17:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:08:57"
+      },
+      {
+        "aim": 4,
+        "airline_id": "aad872e2-95b1-44ae-bfef-6a946f09c435",
+        "airline_name": "【全景】比亚迪一期",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "17:06:15",
+        "t2": "17:05:20",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "17:06:15"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 14,
+        "out_airline_id": null,
+        "plan_window": [
+          "18:00:00",
+          "19:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "18:03:04",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "18:03:04"
+      },
+      {
+        "aim": 4,
+        "airline_id": "80a22ea5-b047-47c3-b8ac-79a717de2ede",
+        "airline_name": "【全景】西安金凤水厂一期工程",
+        "index": 15,
+        "out_airline_id": null,
+        "plan_window": [
+          "18:00:00",
+          "19:00:00"
+        ],
+        "round": 1,
+        "state": 0,
+        "t1": "",
+        "t2": "18:50:48",
+        "task_id": "1fc85a32-e124-4274-bb6d-c4ae2bb0acdb",
+        "ticket_id": "12177",
+        "time": "18:50:48"
+      }
+    ],
+    "date": "2024-08-01"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "09:09:39",
+        "t2": "09:08:46",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:09:39"
+      },
+      {
+        "aim": 10,
+        "airline_id": "d8b9e960-bcff-426c-aa28-f5c340111e8b",
+        "airline_name": "一键起飞",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "09:33:45",
+        "t2": "09:32:49",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:33:45"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "09:36:27",
+        "t2": "09:35:59",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:36:27"
+      },
+      {
+        "aim": 4,
+        "airline_id": "4d579ce8-c6be-46ed-88f2-4adfc5a7f0f3",
+        "airline_name": "【全景】污水处理厂扩建",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "10:28:23",
+        "t2": "10:27:25",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "10:28:23"
+      },
+      {
+        "aim": 4,
+        "airline_id": "dc356572-dd46-46b5-a776-089598e3ef2e",
+        "airline_name": "【全景】西安高新区集贤电子智能制造产业园项目",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "11:34:27",
+        "t2": "11:33:33",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:34:27"
+      },
+      {
+        "aim": 4,
+        "airline_id": "80a22ea5-b047-47c3-b8ac-79a717de2ede",
+        "airline_name": "【全景】西安金凤水厂一期工程",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "11:44:29",
+        "t2": "11:44:03",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:44:29"
+      },
+      {
+        "aim": 4,
+        "airline_id": "eb4cf4da-d9fb-49b0-b6dc-3ddb142d2795",
+        "airline_name": "【全景】比亚迪二期",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 1,
+        "state": 2,
+        "t1": "09:53:58",
+        "t2": "11:58:34",
+        "task_id": "653d8def-cbcb-4dec-89e5-c4b81449f31a",
+        "ticket_id": "12183",
+        "time": "09:53:58"
+      },
+      {
+        "aim": 4,
+        "airline_id": "469e0945-fc2f-420e-b205-739ea0f856c2",
+        "airline_name": "【全景】集贤新能源汽车本地化配套基地",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 1,
+        "state": 2,
+        "t1": "10:58:03",
+        "t2": "12:21:21",
+        "task_id": "d8935642-8e5c-4732-948d-10cfc3b5ff9f",
+        "ticket_id": "12179",
+        "time": "10:58:03"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 10,
+        "state": 3,
+        "t1": "14:16:55",
+        "t2": "12:35:20",
+        "task_id": "e8ce6112-ae51-4d4c-a135-c25e0a2d6886",
+        "ticket_id": "12039",
+        "time": "14:16:55"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 10,
+        "state": 0,
+        "t1": "",
+        "t2": "13:26:14",
+        "task_id": "2dcea273-c746-4d15-8edd-c0fb52232bbe",
+        "ticket_id": "10227",
+        "time": "13:26:14"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "15:11:03",
+        "t2": "15:06:29",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "15:11:03"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "16:24:23",
+        "t2": "16:01:46",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "16:24:23"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "16:36:50",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "16:36:50"
+      }
+    ],
+    "date": "2024-08-02"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "09:03:40",
+        "task_id": "f02be79d-5744-45bb-a77d-df5d31080cb1",
+        "ticket_id": "12039",
+        "time": "09:03:40"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 2,
+        "state": 0,
+        "t1": "",
+        "t2": "10:05:53",
+        "task_id": "4cbe4941-983c-4672-a012-3e00eff66cb0",
+        "ticket_id": "11873",
+        "time": "10:05:53"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "11:09:04",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "11:09:04"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 10,
+        "state": 0,
+        "t1": "",
+        "t2": "12:04:34",
+        "task_id": "2dcea273-c746-4d15-8edd-c0fb52232bbe",
+        "ticket_id": "10227",
+        "time": "12:04:34"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "13:03:44",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "13:03:44"
+      }
+    ],
+    "date": "2024-08-03"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 12,
+        "state": 0,
+        "t1": "",
+        "t2": "09:08:00",
+        "task_id": "9ad1d260-3cda-494b-aab7-6aa0af247496",
+        "ticket_id": "12039",
+        "time": "09:08:00"
+      },
+      {
+        "aim": 4,
+        "airline_id": "eb4cf4da-d9fb-49b0-b6dc-3ddb142d2795",
+        "airline_name": "【全景】比亚迪二期",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 1,
+        "state": 0,
+        "t1": "",
+        "t2": "10:00:06",
+        "task_id": "653d8def-cbcb-4dec-89e5-c4b81449f31a",
+        "ticket_id": "12183",
+        "time": "10:00:06"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 2,
+        "state": 0,
+        "t1": "",
+        "t2": "11:08:56",
+        "task_id": "4cbe4941-983c-4672-a012-3e00eff66cb0",
+        "ticket_id": "11873",
+        "time": "11:08:56"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 10,
+        "state": 0,
+        "t1": "",
+        "t2": "12:02:36",
+        "task_id": "2dcea273-c746-4d15-8edd-c0fb52232bbe",
+        "ticket_id": "10227",
+        "time": "12:02:36"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "13:09:01",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "13:09:01"
+      }
+    ],
+    "date": "2024-08-04"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 4,
+        "airline_id": "aaf930d2-fbcb-41cd-ae16-a041dba34d24",
+        "airline_name": "【全景】航投项目",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "09:48:51",
+        "t2": "09:47:53",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:48:51"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0c009bbe-4d0b-4adf-ad4f-751c6394381e",
+        "airline_name": "【拍照】恒怡、天亿每周安全生产巡查01",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "09:36:49",
+        "t2": "10:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:36:49"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 13,
+        "state": 0,
+        "t1": "",
+        "t2": "10:10:00",
+        "task_id": "e827d510-5811-42fd-b174-7fb8d6e8fe59",
+        "ticket_id": "12039",
+        "time": "10:10:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "10:50:22",
+        "task_id": "36d0048d-b731-4f4f-929e-35b8f5c7d19a",
+        "ticket_id": "10229",
+        "time": "10:50:22"
+      },
+      {
+        "aim": 1,
+        "airline_id": "e07480df-ec18-465e-ad72-194843a0df0f",
+        "airline_name": "【采样取证】陕西省西安市周至县集贤镇三隆实业有限公司",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "11:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:00:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 2,
+        "state": 0,
+        "t1": "",
+        "t2": "11:01:40",
+        "task_id": "4cbe4941-983c-4672-a012-3e00eff66cb0",
+        "ticket_id": "11873",
+        "time": "11:01:40"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "11:20:30",
+        "t2": "11:19:28",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:20:30"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 13,
+        "state": 2,
+        "t1": "10:19:20",
+        "t2": "11:28:47",
+        "task_id": "4f4fea41-2926-4161-8de6-c139dd2241c8",
+        "ticket_id": "8728",
+        "time": "10:19:20"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "12:02:12",
+        "task_id": "01cdf409-2355-49c6-ad06-dbfafb980229",
+        "ticket_id": "10227",
+        "time": "12:02:12"
+      },
+      {
+        "aim": 1,
+        "airline_id": "00941e6c-cb75-4b3c-8313-99c1fe26f0de",
+        "airline_name": "【拍照】（三公里外）比亚迪二期01",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "13:09:03",
+        "task_id": "995baa79-7b94-435b-90b6-a2654f59a105",
+        "ticket_id": "10228",
+        "time": "13:09:03"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "14:03:18",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "14:03:18"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "14:18:43",
+        "t2": "14:17:44",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:18:43"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "14:54:17",
+        "t2": "14:53:47",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:54:17"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 14,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "15:46:35",
+        "t2": "15:45:32",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:46:35"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 15,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": 13,
+        "state": 2,
+        "t1": "17:06:57",
+        "t2": "17:21:31",
+        "task_id": "4f4fea41-2926-4161-8de6-c139dd2241c8",
+        "ticket_id": "8728",
+        "time": "17:06:57"
+      }
+    ],
+    "date": "2024-08-05"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "09:01:13",
+        "task_id": "36d0048d-b731-4f4f-929e-35b8f5c7d19a",
+        "ticket_id": "10229",
+        "time": "09:01:13"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "09:11:17",
+        "t2": "09:10:17",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:11:17"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 14,
+        "state": 3,
+        "t1": "09:55:21",
+        "t2": "10:03:17",
+        "task_id": "e4cf1119-cb75-4ef5-8dee-cdd9c158420e",
+        "ticket_id": "12039",
+        "time": "09:55:21"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "11:17:52",
+        "t2": "11:16:53",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:17:52"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "12:38:46",
+        "task_id": "01cdf409-2355-49c6-ad06-dbfafb980229",
+        "ticket_id": "10227",
+        "time": "12:38:46"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "13:47:39",
+        "t2": "13:46:24",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "13:47:39"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0c009bbe-4d0b-4adf-ad4f-751c6394381e",
+        "airline_name": "【拍照】恒怡、天亿每周安全生产巡查01",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:00:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "09:19:09",
+        "t2": "14:02:43",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "09:19:09"
+      },
+      {
+        "aim": 3,
+        "airline_id": "7724ad04-4cb1-4dac-95d7-b4e20b237532",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B03",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "14:31:55",
+        "t2": "14:31:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:31:55"
+      },
+      {
+        "aim": 3,
+        "airline_id": "7724ad04-4cb1-4dac-95d7-b4e20b237532",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B03",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 13,
+        "state": 3,
+        "t1": "11:45:25",
+        "t2": "15:00:26",
+        "task_id": "4f4fea41-2926-4161-8de6-c139dd2241c8",
+        "ticket_id": "8728",
+        "time": "11:45:25"
+      },
+      {
+        "aim": 1,
+        "airline_id": "00941e6c-cb75-4b3c-8313-99c1fe26f0de",
+        "airline_name": "【拍照】（三公里外）比亚迪二期01",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "16:38:56",
+        "task_id": "995baa79-7b94-435b-90b6-a2654f59a105",
+        "ticket_id": "10228",
+        "time": "16:38:56"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": 2,
+        "state": 0,
+        "t1": "",
+        "t2": "17:09:50",
+        "task_id": "4cbe4941-983c-4672-a012-3e00eff66cb0",
+        "ticket_id": "11873",
+        "time": "17:09:50"
+      }
+    ],
+    "date": "2024-08-06"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "09:16:37",
+        "t2": "09:15:46",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:16:37"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "09:57:41",
+        "t2": "09:56:41",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:57:41"
+      },
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "11:57:24",
+        "task_id": "36d0048d-b731-4f4f-929e-35b8f5c7d19a",
+        "ticket_id": "10229",
+        "time": "11:57:24"
+      },
+      {
+        "aim": 4,
+        "airline_id": "b03adb34-57f1-49b3-90ba-1b0aa092295d",
+        "airline_name": "【全景】比亚迪高端智能产业园项目(组装)",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 4,
+        "state": 0,
+        "t1": "",
+        "t2": "13:16:33",
+        "task_id": "0a154146-7597-43d9-a16c-4010aa90db00",
+        "ticket_id": "12166",
+        "time": "13:16:33"
+      },
+      {
+        "aim": 3,
+        "airline_id": "3294e4e7-fa62-4850-a9b2-6a7d2489c8d6",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B05",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "13:37:17",
+        "t2": "13:36:14",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "13:37:17"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "14:19:37",
+        "task_id": "01cdf409-2355-49c6-ad06-dbfafb980229",
+        "ticket_id": "10227",
+        "time": "14:19:37"
+      },
+      {
+        "aim": 3,
+        "airline_id": "1db93242-a5d2-4743-bb9a-517c5b32af1d",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B06",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "14:23:23",
+        "t2": "14:22:18",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:23:23"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 15,
+        "state": 3,
+        "t1": "10:46:33",
+        "t2": "15:03:51",
+        "task_id": "c59c8a65-590f-40cc-9ba9-8ceee2297351",
+        "ticket_id": "12039",
+        "time": "10:46:33"
+      },
+      {
+        "aim": 1,
+        "airline_id": "00941e6c-cb75-4b3c-8313-99c1fe26f0de",
+        "airline_name": "【拍照】（三公里外）比亚迪二期01",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "15:26:02",
+        "task_id": "995baa79-7b94-435b-90b6-a2654f59a105",
+        "ticket_id": "10228",
+        "time": "15:26:02"
+      },
+      {
+        "aim": 3,
+        "airline_id": "6bff9c05-3998-427f-b646-9bc4c5e87778",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B07",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "15:32:27",
+        "t2": "15:31:29",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:32:27"
+      },
+      {
+        "aim": 3,
+        "airline_id": "b9c7c006-756d-41d9-8b26-2fe186f6db6f",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B04",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 13,
+        "state": 2,
+        "t1": "12:34:01",
+        "t2": "16:00:12",
+        "task_id": "4f4fea41-2926-4161-8de6-c139dd2241c8",
+        "ticket_id": "8728",
+        "time": "12:34:01"
+      },
+      {
+        "aim": 1,
+        "airline_id": "00941e6c-cb75-4b3c-8313-99c1fe26f0de",
+        "airline_name": "【拍照】（三公里外）比亚迪二期01",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "17:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "17:00:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "18:00:00",
+          "19:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "18:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "18:00:00"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 14,
+        "out_airline_id": null,
+        "plan_window": [
+          "18:00:00",
+          "19:00:00"
+        ],
+        "round": 3,
+        "state": 0,
+        "t1": "",
+        "t2": "18:00:40",
+        "task_id": "383e11b1-7ffd-4b23-9475-7c81088e0567",
+        "ticket_id": "12167",
+        "time": "18:00:40"
+      },
+      {
+        "aim": 1,
+        "airline_id": "37d547c6-9788-4d5d-a94d-afa461e98d1c",
+        "airline_name": "【拍照】巡查",
+        "index": 15,
+        "out_airline_id": null,
+        "plan_window": [
+          "20:00:00",
+          "21:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "20:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "20:00:00"
+      }
+    ],
+    "date": "2024-08-07"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 16,
+        "state": 3,
+        "t1": "11:03:19",
+        "t2": "09:04:55",
+        "task_id": "0bcb56ee-145e-4aff-9513-e14f5e682cb4",
+        "ticket_id": "12039",
+        "time": "11:03:19"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "09:19:32",
+        "t2": "09:18:30",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:19:32"
+      },
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "10:02:38",
+        "task_id": "36d0048d-b731-4f4f-929e-35b8f5c7d19a",
+        "ticket_id": "10229",
+        "time": "10:02:38"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "10:11:43",
+        "t2": "10:10:46",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "10:11:43"
+      },
+      {
+        "aim": 4,
+        "airline_id": "dc356572-dd46-46b5-a776-089598e3ef2e",
+        "airline_name": "【全景】西安高新区集贤电子智能制造产业园项目",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 2,
+        "state": 2,
+        "t1": "16:41:17",
+        "t2": "11:52:53",
+        "task_id": "38b5891a-b531-4ea5-bade-da63e971e1b1",
+        "ticket_id": "12178",
+        "time": "16:41:17"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "12:30:11",
+        "task_id": "01cdf409-2355-49c6-ad06-dbfafb980229",
+        "ticket_id": "10227",
+        "time": "12:30:11"
+      },
+      {
+        "aim": 4,
+        "airline_id": "aad872e2-95b1-44ae-bfef-6a946f09c435",
+        "airline_name": "【全景】比亚迪一期",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "12:45:25",
+        "t2": "12:44:36",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "12:45:25"
+      },
+      {
+        "aim": 4,
+        "airline_id": "eb4cf4da-d9fb-49b0-b6dc-3ddb142d2795",
+        "airline_name": "【全景】比亚迪二期",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "12:58:31",
+        "t2": "12:58:01",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "12:58:31"
+      },
+      {
+        "aim": 1,
+        "airline_id": "00941e6c-cb75-4b3c-8313-99c1fe26f0de",
+        "airline_name": "【拍照】（三公里外）比亚迪二期01",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "13:33:37",
+        "task_id": "995baa79-7b94-435b-90b6-a2654f59a105",
+        "ticket_id": "10228",
+        "time": "13:33:37"
+      },
+      {
+        "aim": 4,
+        "airline_id": "aaf930d2-fbcb-41cd-ae16-a041dba34d24",
+        "airline_name": "【全景】航投项目",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "14:08:05",
+        "t2": "14:07:09",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:08:05"
+      },
+      {
+        "aim": 4,
+        "airline_id": "469e0945-fc2f-420e-b205-739ea0f856c2",
+        "airline_name": "【全景】集贤新能源汽车本地化配套基地",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 2,
+        "state": 2,
+        "t1": "16:15:55",
+        "t2": "14:46:04",
+        "task_id": "ec3bb076-e203-4922-8c18-665110b20c5f",
+        "ticket_id": "12179",
+        "time": "16:15:55"
+      },
+      {
+        "aim": 4,
+        "airline_id": "e015229a-dd53-464d-b901-c327d361295c",
+        "airline_name": "【全景】陕西宏开新型节能环保建筑材料",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "15:03:31",
+        "t2": "15:02:32",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:03:31"
+      },
+      {
+        "aim": 4,
+        "airline_id": "4d579ce8-c6be-46ed-88f2-4adfc5a7f0f3",
+        "airline_name": "【全景】污水处理厂扩建",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "15:17:11",
+        "t2": "15:16:35",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:17:11"
+      },
+      {
+        "aim": 4,
+        "airline_id": "4d579ce8-c6be-46ed-88f2-4adfc5a7f0f3",
+        "airline_name": "【全景】污水处理厂扩建",
+        "index": 14,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "15:43:15",
+        "t2": "15:42:17",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:43:15"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 15,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "17:30:31",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "17:30:31"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 16,
+        "out_airline_id": null,
+        "plan_window": [
+          "18:00:00",
+          "19:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "18:11:33",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "18:11:33"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "index": 17,
+        "out_airline_id": null,
+        "plan_window": [
+          "19:00:00",
+          "20:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "19:12:07",
+        "t2": "19:11:09",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "19:12:07"
+      }
+    ],
+    "date": "2024-08-08"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 17,
+        "state": 0,
+        "t1": "",
+        "t2": "09:02:57",
+        "task_id": "be5e22d6-08a1-4bdc-a946-59c8207b4db3",
+        "ticket_id": "12039",
+        "time": "09:02:57"
+      },
+      {
+        "aim": 4,
+        "airline_id": "80a22ea5-b047-47c3-b8ac-79a717de2ede",
+        "airline_name": "【全景】西安金凤水厂一期工程",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "11:16:02",
+        "t2": "11:15:13",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:16:02"
+      },
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "11:45:10",
+        "task_id": "36d0048d-b731-4f4f-929e-35b8f5c7d19a",
+        "ticket_id": "10229",
+        "time": "11:45:10"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "12:43:06",
+        "task_id": "01cdf409-2355-49c6-ad06-dbfafb980229",
+        "ticket_id": "10227",
+        "time": "12:43:06"
+      },
+      {
+        "aim": 1,
+        "airline_id": "00941e6c-cb75-4b3c-8313-99c1fe26f0de",
+        "airline_name": "【拍照】（三公里外）比亚迪二期01",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "13:46:31",
+        "task_id": "995baa79-7b94-435b-90b6-a2654f59a105",
+        "ticket_id": "10228",
+        "time": "13:46:31"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "14:39:57",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "14:39:57"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "15:22:35",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "15:22:35"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "16:00:19",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "16:00:19"
+      }
+    ],
+    "date": "2024-08-09"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 18,
+        "state": 0,
+        "t1": "",
+        "t2": "09:07:20",
+        "task_id": "b7f87cb1-76da-471f-87de-f788e4779214",
+        "ticket_id": "12039",
+        "time": "09:07:20"
+      },
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 11,
+        "state": 0,
+        "t1": "",
+        "t2": "10:07:29",
+        "task_id": "36d0048d-b731-4f4f-929e-35b8f5c7d19a",
+        "ticket_id": "10229",
+        "time": "10:07:29"
+      },
+      {
+        "aim": 4,
+        "airline_id": "5474158b-e365-44b2-bbe7-c873d11f9732",
+        "airline_name": "【全景】集贤佳苑项目",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 3,
+        "state": 0,
+        "t1": "",
+        "t2": "11:04:47",
+        "task_id": "7f848a6d-d255-4ce2-9d4b-df1e7f9e625b",
+        "ticket_id": "12168",
+        "time": "11:04:47"
+      },
+      {
+        "aim": 4,
+        "airline_id": "a731d738-df51-4910-80ea-eb7b0e479ce5",
+        "airline_name": "【全景】西安应真阁家俱生产基地改建项目",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 2,
+        "state": 0,
+        "t1": "",
+        "t2": "12:01:16",
+        "task_id": "9295aa1c-f925-4b71-a9ec-4b72dbafdc79",
+        "ticket_id": "12174",
+        "time": "12:01:16"
+      },
+      {
+        "aim": 4,
+        "airline_id": "b03adb34-57f1-49b3-90ba-1b0aa092295d",
+        "airline_name": "【全景】比亚迪高端智能产业园项目(组装)",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 4,
+        "state": 0,
+        "t1": "",
+        "t2": "13:08:26",
+        "task_id": "0a154146-7597-43d9-a16c-4010aa90db00",
+        "ticket_id": "12166",
+        "time": "13:08:26"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 4,
+        "state": 0,
+        "t1": "",
+        "t2": "14:07:40",
+        "task_id": "e15aa5b3-0d02-4441-869f-f7e26da0f57d",
+        "ticket_id": "12167",
+        "time": "14:07:40"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "15:00:12",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "15:00:12"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "16:00:25",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "16:00:25"
+      }
+    ],
+    "date": "2024-08-10"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 19,
+        "state": 2,
+        "t1": "15:28:31",
+        "t2": "09:05:09",
+        "task_id": "99a9d5f0-c6be-4daa-8567-d504d47dea4d",
+        "ticket_id": "12039",
+        "time": "15:28:31"
+      },
+      {
+        "aim": 4,
+        "airline_id": "a731d738-df51-4910-80ea-eb7b0e479ce5",
+        "airline_name": "【全景】西安应真阁家俱生产基地改建项目",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "09:59:23",
+        "t2": "09:58:31",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:59:23"
+      },
+      {
+        "aim": 4,
+        "airline_id": "a731d738-df51-4910-80ea-eb7b0e479ce5",
+        "airline_name": "【全景】西安应真阁家俱生产基地改建项目",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "10:08:13",
+        "t2": "10:07:35",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "10:08:13"
+      },
+      {
+        "aim": 4,
+        "airline_id": "a731d738-df51-4910-80ea-eb7b0e479ce5",
+        "airline_name": "【全景】西安应真阁家俱生产基地改建项目",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "10:14:53",
+        "t2": "10:14:26",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "10:14:53"
+      },
+      {
+        "aim": 4,
+        "airline_id": "a731d738-df51-4910-80ea-eb7b0e479ce5",
+        "airline_name": "【全景】西安应真阁家俱生产基地改建项目",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "10:26:57",
+        "t2": "10:25:59",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "10:26:57"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 3,
+        "state": 0,
+        "t1": "",
+        "t2": "10:48:42",
+        "task_id": "383e11b1-7ffd-4b23-9475-7c81088e0567",
+        "ticket_id": "12167",
+        "time": "10:48:42"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "16:23:03",
+        "t2": "11:33:08",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "16:23:03"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "14:16:11",
+        "t2": "12:09:51",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "14:16:11"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "13:00:52",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "13:00:52"
+      },
+      {
+        "aim": 4,
+        "airline_id": "b03adb34-57f1-49b3-90ba-1b0aa092295d",
+        "airline_name": "【全景】比亚迪高端智能产业园项目(组装)",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "13:53:59",
+        "t2": "13:53:01",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "13:53:59"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "14:11:54",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "14:11:54"
+      },
+      {
+        "aim": 3,
+        "airline_id": "7724ad04-4cb1-4dac-95d7-b4e20b237532",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B03",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "15:15:58",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "15:15:58"
+      },
+      {
+        "aim": 3,
+        "airline_id": "b9c7c006-756d-41d9-8b26-2fe186f6db6f",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B04",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "16:18:11",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "16:18:11"
+      }
+    ],
+    "date": "2024-08-11"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 12,
+        "state": 0,
+        "t1": "",
+        "t2": "09:46:14",
+        "task_id": "f9caa642-2e87-443b-983d-6a740f0caced",
+        "ticket_id": "10229",
+        "time": "09:46:14"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 2,
+        "state": 0,
+        "t1": "",
+        "t2": "09:50:47",
+        "task_id": "4cbe4941-983c-4672-a012-3e00eff66cb0",
+        "ticket_id": "11873",
+        "time": "09:50:47"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "09:53:01",
+        "t2": "09:52:03",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:53:01"
+      },
+      {
+        "aim": 3,
+        "airline_id": "6bff9c05-3998-427f-b646-9bc4c5e87778",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B07",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 14,
+        "state": 2,
+        "t1": "10:28:37",
+        "t2": "10:27:39",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "10:28:37"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0c009bbe-4d0b-4adf-ad4f-751c6394381e",
+        "airline_name": "【拍照】恒怡、天亿每周安全生产巡查01",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "10:38:52",
+        "task_id": "6bc98cde-8134-496b-bfe3-2181aac658e9",
+        "ticket_id": "10116",
+        "time": "10:38:52"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 20,
+        "state": 0,
+        "t1": "",
+        "t2": "10:44:10",
+        "task_id": "38b9a2e7-99da-40a7-958d-16f010b6f2d3",
+        "ticket_id": "12039",
+        "time": "10:44:10"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "11:02:44",
+        "t2": "11:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:02:44"
+      },
+      {
+        "aim": 1,
+        "airline_id": "00941e6c-cb75-4b3c-8313-99c1fe26f0de",
+        "airline_name": "【拍照】（三公里外）比亚迪二期01",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 12,
+        "state": 0,
+        "t1": "",
+        "t2": "12:00:51",
+        "task_id": "3dd2ac20-f65b-4ceb-a58a-8037767c5537",
+        "ticket_id": "10228",
+        "time": "12:00:51"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 12,
+        "state": 0,
+        "t1": "",
+        "t2": "12:04:10",
+        "task_id": "1283d398-d48a-4dd8-aca5-260939a616b9",
+        "ticket_id": "10227",
+        "time": "12:04:10"
+      },
+      {
+        "aim": 3,
+        "airline_id": "7724ad04-4cb1-4dac-95d7-b4e20b237532",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B03",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "11:47:46",
+        "t2": "12:14:19",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:47:46"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "13:00:19",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "13:00:19"
+      },
+      {
+        "aim": 3,
+        "airline_id": "b9c7c006-756d-41d9-8b26-2fe186f6db6f",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B04",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "12:32:32",
+        "t2": "13:26:03",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "12:32:32"
+      },
+      {
+        "aim": 3,
+        "airline_id": "1db93242-a5d2-4743-bb9a-517c5b32af1d",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B06",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:00:00"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 14,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:49",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "14:00:49"
+      },
+      {
+        "aim": 3,
+        "airline_id": "3294e4e7-fa62-4850-a9b2-6a7d2489c8d6",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B05",
+        "index": 15,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "13:39:52",
+        "t2": "14:21:16",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "13:39:52"
+      },
+      {
+        "aim": 3,
+        "airline_id": "1db93242-a5d2-4743-bb9a-517c5b32af1d",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B06",
+        "index": 16,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "14:38:40",
+        "t2": "14:42:35",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:38:40"
+      },
+      {
+        "aim": 3,
+        "airline_id": "7724ad04-4cb1-4dac-95d7-b4e20b237532",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B03",
+        "index": 17,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "15:00:40",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "15:00:40"
+      },
+      {
+        "aim": 3,
+        "airline_id": "3294e4e7-fa62-4850-a9b2-6a7d2489c8d6",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B05",
+        "index": 18,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "15:04:41",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:04:41"
+      },
+      {
+        "aim": 3,
+        "airline_id": "6bff9c05-3998-427f-b646-9bc4c5e87778",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B07",
+        "index": 19,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 15,
+        "state": 0,
+        "t1": "",
+        "t2": "15:07:55",
+        "task_id": "",
+        "ticket_id": "8728",
+        "time": "15:07:55"
+      },
+      {
+        "aim": 4,
+        "airline_id": "5474158b-e365-44b2-bbe7-c873d11f9732",
+        "airline_name": "【全景】集贤佳苑项目",
+        "index": 20,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "15:52:39",
+        "t2": "15:51:25",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:52:39"
+      },
+      {
+        "aim": 3,
+        "airline_id": "b9c7c006-756d-41d9-8b26-2fe186f6db6f",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B04",
+        "index": 21,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "16:00:03",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "16:00:03"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 22,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "16:05:00",
+        "t2": "16:05:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "16:05:00"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 23,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "16:06:48",
+        "t2": "16:24:15",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "16:06:48"
+      }
+    ],
+    "date": "2024-08-12"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 12,
+        "state": 0,
+        "t1": "",
+        "t2": "09:04:51",
+        "task_id": "f9caa642-2e87-443b-983d-6a740f0caced",
+        "ticket_id": "10229",
+        "time": "09:04:51"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 2,
+        "state": 0,
+        "t1": "",
+        "t2": "10:04:39",
+        "task_id": "4cbe4941-983c-4672-a012-3e00eff66cb0",
+        "ticket_id": "11873",
+        "time": "10:04:39"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0c009bbe-4d0b-4adf-ad4f-751c6394381e",
+        "airline_name": "【拍照】恒怡、天亿每周安全生产巡查01",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "11:04:20",
+        "task_id": "6bc98cde-8134-496b-bfe3-2181aac658e9",
+        "ticket_id": "10116",
+        "time": "11:04:20"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 12,
+        "state": 0,
+        "t1": "",
+        "t2": "12:05:27",
+        "task_id": "1283d398-d48a-4dd8-aca5-260939a616b9",
+        "ticket_id": "10227",
+        "time": "12:05:27"
+      },
+      {
+        "aim": 1,
+        "airline_id": "00941e6c-cb75-4b3c-8313-99c1fe26f0de",
+        "airline_name": "【拍照】（三公里外）比亚迪二期01",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 12,
+        "state": 0,
+        "t1": "",
+        "t2": "13:01:28",
+        "task_id": "3dd2ac20-f65b-4ceb-a58a-8037767c5537",
+        "ticket_id": "10228",
+        "time": "13:01:28"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 21,
+        "state": 0,
+        "t1": "",
+        "t2": "14:05:12",
+        "task_id": "ffd30198-cdf0-4c02-891b-748d0d43bca3",
+        "ticket_id": "12039",
+        "time": "14:05:12"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 14,
+        "state": 2,
+        "t1": "15:44:46",
+        "t2": "15:00:01",
+        "task_id": "ede237b7-ebc4-46fe-b15d-eb430d783937",
+        "ticket_id": "8728",
+        "time": "15:44:46"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "15:08:54",
+        "t2": "15:07:57",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:08:54"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 15,
+        "state": 0,
+        "t1": "",
+        "t2": "16:00:33",
+        "task_id": "",
+        "ticket_id": "8728",
+        "time": "16:00:33"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "17:01:02",
+        "t2": "17:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "17:01:02"
+      },
+      {
+        "aim": 4,
+        "airline_id": "5474158b-e365-44b2-bbe7-c873d11f9732",
+        "airline_name": "【全景】集贤佳苑项目",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "18:00:00",
+          "19:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "18:01:00",
+        "t2": "18:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "18:01:00"
+      },
+      {
+        "aim": 4,
+        "airline_id": "a731d738-df51-4910-80ea-eb7b0e479ce5",
+        "airline_name": "【全景】西安应真阁家俱生产基地改建项目",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "19:00:00",
+          "20:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "19:01:00",
+        "t2": "19:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "19:01:00"
+      },
+      {
+        "aim": 4,
+        "airline_id": "80a22ea5-b047-47c3-b8ac-79a717de2ede",
+        "airline_name": "【全景】西安金凤水厂一期工程",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "20:00:00",
+          "21:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "",
+        "t2": "20:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "20:00:00"
+      },
+      {
+        "aim": 4,
+        "airline_id": "dc356572-dd46-46b5-a776-089598e3ef2e",
+        "airline_name": "【全景】西安高新区集贤电子智能制造产业园项目",
+        "index": 14,
+        "out_airline_id": null,
+        "plan_window": [
+          "21:00:00",
+          "22:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "21:00:56",
+        "t2": "21:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "21:00:56"
+      },
+      {
+        "aim": 4,
+        "airline_id": "469e0945-fc2f-420e-b205-739ea0f856c2",
+        "airline_name": "【全景】集贤新能源汽车本地化配套基地",
+        "index": 15,
+        "out_airline_id": null,
+        "plan_window": [
+          "22:00:00",
+          "23:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "22:01:02",
+        "t2": "22:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "22:01:02"
+      }
+    ],
+    "date": "2024-08-13"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 22,
+        "state": 2,
+        "t1": "09:02:43",
+        "t2": "09:01:48",
+        "task_id": "1843740b-ce6a-457f-94a3-a3e8420af93d",
+        "ticket_id": "12039",
+        "time": "09:02:43"
+      },
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 12,
+        "state": 2,
+        "t1": "10:08:24",
+        "t2": "10:03:14",
+        "task_id": "f9caa642-2e87-443b-983d-6a740f0caced",
+        "ticket_id": "10229",
+        "time": "10:08:24"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "11:02:10",
+        "t2": "11:01:10",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "11:02:10"
+      },
+      {
+        "aim": 1,
+        "airline_id": "dc3e4bf8-be96-4eca-aab2-5f3fe59d04e2",
+        "airline_name": "【拍照】（三公里外）比亚迪一期01",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 12,
+        "state": 2,
+        "t1": "12:05:16",
+        "t2": "12:04:22",
+        "task_id": "1283d398-d48a-4dd8-aca5-260939a616b9",
+        "ticket_id": "10227",
+        "time": "12:05:16"
+      },
+      {
+        "aim": 1,
+        "airline_id": "00941e6c-cb75-4b3c-8313-99c1fe26f0de",
+        "airline_name": "【拍照】（三公里外）比亚迪二期01",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 12,
+        "state": 2,
+        "t1": "13:10:24",
+        "t2": "13:09:26",
+        "task_id": "3dd2ac20-f65b-4ceb-a58a-8037767c5537",
+        "ticket_id": "10228",
+        "time": "13:10:24"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "14:09:16",
+        "t2": "14:08:12",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "14:09:16"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 15,
+        "state": 2,
+        "t1": "15:01:12",
+        "t2": "15:00:15",
+        "task_id": "0d22313d-9070-4d93-a143-60405f8bc1bc",
+        "ticket_id": "8728",
+        "time": "15:01:12"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 15,
+        "state": 3,
+        "t1": "",
+        "t2": "16:00:28",
+        "task_id": "0d22313d-9070-4d93-a143-60405f8bc1bc",
+        "ticket_id": "8728",
+        "time": "16:00:28"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 15,
+        "state": 3,
+        "t1": "",
+        "t2": "16:10:28",
+        "task_id": "0d22313d-9070-4d93-a143-60405f8bc1bc",
+        "ticket_id": "8728",
+        "time": "16:10:28"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 15,
+        "state": 3,
+        "t1": "",
+        "t2": "16:20:28",
+        "task_id": "0d22313d-9070-4d93-a143-60405f8bc1bc",
+        "ticket_id": "8728",
+        "time": "16:20:28"
+      }
+    ],
+    "date": "2024-08-14"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 23,
+        "state": 0,
+        "t1": "",
+        "t2": "09:05:32",
+        "task_id": "28aee3ab-cb83-4f80-9a62-1b7ee518c971",
+        "ticket_id": "12039",
+        "time": "09:05:32"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 6,
+        "state": 0,
+        "t1": "",
+        "t2": "11:42:12",
+        "task_id": "c6b818fa-7919-4be6-9a38-057cbfb00f3e",
+        "ticket_id": "12167",
+        "time": "11:42:12"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "13:03:49",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "13:03:49"
+      },
+      {
+        "aim": 4,
+        "airline_id": "80a22ea5-b047-47c3-b8ac-79a717de2ede",
+        "airline_name": "【全景】西安金凤水厂一期工程",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 4,
+        "state": 0,
+        "t1": "",
+        "t2": "16:59:54",
+        "task_id": "87af7308-4b7a-4e2f-819b-d3487971afec",
+        "ticket_id": "12177",
+        "time": "16:59:54"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "17:35:34",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "17:35:34"
+      }
+    ],
+    "date": "2024-08-15"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 24,
+        "state": 2,
+        "t1": "09:05:29",
+        "t2": "09:04:30",
+        "task_id": "8fa3caf4-287f-4b94-ba24-b519bab78368",
+        "ticket_id": "12039",
+        "time": "09:05:29"
+      },
+      {
+        "aim": 4,
+        "airline_id": "e015229a-dd53-464d-b901-c327d361295c",
+        "airline_name": "【全景】陕西宏开新型节能环保建筑材料",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 3,
+        "state": 2,
+        "t1": "09:56:22",
+        "t2": "09:55:24",
+        "task_id": "569aeea7-0afd-40fb-b109-0e0ac749c49c",
+        "ticket_id": "12181",
+        "time": "09:56:22"
+      },
+      {
+        "aim": 4,
+        "airline_id": "eb4cf4da-d9fb-49b0-b6dc-3ddb142d2795",
+        "airline_name": "【全景】比亚迪二期",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 3,
+        "state": 2,
+        "t1": "10:41:06",
+        "t2": "10:40:06",
+        "task_id": "6ed0f8cb-02ba-4ff5-acb4-3823954dc6d2",
+        "ticket_id": "12183",
+        "time": "10:41:06"
+      },
+      {
+        "aim": 4,
+        "airline_id": "aad872e2-95b1-44ae-bfef-6a946f09c435",
+        "airline_name": "【全景】比亚迪一期",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 3,
+        "state": 2,
+        "t1": "11:23:34",
+        "t2": "11:22:33",
+        "task_id": "ac3c897d-f682-41bc-a7f7-7172e27899a3",
+        "ticket_id": "12194",
+        "time": "11:23:34"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 15,
+        "state": 2,
+        "t1": "12:01:56",
+        "t2": "12:00:56",
+        "task_id": "0d22313d-9070-4d93-a143-60405f8bc1bc",
+        "ticket_id": "8728",
+        "time": "12:01:56"
+      },
+      {
+        "aim": 3,
+        "airline_id": "7724ad04-4cb1-4dac-95d7-b4e20b237532",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B03",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 15,
+        "state": 2,
+        "t1": "13:01:48",
+        "t2": "13:00:59",
+        "task_id": "0d22313d-9070-4d93-a143-60405f8bc1bc",
+        "ticket_id": "8728",
+        "time": "13:01:48"
+      },
+      {
+        "aim": 3,
+        "airline_id": "b9c7c006-756d-41d9-8b26-2fe186f6db6f",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B04",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 15,
+        "state": 2,
+        "t1": "14:01:48",
+        "t2": "14:00:49",
+        "task_id": "0d22313d-9070-4d93-a143-60405f8bc1bc",
+        "ticket_id": "8728",
+        "time": "14:01:48"
+      },
+      {
+        "aim": 3,
+        "airline_id": "3294e4e7-fa62-4850-a9b2-6a7d2489c8d6",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B05",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 15,
+        "state": 2,
+        "t1": "15:02:15",
+        "t2": "15:00:36",
+        "task_id": "0d22313d-9070-4d93-a143-60405f8bc1bc",
+        "ticket_id": "8728",
+        "time": "15:02:15"
+      },
+      {
+        "aim": 3,
+        "airline_id": "1db93242-a5d2-4743-bb9a-517c5b32af1d",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B06",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 15,
+        "state": 2,
+        "t1": "16:01:44",
+        "t2": "16:00:40",
+        "task_id": "0d22313d-9070-4d93-a143-60405f8bc1bc",
+        "ticket_id": "8728",
+        "time": "16:01:44"
+      }
+    ],
+    "date": "2024-08-16"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 25,
+        "state": 0,
+        "t1": "",
+        "t2": "09:02:49",
+        "task_id": "19524d7e-f596-405a-9ca9-472f3442bad6",
+        "ticket_id": "12039",
+        "time": "09:02:49"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0c009bbe-4d0b-4adf-ad4f-751c6394381e",
+        "airline_name": "【拍照】恒怡、天亿每周安全生产巡查01",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 14,
+        "state": 0,
+        "t1": "",
+        "t2": "10:07:30",
+        "task_id": "6bc98cde-8134-496b-bfe3-2181aac658e9",
+        "ticket_id": "10116",
+        "time": "10:07:30"
+      },
+      {
+        "aim": 4,
+        "airline_id": "b03adb34-57f1-49b3-90ba-1b0aa092295d",
+        "airline_name": "【全景】比亚迪高端智能产业园项目(组装)",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "11:05:46",
+        "task_id": "49f402a9-e47d-442d-b09b-aaffb6e7dea6",
+        "ticket_id": "12166",
+        "time": "11:05:46"
+      },
+      {
+        "aim": 4,
+        "airline_id": "80a22ea5-b047-47c3-b8ac-79a717de2ede",
+        "airline_name": "【全景】西安金凤水厂一期工程",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 4,
+        "state": 0,
+        "t1": "",
+        "t2": "12:00:20",
+        "task_id": "87af7308-4b7a-4e2f-819b-d3487971afec",
+        "ticket_id": "12177",
+        "time": "12:00:20"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 6,
+        "state": 0,
+        "t1": "",
+        "t2": "13:07:45",
+        "task_id": "c6b818fa-7919-4be6-9a38-057cbfb00f3e",
+        "ticket_id": "12167",
+        "time": "13:07:45"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "14:07:50",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "14:07:50"
+      },
+      {
+        "aim": 3,
+        "airline_id": "6bff9c05-3998-427f-b646-9bc4c5e87778",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B07",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 15,
+        "state": 0,
+        "t1": "",
+        "t2": "15:00:57",
+        "task_id": "0d22313d-9070-4d93-a143-60405f8bc1bc",
+        "ticket_id": "8728",
+        "time": "15:00:57"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "16:00:54",
+        "task_id": "",
+        "ticket_id": "8728",
+        "time": "16:00:54"
+      }
+    ],
+    "date": "2024-08-17"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 4,
+        "airline_id": "b03adb34-57f1-49b3-90ba-1b0aa092295d",
+        "airline_name": "【全景】比亚迪高端智能产业园项目(组装)",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "09:02:16",
+        "task_id": "49f402a9-e47d-442d-b09b-aaffb6e7dea6",
+        "ticket_id": "12166",
+        "time": "09:02:16"
+      },
+      {
+        "aim": 4,
+        "airline_id": "80a22ea5-b047-47c3-b8ac-79a717de2ede",
+        "airline_name": "【全景】西安金凤水厂一期工程",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 4,
+        "state": 0,
+        "t1": "",
+        "t2": "10:01:24",
+        "task_id": "87af7308-4b7a-4e2f-819b-d3487971afec",
+        "ticket_id": "12177",
+        "time": "10:01:24"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 6,
+        "state": 0,
+        "t1": "",
+        "t2": "11:05:03",
+        "task_id": "c6b818fa-7919-4be6-9a38-057cbfb00f3e",
+        "ticket_id": "12167",
+        "time": "11:05:03"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "12:03:54",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "12:03:54"
+      },
+      {
+        "aim": 3,
+        "airline_id": "6bff9c05-3998-427f-b646-9bc4c5e87778",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B07",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 15,
+        "state": 0,
+        "t1": "",
+        "t2": "13:00:46",
+        "task_id": "0d22313d-9070-4d93-a143-60405f8bc1bc",
+        "ticket_id": "8728",
+        "time": "13:00:46"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:58",
+        "task_id": "",
+        "ticket_id": "8728",
+        "time": "14:00:58"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "15:00:02",
+        "task_id": "",
+        "ticket_id": "8728",
+        "time": "15:00:02"
+      },
+      {
+        "aim": 3,
+        "airline_id": "7724ad04-4cb1-4dac-95d7-b4e20b237532",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B03",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "16:00:15",
+        "task_id": "",
+        "ticket_id": "8728",
+        "time": "16:00:15"
+      }
+    ],
+    "date": "2024-08-18"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 4,
+        "airline_id": "b03adb34-57f1-49b3-90ba-1b0aa092295d",
+        "airline_name": "【全景】比亚迪高端智能产业园项目(组装)",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "09:23:47",
+        "t2": "09:22:44",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:23:47"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "09:29:43",
+        "t2": "09:29:02",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:29:43"
+      },
+      {
+        "aim": 4,
+        "airline_id": "5474158b-e365-44b2-bbe7-c873d11f9732",
+        "airline_name": "【全景】集贤佳苑项目",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "09:46:17",
+        "t2": "09:45:22",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "09:46:17"
+      },
+      {
+        "aim": 1,
+        "airline_id": "8df8cf95-c741-44f4-99d8-490ccf81e71a",
+        "airline_name": "【拍照】（三公里外）航投01",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 13,
+        "state": 0,
+        "t1": "",
+        "t2": "10:04:08",
+        "task_id": "093f80dd-38cc-47b9-8ccf-f6068d14e569",
+        "ticket_id": "10229",
+        "time": "10:04:08"
+      },
+      {
+        "aim": 4,
+        "airline_id": "a731d738-df51-4910-80ea-eb7b0e479ce5",
+        "airline_name": "【全景】西安应真阁家俱生产基地改建项目",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "10:35:45",
+        "t2": "10:34:53",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "10:35:45"
+      },
+      {
+        "aim": 4,
+        "airline_id": "80a22ea5-b047-47c3-b8ac-79a717de2ede",
+        "airline_name": "【全景】西安金凤水厂一期工程",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "10:42:08",
+        "t2": "10:41:38",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "10:42:08"
+      },
+      {
+        "aim": 4,
+        "airline_id": "dc356572-dd46-46b5-a776-089598e3ef2e",
+        "airline_name": "【全景】西安高新区集贤电子智能制造产业园项目",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "10:53:14",
+        "t2": "10:52:48",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "10:53:14"
+      },
+      {
+        "aim": 4,
+        "airline_id": "469e0945-fc2f-420e-b205-739ea0f856c2",
+        "airline_name": "【全景】集贤新能源汽车本地化配套基地",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "11:32:52",
+        "t2": "11:31:53",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:32:52"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "16:56:20",
+        "t2": "12:21:28",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "16:56:20"
+      },
+      {
+        "aim": 4,
+        "airline_id": "4d579ce8-c6be-46ed-88f2-4adfc5a7f0f3",
+        "airline_name": "【全景】污水处理厂扩建",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "12:26:59",
+        "t2": "12:25:57",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "12:26:59"
+      },
+      {
+        "aim": 3,
+        "airline_id": "6bff9c05-3998-427f-b646-9bc4c5e87778",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B07",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 15,
+        "state": 0,
+        "t1": "",
+        "t2": "13:09:11",
+        "task_id": "0d22313d-9070-4d93-a143-60405f8bc1bc",
+        "ticket_id": "8728",
+        "time": "13:09:11"
+      },
+      {
+        "aim": 4,
+        "airline_id": "e015229a-dd53-464d-b901-c327d361295c",
+        "airline_name": "【全景】陕西宏开新型节能环保建筑材料",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "13:50:28",
+        "t2": "13:49:25",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "13:50:28"
+      }
+    ],
+    "date": "2024-08-19"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "09:04:13",
+        "t2": "09:06:20",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "09:04:13"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "10:06:31",
+        "t2": "10:07:07",
+        "task_id": "",
+        "ticket_id": "12039",
+        "time": "10:06:31"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "11:03:17",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "11:03:17"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "11:02:59",
+        "t2": "11:05:52",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:02:59"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "11:36:27",
+        "t2": "12:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:36:27"
+      },
+      {
+        "aim": 3,
+        "airline_id": "6bff9c05-3998-427f-b646-9bc4c5e87778",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B07",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 15,
+        "state": 0,
+        "t1": "",
+        "t2": "12:00:52",
+        "task_id": "0d22313d-9070-4d93-a143-60405f8bc1bc",
+        "ticket_id": "8728",
+        "time": "12:00:52"
+      },
+      {
+        "aim": 3,
+        "airline_id": "7724ad04-4cb1-4dac-95d7-b4e20b237532",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B03",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "12:18:37",
+        "t2": "13:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "12:18:37"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "13:00:34",
+        "task_id": "",
+        "ticket_id": "8728",
+        "time": "13:00:34"
+      },
+      {
+        "aim": 3,
+        "airline_id": "b9c7c006-756d-41d9-8b26-2fe186f6db6f",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B04",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "13:34:21",
+        "t2": "14:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "13:34:21"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:13",
+        "task_id": "",
+        "ticket_id": "8728",
+        "time": "14:00:13"
+      },
+      {
+        "aim": 3,
+        "airline_id": "3294e4e7-fa62-4850-a9b2-6a7d2489c8d6",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B05",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "15:25:21",
+        "t2": "15:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:25:21"
+      },
+      {
+        "aim": 3,
+        "airline_id": "7724ad04-4cb1-4dac-95d7-b4e20b237532",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B03",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "15:00:20",
+        "task_id": "",
+        "ticket_id": "8728",
+        "time": "15:00:20"
+      },
+      {
+        "aim": 3,
+        "airline_id": "1db93242-a5d2-4743-bb9a-517c5b32af1d",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B06",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "16:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "16:00:00"
+      },
+      {
+        "aim": 3,
+        "airline_id": "1db93242-a5d2-4743-bb9a-517c5b32af1d",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B06",
+        "index": 14,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "16:17:17",
+        "t2": "16:16:13",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "16:17:17"
+      },
+      {
+        "aim": 3,
+        "airline_id": "b9c7c006-756d-41d9-8b26-2fe186f6db6f",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B04",
+        "index": 15,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "16:20:01",
+        "task_id": "",
+        "ticket_id": "8728",
+        "time": "16:20:01"
+      },
+      {
+        "aim": 3,
+        "airline_id": "6bff9c05-3998-427f-b646-9bc4c5e87778",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B07",
+        "index": 16,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "17:15:49",
+        "t2": "17:19:29",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "17:15:49"
+      },
+      {
+        "aim": 3,
+        "airline_id": "3294e4e7-fa62-4850-a9b2-6a7d2489c8d6",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B05",
+        "index": 17,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "17:30:57",
+        "task_id": "",
+        "ticket_id": "8728",
+        "time": "17:30:57"
+      }
+    ],
+    "date": "2024-08-20"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "13:03:08",
+        "t2": "09:07:51",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "13:03:08"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "13:39:15",
+        "t2": "10:10:37",
+        "task_id": "",
+        "ticket_id": "12039",
+        "time": "13:39:15"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "10:29:54",
+        "t2": "11:01:33",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "10:29:54"
+      },
+      {
+        "aim": 3,
+        "airline_id": "6bff9c05-3998-427f-b646-9bc4c5e87778",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B07",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 15,
+        "state": 2,
+        "t1": "09:17:18",
+        "t2": "12:00:26",
+        "task_id": "0d22313d-9070-4d93-a143-60405f8bc1bc",
+        "ticket_id": "8728",
+        "time": "09:17:18"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "13:00:13",
+        "task_id": "",
+        "ticket_id": "8728",
+        "time": "13:00:13"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "14:28:49",
+        "task_id": "",
+        "ticket_id": "8728",
+        "time": "14:28:49"
+      },
+      {
+        "aim": 3,
+        "airline_id": "7724ad04-4cb1-4dac-95d7-b4e20b237532",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B03",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "15:32:53",
+        "task_id": "",
+        "ticket_id": "8728",
+        "time": "15:32:53"
+      }
+    ],
+    "date": "2024-08-21"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "14:03:34",
+        "t2": "10:04:22",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "14:03:34"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "11:16:57",
+        "t2": "11:07:43",
+        "task_id": "",
+        "ticket_id": "12039",
+        "time": "11:16:57"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "11:18:16",
+        "t2": "11:17:40",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:18:16"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "10:18:19",
+        "t2": "12:05:23",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "10:18:19"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "13:00:55",
+        "task_id": "661190e8-b44b-4e68-acb3-7532a998ddbf",
+        "ticket_id": "8728",
+        "time": "13:00:55"
+      },
+      {
+        "aim": 3,
+        "airline_id": "82ff97e7-a913-487c-8a96-5da07ecf2d96",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B02",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:22",
+        "task_id": "661190e8-b44b-4e68-acb3-7532a998ddbf",
+        "ticket_id": "8728",
+        "time": "14:00:22"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "14:22:48",
+        "t2": "14:21:41",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:22:48"
+      },
+      {
+        "aim": 3,
+        "airline_id": "7724ad04-4cb1-4dac-95d7-b4e20b237532",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B03",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 16,
+        "state": 0,
+        "t1": "",
+        "t2": "15:32:04",
+        "task_id": "661190e8-b44b-4e68-acb3-7532a998ddbf",
+        "ticket_id": "8728",
+        "time": "15:32:04"
+      },
+      {
+        "aim": 3,
+        "airline_id": "67a1d3e0-8204-4af2-a81d-1e7a11d96d7f",
+        "airline_name": "【全覆盖】西安-周至-3000mB01",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "16:27:37",
+        "t2": "16:26:45",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "16:27:37"
+      },
+      {
+        "aim": 4,
+        "airline_id": "eb4cf4da-d9fb-49b0-b6dc-3ddb142d2795",
+        "airline_name": "【全景】比亚迪二期",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": 6,
+        "state": 0,
+        "t1": "",
+        "t2": "17:15:30",
+        "task_id": "8a7fd1e9-adad-4cbc-8be4-790c1744afba",
+        "ticket_id": "12183",
+        "time": "17:15:30"
+      },
+      {
+        "aim": 3,
+        "airline_id": "80b41366-0cc1-4d85-8d6a-5cc893bc9875",
+        "airline_name": "【全覆盖】西安-周至-3000mB02",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "17:43:23",
+        "t2": "17:42:31",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "17:43:23"
+      },
+      {
+        "aim": 10,
+        "airline_id": "d8b9e960-bcff-426c-aa28-f5c340111e8b",
+        "airline_name": "一键起飞",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "17:59:25",
+        "t2": "17:59:01",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "17:59:25"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "18:00:00",
+          "19:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "18:50:59",
+        "t2": "18:49:55",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "18:50:59"
+      }
+    ],
+    "date": "2024-08-22"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 4,
+        "airline_id": "aaf930d2-fbcb-41cd-ae16-a041dba34d24",
+        "airline_name": "【全景】航投项目",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 6,
+        "state": 0,
+        "t1": "",
+        "t2": "09:05:56",
+        "task_id": "26799f1c-3986-49cd-98d7-58d719027c6a",
+        "ticket_id": "12182",
+        "time": "09:05:56"
+      },
+      {
+        "aim": 4,
+        "airline_id": "eb4cf4da-d9fb-49b0-b6dc-3ddb142d2795",
+        "airline_name": "【全景】比亚迪二期",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 6,
+        "state": 0,
+        "t1": "",
+        "t2": "10:03:52",
+        "task_id": "8a7fd1e9-adad-4cbc-8be4-790c1744afba",
+        "ticket_id": "12183",
+        "time": "10:03:52"
+      },
+      {
+        "aim": 3,
+        "airline_id": "ff6bcffe-14e3-40da-93f4-77fa77f5301a",
+        "airline_name": "【全覆盖】西安-周至-3000mB03",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "10:02:02",
+        "t2": "10:05:41",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "10:02:02"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "10:45:52",
+        "t2": "10:44:56",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "10:45:52"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 8,
+        "state": 0,
+        "t1": "",
+        "t2": "11:04:25",
+        "task_id": "bd788b07-5bce-400d-9120-246765d9eb4d",
+        "ticket_id": "12167",
+        "time": "11:04:25"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "11:36:24",
+        "t2": "11:35:27",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:36:24"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "12:00:18",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "12:00:18"
+      },
+      {
+        "aim": 3,
+        "airline_id": "ff6bcffe-14e3-40da-93f4-77fa77f5301a",
+        "airline_name": "【全覆盖】西安-周至-3000mB03",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "13:00:07",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "13:00:07"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "12:24:26",
+        "t2": "13:24:42",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "12:24:26"
+      },
+      {
+        "aim": 3,
+        "airline_id": "cc8c55af-b280-4859-939c-fb84fd1b3426",
+        "airline_name": "【全覆盖】西安-周至-3000mB04",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:32",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "14:00:32"
+      },
+      {
+        "aim": 3,
+        "airline_id": "3b905436-9a2d-4bfb-9cfb-c0a033ca6ad3",
+        "airline_name": "【全覆盖】西安-周至-3000mB07",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 5,
+        "state": 2,
+        "t1": "14:17:52",
+        "t2": "14:16:34",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "14:17:52"
+      },
+      {
+        "aim": 3,
+        "airline_id": "e411a064-c5bd-4423-be2d-9cbe17b704da",
+        "airline_name": "【全覆盖】西安-周至-3000mB05",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "15:00:59",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "15:00:59"
+      },
+      {
+        "aim": 3,
+        "airline_id": "298491f4-3256-4a12-9949-579ca68d49df",
+        "airline_name": "【全覆盖】西安-周至-3000mB08",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 5,
+        "state": 2,
+        "t1": "15:16:54",
+        "t2": "15:15:56",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "15:16:54"
+      },
+      {
+        "aim": 3,
+        "airline_id": "cc8c55af-b280-4859-939c-fb84fd1b3426",
+        "airline_name": "【全覆盖】西安-周至-3000mB04",
+        "index": 14,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "16:00:52",
+        "t2": "16:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "16:00:52"
+      },
+      {
+        "aim": 3,
+        "airline_id": "3fc6429f-ca34-4b51-9382-35689ef3d290",
+        "airline_name": "【全覆盖】西安-周至-3000mB06",
+        "index": 15,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "16:00:55",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "16:00:55"
+      },
+      {
+        "aim": 3,
+        "airline_id": "692945ef-0e3d-4ab1-8edd-ba3680afa984",
+        "airline_name": "【全覆盖】西安-周至-3000mB09",
+        "index": 16,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "16:33:09",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "16:33:09"
+      },
+      {
+        "aim": 3,
+        "airline_id": "cc8c55af-b280-4859-939c-fb84fd1b3426",
+        "airline_name": "【全覆盖】西安-周至-3000mB04",
+        "index": 17,
+        "out_airline_id": null,
+        "plan_window": [
+          "18:00:00",
+          "19:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "18:14:14",
+        "t2": "18:13:15",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "18:14:14"
+      },
+      {
+        "aim": 3,
+        "airline_id": "e411a064-c5bd-4423-be2d-9cbe17b704da",
+        "airline_name": "【全覆盖】西安-周至-3000mB05",
+        "index": 18,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "17:09:00",
+        "t2": "18:17:40",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "17:09:00"
+      }
+    ],
+    "date": "2024-08-23"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 4,
+        "airline_id": "aaf930d2-fbcb-41cd-ae16-a041dba34d24",
+        "airline_name": "【全景】航投项目",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 6,
+        "state": 2,
+        "t1": "09:10:05",
+        "t2": "09:09:05",
+        "task_id": "26799f1c-3986-49cd-98d7-58d719027c6a",
+        "ticket_id": "12182",
+        "time": "09:10:05"
+      },
+      {
+        "aim": 4,
+        "airline_id": "eb4cf4da-d9fb-49b0-b6dc-3ddb142d2795",
+        "airline_name": "【全景】比亚迪二期",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 6,
+        "state": 2,
+        "t1": "10:11:01",
+        "t2": "10:10:00",
+        "task_id": "8a7fd1e9-adad-4cbc-8be4-790c1744afba",
+        "ticket_id": "12183",
+        "time": "10:11:01"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 8,
+        "state": 2,
+        "t1": "11:09:37",
+        "t2": "11:08:32",
+        "task_id": "bd788b07-5bce-400d-9120-246765d9eb4d",
+        "ticket_id": "12167",
+        "time": "11:09:37"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "12:01:23",
+        "t2": "12:00:22",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "12:01:23"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "13:00:35",
+        "t2": "13:00:35",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "13:00:35"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "13:29:07",
+        "t2": "13:28:17",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "13:29:07"
+      },
+      {
+        "aim": 3,
+        "airline_id": "cc8c55af-b280-4859-939c-fb84fd1b3426",
+        "airline_name": "【全覆盖】西安-周至-3000mB04",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:00:00"
+      },
+      {
+        "aim": 3,
+        "airline_id": "3fc6429f-ca34-4b51-9382-35689ef3d290",
+        "airline_name": "【全覆盖】西安-周至-3000mB06",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "14:16:01",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "14:16:01"
+      },
+      {
+        "aim": 3,
+        "airline_id": "e411a064-c5bd-4423-be2d-9cbe17b704da",
+        "airline_name": "【全覆盖】西安-周至-3000mB05",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "15:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:00:00"
+      },
+      {
+        "aim": 3,
+        "airline_id": "692945ef-0e3d-4ab1-8edd-ba3680afa984",
+        "airline_name": "【全覆盖】西安-周至-3000mB09",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "15:19:28",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "15:19:28"
+      },
+      {
+        "aim": 3,
+        "airline_id": "3fc6429f-ca34-4b51-9382-35689ef3d290",
+        "airline_name": "【全覆盖】西安-周至-3000mB06",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "20:00:00",
+          "21:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "20:19:06",
+        "t2": "16:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "20:19:06"
+      },
+      {
+        "aim": 3,
+        "airline_id": "8cbba57b-5198-41b9-b68a-9300e1d8c8be",
+        "airline_name": "【全覆盖】西安-周至-3000mB10",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "16:23:18",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "16:23:18"
+      },
+      {
+        "aim": 3,
+        "airline_id": "3fc6429f-ca34-4b51-9382-35689ef3d290",
+        "airline_name": "【全覆盖】西安-周至-3000mB06",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "20:00:00",
+          "21:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "20:29:58",
+        "t2": "20:29:09",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "20:29:58"
+      }
+    ],
+    "date": "2024-08-24"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "09:04:37",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "09:04:37"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "10:02:29",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "10:02:29"
+      },
+      {
+        "aim": 3,
+        "airline_id": "692945ef-0e3d-4ab1-8edd-ba3680afa984",
+        "airline_name": "【全覆盖】西安-周至-3000mB09",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "11:00:38",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "11:00:38"
+      },
+      {
+        "aim": 3,
+        "airline_id": "8cbba57b-5198-41b9-b68a-9300e1d8c8be",
+        "airline_name": "【全覆盖】西安-周至-3000mB10",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "12:00:04",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "12:00:04"
+      },
+      {
+        "aim": 3,
+        "airline_id": "0bc80853-6ae6-472a-9a7a-dac16c232c71",
+        "airline_name": "【全覆盖】西安-周至-3000mB11",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "13:00:18",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "13:00:18"
+      },
+      {
+        "aim": 3,
+        "airline_id": "543103cc-97ae-44c4-9eb3-4f308d90453b",
+        "airline_name": "【全覆盖】西安-周至-3000mB12",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:16",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "14:00:16"
+      }
+    ],
+    "date": "2024-08-25"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "09:18:03",
+        "t2": "10:01:18",
+        "task_id": "",
+        "ticket_id": "12039",
+        "time": "09:18:03"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "13:23:36",
+        "t2": "10:07:37",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "13:23:36"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "14:45:48",
+        "t2": "11:08:51",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "14:45:48"
+      },
+      {
+        "aim": 3,
+        "airline_id": "692945ef-0e3d-4ab1-8edd-ba3680afa984",
+        "airline_name": "【全覆盖】西安-周至-3000mB09",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "12:00:29",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "12:00:29"
+      },
+      {
+        "aim": 3,
+        "airline_id": "8cbba57b-5198-41b9-b68a-9300e1d8c8be",
+        "airline_name": "【全覆盖】西安-周至-3000mB10",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "13:00:29",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "13:00:29"
+      },
+      {
+        "aim": 3,
+        "airline_id": "0bc80853-6ae6-472a-9a7a-dac16c232c71",
+        "airline_name": "【全覆盖】西安-周至-3000mB11",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:36",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "14:00:36"
+      },
+      {
+        "aim": 3,
+        "airline_id": "543103cc-97ae-44c4-9eb3-4f308d90453b",
+        "airline_name": "【全覆盖】西安-周至-3000mB12",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "15:23:31",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "15:23:31"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "15:44:38",
+        "t2": "15:43:34",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:44:38"
+      }
+    ],
+    "date": "2024-08-26"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "",
+        "t2": "09:08:02",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "09:08:02"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "09:23:01",
+        "t2": "10:05:04",
+        "task_id": "",
+        "ticket_id": "12039",
+        "time": "09:23:01"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "",
+        "t2": "11:00:54",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "11:00:54"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "11:20:53",
+        "t2": "11:20:22",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:20:53"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "12:09:19",
+        "t2": "12:08:20",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "12:09:19"
+      },
+      {
+        "aim": 3,
+        "airline_id": "692945ef-0e3d-4ab1-8edd-ba3680afa984",
+        "airline_name": "【全覆盖】西安-周至-3000mB09",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 5,
+        "state": 2,
+        "t1": "13:01:24",
+        "t2": "13:00:17",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "13:01:24"
+      },
+      {
+        "aim": 3,
+        "airline_id": "8cbba57b-5198-41b9-b68a-9300e1d8c8be",
+        "airline_name": "【全覆盖】西安-周至-3000mB10",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:42",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "14:00:42"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "14:48:52",
+        "t2": "14:47:45",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:48:52"
+      },
+      {
+        "aim": 3,
+        "airline_id": "0bc80853-6ae6-472a-9a7a-dac16c232c71",
+        "airline_name": "【全覆盖】西安-周至-3000mB11",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "15:21:30",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "15:21:30"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "15:32:13",
+        "t2": "15:31:23",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:32:13"
+      },
+      {
+        "aim": 3,
+        "airline_id": "543103cc-97ae-44c4-9eb3-4f308d90453b",
+        "airline_name": "【全覆盖】西安-周至-3000mB12",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "16:24:58",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "16:24:58"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "16:26:00",
+        "t2": "16:25:32",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "16:26:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "17:09:42",
+        "t2": "17:08:46",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "17:09:42"
+      }
+    ],
+    "date": "2024-08-27"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 9,
+        "state": 0,
+        "t1": "",
+        "t2": "09:07:18",
+        "task_id": "befe2605-6d89-4ccd-bd86-2feabbd71c72",
+        "ticket_id": "12167",
+        "time": "09:07:18"
+      },
+      {
+        "aim": 4,
+        "airline_id": "b03adb34-57f1-49b3-90ba-1b0aa092295d",
+        "airline_name": "【全景】比亚迪高端智能产业园项目(组装)",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 7,
+        "state": 0,
+        "t1": "",
+        "t2": "10:06:57",
+        "task_id": "2cec9498-7c2a-48de-b512-08a535e9f96d",
+        "ticket_id": "12166",
+        "time": "10:06:57"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "13:27:32",
+        "t2": "10:34:52",
+        "task_id": "",
+        "ticket_id": "12041",
+        "time": "13:27:32"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "15:43:18",
+        "t2": "11:17:30",
+        "task_id": "",
+        "ticket_id": "12039",
+        "time": "15:43:18"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "12:17:04",
+        "task_id": "",
+        "ticket_id": "12042",
+        "time": "12:17:04"
+      },
+      {
+        "aim": 3,
+        "airline_id": "8cbba57b-5198-41b9-b68a-9300e1d8c8be",
+        "airline_name": "【全覆盖】西安-周至-3000mB10",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "13:00:32",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "13:00:32"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:00:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:00:00"
+      },
+      {
+        "aim": 3,
+        "airline_id": "0bc80853-6ae6-472a-9a7a-dac16c232c71",
+        "airline_name": "【全覆盖】西安-周至-3000mB11",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "14:00:29",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "14:00:29"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "15:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:00:00"
+      },
+      {
+        "aim": 3,
+        "airline_id": "543103cc-97ae-44c4-9eb3-4f308d90453b",
+        "airline_name": "【全覆盖】西安-周至-3000mB12",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "15:00:38",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "15:00:38"
+      },
+      {
+        "aim": 3,
+        "airline_id": "b934ba14-88bd-46be-a1af-ba6aa2afc285",
+        "airline_name": "【全覆盖】西安-周至-3000mB13",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "16:00:52",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "16:00:52"
+      },
+      {
+        "aim": 4,
+        "airline_id": "b03adb34-57f1-49b3-90ba-1b0aa092295d",
+        "airline_name": "【全景】比亚迪高端智能产业园项目(组装)",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "16:32:52",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "16:32:52"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 14,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "17:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "17:00:00"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 15,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "17:39:25",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "17:39:25"
+      },
+      {
+        "aim": 4,
+        "airline_id": "5474158b-e365-44b2-bbe7-c873d11f9732",
+        "airline_name": "【全景】集贤佳苑项目",
+        "index": 16,
+        "out_airline_id": null,
+        "plan_window": [
+          "18:00:00",
+          "19:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "18:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "18:00:00"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 17,
+        "out_airline_id": null,
+        "plan_window": [
+          "19:00:00",
+          "20:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "19:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "19:00:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "index": 18,
+        "out_airline_id": null,
+        "plan_window": [
+          "21:00:00",
+          "22:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "21:26:03",
+        "t2": "21:24:56",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "21:26:03"
+      }
+    ],
+    "date": "2024-08-28"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "index": 1,
+        "out_airline_id": null,
+        "plan_window": [
+          "08:00:00",
+          "09:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "08:05:55",
+        "t2": "08:04:57",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "08:05:55"
+      },
+      {
+        "aim": 4,
+        "airline_id": "80a22ea5-b047-47c3-b8ac-79a717de2ede",
+        "airline_name": "【全景】西安金凤水厂一期工程",
+        "index": 2,
+        "out_airline_id": null,
+        "plan_window": [
+          "09:00:00",
+          "10:00:00"
+        ],
+        "round": 6,
+        "state": 0,
+        "t1": "",
+        "t2": "09:05:30",
+        "task_id": "c8a5ce73-a9a9-47cd-84e4-cb0a7efc5e68",
+        "ticket_id": "12177",
+        "time": "09:05:30"
+      },
+      {
+        "aim": 4,
+        "airline_id": "469e0945-fc2f-420e-b205-739ea0f856c2",
+        "airline_name": "【全景】集贤新能源汽车本地化配套基地",
+        "index": 3,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": 6,
+        "state": 0,
+        "t1": "",
+        "t2": "10:05:09",
+        "task_id": "e0b6154b-523e-4aef-a5be-48404b5b09b7",
+        "ticket_id": "12179",
+        "time": "10:05:09"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "index": 4,
+        "out_airline_id": null,
+        "plan_window": [
+          "10:00:00",
+          "11:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "10:37:22",
+        "t2": "10:35:52",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "10:37:22"
+      },
+      {
+        "aim": 4,
+        "airline_id": "b03adb34-57f1-49b3-90ba-1b0aa092295d",
+        "airline_name": "【全景】比亚迪高端智能产业园项目(组装)",
+        "index": 5,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": 7,
+        "state": 0,
+        "t1": "",
+        "t2": "11:20:21",
+        "task_id": "2cec9498-7c2a-48de-b512-08a535e9f96d",
+        "ticket_id": "12166",
+        "time": "11:20:21"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "index": 6,
+        "out_airline_id": null,
+        "plan_window": [
+          "11:00:00",
+          "12:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "11:43:16",
+        "t2": "11:42:22",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "11:43:16"
+      },
+      {
+        "aim": 4,
+        "airline_id": "b03adb34-57f1-49b3-90ba-1b0aa092295d",
+        "airline_name": "【全景】比亚迪高端智能产业园项目(组装)",
+        "index": 7,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "12:33:27",
+        "t2": "12:32:31",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "12:33:27"
+      },
+      {
+        "aim": 4,
+        "airline_id": "dc356572-dd46-46b5-a776-089598e3ef2e",
+        "airline_name": "【全景】西安高新区集贤电子智能制造产业园项目",
+        "index": 8,
+        "out_airline_id": null,
+        "plan_window": [
+          "12:00:00",
+          "13:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "12:32:50",
+        "task_id": "de1c09f6-8ad7-4cc8-8f93-999f2519916c",
+        "ticket_id": "12178",
+        "time": "12:32:50"
+      },
+      {
+        "aim": 3,
+        "airline_id": "f88aecd5-d37c-4b76-bec0-f57f4c4ceb10",
+        "airline_name": "【全覆盖】新-园区巡检全覆盖B01",
+        "index": 9,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 0,
+        "t1": "",
+        "t2": "13:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "13:00:00"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 10,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": 10,
+        "state": 0,
+        "t1": "",
+        "t2": "13:07:11",
+        "task_id": "729077f7-3412-4b1d-84ff-1667e9f7ed26",
+        "ticket_id": "12167",
+        "time": "13:07:11"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "index": 11,
+        "out_airline_id": null,
+        "plan_window": [
+          "13:00:00",
+          "14:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "13:19:05",
+        "t2": "13:17:51",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "13:19:05"
+      },
+      {
+        "aim": 4,
+        "airline_id": "5474158b-e365-44b2-bbe7-c873d11f9732",
+        "airline_name": "【全景】集贤佳苑项目",
+        "index": 12,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "14:01:07",
+        "t2": "14:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "14:01:07"
+      },
+      {
+        "aim": 4,
+        "airline_id": "4d579ce8-c6be-46ed-88f2-4adfc5a7f0f3",
+        "airline_name": "【全景】污水处理厂扩建",
+        "index": 13,
+        "out_airline_id": null,
+        "plan_window": [
+          "14:00:00",
+          "15:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "14:09:17",
+        "task_id": "dca354c9-77ac-4917-8b53-db8affb8c552",
+        "ticket_id": "12180",
+        "time": "14:09:17"
+      },
+      {
+        "aim": 4,
+        "airline_id": "a731d738-df51-4910-80ea-eb7b0e479ce5",
+        "airline_name": "【全景】西安应真阁家俱生产基地改建项目",
+        "index": 14,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "15:01:12",
+        "t2": "15:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "15:01:12"
+      },
+      {
+        "aim": 3,
+        "airline_id": "8cbba57b-5198-41b9-b68a-9300e1d8c8be",
+        "airline_name": "【全覆盖】西安-周至-3000mB10",
+        "index": 15,
+        "out_airline_id": null,
+        "plan_window": [
+          "15:00:00",
+          "16:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "15:00:48",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "15:00:48"
+      },
+      {
+        "aim": 4,
+        "airline_id": "80a22ea5-b047-47c3-b8ac-79a717de2ede",
+        "airline_name": "【全景】西安金凤水厂一期工程",
+        "index": 16,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "16:01:10",
+        "t2": "16:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "16:01:10"
+      },
+      {
+        "aim": 3,
+        "airline_id": "0bc80853-6ae6-472a-9a7a-dac16c232c71",
+        "airline_name": "【全覆盖】西安-周至-3000mB11",
+        "index": 17,
+        "out_airline_id": null,
+        "plan_window": [
+          "16:00:00",
+          "17:00:00"
+        ],
+        "round": 5,
+        "state": 0,
+        "t1": "",
+        "t2": "16:00:06",
+        "task_id": "e82a75bc-a2af-49a4-9d66-507f0cd548df",
+        "ticket_id": "9260",
+        "time": "16:00:06"
+      },
+      {
+        "aim": 4,
+        "airline_id": "dc356572-dd46-46b5-a776-089598e3ef2e",
+        "airline_name": "【全景】西安高新区集贤电子智能制造产业园项目",
+        "index": 18,
+        "out_airline_id": null,
+        "plan_window": [
+          "17:00:00",
+          "18:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "17:01:07",
+        "t2": "17:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "17:01:07"
+      },
+      {
+        "aim": 4,
+        "airline_id": "469e0945-fc2f-420e-b205-739ea0f856c2",
+        "airline_name": "【全景】集贤新能源汽车本地化配套基地",
+        "index": 19,
+        "out_airline_id": null,
+        "plan_window": [
+          "18:00:00",
+          "19:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "18:00:59",
+        "t2": "18:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "18:00:59"
+      },
+      {
+        "aim": 4,
+        "airline_id": "4d579ce8-c6be-46ed-88f2-4adfc5a7f0f3",
+        "airline_name": "【全景】污水处理厂扩建",
+        "index": 20,
+        "out_airline_id": null,
+        "plan_window": [
+          "19:00:00",
+          "20:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "19:00:59",
+        "t2": "19:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "19:00:59"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "index": 21,
+        "out_airline_id": null,
+        "plan_window": [
+          "19:00:00",
+          "20:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "19:19:35",
+        "t2": "19:18:41",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "19:19:35"
+      },
+      {
+        "aim": 4,
+        "airline_id": "e015229a-dd53-464d-b901-c327d361295c",
+        "airline_name": "【全景】陕西宏开新型节能环保建筑材料",
+        "index": 22,
+        "out_airline_id": null,
+        "plan_window": [
+          "20:00:00",
+          "21:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "",
+        "t2": "20:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "20:00:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "index": 23,
+        "out_airline_id": null,
+        "plan_window": [
+          "20:00:00",
+          "21:00:00"
+        ],
+        "round": null,
+        "state": 3,
+        "t1": "20:02:51",
+        "t2": "20:01:50",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "20:02:51"
+      },
+      {
+        "aim": 4,
+        "airline_id": "aaf930d2-fbcb-41cd-ae16-a041dba34d24",
+        "airline_name": "【全景】航投项目",
+        "index": 24,
+        "out_airline_id": null,
+        "plan_window": [
+          "21:00:00",
+          "22:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "21:01:00",
+        "t2": "21:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "21:01:00"
+      },
+      {
+        "aim": 4,
+        "airline_id": "eb4cf4da-d9fb-49b0-b6dc-3ddb142d2795",
+        "airline_name": "【全景】比亚迪二期",
+        "index": 25,
+        "out_airline_id": null,
+        "plan_window": [
+          "22:00:00",
+          "23:00:00"
+        ],
+        "round": null,
+        "state": 2,
+        "t1": "22:00:58",
+        "t2": "22:00:00",
+        "task_id": "",
+        "ticket_id": "",
+        "time": "22:00:58"
+      }
+    ],
+    "date": "2024-08-29"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "date": "2024-08-31",
+        "index": 1,
+        "out_airline_id": "DJI_4916283157931626497",
+        "plan_window": null,
+        "round": 10,
+        "schedule_text": "周期循环，每1周三,四执行",
+        "state": 0,
+        "task_id": "729077f7-3412-4b1d-84ff-1667e9f7ed26",
+        "ticket_id": "12167",
+        "time": "09:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "date": "2024-08-31",
+        "index": 2,
+        "out_airline_id": "DJI_4913663541292044289",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12042,
+        "time": "10:30"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "date": "2024-08-31",
+        "index": 3,
+        "out_airline_id": "DJI_4913663258839224321",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12041,
+        "time": "12:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "date": "2024-08-31",
+        "index": 4,
+        "out_airline_id": "DJI_4913660064222416897",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12039,
+        "time": "14:30"
+      },
+      {
+        "aim": 6,
+        "airline_id": "9c1a482f-bf7c-4a25-9696-6622ef1d7faa",
+        "airline_name": "【三维】赵代路_前2条",
+        "date": "2024-08-31",
+        "index": 5,
+        "out_airline_id": "DJI_4925995593651720193",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "17:00"
+      },
+      {
+        "aim": 6,
+        "airline_id": "5d28339c-faa0-465e-9330-cc0ba55fd369",
+        "airline_name": "【三维】赵代路_中间2条",
+        "date": "2024-08-31",
+        "index": 6,
+        "out_airline_id": "DJI_4925995594209562625",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 1,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "19:00"
+      }
+    ],
+    "date": "2024-08-31"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 6,
+        "airline_id": "b3a72a10-4e09-4f52-9601-cad8c23f7a8b",
+        "airline_name": "【三维】赵代路_右边01",
+        "date": "2024-09-01",
+        "index": 1,
+        "out_airline_id": "DJI_4925995595228778497",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 2,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "09:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "date": "2024-09-01",
+        "index": 2,
+        "out_airline_id": "DJI_4913663541292044289",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12042,
+        "time": "10:30"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "date": "2024-09-01",
+        "index": 3,
+        "out_airline_id": "DJI_4913663258839224321",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12041,
+        "time": "12:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "date": "2024-09-01",
+        "index": 4,
+        "out_airline_id": "DJI_4913660064222416897",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12039,
+        "time": "14:30"
+      },
+      {
+        "aim": 6,
+        "airline_id": "9c1a482f-bf7c-4a25-9696-6622ef1d7faa",
+        "airline_name": "【三维】赵代路_前2条",
+        "date": "2024-09-01",
+        "index": 5,
+        "out_airline_id": "DJI_4925995593651720193",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "17:00"
+      },
+      {
+        "aim": 6,
+        "airline_id": "5d28339c-faa0-465e-9330-cc0ba55fd369",
+        "airline_name": "【三维】赵代路_中间2条",
+        "date": "2024-09-01",
+        "index": 6,
+        "out_airline_id": "DJI_4925995594209562625",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 1,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "19:00"
+      }
+    ],
+    "date": "2024-09-01"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 1,
+        "airline_id": "0e2426ac-d927-4423-bb29-5d596221b0fb",
+        "airline_name": "【拍照】西安比亚迪集贤工业园(东2门)西北23米附近01",
+        "date": "2024-09-02",
+        "index": 1,
+        "out_airline_id": "DJI_4911644623400603649",
+        "plan_window": null,
+        "round": 3,
+        "schedule_text": "周期循环，每1月2执行",
+        "state": 0,
+        "task_id": "9741ba29-a635-46c5-9e67-6bb8cd7b9bb8",
+        "ticket_id": "11873",
+        "time": "09:00"
+      },
+      {
+        "aim": 6,
+        "airline_id": "b3a72a10-4e09-4f52-9601-cad8c23f7a8b",
+        "airline_name": "【三维】赵代路_右边01",
+        "date": "2024-09-02",
+        "index": 2,
+        "out_airline_id": "DJI_4925995595228778497",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 2,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "10:30"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "date": "2024-09-02",
+        "index": 3,
+        "out_airline_id": "DJI_4913663541292044289",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12042,
+        "time": "12:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "date": "2024-09-02",
+        "index": 4,
+        "out_airline_id": "DJI_4913663258839224321",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12041,
+        "time": "14:30"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "date": "2024-09-02",
+        "index": 5,
+        "out_airline_id": "DJI_4913660064222416897",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12039,
+        "time": "17:00"
+      },
+      {
+        "aim": 6,
+        "airline_id": "9c1a482f-bf7c-4a25-9696-6622ef1d7faa",
+        "airline_name": "【三维】赵代路_前2条",
+        "date": "2024-09-02",
+        "index": 6,
+        "out_airline_id": "DJI_4925995593651720193",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "19:00"
+      }
+    ],
+    "date": "2024-09-02"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 6,
+        "airline_id": "5d28339c-faa0-465e-9330-cc0ba55fd369",
+        "airline_name": "【三维】赵代路_中间2条",
+        "date": "2024-09-03",
+        "index": 1,
+        "out_airline_id": "DJI_4925995594209562625",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 1,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "09:00"
+      },
+      {
+        "aim": 6,
+        "airline_id": "b3a72a10-4e09-4f52-9601-cad8c23f7a8b",
+        "airline_name": "【三维】赵代路_右边01",
+        "date": "2024-09-03",
+        "index": 2,
+        "out_airline_id": "DJI_4925995595228778497",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 2,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "10:30"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "date": "2024-09-03",
+        "index": 3,
+        "out_airline_id": "DJI_4913663541292044289",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12042,
+        "time": "12:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "date": "2024-09-03",
+        "index": 4,
+        "out_airline_id": "DJI_4913663258839224321",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12041,
+        "time": "14:30"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "date": "2024-09-03",
+        "index": 5,
+        "out_airline_id": "DJI_4913660064222416897",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12039,
+        "time": "17:00"
+      },
+      {
+        "aim": 6,
+        "airline_id": "9c1a482f-bf7c-4a25-9696-6622ef1d7faa",
+        "airline_name": "【三维】赵代路_前2条",
+        "date": "2024-09-03",
+        "index": 6,
+        "out_airline_id": "DJI_4925995593651720193",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "19:00"
+      }
+    ],
+    "date": "2024-09-03"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 6,
+        "airline_id": "5d28339c-faa0-465e-9330-cc0ba55fd369",
+        "airline_name": "【三维】赵代路_中间2条",
+        "date": "2024-09-04",
+        "index": 1,
+        "out_airline_id": "DJI_4925995594209562625",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 1,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "09:00"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "date": "2024-09-04",
+        "index": 2,
+        "out_airline_id": "DJI_4916283157931626497",
+        "plan_window": null,
+        "round": 11,
+        "schedule_text": "周期循环，每1周三,四执行",
+        "state": 0,
+        "task_id": "de246691-dddc-494f-9863-8b1505db7dcb",
+        "ticket_id": "12167",
+        "time": "10:30"
+      },
+      {
+        "aim": 6,
+        "airline_id": "b3a72a10-4e09-4f52-9601-cad8c23f7a8b",
+        "airline_name": "【三维】赵代路_右边01",
+        "date": "2024-09-04",
+        "index": 3,
+        "out_airline_id": "DJI_4925995595228778497",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 2,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "12:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "date": "2024-09-04",
+        "index": 4,
+        "out_airline_id": "DJI_4913663541292044289",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12042,
+        "time": "14:30"
+      },
+      {
+        "aim": 4,
+        "airline_id": "b03adb34-57f1-49b3-90ba-1b0aa092295d",
+        "airline_name": "【全景】比亚迪高端智能产业园项目(组装)",
+        "date": "2024-09-04",
+        "index": 5,
+        "out_airline_id": "DJI_4916277991534759937",
+        "plan_window": null,
+        "round": 8,
+        "schedule_text": "周期循环，每1周三执行",
+        "state": 0,
+        "task_id": "08c2f67a-7893-42a0-979f-4a79352d226a",
+        "ticket_id": "12166",
+        "time": "17:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "date": "2024-09-04",
+        "index": 6,
+        "out_airline_id": "DJI_4913663258839224321",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12041,
+        "time": "19:00"
+      }
+    ],
+    "date": "2024-09-04"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 4,
+        "airline_id": "80a22ea5-b047-47c3-b8ac-79a717de2ede",
+        "airline_name": "【全景】西安金凤水厂一期工程",
+        "date": "2024-09-05",
+        "index": 1,
+        "out_airline_id": "DJI_4916562580555698177",
+        "plan_window": null,
+        "round": 7,
+        "schedule_text": "周期循环，每1周四执行",
+        "state": 0,
+        "task_id": "a4ae5470-7510-40a0-a775-1a4734eeed30",
+        "ticket_id": "12177",
+        "time": "09:00"
+      },
+      {
+        "aim": 4,
+        "airline_id": "2d2aea9f-9b9d-4c5e-916b-dbbcf97c8903",
+        "airline_name": "【全景】（三公里外）九曲路",
+        "date": "2024-09-05",
+        "index": 2,
+        "out_airline_id": "DJI_4916283157931626497",
+        "plan_window": null,
+        "round": 12,
+        "schedule_text": "周期循环，每1周三,四执行",
+        "state": 0,
+        "task_id": "20d97a3f-7e41-40b8-82dd-13dad8b8a4fb",
+        "ticket_id": "12167",
+        "time": "10:30"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "date": "2024-09-05",
+        "index": 3,
+        "out_airline_id": "DJI_4913660064222416897",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12039,
+        "time": "12:00"
+      },
+      {
+        "aim": 4,
+        "airline_id": "a731d738-df51-4910-80ea-eb7b0e479ce5",
+        "airline_name": "【全景】西安应真阁家俱生产基地改建项目",
+        "date": "2024-09-05",
+        "index": 4,
+        "out_airline_id": "DJI_4916559825770385409",
+        "plan_window": null,
+        "round": 6,
+        "schedule_text": "周期循环，每1周四执行",
+        "state": 0,
+        "task_id": "5452bfd5-ad22-44e2-914f-49ae556c0bbb",
+        "ticket_id": "12174",
+        "time": "14:30"
+      },
+      {
+        "aim": 6,
+        "airline_id": "9c1a482f-bf7c-4a25-9696-6622ef1d7faa",
+        "airline_name": "【三维】赵代路_前2条",
+        "date": "2024-09-05",
+        "index": 5,
+        "out_airline_id": "DJI_4925995593651720193",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "17:00"
+      },
+      {
+        "aim": 4,
+        "airline_id": "aaf930d2-fbcb-41cd-ae16-a041dba34d24",
+        "airline_name": "【全景】航投项目",
+        "date": "2024-09-05",
+        "index": 6,
+        "out_airline_id": "DJI_4916567711816880129",
+        "plan_window": null,
+        "round": 8,
+        "schedule_text": "周期循环，每1周四执行",
+        "state": 0,
+        "task_id": "ac77c77c-4054-41a7-9eae-a4887bb14002",
+        "ticket_id": "12182",
+        "time": "19:00"
+      }
+    ],
+    "date": "2024-09-05"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 4,
+        "airline_id": "469e0945-fc2f-420e-b205-739ea0f856c2",
+        "airline_name": "【全景】集贤新能源汽车本地化配套基地",
+        "date": "2024-09-06",
+        "index": 1,
+        "out_airline_id": "DJI_4916564606500999169",
+        "plan_window": null,
+        "round": 7,
+        "schedule_text": "周期循环，每1周四执行",
+        "state": 0,
+        "task_id": "abf3a183-bd8d-48b3-9f01-1fac2f16315b",
+        "ticket_id": "12179",
+        "time": "09:00"
+      },
+      {
+        "aim": 6,
+        "airline_id": "5d28339c-faa0-465e-9330-cc0ba55fd369",
+        "airline_name": "【三维】赵代路_中间2条",
+        "date": "2024-09-06",
+        "index": 2,
+        "out_airline_id": "DJI_4925995594209562625",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 1,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "10:30"
+      },
+      {
+        "aim": 6,
+        "airline_id": "b3a72a10-4e09-4f52-9601-cad8c23f7a8b",
+        "airline_name": "【三维】赵代路_右边01",
+        "date": "2024-09-06",
+        "index": 3,
+        "out_airline_id": "DJI_4925995595228778497",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 2,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "12:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "date": "2024-09-06",
+        "index": 4,
+        "out_airline_id": "DJI_4913663541292044289",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12042,
+        "time": "14:30"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "date": "2024-09-06",
+        "index": 5,
+        "out_airline_id": "DJI_4913663258839224321",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12041,
+        "time": "17:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "date": "2024-09-06",
+        "index": 6,
+        "out_airline_id": "DJI_4913660064222416897",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12039,
+        "time": "19:00"
+      }
+    ],
+    "date": "2024-09-06"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 6,
+        "airline_id": "9c1a482f-bf7c-4a25-9696-6622ef1d7faa",
+        "airline_name": "【三维】赵代路_前2条",
+        "date": "2024-09-07",
+        "index": 1,
+        "out_airline_id": "DJI_4925995593651720193",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "09:00"
+      },
+      {
+        "aim": 6,
+        "airline_id": "5d28339c-faa0-465e-9330-cc0ba55fd369",
+        "airline_name": "【三维】赵代路_中间2条",
+        "date": "2024-09-07",
+        "index": 2,
+        "out_airline_id": "DJI_4925995594209562625",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 1,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "10:30"
+      },
+      {
+        "aim": 6,
+        "airline_id": "b3a72a10-4e09-4f52-9601-cad8c23f7a8b",
+        "airline_name": "【三维】赵代路_右边01",
+        "date": "2024-09-07",
+        "index": 3,
+        "out_airline_id": "DJI_4925995595228778497",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 2,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "12:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "date": "2024-09-07",
+        "index": 4,
+        "out_airline_id": "DJI_4913663541292044289",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12042,
+        "time": "14:30"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "date": "2024-09-07",
+        "index": 5,
+        "out_airline_id": "DJI_4913663258839224321",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12041,
+        "time": "17:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "date": "2024-09-07",
+        "index": 6,
+        "out_airline_id": "DJI_4913660064222416897",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12039,
+        "time": "19:00"
+      }
+    ],
+    "date": "2024-09-07"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 6,
+        "airline_id": "9c1a482f-bf7c-4a25-9696-6622ef1d7faa",
+        "airline_name": "【三维】赵代路_前2条",
+        "date": "2024-09-08",
+        "index": 1,
+        "out_airline_id": "DJI_4925995593651720193",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "09:00"
+      },
+      {
+        "aim": 6,
+        "airline_id": "5d28339c-faa0-465e-9330-cc0ba55fd369",
+        "airline_name": "【三维】赵代路_中间2条",
+        "date": "2024-09-08",
+        "index": 2,
+        "out_airline_id": "DJI_4925995594209562625",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 1,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "10:30"
+      },
+      {
+        "aim": 6,
+        "airline_id": "b3a72a10-4e09-4f52-9601-cad8c23f7a8b",
+        "airline_name": "【三维】赵代路_右边01",
+        "date": "2024-09-08",
+        "index": 3,
+        "out_airline_id": "DJI_4925995595228778497",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 2,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "12:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "date": "2024-09-08",
+        "index": 4,
+        "out_airline_id": "DJI_4913663541292044289",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12042,
+        "time": "14:30"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "date": "2024-09-08",
+        "index": 5,
+        "out_airline_id": "DJI_4913663258839224321",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12041,
+        "time": "17:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "date": "2024-09-08",
+        "index": 6,
+        "out_airline_id": "DJI_4913660064222416897",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12039,
+        "time": "19:00"
+      }
+    ],
+    "date": "2024-09-08"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 6,
+        "airline_id": "9c1a482f-bf7c-4a25-9696-6622ef1d7faa",
+        "airline_name": "【三维】赵代路_前2条",
+        "date": "2024-09-09",
+        "index": 1,
+        "out_airline_id": "DJI_4925995593651720193",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "09:00"
+      },
+      {
+        "aim": 6,
+        "airline_id": "5d28339c-faa0-465e-9330-cc0ba55fd369",
+        "airline_name": "【三维】赵代路_中间2条",
+        "date": "2024-09-09",
+        "index": 2,
+        "out_airline_id": "DJI_4925995594209562625",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 1,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "10:30"
+      },
+      {
+        "aim": 6,
+        "airline_id": "b3a72a10-4e09-4f52-9601-cad8c23f7a8b",
+        "airline_name": "【三维】赵代路_右边01",
+        "date": "2024-09-09",
+        "index": 3,
+        "out_airline_id": "DJI_4925995595228778497",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 2,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "12:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "date": "2024-09-09",
+        "index": 4,
+        "out_airline_id": "DJI_4913663541292044289",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12042,
+        "time": "14:30"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "date": "2024-09-09",
+        "index": 5,
+        "out_airline_id": "DJI_4913663258839224321",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12041,
+        "time": "17:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "date": "2024-09-09",
+        "index": 6,
+        "out_airline_id": "DJI_4913660064222416897",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12039,
+        "time": "19:00"
+      }
+    ],
+    "date": "2024-09-09"
+  },
+  {
+    "airlines": [
+      {
+        "aim": 6,
+        "airline_id": "9c1a482f-bf7c-4a25-9696-6622ef1d7faa",
+        "airline_name": "【三维】赵代路_前2条",
+        "date": "2024-09-10",
+        "index": 1,
+        "out_airline_id": "DJI_4925995593651720193",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "09:00"
+      },
+      {
+        "aim": 6,
+        "airline_id": "5d28339c-faa0-465e-9330-cc0ba55fd369",
+        "airline_name": "【三维】赵代路_中间2条",
+        "date": "2024-09-10",
+        "index": 2,
+        "out_airline_id": "DJI_4925995594209562625",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 1,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "10:30"
+      },
+      {
+        "aim": 6,
+        "airline_id": "b3a72a10-4e09-4f52-9601-cad8c23f7a8b",
+        "airline_name": "【三维】赵代路_右边01",
+        "date": "2024-09-10",
+        "index": 3,
+        "out_airline_id": "DJI_4925995595228778497",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 2,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12837,
+        "time": "12:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "af26828b-8e06-4942-b1ba-9bbde3cdb7c1",
+        "airline_name": "【拍照】集贤初中北边污水巡查0101",
+        "date": "2024-09-10",
+        "index": 4,
+        "out_airline_id": "DJI_4913663541292044289",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12042,
+        "time": "14:30"
+      },
+      {
+        "aim": 1,
+        "airline_id": "4891591a-c844-4ee9-8346-452994488606",
+        "airline_name": "【拍照】集贤初中东边污水巡查0101",
+        "date": "2024-09-10",
+        "index": 5,
+        "out_airline_id": "DJI_4913663258839224321",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12041,
+        "time": "17:00"
+      },
+      {
+        "aim": 1,
+        "airline_id": "c86cac94-22cb-4357-8cbb-09c3c6531c81",
+        "airline_name": "【拍照】西安航投以东污水巡查01",
+        "date": "2024-09-10",
+        "index": 6,
+        "out_airline_id": "DJI_4913660064222416897",
+        "plan_window": "",
+        "round": "",
+        "schedule_text": "连续执行",
+        "sort": 0,
+        "state": 0,
+        "task_id": "",
+        "ticket_id": 12039,
+        "time": "19:00"
+      }
+    ],
+    "date": "2024-09-10"
+  }
+]

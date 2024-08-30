@@ -6,11 +6,19 @@
           <div class="nest-info">
             <el-popover
               placement="bottom"
-              title="标题"
-              width="200"
               trigger="click"
-              content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+              width="480"
+              popper-class="schedule-nest-popover"
             >
+              <div class="nest-dialog">
+                <div class="nest-area-wrap">
+                  <div class="nest-item nest-item-selected">全部机场(1)</div>
+                </div>
+                <div class="nest-list-wrap">
+                  <div class="nest-item nest-item-selected">西安-周至</div>
+                </div>
+              </div>
+
               <div slot="reference">
                 <span>西安-周至</span>
                 <i class="el-icon-arrow-down"></i>
@@ -30,20 +38,35 @@
           </div>
           <div class="date-type-switch">
             <div class="type-switch">
-              <div class="date-select">日</div>
-              <div class="date-unselect">月</div>
+              <div
+                :class="[isDay ? 'date-select' : 'date-unselect']"
+                @click="showDay"
+              >
+                日
+              </div>
+              <div
+                :class="[!isDay ? 'date-select' : 'date-unselect']"
+                @click="showMounth"
+              >
+                月
+              </div>
             </div>
           </div>
         </div>
-        <div class="sort-day" v-if="true">
+        <div class="sort-day" v-if="isDay">
           <sort-day-list></sort-day-list>
         </div>
-        <div class="sort-month" v-else></div>
+        <div class="sort-month" v-else>
+          <sort-month-list></sort-month-list>
+        </div>
       </div>
     </div>
     <!-- AI托管弹窗 -->
     <div v-if="showAIDialog">
-      <AIDialog :showAIDialog="showAIDialog" @handleClose="handleClose"></AIDialog>
+      <AIDialog
+        :showAIDialog="showAIDialog"
+        @handleClose="handleClose"
+      ></AIDialog>
     </div>
   </div>
 </template>
@@ -52,16 +75,19 @@
 import AIDialog from "./Template/AIDialog.vue";
 import DateTitle from "./Template/DateTitle.vue";
 import SortDayList from "./Template/SortDayList.vue";
+import SortMonthList from "./Template/SortMonthList.vue";
 export default {
   name: "FlightDate",
   components: {
     DateTitle,
     SortDayList,
     AIDialog,
+    SortMonthList,
   },
   data() {
     return {
       showAIDialog: false,
+      isDay: true,
     };
   },
   methods: {
@@ -70,8 +96,14 @@ export default {
     },
     openAI() {
       this.showAIDialog = true;
-    }
-  }
+    },
+    showDay() {
+      this.isDay = true;
+    },
+    showMounth() {
+      this.isDay = false;
+    },
+  },
 };
 </script>
 
@@ -160,6 +192,65 @@ export default {
       align-items: center;
       width: 100%;
       height: calc(100vh - 200px);
+    }
+    .sort-month {
+      margin-left: 7px;
+      margin-right: 8px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: calc(100vh - 200px);
+    }
+  }
+}
+.schedule-nest-popover {
+  .nest-dialog {
+    max-height: 350px;
+    display: flex;
+    flex-direction: row;
+    padding: 8px;
+    font-size: 14px;
+    color: #1d1d1f;
+    user-select: none;
+    .nest-area-wrap {
+      border-right: 1px solid #f5f5f5;
+      padding-right: 8px;
+      overflow-y: auto;
+      .nest-item {
+        cursor: pointer;
+        border-radius: 6px;
+        height: 36px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 7px 16px;
+      }
+      .nest-item-selected {
+        background-color: #f5f5f5;
+        font-weight: 700;
+      }
+    }
+    .nest-list-wrap {
+      overflow-y: auto;
+      padding-left: 8px;
+      padding-right: 8px;
+      flex: 1;
+      .nest-item {
+        cursor: pointer;
+        border-radius: 6px;
+        height: 36px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 7px 16px;
+      }
+      .nest-item-selected {
+        background-color: #f5f5f5;
+        font-weight: 700;
+      }
     }
   }
 }

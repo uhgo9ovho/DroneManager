@@ -96,6 +96,7 @@ export default {
       .el-input__inner {
         padding: 0 !important;
         height: 0 !important;
+        border: 0;
       }
       .el-input__prefix,
       .el-input__suffix {
