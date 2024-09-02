@@ -34,7 +34,7 @@
             </el-tooltip>
           </div>
           <div>
-            <date-title></date-title>
+            <date-title :isDay="isDay"></date-title>
           </div>
           <div class="date-type-switch">
             <div class="type-switch">

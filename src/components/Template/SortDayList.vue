@@ -31,7 +31,7 @@
                     </div>
                   </div>
                   <div v-if="!item.airline_name">
-                    <div class="task-card3">
+                    <div class="task-card3" @click="addAirBtn">
                       <div class="icon-add">+</div>
                     </div>
                   </div>
@@ -50,6 +50,10 @@
     <div v-if="visible">
       <FlightDialog @closeDialog="closeDialog" :detailsShow="true" :taskDetails="true"></FlightDialog>
     </div>
+    <!-- 添加航线弹窗 -->
+     <div v-if="addAirShow">
+      <AddAirLineDialog :addAirShow="addAirShow" @closeLineDialog="closeLineDialog"></AddAirLineDialog>
+     </div>
   </div>
 </template>
 
@@ -57,11 +61,13 @@
 import { mockList4 } from "@/utils/mock.js";
 import AirItemInfo from "./AirItemInfo.vue";
 import FlightDialog from "./FlightDialog.vue";
+import AddAirLineDialog from './AddAirLineDialog.vue';
 export default {
   name: "DayList",
   components: {
     AirItemInfo,
     FlightDialog,
+    AddAirLineDialog
   },
   data() {
     return {
@@ -118,6 +124,7 @@ export default {
       top: 0,
       shouldMove: false, //是否开始移动
       visible: false,
+      addAirShow: false,
     };
   },
   computed: {
@@ -128,6 +135,12 @@ export default {
     },
   },
   methods: {
+    addAirBtn() {
+      this.addAirShow = true;
+    },
+    closeLineDialog() {
+      this.addAirShow = false;
+    },
     openDialog() {
       this.visible = true;
     },
