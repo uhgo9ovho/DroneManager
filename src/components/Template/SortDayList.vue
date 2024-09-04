@@ -162,7 +162,7 @@ export default {
         this.shouldMove = true;
         // 计算已经过去的分钟数
         const minutesPastNine = Math.floor((now - nineAM) / 60000) * 1.16;
-        console.log(minutesPastNine);
+        
 
         this.top = minutesPastNine; // 根据过去的分钟数设置初始 top 值
         this.startMoving();
@@ -177,10 +177,12 @@ export default {
     },
     startMoving() {
       this.shouldMove = true;
+
       setInterval(() => {
         this.top += 1.16;
       }, 60000); // 每60,000毫秒(1分钟) 增加1px
     },
+    
     updateTime() {
       var now = new Date();
       var hours = now.getHours();
@@ -211,7 +213,6 @@ export default {
           });
         }
       });
-      console.log(this.airLines);
     },
   },
   mounted() {
