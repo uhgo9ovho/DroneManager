@@ -28,6 +28,7 @@
               class="img_item"
               v-for="(item, index) in imgOptions"
               :key="index"
+              @click="previewBtn"
             >
               <img
                 src="http://fsimage.guihuao.com/images/38615a57-7181-4962-bdb1-b640614d6947/4928517202866343937.jpeg?imageMogr2/thumbnail/400x"
@@ -129,11 +130,16 @@
         </div>
       </div>
     </div>
+    <!-- 照片预览组件 -->
+    <div v-if="preview">
+      <PhotoPreview @closePreview="closePreview"></PhotoPreview>
+    </div>
   </div>
 </template>
 
 <script>
 import MapContainer from "../MapContainer.vue";
+import PhotoPreview from "./PhotoPreview.vue";
 export default {
   name: "AirLogDialog",
   data() {
@@ -143,10 +149,12 @@ export default {
         234, 324, 234, 2344, 2343, 2342, 2341,
       ],
       vedioVisible: true,
+      preview: false,
     };
   },
   components: {
     MapContainer,
+    PhotoPreview,
   },
   methods: {
     showVideo() {
@@ -154,6 +162,12 @@ export default {
     },
     showMap() {
       this.vedioVisible = false;
+    },
+    previewBtn() {
+      this.preview = true;
+    },
+    closePreview() {
+      this.preview = false;
     },
   },
 };
