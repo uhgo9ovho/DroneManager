@@ -11,6 +11,10 @@ export default {
       type: String,
       required: true,
     },
+    isEdit: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -122,13 +126,14 @@ export default {
       return { x, y };
     },
     handleMouseDown(event) {
-      if (event.shiftKey) {
+      if (this.isEdit) {
         this.isSelecting = true;
         const coords = this.transformMouseCoords(event);
         this.selectionStartX = coords.x;
         this.selectionStartY = coords.y;
         this.selectionEndX = this.selectionStartX;
         this.selectionEndY = this.selectionStartY;
+        this.$emit('startLister')
       } else {
         this.isDragging = true;
         this.startX = event.clientX - this.originX;
@@ -155,7 +160,7 @@ export default {
       if (this.isSelecting) {
         this.isSelecting = false;
         const selectedArea = this.getSelectionArea();
-        console.log("Selected area:", selectedArea);
+        this.$emit("handleMouseUp", selectedArea);
       }
     },
     handleMouseOut() {
@@ -186,6 +191,8 @@ export default {
         y: y1,
         width: x2 - x1,
         height: y2 - y1,
+        x2,
+        y2,
       };
     },
   },
