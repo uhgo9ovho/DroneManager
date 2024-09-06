@@ -32,6 +32,7 @@ export default {
       img: null,
       canvasWidth: 754, // 固定 canvas 宽度
       canvasHeight: 566, // 固定 canvas 高度
+      textSize: {width: 0, height: 0}
     };
   },
   mounted() {
@@ -52,7 +53,7 @@ export default {
   methods: {
     setupCanvas() {
       const canvas = this.$refs.canvas;
-      const ctx = canvas.getContext("2d");
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
       // 获取设备像素比
       const devicePixelRatio = window.devicePixelRatio || 1;
@@ -65,6 +66,22 @@ export default {
       ctx.scale(devicePixelRatio, devicePixelRatio);
       // 禁用图像平滑处理，以提高清晰度
       ctx.imageSmoothingEnabled = false;
+    },
+    drawTextOnCanvas(text) {
+      const canvas = this.$refs.canvas;
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      // ctx.clearRect(this.selectionStartX, this.selectionStartY - this.textSize.height, this.textSize.width, this.textSize.height);
+      // 设置字体
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "red"; // 设置字体颜色
+      // 计算文字宽度
+      const textMetrics = ctx.measureText(text);
+      const textWidth = textMetrics.width;
+      // 估算文字高度
+      const textHeight = 16;
+      this.textSize = { width: textWidth, height: textHeight };
+      // 在指定位置添加文字
+      ctx.fillText(text, this.selectionStartX, this.selectionStartY);
     },
     drawImage() {
       const canvas = this.$refs.canvas;
@@ -133,7 +150,7 @@ export default {
         this.selectionStartY = coords.y;
         this.selectionEndX = this.selectionStartX;
         this.selectionEndY = this.selectionStartY;
-        this.$emit('startLister')
+        this.$emit("startLister");
       } else {
         this.isDragging = true;
         this.startX = event.clientX - this.originX;

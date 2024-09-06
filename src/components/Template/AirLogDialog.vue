@@ -1,7 +1,7 @@
 <template>
   <div class="air-log-dialog">
     <div class="outer">
-      <div class="task-back">
+      <div class="task-back" @click="closeAirDialog">
         <i class="el-icon-close"></i>
       </div>
       <div class="title">
@@ -168,6 +168,9 @@ export default {
     },
     closePreview() {
       this.preview = false;
+    },
+    closeAirDialog() {
+        this.$emit('closeAirDialog')
     },
   },
 };

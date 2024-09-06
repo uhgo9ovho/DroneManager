@@ -21,7 +21,7 @@
     </common-table>
     <!-- 查看弹窗 -->
      <div v-if="showDialog">
-      <AirLogDialog></AirLogDialog>
+      <AirLogDialog @closeAirDialog="closeAirDialog"></AirLogDialog>
      </div>
   </div>
 </template>
@@ -97,6 +97,9 @@ export default {
     },
     lookBtn() {
       this.showDialog = true;
+    },
+    closeAirDialog() {
+      this.showDialog = false;
     }
   },
   mounted() {

@@ -35,7 +35,7 @@
       </div>
       <div
         class="deleteBtn"
-        @click="clearDrawBtn"
+        @click.stop="clearDrawBtn"
         :style="getPosition"
         v-show="isShow"
       >
@@ -62,6 +62,7 @@
             class="typeList_li"
             v-for="(item, index) in typeList"
             :key="index"
+            @click="selectItem(item)"
           >
             {{ item }}
           </div>
@@ -122,7 +123,7 @@ export default {
       };
     },
     getListPosition() {
-      if (this.clientY > this.windowH - 412) {
+      if (this.clientY > this.windowH - 312) {
         const posY = this.windowH - this.clientY;
         console.log(posY);
         return {
@@ -131,7 +132,7 @@ export default {
         };
       }
       return {
-        top: `${this.top - 26}px`,
+        top: `${this.top - 126}px`,
         left: `${this.left + 6}px`,
       };
     },
@@ -148,16 +149,22 @@ export default {
       this.isEdit = !this.isEdit;
     },
     handleMouseUp(selectedArea) {
-      this.isShow = true;
+      if (!selectedArea.width || !selectedArea.height) {
+        this.isShow = false;
+      } else {
+        this.isShow = true;
+      }
       console.log(selectedArea, "asdasd");
       this.top = selectedArea.y2;
       this.left = selectedArea.x2;
+      this.startX = selectedArea.x1;
+      this.startY = selectedArea.y1;
       this.areaWidth = selectedArea.width;
       this.areaHeight = selectedArea.height;
       document.removeEventListener("mousemove", this.getPos);
     },
     startLister() {
-        this.isShow = false;
+      this.isShow = false;
       document.addEventListener("mousemove", this.getPos);
     },
     getPos(event) {
@@ -166,9 +173,12 @@ export default {
     },
     clearDrawBtn() {
       this.$refs.imageZoom.drawImage();
-      this.areaHeight = 0;
-      this.areaWidth = 0;
+      this.isShow = false;
     },
+    selectItem(item) {
+        this.$refs.imageZoom.drawTextOnCanvas(item);
+        this.isShow = false;
+    }
   },
   mounted() {
     window.addEventListener("resize", () => {
@@ -321,6 +331,7 @@ export default {
       -webkit-backdrop-filter: blur(5px);
       backdrop-filter: blur(5px);
       padding: 12px 8px 8px 8px;
+      z-index: 1000;
       .top {
         padding-left: 12px;
         padding-right: 4px;
@@ -393,7 +404,7 @@ export default {
       }
       .typeList_ul {
         margin-top: 4px;
-        max-height: 300px;
+        max-height: 200px;
         overflow: auto;
         .typeList_li {
           font-size: 12px;
