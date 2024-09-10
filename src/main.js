@@ -20,7 +20,6 @@ import './permission' // permission control
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree } from "@/utils/ruoyi";
 //引入自定义icon
 import '../font_4643341_ubjqd77vsam/iconfont.css'
-
 // 全局方法挂载
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm

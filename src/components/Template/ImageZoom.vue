@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <canvas ref="canvas"></canvas>
+  <div ref="canvasWrapEl">
+    <canvas id="canvas" ref="canvas"></canvas>
   </div>
 </template>
-  
-  <script>
+
+<script>
+import { fabric } from "fabric"; // v6
 export default {
   props: {
     src: {
@@ -18,219 +19,170 @@ export default {
   },
   data() {
     return {
-      scale: 1,
-      originX: 0,
-      originY: 0,
-      isDragging: false,
-      startX: 0,
-      startY: 0,
-      isSelecting: false,
-      selectionStartX: 0,
-      selectionStartY: 0,
-      selectionEndX: 0,
-      selectionEndY: 0,
-      img: null,
-      canvasWidth: 754, // 固定 canvas 宽度
-      canvasHeight: 566, // 固定 canvas 高度
-      textSize: {width: 0, height: 0}
+      canvas: null,
+      isDrawing: false,
+      selectionRect: null,
+      isDrawing: false, // 判断是否正在框选
+      startX: 0, // 框选起点X
+      startY: 0, // 框选起点Y
+      backgroundImage: null, // 背景图片对象
+      width: 754,
+      height: 566,
+      zoomFactor: 1, // 当前缩放比例
     };
-  },
-  mounted() {
-    this.img = new Image();
-    this.img.src = this.src;
-
-    this.img.onload = () => {
-      this.setupCanvas();
-      this.drawImage();
-    };
-
-    this.$refs.canvas.addEventListener("wheel", this.handleWheel);
-    this.$refs.canvas.addEventListener("mousedown", this.handleMouseDown);
-    this.$refs.canvas.addEventListener("mousemove", this.handleMouseMove);
-    this.$refs.canvas.addEventListener("mouseup", this.handleMouseUp);
-    this.$refs.canvas.addEventListener("mouseout", this.handleMouseOut);
   },
   methods: {
-    setupCanvas() {
-      const canvas = this.$refs.canvas;
-      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    init() {
+      let that = this;
+      const canvasElement = this.$refs.canvas;
+      // 使用自定义的上下文初始化 Fabric.js Canvas
+      this.canvas = new fabric.Canvas(canvasElement);
+      this.canvas.setWidth(754);
+      this.canvas.setHeight(566);
+      if (!this.canvas) {
+        console.error("Canvas not initialized");
+        return;
+      }
+      // 加载图片并设置为背景
+      fabric.Image.fromURL(
+        this.src,
+        (img) => {
+          this.backgroundImage = img;
+          img.scaleToWidth(this.canvas.width); // 将图片缩放到 canvas 宽度
+          img.scaleToHeight(this.canvas.height); // 将图片缩放到 canvas 高度
 
-      // 获取设备像素比
-      const devicePixelRatio = window.devicePixelRatio || 1;
-
-      // 设置 canvas 的实际像素尺寸为显示尺寸的倍数
-      canvas.width = this.canvasWidth * devicePixelRatio;
-      canvas.height = this.canvasHeight * devicePixelRatio;
-
-      // 缩放绘图上下文，确保绘制的内容清晰
-      ctx.scale(devicePixelRatio, devicePixelRatio);
-      // 禁用图像平滑处理，以提高清晰度
-      ctx.imageSmoothingEnabled = false;
-    },
-    drawTextOnCanvas(text) {
-      const canvas = this.$refs.canvas;
-      const ctx = canvas.getContext("2d", { willReadFrequently: true });
-      // ctx.clearRect(this.selectionStartX, this.selectionStartY - this.textSize.height, this.textSize.width, this.textSize.height);
-      // 设置字体
-      ctx.font = "16px Arial";
-      ctx.fillStyle = "red"; // 设置字体颜色
-      // 计算文字宽度
-      const textMetrics = ctx.measureText(text);
-      const textWidth = textMetrics.width;
-      // 估算文字高度
-      const textHeight = 16;
-      this.textSize = { width: textWidth, height: textHeight };
-      // 在指定位置添加文字
-      ctx.fillText(text, this.selectionStartX, this.selectionStartY);
-    },
-    drawImage() {
-      const canvas = this.$refs.canvas;
-      const ctx = canvas.getContext("2d", { willReadFrequently: true });
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      // 计算图片缩放比例
-      const scaleX = this.canvasWidth / this.img.width;
-      const scaleY = this.canvasHeight / this.img.height;
-      const scale = Math.min(scaleX, scaleY);
-      // 计算图片在 canvas 中居中的位置
-      const x = (this.canvasWidth - this.img.width * scale) / 2;
-      const y = (this.canvasHeight - this.img.height * scale) / 2;
-      ctx.save();
-      ctx.translate(this.originX, this.originY);
-      ctx.scale(this.scale, this.scale);
-      ctx.drawImage(
-        this.img,
-        0,
-        0,
-        this.img.width,
-        this.img.height,
-        x,
-        y,
-        this.img.width * scale,
-        this.img.height * scale
+          // 缩放背景图片使其与 canvas 的尺寸匹配
+          this.canvas.setBackgroundImage(
+            img,
+            this.canvas.renderAll.bind(this.canvas), // 回调函数以渲染 canvas
+            {
+              scaleX: this.canvas.width / img.width, // 计算水平缩放比例
+              scaleY: this.canvas.height / img.height, // 计算垂直缩放比例
+            }
+          );
+        },
+        { crossOrigin: "anonymous" }
       );
-      ctx.restore();
-
-      if (this.isSelecting) {
-        this.drawSelection();
-      }
-    },
-    handleWheel(event) {
-      event.preventDefault();
-
-      const mouseX = event.offsetX;
-      const mouseY = event.offsetY;
-      const canvasX = (mouseX - this.originX) / this.scale;
-      const canvasY = (mouseY - this.originY) / this.scale;
-
-      if (event.deltaY < 0) {
-        this.scale *= 1.1;
-      } else {
-        this.scale *= 0.9;
-      }
-
-      this.scale = Math.min(Math.max(0.1, this.scale), 10);
-
-      this.originX = mouseX - canvasX * this.scale;
-      this.originY = mouseY - canvasY * this.scale;
-
-      this.drawImage();
-    },
-    // 将鼠标位置转换为图像中的实际位置
-    transformMouseCoords(event) {
-      const rect = this.$refs.canvas.getBoundingClientRect();
-      const x = (event.clientX - rect.left - this.originX) / this.scale;
-      const y = (event.clientY - rect.top - this.originY) / this.scale;
-      return { x, y };
+      // 监听框选操作
+      this.canvas.on("mouse:down", this.handleMouseDown);
+      this.canvas.on("mouse:move", this.handleMouseMove);
+      this.canvas.on("mouse:up", this.handleMouseUp);
+      // 监听鼠标滚轮事件
+      this.canvas.on("mouse:wheel", this.handleMouseWheel);
     },
     handleMouseDown(event) {
-      if (this.isEdit) {
-        this.isSelecting = true;
-        const coords = this.transformMouseCoords(event);
-        this.selectionStartX = coords.x;
-        this.selectionStartY = coords.y;
-        this.selectionEndX = this.selectionStartX;
-        this.selectionEndY = this.selectionStartY;
-        this.$emit("startLister");
-      } else {
+      const pointer = this.canvas.getPointer(event.e);
+      const activeObject = this.canvas.findTarget(event.e);
+
+      if (activeObject && activeObject.type === "rect") {
+        // 如果点击在已有的矩形上，启动拖动操作
         this.isDragging = true;
-        this.startX = event.clientX - this.originX;
-        this.startY = event.clientY - this.originY;
+        this.canvas.setActiveObject(activeObject);
+      } else {
+        // 如果没有点击在已有的矩形上，开始新的框选
+        this.isDrawing = true;
+        this.startX = pointer.x;
+        this.startY = pointer.y;
+
+        // 创建一个新的矩形
+        this.selectionRect = new fabric.Rect({
+          left: this.startX,
+          top: this.startY,
+          width: 0,
+          height: 0,
+          fill: "rgba(0, 0, 255, 0.3)",
+          stroke: "blue",
+          strokeWidth: 2,
+          selectable: true, // 允许拖动
+          hasControls: true,
+        });
+        this.canvas.add(this.selectionRect);
       }
     },
 
     handleMouseMove(event) {
-      if (this.isDragging) {
-        this.originX = event.clientX - this.startX;
-        this.originY = event.clientY - this.startY;
-        this.drawImage();
-      }
+      if (!this.isDrawing) return;
 
-      if (this.isSelecting) {
-        const coords = this.transformMouseCoords(event);
-        this.selectionEndX = coords.x;
-        this.selectionEndY = coords.y;
-        this.drawImage();
-      }
+      const pointer = this.canvas.getPointer(event.e);
+      const width = pointer.x - this.startX;
+      const height = pointer.y - this.startY;
+
+      // 更新矩形的大小
+      this.selectionRect.set({
+        width: Math.abs(width),
+        height: Math.abs(height),
+        left: width < 0 ? pointer.x : this.startX,
+        top: height < 0 ? pointer.y : this.startY,
+      });
+
+      this.canvas.renderAll();
     },
+
     handleMouseUp() {
-      this.isDragging = false;
-      if (this.isSelecting) {
-        this.isSelecting = false;
-        const selectedArea = this.getSelectionArea();
-        this.$emit("handleMouseUp", selectedArea);
+      this.isDrawing = false;
+    },
+
+    handleMouseWheel(event) {
+      const delta = event.e.deltaY;
+      const zoomFactor = 1.1;
+      let zoom = delta < 0 ? zoomFactor : 1 / zoomFactor;
+
+      // 当前缩放比例
+      this.zoomFactor *= zoom;
+
+      // 获取鼠标位置
+      const pointer = this.canvas.getPointer(event.e);
+
+      // 更新背景图片缩放
+      if (this.backgroundImage) {
+        const newScaleX = this.backgroundImage.scaleX * zoom;
+        const newScaleY = this.backgroundImage.scaleY * zoom;
+
+        const newLeft =
+          pointer.x -
+          (pointer.x - (this.backgroundImage.left || 0)) *
+            (newScaleX / this.backgroundImage.scaleX);
+        const newTop =
+          pointer.y -
+          (pointer.y - (this.backgroundImage.top || 0)) *
+            (newScaleY / this.backgroundImage.scaleY);
+
+        this.backgroundImage.set({
+          scaleX: newScaleX,
+          scaleY: newScaleY,
+          left: newLeft,
+          top: newTop,
+        });
+        this.canvas.renderAll();
       }
-    },
-    handleMouseOut() {
-      this.isDragging = false;
-    },
-    drawSelection() {
-      const canvas = this.$refs.canvas;
-      const ctx = canvas.getContext("2d");
-      ctx.strokeStyle = "red";
-      ctx.lineWidth = 2;
-      ctx.setLineDash([5, 5]);
 
-      // 反向计算回实际的绘制位置
-      const x = this.selectionStartX * this.scale + this.originX;
-      const y = this.selectionStartY * this.scale + this.originY;
-      const width = (this.selectionEndX - this.selectionStartX) * this.scale;
-      const height = (this.selectionEndY - this.selectionStartY) * this.scale;
+      // 更新所有矩形的缩放比例和位置
+      this.canvas.getObjects("rect").forEach((rect) => {
+        rect.set({
+          scaleX: rect.scaleX * zoom,
+          scaleY: rect.scaleY * zoom,
+          left: pointer.x - (pointer.x - rect.left) * zoom,
+          top: pointer.y - (pointer.y - rect.top) * zoom,
+        });
+      });
 
-      ctx.strokeRect(x, y, width, height);
-    },
-    getSelectionArea() {
-      const x1 = Math.min(this.selectionStartX, this.selectionEndX);
-      const y1 = Math.min(this.selectionStartY, this.selectionEndY);
-      const x2 = Math.max(this.selectionStartX, this.selectionEndX);
-      const y2 = Math.max(this.selectionStartY, this.selectionEndY);
-      return {
-        x: x1,
-        y: y1,
-        width: x2 - x1,
-        height: y2 - y1,
-        x2,
-        y2,
-      };
+      this.canvas.renderAll();
+      event.e.preventDefault();
+      event.e.stopPropagation();
     },
   },
-  beforeDestroy() {
-    this.$refs.canvas.removeEventListener("wheel", this.handleWheel);
-    this.$refs.canvas.removeEventListener("mousedown", this.handleMouseDown);
-    this.$refs.canvas.removeEventListener("mousemove", this.handleMouseMove);
-    this.$refs.canvas.removeEventListener("mouseup", this.handleMouseUp);
-    this.$refs.canvas.removeEventListener("mouseout", this.handleMouseOut);
+  mounted() {
+    this.init();
   },
 };
 </script>
-  
-  <style scoped>
+
+<style>
 canvas {
   display: block;
   margin: 0 auto;
   border: 1px solid #ccc;
   position: absolute;
-  width: 754px;
-  height: 566px;
   left: 0px;
   top: 0px;
   touch-action: none;
