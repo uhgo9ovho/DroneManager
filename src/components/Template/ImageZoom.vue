@@ -29,6 +29,8 @@ export default {
       width: 754,
       height: 566,
       zoomFactor: 1, // 当前缩放比例
+      hasPos: false, //定位信息
+      textMap: new Map(), // 存储矩形框和对应的标注
     };
   },
   methods: {
@@ -69,6 +71,8 @@ export default {
       this.canvas.on("mouse:up", this.handleMouseUp);
       // 监听鼠标滚轮事件
       this.canvas.on("mouse:wheel", this.handleMouseWheel);
+      // 监听对象移动事件
+      this.canvas.on("object:moving", this.handleObjectMoving);
     },
     handleMouseDown(event) {
       const pointer = this.canvas.getPointer(event.e);
@@ -78,7 +82,24 @@ export default {
         // 如果点击在已有的矩形上，启动拖动操作
         this.isDragging = true;
         this.canvas.setActiveObject(activeObject);
+        // 获取矩形的起始位置和结束位置
+        const left = activeObject.left;
+        const top = activeObject.top;
+        const width = activeObject.width * activeObject.scaleX; // 考虑缩放比例
+        const height = activeObject.height * activeObject.scaleY; // 考虑缩放比例
+        const right = left + width;
+        const bottom = top + height;
+        this.$emit("handleMouseUp", {
+          x1: left,
+          y1: top,
+          x2: right,
+          y2: bottom,
+          width,
+          height,
+        });
+        this.hasPos = true;
       } else {
+        this.hasPos = false;
         // 如果没有点击在已有的矩形上，开始新的框选
         this.isDrawing = true;
         this.startX = pointer.x;
@@ -102,6 +123,7 @@ export default {
 
     handleMouseMove(event) {
       if (!this.isDrawing) return;
+      const activeObject = event.target;
 
       const pointer = this.canvas.getPointer(event.e);
       const width = pointer.x - this.startX;
@@ -118,7 +140,63 @@ export default {
       this.canvas.renderAll();
     },
 
+    handleObjectMoving(event) {
+      const activeObject = event.target;
+      if (activeObject && activeObject.type === "rect") {
+        const left = activeObject.left;
+        const top = activeObject.top;
+        const width = activeObject.width * activeObject.scaleX; // 考虑缩放比例
+        const height = activeObject.height * activeObject.scaleY; // 考虑缩放比例
+        const right = left + width;
+        const bottom = top + height;
+        this.$emit("handleMouseUp", {
+          x1: left,
+          y1: top,
+          x2: right,
+          y2: bottom,
+          width,
+          height,
+        });
+        // 输出实时的起始位置和结束位置
+        console.log(`实时矩形起点位置: (${left}, ${top})`);
+        console.log(`实时矩形结束位置: (${right}, ${bottom})`);
+        // 获取与该矩形框绑定的标注文字
+        const boundText = this.textMap.get(activeObject);
+
+        if (boundText) {
+          // 移动标注文字的位置，使其相对于矩形框的位置保持一致
+          boundText.set({
+            left: left + 10, // 偏移一点以确保文字在框内
+            top: top + 10,
+          });
+        }
+        this.canvas.renderAll();
+      }
+    },
+
     handleMouseUp() {
+      // 框选完成后获取位置
+      if (this.selectionRect) {
+        const left = this.selectionRect.left;
+        const top = this.selectionRect.top;
+        const width = this.selectionRect.width * this.selectionRect.scaleX; // 考虑缩放比例
+        const height = this.selectionRect.height * this.selectionRect.scaleY; // 考虑缩放比例
+        const right = left + width;
+        const bottom = top + height;
+
+        console.log(`起点位置: (${left}, ${top})`);
+        console.log(`结束位置: (${right}, ${bottom})`);
+        if (!this.hasPos) {
+          this.$emit("handleMouseUp", {
+            x1: left,
+            y1: top,
+            x2: right,
+            y2: bottom,
+            width,
+            height,
+          });
+        }
+      }
       this.isDrawing = false;
     },
 
@@ -158,17 +236,95 @@ export default {
 
       // 更新所有矩形的缩放比例和位置
       this.canvas.getObjects("rect").forEach((rect) => {
+        const newLeft = pointer.x - (pointer.x - rect.left) * zoom;
+        const newTop = pointer.y - (pointer.y - rect.top) * zoom;
         rect.set({
           scaleX: rect.scaleX * zoom,
           scaleY: rect.scaleY * zoom,
           left: pointer.x - (pointer.x - rect.left) * zoom,
           top: pointer.y - (pointer.y - rect.top) * zoom,
         });
+        // 获取矩形框对应的文字并更新其位置和缩放比例
+        const boundText = this.textMap.get(rect);
+        if (boundText) {
+          boundText.set({
+            scaleX: boundText.scaleX * zoom, // 同步缩放文字
+            scaleY: boundText.scaleY * zoom,
+            left: newLeft + 10, // 保持文字在框的偏移位置
+            top: newTop + 10,
+          });
+        }
       });
 
       this.canvas.renderAll();
       event.e.preventDefault();
       event.e.stopPropagation();
+    },
+
+    addTextToSelectedBox(textProps) {
+      const activeObject = this.canvas.getActiveObject();
+      if (activeObject && activeObject.type === "rect") {
+        // 先检查并删除框选区域内已有的文字标注
+        this.removeExistingTextInRect(activeObject);
+        // 获取矩形框的位置
+        const left = activeObject.left + 10; // 稍微偏移，让文字在框内
+        const top = activeObject.top + 10;
+
+        // 创建一个标注文字
+        const text = new fabric.Textbox(textProps, {
+          left: left,
+          top: top,
+          fontSize: 16,
+          fill: "#000",
+          editable: true,
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+        });
+
+        // 将文字添加到画布上
+        this.canvas.add(text);
+        this.canvas.setActiveObject(text);
+        // 绑定矩形框和文字
+        this.textMap.set(activeObject, text);
+        this.canvas.renderAll();
+      } else {
+        console.log("请选择一个矩形框进行标注");
+      }
+    },
+
+    // 查找并删除已存在的标注文字
+    removeExistingTextInRect(rect) {
+      const objects = this.canvas.getObjects("textbox");
+      objects.forEach((obj) => {
+        if (
+          obj.left >= rect.left &&
+          obj.top >= rect.top &&
+          obj.left <= rect.left + rect.width &&
+          obj.top <= rect.top + rect.height
+        ) {
+          this.canvas.remove(obj); // 删除该标注
+        }
+      });
+    },
+    // 删除选中的矩形框和标注文字
+    removeSelectedBoxAndText() {
+      const activeObject = this.canvas.getActiveObject();
+      if (activeObject && activeObject.type === 'rect') {
+        // 查找该矩形框的标注文字
+        const boundText = this.textMap.get(activeObject);
+
+        // 从画布中移除矩形框和标注文字
+        this.canvas.remove(activeObject);
+        if (boundText) {
+          this.canvas.remove(boundText);
+        }
+
+        // 从 textMap 中删除绑定信息
+        this.textMap.delete(activeObject);
+
+        this.canvas.renderAll();
+      } else {
+        console.log('没有选中任何框');
+      }
     },
   },
   mounted() {

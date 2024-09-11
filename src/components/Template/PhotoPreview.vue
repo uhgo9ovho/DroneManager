@@ -172,13 +172,13 @@ export default {
       this.clientY = event.clientY; // 鼠标相对于窗口的Y坐标
     },
     clearDrawBtn() {
-      this.$refs.imageZoom.drawImage();
+      this.$refs.imageZoom.removeSelectedBoxAndText();
       this.isShow = false;
     },
     selectItem(item) {
-        this.$refs.imageZoom.drawTextOnCanvas(item);
-        this.isShow = false;
-    }
+      this.$refs.imageZoom.addTextToSelectedBox(item);
+      this.isShow = false;
+    },
   },
   mounted() {
     window.addEventListener("resize", () => {
