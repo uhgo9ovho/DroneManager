@@ -1,6 +1,6 @@
 import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-
+import { encrypt } from '@/utils/jsencrypt.js'
 const user = {
   state: {
     token: getToken(),
@@ -41,6 +41,7 @@ const user = {
     // 登录
     Login({ commit }, userInfo) {
       const username = userInfo.username.trim()
+      // const password = encrypt(userInfo.password)
       const password = userInfo.password
       const code = userInfo.code
       const uuid = userInfo.uuid
