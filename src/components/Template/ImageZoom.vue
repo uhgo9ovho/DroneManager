@@ -16,6 +16,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    width: {
+      type: Number,
+      default: 754,
+    },
+    height: {
+      type: Number,
+      default: 566
+    }
   },
   data() {
     return {
@@ -26,8 +34,6 @@ export default {
       startX: 0, // 框选起点X
       startY: 0, // 框选起点Y
       backgroundImage: null, // 背景图片对象
-      width: 754,
-      height: 566,
       zoomFactor: 1, // 当前缩放比例
       hasPos: false, //定位信息
       textMap: new Map(), // 存储矩形框和对应的标注
@@ -39,8 +45,8 @@ export default {
       const canvasElement = this.$refs.canvas;
       // 使用自定义的上下文初始化 Fabric.js Canvas
       this.canvas = new fabric.Canvas(canvasElement);
-      this.canvas.setWidth(754);
-      this.canvas.setHeight(566);
+      this.canvas.setWidth(this.width);
+      this.canvas.setHeight(this.height);
       if (!this.canvas) {
         console.error("Canvas not initialized");
         return;
@@ -65,6 +71,7 @@ export default {
         },
         { crossOrigin: "anonymous" }
       );
+      if(!this.isEdit) return;
       // 监听框选操作
       this.canvas.on("mouse:down", this.handleMouseDown);
       this.canvas.on("mouse:move", this.handleMouseMove);
@@ -343,6 +350,6 @@ canvas {
   top: 0px;
   touch-action: none;
   user-select: none;
-  border-radius: 12px;
+  /* border-radius: 12px; */
 }
 </style>

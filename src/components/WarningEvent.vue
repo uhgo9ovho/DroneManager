@@ -88,25 +88,41 @@
       </template>
     </common-table>
     <!-- 预警详情弹窗 -->
-     <div v-if="warningVisible">
-
-     </div>
+    <div v-if="warningVisible">
+      <warning-dialog @closeWarningDialog="closeWarningDialog"></warning-dialog>
+    </div>
+    <!-- 忽略弹窗 -->
+    <div v-if="neglectVisible">
+      <NeglectDialog
+        :neglectVisible="neglectVisible"
+        @closeNeglectDialog="closeNeglectDialog"
+      ></NeglectDialog>
+    </div>
+    <!-- 处理弹窗 -->
+    <div v-if="handleVisible">
+      <HandleDialog
+        :handleVisible="handleVisible"
+        @closeHandleDialog="closeHandleDialog"
+      ></HandleDialog>
+    </div>
   </div>
 </template>
 
 <script>
 import CommonTable from "./CommonTable.vue";
 import { mockList } from "@/utils/mock.js";
+import WarningDialog from "./Template/WarningDialog.vue";
 import EventInfo from "./Template/EventInfo.vue";
-import FlightDialog from "./Template/FlightDialog.vue";
-import PanoramicDialog from "./Template/PanoramicDialog.vue";
-import FlightDataDialog from "./Template/FlightDataDialog.vue";
+import NeglectDialog from "./Template/NeglectDialog.vue";
+import HandleDialog from "./Template/HandleDialog.vue";
 export default {
   name: "FlightTable",
   props: {},
   data() {
     return {
       warningVisible: false,
+      neglectVisible: false,
+      handleVisible: false,
       columns: [
         {
           prop: "taskName",
@@ -199,42 +215,38 @@ export default {
     },
   },
   methods: {
+    closeNeglectDialog() {
+      this.neglectVisible = false;
+    },
+    closeWarningDialog() {
+      this.warningVisible = false;
+    },
     nameCommand(itemCommand) {
       console.log(itemCommand);
     },
     statusCommand(itemCommand) {},
     operateCommand(itemCommand) {
       console.log(itemCommand);
-      if (itemCommand === "成果") {
-        this.panoramicVisible = true;
-      } else if (itemCommand === "排期") {
-        this.flyDateVisible = true;
+      if (itemCommand === "忽略") {
+        this.neglectVisible = true;
       }
     },
     detailsBtn() {
-      
+      this.warningVisible = true;
     },
     flightBtn() {
-      this.flightVisible = true;
-      this.detailsShow = false;
-      this.filghtShow = true;
+      this.handleVisible = true;
     },
-    closeDialog() {
-      this.flightVisible = false;
-    },
-    closeQJDialog() {
-      this.panoramicVisible = false;
-    },
-    closeFlightDateDialog() {
-      this.flyDateVisible = false;
+    closeHandleDialog() {
+      this.handleVisible = false;
     },
   },
   components: {
     CommonTable,
+    WarningDialog,
     EventInfo,
-    FlightDialog,
-    PanoramicDialog,
-    FlightDataDialog
+    NeglectDialog,
+    HandleDialog,
   },
 };
 </script>
