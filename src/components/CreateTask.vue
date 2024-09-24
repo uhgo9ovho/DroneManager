@@ -2,7 +2,7 @@
   <div class="create-task">
     <div class="task-title">
       <div class="title">新建任务</div>
-      <el-button icon="el-icon-switch-button">退出</el-button>
+      <el-button icon="el-icon-switch-button" @click="outBtn">退出</el-button>
     </div>
     <el-divider></el-divider>
     <div class="form-box">
@@ -84,6 +84,9 @@ export default {
   methods: {
     openSettingDate() {
       this.$emit('openSettingDate')
+    },
+    outBtn() {
+      this.$router.push('/flight');
     }
   }
 };
@@ -109,6 +112,7 @@ export default {
     align-items: center;
     .title {
       font-family: Alibaba PuHuiTi 3, Alibaba PuHuiTi 30;
+      margin: 0px 60px 30px auto;
       font-weight: 600;
       font-size: 18px;
       color: #000000;

@@ -121,6 +121,7 @@ import TableNameInfo from "./Template/TableNameInfo.vue";
 import FlightDialog from "./Template/FlightDialog.vue";
 import PanoramicDialog from "./Template/PanoramicDialog.vue";
 import FlightDataDialog from "./Template/FlightDataDialog.vue";
+import { taskListAPI } from '@/api/TaskManager.js';
 export default {
   name: "FlightTable",
   props: {},
@@ -207,6 +208,12 @@ export default {
         },
       ],
     };
+  },
+  mounted() {
+    taskListAPI().then(res => {
+      console.log(res);
+      
+    })
   },
   computed: {
     mockTableList() {
