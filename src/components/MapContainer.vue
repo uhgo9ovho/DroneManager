@@ -33,8 +33,9 @@ export default {
             // 设置地图容器id
             viewMode: "2D", // 是否为3D地图模式
             zoom: 11, // 初始化地图级别
-            center: [121.7789, 31.3102], // 初始化地图中心点位置
+            center: [116.397428, 39.90923], // 初始化地图中心点位置
             layers: [layer],
+            resizeEnable: true,
           });
           const traffic = new AMap.TileLayer.Traffic({
             autoRefresh: true, //是否自动刷新
@@ -55,7 +56,6 @@ export default {
           //自定义marker（标记点）
           const markerContent = `<div class="custom-content-marker">
 <img src="//a.amap.com/jsapi_demos/static/demo-center/icons/dir-via-marker.png">
-<div class="close-btn" onclick="clearMarker()">X</div>
 </div>`;
           const position = new AMap.LngLat(116.397428, 39.90923); //经纬度
           const marker = new AMap.Marker({
@@ -63,11 +63,12 @@ export default {
             content: markerContent, //将 html 传给 content
             offset: new AMap.Pixel(-13, -30), //以 icon 的 [center bottom] 为原点
           });
+          marker.on('click', this.markerClick)
           map.add(marker);
-          function clearMarker() {
-            map.remove(marker);
-          }
-          document.querySelector(".close-btn").onclick = clearMarker;
+          // function clearMarker() {
+          //   map.remove(marker);
+          // }
+          // document.querySelector(".close-btn").onclick = clearMarker;
           //   polygon 面
           const pathArr = [
             [
@@ -114,6 +115,10 @@ export default {
           console.log(e);
         });
     },
+    markerClick() {
+      console.log(123);
+      
+    }
   },
 };
 </script>

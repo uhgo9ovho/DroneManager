@@ -1,13 +1,14 @@
 <template>
-  <div>机场</div>
+  <div class="air-port">
+  </div>
 </template>
 
 <script>
 export default {
+  name: "AirPort",
 
 }
 </script>
 
-<style>
-
+<style lang="scss">
 </style>

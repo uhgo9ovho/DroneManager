@@ -52,6 +52,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/videoMap',
+    component: () => import('@/views/VideoMap'),
+    hidden: true
+  },
+  {
     path: '',
     component: Layout,
     redirect: 'index',

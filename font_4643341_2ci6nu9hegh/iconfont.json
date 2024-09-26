@@ -6,6 +6,146 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "441341",
+      "name": "信号",
+      "font_class": "xinhao",
+      "unicode": "e697",
+      "unicode_decimal": 59031
+    },
+    {
+      "icon_id": "844631",
+      "name": "箭头3-1",
+      "font_class": "jiantou31",
+      "unicode": "e72d",
+      "unicode_decimal": 59181
+    },
+    {
+      "icon_id": "844632",
+      "name": "箭头3-2",
+      "font_class": "jiantou32",
+      "unicode": "e72e",
+      "unicode_decimal": 59182
+    },
+    {
+      "icon_id": "844633",
+      "name": "箭头3-3",
+      "font_class": "jiantou33",
+      "unicode": "e72f",
+      "unicode_decimal": 59183
+    },
+    {
+      "icon_id": "844634",
+      "name": "箭头3-4",
+      "font_class": "jiantou34",
+      "unicode": "e730",
+      "unicode_decimal": 59184
+    },
+    {
+      "icon_id": "5133052",
+      "name": "箭头",
+      "font_class": "jiantou",
+      "unicode": "e662",
+      "unicode_decimal": 58978
+    },
+    {
+      "icon_id": "7474397",
+      "name": "停机坪",
+      "font_class": "tingjiping",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "8106293",
+      "name": "wifi",
+      "font_class": "wifi",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "8832063",
+      "name": "温度计-01",
+      "font_class": "wenduji-",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "9012602",
+      "name": "控制",
+      "font_class": "kongzhi",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    },
+    {
+      "icon_id": "11372721",
+      "name": "相机",
+      "font_class": "xiangji",
+      "unicode": "e8bc",
+      "unicode_decimal": 59580
+    },
+    {
+      "icon_id": "13032127",
+      "name": "高度",
+      "font_class": "gaodu",
+      "unicode": "e8e9",
+      "unicode_decimal": 59625
+    },
+    {
+      "icon_id": "15660242",
+      "name": "仪表盘",
+      "font_class": "yibiaopan",
+      "unicode": "eab4",
+      "unicode_decimal": 60084
+    },
+    {
+      "icon_id": "17340729",
+      "name": "箭头",
+      "font_class": "jiantou1",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "22018857",
+      "name": "查看",
+      "font_class": "lianxi2hebing_chakan",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "23514940",
+      "name": "撤销",
+      "font_class": "chexiao",
+      "unicode": "e6ed",
+      "unicode_decimal": 59117
+    },
+    {
+      "icon_id": "29114914",
+      "name": "返回",
+      "font_class": "fanhui",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "39168364",
+      "name": "右箭头-copy",
+      "font_class": "iconfontyoujiantou-copy",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "39769385",
+      "name": "控制-copy",
+      "font_class": "controls",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "41797430",
+      "name": "一键返航",
+      "font_class": "yijianfanhang",
+      "unicode": "e6fe",
+      "unicode_decimal": 59134
+    },
+    {
       "icon_id": "8289033",
       "name": "星星",
       "font_class": "xingxing1",
