@@ -1,6 +1,8 @@
 <template>
   <div class="video-map-wrap">
-    <map-container></map-container>
+    <div>
+      <map-container></map-container>
+    </div>
     <div class="topinfoBox">
       <div class="toppaln">
         <div class="toppaln_left">
@@ -57,20 +59,90 @@
         <div class="top_center">
           <div class="flyinfo_center">
             <div class="fly_icon">
-                <i class="el-icon-sort"></i>    
+              <i class="el-icon-gaodu iconfont"></i>
             </div>
-            <div class="fly_text"></div>
+            <div class="fly_text">
+              <p>
+                离地高度
+                <span class="distance_number">- </span>
+                <span class="distance_unit">m</span>
+              </p>
+              <p>
+                离巢距离
+                <span class="distance_number">- </span>
+                <span class="distance_unit">m</span>
+              </p>
+            </div>
           </div>
-          <div class="flyinfo_speed"></div>
+          <div class="flyinfo_speed">
+            <div class="fly_icon">
+              <i class="el-icon-yibiaopan iconfont"></i>
+            </div>
+            <div class="fly_text">
+              <p>
+                水平速度
+                <span class="distance_number">0 </span>
+                <span class="distance_unit">m/s</span>
+              </p>
+              <p>
+                垂直速度
+                <span class="distance_number">0 </span>
+                <span class="distance_unit">m/s</span>
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="top_side"></div>
+        <div class="top_side">
+          <div class="weather_Box">
+            <div class="weather_info">
+              <div>
+                <p>天气</p>
+                <p>无雨雪</p>
+              </div>
+              <div>
+                <p>风速</p>
+                <p>0级（1.5m/s）</p>
+              </div>
+              <div>
+                <p>湿度</p>
+                <p>58% RH</p>
+              </div>
+            </div>
+          </div>
+          <div class="top_right">
+            <div class="top_right_plan">
+              <div class="battery_signal">
+                <div class="wifi">
+                  <i class="iconfont el-icon-wifi"></i>
+                  <span> 5339KB/s </span>
+                </div>
+                <div class="electric-panel warning">
+                  <div class="panel">
+                    <div class="remainder" style="width: 30%"></div>
+                  </div>
+                  <div class="textNum">28%</div>
+                </div>
+                <div class="signal_info">
+                  <i class="iconfont el-icon-xinhao"></i>
+                </div>
+              </div>
+              <div class="goback_plan redBtnColor">退出</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+    <!-- 飞行视角预览 -->
+    <FlyVideoBox @changeVideo="changeVideo"></FlyVideoBox>
+    <!-- 机巢视角预览 -->
+    <AirPortVideo></AirPortVideo>
   </div>
 </template>
 
 <script>
 import MapContainer from "./MapContainer.vue";
+import FlyVideoBox from "./Template/FlyVideoBox.vue";
+import AirPortVideo from "./Template/AirPortVideo.vue";
 export default {
   name: "VideoMapWrap",
   data() {
@@ -114,6 +186,8 @@ export default {
   },
   components: {
     MapContainer,
+    FlyVideoBox,
+    AirPortVideo,
   },
   methods: {
     showTools() {
@@ -122,6 +196,7 @@ export default {
     closeDebug() {
       this.toolsVisible = false;
     },
+    changeVideo() {},
   },
 };
 </script>
@@ -170,6 +245,7 @@ export default {
           line-height: 20px;
           text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
           background-image: none;
+          width: 470px;
         }
         .nestListBox {
           width: 200px;
@@ -216,7 +292,7 @@ export default {
           }
           .debug_control {
             position: absolute;
-            left: 210px;
+            left: 200px;
             bottom: 6px;
             background-image: none;
             cursor: pointer;
@@ -355,11 +431,180 @@ export default {
         display: flex;
         background-image: none;
         justify-content: center;
-        .flyinfo_center {
+        .flyinfo_center,
+        .flyinfo_speed {
           background-image: none;
           display: flex;
-          padding: 13px 0;
           text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+          .fly_icon {
+            width: 28px;
+            height: 100%;
+            display: flex;
+            background-image: none;
+            align-items: center;
+            .el-icon-gaodu,
+            .el-icon-yibiaopan {
+              background-image: none;
+              font-size: 28px;
+            }
+          }
+          .fly_text {
+            line-height: 18px;
+            background-image: none;
+            font-size: 12px;
+            padding-left: 8px;
+            margin-right: 40px;
+            font-weight: 400;
+            width: 136px;
+            p {
+              font-weight: 400;
+              background-image: none;
+              line-height: 18px;
+              .distance_number {
+                color: #fff;
+                font-weight: 500;
+                background-image: none;
+                line-height: 18px;
+                padding-left: 9px;
+              }
+              .distance_unit {
+                color: #fff;
+                background-image: none;
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 18px;
+              }
+            }
+          }
+        }
+      }
+      .top_side {
+        display: flex;
+        background-image: none;
+        flex: 1;
+        .weather_Box {
+          background-image: none;
+          .weather_info {
+            width: 210px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+            background-image: none;
+            display: flex;
+            justify-content: space-around;
+            font-size: 12px;
+            font-weight: 400;
+            color: #fff;
+            div {
+              background-image: none;
+              p {
+                text-align: center;
+                line-height: 18px;
+                background-image: none;
+                margin-bottom: 2px;
+              }
+            }
+          }
+        }
+
+        .top_right {
+          flex: 1;
+          display: flex;
+          background-image: none;
+          justify-content: flex-end;
+          .top_right_plan {
+            background-image: none;
+            position: relative;
+            .battery_signal {
+              position: relative;
+              background-image: none;
+              line-height: 18px;
+              margin: 6px 0;
+              display: flex;
+              justify-content: space-between;
+              height: 18px;
+              width: 80px;
+              .wifi {
+                position: absolute;
+                display: flex;
+                right: 98px;
+                background-image: none;
+                top: 0;
+                font-weight: 400;
+                font-size: 11px;
+                span {
+                  background-image: none;
+                }
+                .el-icon-wifi {
+                  font-size: 16px;
+                  background-image: none;
+                  margin-right: 4px;
+                }
+              }
+              .electric-panel {
+                display: flex;
+                justify-content: center;
+                background-image: none;
+                align-items: center;
+                height: 18px;
+                .panel {
+                  box-sizing: border-box;
+                  width: 16px;
+                  height: 10px;
+                  position: relative;
+                  background: url("../assets/icons/下载.png") no-repeat;
+                  background-size: cover;
+                  padding: 3px;
+                  padding-right: 4px;
+                  background-image: none;
+                  padding-left: 1px;
+                  .remainder {
+                    border-radius: 1px;
+                    background-image: none;
+                    position: relative;
+                    height: 100%;
+                    width: 0;
+                    left: 0;
+                    top: 0;
+                    background: #13ce66;
+                  }
+                }
+                .textNum {
+                  padding-left: 4px;
+                  background-image: none;
+                  color: #fff;
+                  font-weight: 400;
+                  font-size: 12px;
+                }
+                .signal_info {
+                  display: flex;
+                  background-image: none;
+                  width: 16px;
+                  height: 10px;
+                  margin-top: 4px;
+                  .el-icon-xinhao {
+                    font-size: 14px;
+                    background-image: none;
+                  }
+                }
+              }
+            }
+            .goback_plan {
+              cursor: pointer;
+              width: 80px;
+              height: 26px;
+              background-image: none;
+              line-height: 26px;
+              border-radius: 16px;
+              font-weight: 500;
+              font-size: 12px;
+              color: #fff;
+              text-align: center;
+            }
+            .redBtnColor {
+              background-image: none;
+              background: #f45050;
+              transition: background 0.2s;
+            }
+          }
         }
       }
     }
