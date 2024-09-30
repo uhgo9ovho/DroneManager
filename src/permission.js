@@ -8,7 +8,7 @@ import { isRelogin } from '@/utils/request'
 import { constantRoutes } from "@/router";
 NProgress.configure({ showSpinner: false })
 
-const whiteList = ['/login', '/register']
+const whiteList = ['/login', '/register', '/videoMap']
 let routeList = constantRoutes.filter((item, index) => {
   return !item.hidden;
 })[0].children;

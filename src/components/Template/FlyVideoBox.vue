@@ -1,5 +1,9 @@
 <template>
-  <div class="flyVideoBox right-window-position" @click="changeVideo">
+  <div
+    class="flyVideoBox right-window-position"
+    @click="changeVideo"
+    :style="{ width: videoWidth, height: videoHeight }"
+  >
     <div class="wrap wrap_window">
       <video
         id="myVideo"
@@ -7,18 +11,36 @@
         src="../../assets/a.mp4"
         width="100%"
         height="100%"
+        v-if="showVideo"
       ></video>
+      <div v-else :style="{ width: mapWidth, height: mapHeight }">
+        <map-container></map-container>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import MapContainer from "../MapContainer.vue";
 export default {
-    methods: {
-        changeVideo() {
-            this.$emit('changeVideo')
-        }
-    }
+  data() {
+    return {
+      showVideo: true,
+      mapWidth: "130px",
+      mapHeight: "80px",
+      videoWidth: "130px",
+      videoHeight: "80px",
+    };
+  },
+  methods: {
+    changeVideo() {
+      this.$emit("changeVideo");
+      this.showVideo = !this.showVideo;
+    },
+  },
+  components: {
+    MapContainer,
+  },
 };
 </script>
 

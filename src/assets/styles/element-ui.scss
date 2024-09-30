@@ -45,6 +45,7 @@
     }
   }
 }
+
 // to fixed https://github.com/ElemeFE/element/issues/2461
 .el-dialog {
   transform: none;
@@ -88,6 +89,7 @@
 
 .invite-dialog {
   border-radius: 12px;
+
   .title {
     font-weight: 500;
     font-size: 16px;
@@ -117,6 +119,7 @@
       vertical-align: top;
     }
   }
+
   .refresh {
     margin-top: 52px;
     font-weight: 400;
@@ -128,8 +131,24 @@
   }
 
 }
+
 .popper-notification {
   min-height: 352px;
   max-height: 480px;
   height: auto;
+}
+
+.el-popover {
+  background: rgba(29, 29, 31, .9215686274509803);
+  border-radius: 12px;
+  border-color: rgba(29, 29, 31, .9215686274509803);
+  color: #fff;
+
+  .popper__arrow {
+    border-top-color: rgba(29, 29, 31, .9215686274509803) !important;
+  }
+
+  .popper__arrow::after {
+    border-top-color: rgba(29, 29, 31, .9215686274509803) !important;
+  }
 }

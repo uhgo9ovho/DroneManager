@@ -1,8 +1,18 @@
 <template>
   <div class="video-map-wrap">
-    <div>
+    <div :style="{ width: mapWidth, height: mapHeight }" v-if="showMap">
       <map-container></map-container>
     </div>
+    <div v-else :style="{ width: mapWidth, height: mapHeight }">
+      <video
+        id="myVideo"
+        autoplay
+        src="../assets/a.mp4"
+        width="100%"
+        height="100%"
+      ></video>
+    </div>
+    <!-- 顶部信息 -->
     <div class="topinfoBox">
       <div class="toppaln">
         <div class="toppaln_left">
@@ -132,10 +142,37 @@
         </div>
       </div>
     </div>
+    <!-- 控制按钮 -->
+    <el-popconfirm :title="title" v-if="!showMap">
+      <div class="bottomControlBox" slot="reference">
+        <div class="innerbottomBox">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="抓拍截图"
+            placement="top"
+          >
+            <i class="iconfont el-icon-xiangji"></i>
+          </el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="获取控制权"
+            placement="top"
+          >
+            <i class="iconfont el-icon-kongzhi"></i>
+          </el-tooltip>
+        </div>
+      </div>
+    </el-popconfirm>
     <!-- 飞行视角预览 -->
     <FlyVideoBox @changeVideo="changeVideo"></FlyVideoBox>
     <!-- 机巢视角预览 -->
     <AirPortVideo></AirPortVideo>
+    <!-- 控制无人机操作界面 -->
+    <div v-if="!showMap">
+      <FlyRemote></FlyRemote>
+    </div>
   </div>
 </template>
 
@@ -143,10 +180,14 @@
 import MapContainer from "./MapContainer.vue";
 import FlyVideoBox from "./Template/FlyVideoBox.vue";
 import AirPortVideo from "./Template/AirPortVideo.vue";
+import FlyRemote from "./Template/FlyRemote.vue";
 export default {
   name: "VideoMapWrap",
   data() {
     return {
+      showMap: true,
+      mapWidth: "100vw",
+      mapHeight: "100vh",
       taskOptions: [
         {
           label: "西安-周至",
@@ -188,6 +229,12 @@ export default {
     MapContainer,
     FlyVideoBox,
     AirPortVideo,
+    FlyRemote,
+  },
+  computed: {
+    title() {
+      return "当前无人控制该设备，是否确认继续申请控制权？";
+    },
   },
   methods: {
     showTools() {
@@ -196,7 +243,9 @@ export default {
     closeDebug() {
       this.toolsVisible = false;
     },
-    changeVideo() {},
+    changeVideo() {
+      this.showMap = !this.showMap;
+    },
   },
 };
 </script>
@@ -606,6 +655,23 @@ export default {
             }
           }
         }
+      }
+    }
+  }
+  .bottomControlBox {
+    position: absolute;
+    z-index: 1000;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    .innerbottomBox {
+      display: flex;
+      i {
+        font-size: 32px;
+        cursor: pointer;
+      }
+      .el-icon-kongzhi {
+        margin-left: 20px;
       }
     }
   }
