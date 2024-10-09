@@ -1,106 +1,116 @@
 <template>
   <div class="login">
-    <!-- <el-form
-      ref="loginForm"
-      :model="loginForm"
-      :rules="loginRules"
-      class="login-form"
-      v-if="!showOrg"
-    >
-      <h3 class="title">若依后台管理系统</h3>
-      <el-form-item prop="username">
-        <el-input
-          v-model="loginForm.username"
-          type="text"
-          auto-complete="off"
-          placeholder="账号"
-        >
-          <svg-icon
-            slot="prefix"
-            icon-class="user"
-            class="el-input__icon input-icon"
-          />
-        </el-input>
-      </el-form-item>
-      <el-form-item prop="password">
-        <el-input
-          v-model="loginForm.password"
-          type="password"
-          auto-complete="off"
-          placeholder="密码"
-          @keyup.enter.native="handleLogin"
-        >
-          <svg-icon
-            slot="prefix"
-            icon-class="password"
-            class="el-input__icon input-icon"
-          />
-        </el-input>
-      </el-form-item>
-      <el-form-item prop="code" v-if="captchaEnabled">
-        <el-input
-          v-model="loginForm.code"
-          auto-complete="off"
-          placeholder="验证码"
-          style="width: 63%"
-          @keyup.enter.native="handleLogin"
-        >
-          <svg-icon
-            slot="prefix"
-            icon-class="validCode"
-            class="el-input__icon input-icon"
-          />
-        </el-input>
-        <div class="login-code">
-          <img :src="codeUrl" @click="getCode" class="login-code-img" />
+    <div v-if="!showOrg" class="pass-user-box">
+      <div v-if="!showQRCode">
+        <div class="new-item-badge" @click="showQRCode = !showQRCode">
+          <i class="iconfont el-icon-weixin1"></i>
         </div>
-      </el-form-item>
-      <el-checkbox
-        v-model="loginForm.rememberMe"
-        style="margin: 0px 0px 25px 0px"
-        >记住密码</el-checkbox
-      >
-      <el-form-item style="width: 100%">
-        <el-button
-          :loading="loading"
-          size="medium"
-          type="primary"
-          style="width: 100%"
-          @click.native.prevent="handleLogin"
+        <el-form
+          ref="loginForm"
+          :model="loginForm"
+          :rules="loginRules"
+          class="login-form"
         >
-          <span v-if="!loading">登 录</span>
-          <span v-else>登 录 中...</span>
-        </el-button>
-        <div style="float: right" v-if="register">
-          <router-link class="link-type" :to="'/register'"
-            >立即注册</router-link
+          <h3 class="title">若依后台管理系统</h3>
+          <el-form-item prop="username">
+            <el-input
+              v-model="loginForm.username"
+              type="text"
+              auto-complete="off"
+              placeholder="账号"
+            >
+              <svg-icon
+                slot="prefix"
+                icon-class="user"
+                class="el-input__icon input-icon"
+              />
+            </el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input
+              v-model="loginForm.password"
+              type="password"
+              auto-complete="off"
+              placeholder="密码"
+              @keyup.enter.native="handleLogin"
+            >
+              <svg-icon
+                slot="prefix"
+                icon-class="password"
+                class="el-input__icon input-icon"
+              />
+            </el-input>
+          </el-form-item>
+          <el-form-item prop="code" v-if="captchaEnabled">
+            <el-input
+              v-model="loginForm.code"
+              auto-complete="off"
+              placeholder="验证码"
+              style="width: 63%"
+              @keyup.enter.native="handleLogin"
+            >
+              <svg-icon
+                slot="prefix"
+                icon-class="validCode"
+                class="el-input__icon input-icon"
+              />
+            </el-input>
+            <div class="login-code">
+              <img :src="codeUrl" @click="getCode" class="login-code-img" />
+            </div>
+          </el-form-item>
+          <el-checkbox
+            v-model="loginForm.rememberMe"
+            style="margin: 0px 0px 25px 0px"
+            >记住密码</el-checkbox
           >
-        </div>
-      </el-form-item>
-    </el-form> -->
-    <div v-if="!showOrg" class="QRCode-box">
-      <!-- <div class="box-code" ref="qrCodeUrl"></div> -->
-      <el-image
-        :src="QRCodeUrl"
-        alt=""
-        @click="updateUrl"
-        v-loading="loading"
-        v-if="statusMessage == '等待扫描...'"
-      >
-        <div slot="error" class="image-slot">
-          <i class="el-icon-loading" style="font-size: 40px"></i>
-        </div>
-      </el-image>
-      <div v-if="statusMessage === '二维码已扫描'" class="web_qrcode_wrp">
-        <i class="el-icon-success"></i>
-        <h1 class="web_qrcode_msg_title">扫描成功</h1>
+          <el-form-item style="width: 100%">
+            <el-button
+              :loading="loading"
+              size="medium"
+              type="primary"
+              style="width: 100%"
+              @click.native.prevent="handleLogin"
+            >
+              <span v-if="!loading">登 录</span>
+              <span v-else>登 录 中...</span>
+            </el-button>
+            <div style="float: right" v-if="register">
+              <router-link class="link-type" :to="'/register'"
+                >立即注册</router-link
+              >
+            </div>
+          </el-form-item>
+        </el-form>
       </div>
-      <div class="web_qrcode_cancel" v-if="statusMessage == '取消登录'">
-        <i class="el-icon-warning"></i>
-        <h1 class="web_qrcode_msg_title">你已取消此次登录</h1>
-        <el-button type="success">重试</el-button>
+
+      <div class="QRCode-box" v-else>
+        <div class="new-item-badge" @click="showQRCode = !showQRCode">
+          <i class="el-icon-user-solid"></i>
+        </div>
+        <div v-if="statusMessage === '二维码已扫描'" class="web_qrcode_wrp">
+          <i class="el-icon-success"></i>
+          <h1 class="web_qrcode_msg_title">扫描成功</h1>
+        </div>
+        <div class="web_qrcode_cancel" v-else-if="statusMessage == '取消登录'">
+          <i class="el-icon-warning"></i>
+          <h1 class="web_qrcode_msg_title">你已取消此次登录</h1>
+          <el-button type="success">重试</el-button>
+        </div>
+        <el-image
+          v-else
+          :src="QRCodeUrl"
+          alt=""
+          @click="updateUrl"
+          v-loading="loading"
+        >
+          <div slot="error" class="image-slot">
+            <i class="el-icon-loading" style="font-size: 40px"></i>
+          </div>
+        </el-image>
       </div>
     </div>
+
     <div v-else class="org-box">
       <org-list></org-list>
     </div>
@@ -118,6 +128,7 @@ export default {
   name: "Login",
   data() {
     return {
+      showQRCode: false,
       statusMessage: "",
       timer: null, // 存储轮询定时器的 ID
       pollInterval: 5000, // 轮询时间间隔（毫秒）
@@ -158,6 +169,15 @@ export default {
         this.redirect = route.query && route.query.redirect;
       },
       immediate: true,
+    },
+    showQRCode: {
+      handler(val) {
+        if (val) {
+          this.getQRCode();
+        } else {
+          this.stopPolling()
+        }
+      },
     },
   },
   created() {
@@ -248,7 +268,7 @@ export default {
           const statusResponse = await getQRCodeStatusAPI(qrCodeId);
           if (statusResponse.code != 200) {
             //停止轮询
-            this.stopPolling()
+            this.stopPolling();
             return this.$message.error("二维码过期,请刷新");
           }
           const status = statusResponse.data.state;
@@ -265,8 +285,8 @@ export default {
               this.statusMessage = "等待扫描...";
           }
         } catch (error) {
-            this.stopPolling()
-            console.error("检查二维码状态失败:", error);
+          this.stopPolling();
+          console.error("检查二维码状态失败:", error);
         }
       }, this.pollInterval);
     },
@@ -293,7 +313,6 @@ export default {
     },
   },
   mounted() {
-    this.getQRCode();
   },
 };
 </script>
@@ -306,6 +325,36 @@ export default {
   height: 100%;
   background-image: url("../assets/images/login-background.jpg");
   background-size: cover;
+  .pass-user-box {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    .new-item-badge {
+      position: absolute;
+      background: #02a7f0;
+      z-index: 999;
+      width: 70px;
+      text-align: center;
+      height: 40px;
+      line-height: 50px;
+      border-radius: 3px;
+      color: #fff;
+      font-size: 12px !important;
+      padding: 2px 4px 0;
+      top: -10px;
+      left: -25px;
+      -ms-transform: rotate(-45deg);
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      -webkit-transition: 0 0.1s ease-in;
+      -moz-transition: 0 0.1s ease-in;
+      -o-transition: 0 0.1s ease-in;
+      transition: transform 0.1s ease-in;
+      i {
+        font-size: 20px;
+      }
+    }
+  }
   .QRCode-box {
     width: 380px;
     border-radius: 12px;
@@ -314,6 +363,25 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    .new-item-badge {
+      position: absolute;
+      background: #02a7f0;
+      z-index: 999;
+      width: 70px;
+      text-align: center;
+      height: 40px;
+      line-height: 50px;
+      border-radius: 3px;
+      color: #fff;
+      font-size: 12px !important;
+      padding: 2px 4px 0;
+      top: -10px;
+      left: -25px;
+      transition: transform 0.1s ease-in;
+      i {
+        font-size: 20px;
+      }
+    }
     img {
       width: 240px;
       height: 240px;
