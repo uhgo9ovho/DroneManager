@@ -246,8 +246,11 @@ export default {
       this.timer = setInterval(async () => {
         try {
           const statusResponse = await getQRCodeStatusAPI(qrCodeId);
-          if (statusResponse.code != 200)
+          if (statusResponse.code != 200) {
+            //停止轮询
+            this.stopPolling()
             return this.$message.error("二维码过期,请刷新");
+          }
           const status = statusResponse.data.state;
 
           // 根据状态更新消息
@@ -262,7 +265,8 @@ export default {
               this.statusMessage = "等待扫描...";
           }
         } catch (error) {
-          console.error("检查二维码状态失败:", error);
+            this.stopPolling()
+            console.error("检查二维码状态失败:", error);
         }
       }, this.pollInterval);
     },
