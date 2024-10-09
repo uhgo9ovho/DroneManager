@@ -85,6 +85,7 @@
       </div>
 
       <div class="QRCode-box" v-else>
+        <div class="title">微信二维码登录</div>
         <div class="new-item-badge" @click="showQRCode = !showQRCode">
           <i class="el-icon-user-solid"></i>
         </div>
@@ -356,6 +357,7 @@ export default {
     }
   }
   .QRCode-box {
+    position: relative;
     width: 380px;
     border-radius: 12px;
     background-color: #fff;
@@ -363,6 +365,16 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    .title {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      width: 150px;
+      margin-left: -70px;
+      color: #000;
+      font-size: 20px;
+      font-weight: bold;
+    }
     .new-item-badge {
       position: absolute;
       background: #02a7f0;
