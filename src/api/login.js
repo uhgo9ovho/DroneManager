@@ -9,7 +9,7 @@ export function login(username, password, code, uuid) {
     uuid
   }
   return request({
-    url: '/login',
+    url: '/loginCnt/login',
     headers: {
       isToken: false,
       repeatSubmit: false
@@ -22,7 +22,7 @@ export function login(username, password, code, uuid) {
 // 注册方法
 export function register(data) {
   return request({
-    url: '/register',
+    url: '/loginCnt/register',
     headers: {
       isToken: false
     },
@@ -34,7 +34,7 @@ export function register(data) {
 // 获取用户详细信息
 export function getInfo() {
   return request({
-    url: '/getInfo',
+    url: '/loginCnt/getInfo',
     method: 'get'
   })
 }
@@ -56,5 +56,21 @@ export function getCodeImg() {
     },
     method: 'get',
     timeout: 20000
+  })
+}
+
+//获取二维码
+export function getQRCodeAPI(params) {
+  return request({
+    url: `/loginCnt/getWxQrcode?scene=${params.scene}&is_hyaline=${params.is_hyline}&auto_color=${params.auto_color}&page=${params.page}`,
+    method: "get"
+  })
+}
+
+
+//获取二维码状态  device_id=scene
+export function getQRCodeStatusAPI(device_id) {
+  return request({
+    url: `/loginCnt/checkQrcode?device_id=${device_id}`
   })
 }

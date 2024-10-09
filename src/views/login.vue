@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <el-form
+    <!-- <el-form
       ref="loginForm"
       :model="loginForm"
       :rules="loginRules"
@@ -77,7 +77,30 @@
           >
         </div>
       </el-form-item>
-    </el-form>
+    </el-form> -->
+    <div v-if="!showOrg" class="QRCode-box">
+      <!-- <div class="box-code" ref="qrCodeUrl"></div> -->
+      <el-image
+        :src="QRCodeUrl"
+        alt=""
+        @click="updateUrl"
+        v-loading="loading"
+        v-if="statusMessage == '等待扫描...'"
+      >
+        <div slot="error" class="image-slot">
+          <i class="el-icon-loading" style="font-size: 40px"></i>
+        </div>
+      </el-image>
+      <div v-if="statusMessage === '二维码已扫描'" class="web_qrcode_wrp">
+        <i class="el-icon-success"></i>
+        <h1 class="web_qrcode_msg_title">扫描成功</h1>
+      </div>
+      <div class="web_qrcode_cancel" v-if="statusMessage == '取消登录'">
+        <i class="el-icon-warning"></i>
+        <h1 class="web_qrcode_msg_title">你已取消此次登录</h1>
+        <el-button type="success">重试</el-button>
+      </div>
+    </div>
     <div v-else class="org-box">
       <org-list></org-list>
     </div>
@@ -85,15 +108,20 @@
 </template>
 
 <script>
-import { getCodeImg } from "@/api/login";
+import { getCodeImg, getQRCodeAPI, getQRCodeStatusAPI } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from "@/utils/jsencrypt";
 import SvgIcon from "@/components/SvgIcon/index.vue";
 import OrgList from "../components/OrgList.vue";
+import QRCode from "qrcodejs2";
 export default {
   name: "Login",
   data() {
     return {
+      statusMessage: "",
+      timer: null, // 存储轮询定时器的 ID
+      pollInterval: 5000, // 轮询时间间隔（毫秒）
+      QRCodeUrl: "",
       codeUrl: "",
       showOrg: false,
       loginForm: {
@@ -189,6 +217,79 @@ export default {
         }
       });
     },
+    getQRCode() {
+      let time = new Date().getTime();
+      const params = {
+        scene: time,
+        is_hyline: 1,
+        auto_color: "red",
+        page: "pages/index",
+      };
+      getQRCodeAPI(params).then((res) => {
+        console.log(res);
+        if (res.code === 200) {
+          this.QRCodeUrl = "data:image/png;base64," + res.msg;
+          // 启动轮询请求，检查二维码状态
+          this.startPolling(time);
+          // getQRCodeStatusAPI(time).then((re) => {
+          //   console.log(re);
+          // });
+        }
+      });
+    },
+    // 开始轮询检查二维码状态
+    startPolling(qrCodeId) {
+      // 清除上一个定时器（如果存在）
+      if (this.timer) clearInterval(this.timer);
+
+      // 设置新的轮询定时器
+      this.timer = setInterval(async () => {
+        try {
+          const statusResponse = await getQRCodeStatusAPI(qrCodeId);
+          if (statusResponse.code != 200)
+            return this.$message.error("二维码过期,请刷新");
+          const status = statusResponse.data.state;
+
+          // 根据状态更新消息
+          switch (status) {
+            case "lock":
+              this.statusMessage = "二维码已扫描";
+              break;
+            case "cancel":
+              this.statusMessage = "取消登录";
+              break;
+            default:
+              this.statusMessage = "等待扫描...";
+          }
+        } catch (error) {
+          console.error("检查二维码状态失败:", error);
+        }
+      }, this.pollInterval);
+    },
+    // 停止轮询
+    stopPolling() {
+      if (this.timer) {
+        clearInterval(this.timer);
+        this.timer = null;
+      }
+    },
+    creatQrCode(url) {
+      this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
+        text: url, // 需要转换为二维码的内容
+        width: 240,
+        height: 240,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+    },
+    updateUrl() {
+      this.QRCodeUrl = "";
+      this.getQRCode();
+    },
+  },
+  mounted() {
+    this.getQRCode();
   },
 };
 </script>
@@ -201,6 +302,53 @@ export default {
   height: 100%;
   background-image: url("../assets/images/login-background.jpg");
   background-size: cover;
+  .QRCode-box {
+    width: 380px;
+    border-radius: 12px;
+    background-color: #fff;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 240px;
+      height: 240px;
+    }
+  }
+  .web_qrcode_wrp {
+    text-align: center;
+    i {
+      font-size: 96px;
+      color: #58be6a;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 500;
+      margin-top: 24px;
+      letter-spacing: 1px;
+    }
+    p {
+      font-size: 16px;
+      margin-top: 8px;
+    }
+  }
+  .web_qrcode_cancel {
+    text-align: center;
+    i {
+      color: red;
+      font-size: 96px;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 500;
+      margin-top: 24px;
+      letter-spacing: 1px;
+    }
+    .el-button {
+      width: 184px;
+      margin-top: 20px;
+    }
+  }
 }
 .title {
   margin: 0px auto 30px auto;

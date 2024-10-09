@@ -11,7 +11,7 @@
         </el-badge>
       </el-popover>
       <div class="user">
-        <el-popover placement="top-start" width="320" trigger="click">
+        <el-popover placement="top-start" width="320" trigger="click" popper-class="user-popover">
           <user-info></user-info>
           <div class="avatar" slot="reference">
             <img
