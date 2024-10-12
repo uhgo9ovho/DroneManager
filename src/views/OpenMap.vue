@@ -3,10 +3,10 @@
     <!-- 地图组件 -->
     <map-container></map-container>
     <!-- 编辑框 -->
-    <create-task @openSettingDate="openSettingDate"></create-task>
+    <create-task :settingInfo="settingInfo" @openSettingDate="openSettingDate"></create-task>
     <!-- 排期设置 -->
     <div v-if="showSetting">
-      <setting-date @closeSettingDate="closeSettingDate"></setting-date>
+      <setting-date @closeSettingDate="closeSettingDate" @updateFormatInfo="updateFormatInfo"></setting-date>
     </div>
   </div>
 </template>
@@ -25,6 +25,7 @@ export default {
   data() {
     return {
       showSetting: false,
+      settingInfo: ""
     };
   },
   methods: {
@@ -33,6 +34,9 @@ export default {
     },
     closeSettingDate() {
       this.showSetting = false;
+    },
+    updateFormatInfo(info) {
+      this.settingInfo = info;
     }
   },
 };

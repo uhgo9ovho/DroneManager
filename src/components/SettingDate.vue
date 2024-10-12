@@ -15,7 +15,7 @@
       <el-form-item label="重复频率" prop="checkedCities">
         <div class="frequency-box">
           <span>每</span>
-          <el-select v-model="ruleForm.frequency" placeholder="请选择">
+          <el-select v-model="ruleForm.frequency" placeholder="请选择" @change="formatInfo">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -61,6 +61,7 @@
           v-model="ruleForm.inspection"
           placeholder="请选择"
           class="inspection-select"
+          @change="formatInfo"
         >
           <el-option
             v-for="item in inspectionTimes"
@@ -75,7 +76,9 @@
         <el-date-picker
           v-model="ruleForm.startDate"
           type="date"
+          value-format="yyyy-MM-dd"
           placeholder="选择开始日期"
+          @change="formatInfo"
         >
         </el-date-picker>
       </el-form-item>
@@ -83,6 +86,8 @@
         <el-date-picker
           v-model="ruleForm.endDate"
           type="date"
+          value-format="yyyy-MM-dd"
+          @change="formatInfo"
           placeholder="选择结束日期"
         >
         </el-date-picker>
@@ -221,6 +226,27 @@ export default {
           return moonListLength;
       }
     },
+    currentInfo() {
+      let info = "";
+      switch (this.ruleForm.frequency) {
+        case "天":
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每天${this.ruleForm.inspection}执行1次`
+          break;
+        case "周":
+          let checkedItemArr = this.characters.filter(item => item.checked);
+          let checkedInfo = checkedItemArr.map(item => item.label).join(',');
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每周${checkedInfo}执行，共执行${this.frequencyLength}次`
+          break;
+        case "月":
+          let monthItemArr = this.moonList.filter(item => item.checked);
+          let monthinfo = monthItemArr.map(item => item.label).join(',');
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每月${monthinfo}号执行，共执行${this.frequencyLength}次`
+        default:
+          break;
+      }
+      
+      return info;
+    }
   },
   created() {
     this.getMoons();
@@ -228,6 +254,10 @@ export default {
   methods: {
     closeSettingDate() {
       this.$emit('closeSettingDate')
+    },
+    formatInfo(val) {
+      console.log(this.currentInfo);
+      this.$emit('updateFormatInfo', this.currentInfo);
     },
     getMoons() {
       this.moonList = [];
@@ -241,9 +271,11 @@ export default {
     },
     checkedItem(item) {
       item.checked = !item.checked;
+      this.formatInfo();
     },
     checkedMoonItem(item) {
       item.checked = !item.checked;
+      this.formatInfo();
     },
   },
 };

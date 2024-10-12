@@ -6,47 +6,56 @@
     </div>
     <el-divider></el-divider>
     <div class="form-box">
-      <el-form
-        :model="ruleForm"
-        :rules="rules"
-        ref="ruleForm"
-        label-width="100px"
-        class="demo-ruleForm"
-        label-position="top"
-      >
-        <el-form-item label="任务名称" prop="taskName">
-          <el-input
-            v-model="ruleForm.taskName"
-            placeholder="请输入任务名称"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="任务类型" prop="type">
-          <el-radio-group v-model="ruleForm.type">
-            <el-radio-button label="拍照"></el-radio-button>
-            <el-radio-button label="直播"></el-radio-button>
-            <el-radio-button label="全景"></el-radio-button>
-            <el-radio-button label="三维"></el-radio-button>
-            <el-radio-button label="正射"></el-radio-button>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="航线文件" prop="airLine">
-          <el-upload class="upload-demo" action="" :auto-upload="false">
-            <el-button size="small" type="primary" icon="el-icon-plus"
-              >导入文件</el-button
+      <div class="form">
+        <el-form
+          :model="ruleForm"
+          :rules="rules"
+          ref="ruleForm"
+          label-width="100px"
+          class="demo-ruleForm"
+          label-position="top"
+        >
+          <el-form-item label="任务名称" prop="taskName">
+            <el-input
+              v-model="ruleForm.taskName"
+              placeholder="请输入任务名称"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="任务类型" prop="type">
+            <el-radio-group v-model="ruleForm.type">
+              <el-radio-button label="拍照"></el-radio-button>
+              <el-radio-button label="直播"></el-radio-button>
+              <el-radio-button label="全景"></el-radio-button>
+              <el-radio-button label="三维"></el-radio-button>
+              <el-radio-button label="正射"></el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="航线文件" prop="airLine">
+            <el-upload
+              class="upload-demo"
+              action=""
+              :auto-upload="false"
+              multiple
             >
-          </el-upload>
-        </el-form-item>
-        <el-form-item label="飞行排期" prop="date">
-          <el-button class="date-btn" @click="openSettingDate">排期设置</el-button>
-          <div class="date-box">
-            <div class="date">{{ ruleForm.date }}</div>
-            <el-button type="text">修改</el-button>
-          </div>
-        </el-form-item>
-      </el-form>
+              <el-button size="small" type="primary" icon="el-icon-plus"
+                >导入文件</el-button
+              >
+            </el-upload>
+          </el-form-item>
+          <el-form-item label="飞行排期" prop="date">
+            <el-button class="date-btn" @click="openSettingDate"
+              >排期设置</el-button
+            >
+            <div class="date-box">
+              <div class="date">{{ settingInfo }}</div>
+              <el-button type="text" @click="openSettingDate">修改</el-button>
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
       <el-divider></el-divider>
       <div class="next-box">
-        <el-button class="next-btn">下一步</el-button>
+        <el-button class="next-btn">完成</el-button>
       </div>
     </div>
   </div>
@@ -55,6 +64,12 @@
 <script>
 export default {
   name: "CreateForm",
+  props: {
+    settingInfo: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {
       ruleForm: {
@@ -83,12 +98,12 @@ export default {
   },
   methods: {
     openSettingDate() {
-      this.$emit('openSettingDate')
+      this.$emit("openSettingDate");
     },
     outBtn() {
-      this.$router.push('/flight');
-    }
-  }
+      this.$router.push("/flight");
+    },
+  },
 };
 </script>
 
@@ -136,6 +151,11 @@ export default {
   }
   .form-box {
     margin-top: 20px;
+    overflow: auto;
+    .form {
+      height: 480px;
+      overflow: auto;
+    }
     .el-form-item__label {
       color: #000;
     }
@@ -162,14 +182,6 @@ export default {
     }
     .upload-demo {
       position: relative;
-      .el-upload-list {
-        .el-upload-list__item .el-icon-close {
-            display: block;
-        }
-        .el-upload-list__item-name {
-          position: absolute;
-        }
-      }
       .el-upload {
         .el-button {
           width: 137px;
@@ -207,8 +219,9 @@ export default {
   }
   .next-box {
     margin-top: 20px;
+    width: 304px;
     .next-btn {
-      width: 304px;
+      width: 100%;
       height: 40px;
       background: #0271e3;
       border-radius: 104px 104px 104px 104px;

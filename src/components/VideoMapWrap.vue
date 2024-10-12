@@ -1,13 +1,13 @@
 <template>
   <div class="video-map-wrap">
-    <div :style="{ width: mapWidth, height: mapHeight }" v-if="showMap">
+    <div :style="{ width: mapWidth, height: mapHeight }" v-if="!showMap">
       <map-container></map-container>
     </div>
     <div v-else :style="{ width: mapWidth, height: mapHeight }">
       <video
-        id="myVideo"
+        id="jswebrtc"
+        ref="jswebrtc"
         autoplay
-        src="../assets/a.mp4"
         width="100%"
         height="100%"
       ></video>
@@ -74,12 +74,12 @@
             <div class="fly_text">
               <p>
                 离地高度
-                <span class="distance_number">- </span>
+                <span class="distance_number">{{ tempHeight }}</span>
                 <span class="distance_unit">m</span>
               </p>
               <p>
                 离巢距离
-                <span class="distance_number">- </span>
+                <span class="distance_number">{{ tempElevation }}</span>
                 <span class="distance_unit">m</span>
               </p>
             </div>
@@ -91,12 +91,12 @@
             <div class="fly_text">
               <p>
                 水平速度
-                <span class="distance_number">0 </span>
+                <span class="distance_number">{{ tempHorizontal_speed }}</span>
                 <span class="distance_unit">m/s</span>
               </p>
               <p>
                 垂直速度
-                <span class="distance_number">0 </span>
+                <span class="distance_number">{{ tempVertical_speed }}</span>
                 <span class="distance_unit">m/s</span>
               </p>
             </div>
@@ -111,11 +111,11 @@
               </div>
               <div>
                 <p>风速</p>
-                <p>0级（1.5m/s）</p>
+                <p>{{ tempWind_speed }}级（1.5m/s）</p>
               </div>
               <div>
                 <p>湿度</p>
-                <p>58% RH</p>
+                <p>{{ tempHumidity }}% RH</p>
               </div>
             </div>
           </div>
@@ -181,10 +181,13 @@ import MapContainer from "./MapContainer.vue";
 import FlyVideoBox from "./Template/FlyVideoBox.vue";
 import AirPortVideo from "./Template/AirPortVideo.vue";
 import FlyRemote from "./Template/FlyRemote.vue";
+import WebSocketClient from "@/utils/websocket.js";
+import { mapState } from "vuex";
 export default {
   name: "VideoMapWrap",
   data() {
     return {
+      ws: null,
       showMap: true,
       mapWidth: "100vw",
       mapHeight: "100vh",
@@ -223,6 +226,13 @@ export default {
           btnText: "开启",
         },
       ],
+      player: null,
+      tempHeight: 0,
+      tempHorizontal_speed: 0,
+      tempVertical_speed: 0,
+      tempElevation: 0,
+      tempWind_speed: 0,
+      tempHumidity: 0
     };
   },
   components: {
@@ -232,11 +242,68 @@ export default {
     FlyRemote,
   },
   computed: {
+    ...mapState("droneStatus", ["statusInfo"]),
     title() {
       return "当前无人控制该设备，是否确认继续申请控制权？";
     },
   },
+  watch: {
+    statusInfo(val) {
+      console.log(val, "aaweq");
+
+      if (val.host) {
+        if (val.host.height) this.tempHeight = val.host.height.toFixed(2);
+
+        if (val.host.horizontal_speed)
+          this.tempHorizontal_speed = val.host.horizontal_speed.toFixed(2);
+
+        if (val.host.vertical_speed)
+          this.tempVertical_speed = val.host.vertical_speed.toFixed(2);
+
+        if (val.host.elevation) this.tempElevation = val.host.elevation.toFixed(2);
+
+        if (val.host.wind_speed) this.tempWind_speed = val.host.wind_speed.toFixed(2);
+
+        if (val.host.humidity) this.tempHumidity = val.host.humidity.toFixed(2);
+
+        if(val.host.mode_code == '0') {
+          //待机状态
+          this.tempElevation = 0;
+          this.tempHeight = 0;
+          this.tempHorizontal_speed = 0;
+          this.tempHumidity = 0;
+          this.tempVertical_speed = 0;
+          this.tempWind_speed = 0;
+        }
+      }
+    },
+  },
+  mounted() {
+    this.ws = new WebSocketClient(
+      "ws://172.16.40.226:6789/api/v1/ws?ws-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3b3Jrc3BhY2VfaWQiOiJhNzJjYjUxNC02NWYxLTRhZTYtYTA3Yy01ODk4OThiNWI2YjEiLCJzdWIiOiJqa3lDbG91ZEFwaTIwMjQiLCJ1c2VyX3R5cGUiOiIxIiwibmJmIjoxNzI4NjMxMDMxLCJsb2ciOiJMb2dnZXJbY29tLmRqaS5zYW1wbGUuY29tbW9uLm1vZGVsLkN1c3RvbUNsYWltXSIsImlzcyI6IkRKSV9KS1kiLCJpZCI6IjExMTEiLCJleHAiOjE5MDg2MzEwMzEsImlhdCI6MTcyODYzMTAzMSwidXNlcm5hbWUiOiJ6bCJ9.D48LQJfrVj4Eu1-vYY-8ozsqyHyw1TbvWdd1OjasnzY"
+    );
+  },
   methods: {
+    Callback(data) {
+      console.log(data);
+    },
+    // initVideo(url) {
+    //   if (this.player) {
+    //     this.player.destroy();
+    //     this.player = null;
+    //   }
+
+    //   let videoDom = document.getElementById("jswebrtc");
+    //   this.player = new JSWebrtc.Player(url, {
+    //     video: videoDom,
+    //     autoplay: true,
+    //     onplay: (obj) => {
+    //       videoDom.addEventListener("canplay", function (e) {
+    //         videoDom.play();
+    //       });
+    //     },
+    //   });
+    // },
     showTools() {
       this.toolsVisible = true;
     },
@@ -666,6 +733,7 @@ export default {
     transform: translateX(-50%);
     .innerbottomBox {
       display: flex;
+      color: #fff;
       i {
         font-size: 32px;
         cursor: pointer;
