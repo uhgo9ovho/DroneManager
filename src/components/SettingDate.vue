@@ -15,7 +15,11 @@
       <el-form-item label="重复频率" prop="checkedCities">
         <div class="frequency-box">
           <span>每</span>
-          <el-select v-model="ruleForm.frequency" placeholder="请选择" @change="formatInfo">
+          <el-select
+            v-model="ruleForm.frequency"
+            placeholder="请选择"
+            @change="frequencyChange"
+          >
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -52,16 +56,12 @@
           </div>
         </div>
       </el-form-item>
-      <el-form-item
-        label="巡检时段"
-        prop="inspection"
-        v-if="ruleForm.frequency == '天'"
-      >
+      <el-form-item label="巡检时段" prop="inspection">
         <el-select
           v-model="ruleForm.inspection"
           placeholder="请选择"
           class="inspection-select"
-          @change="formatInfo"
+          @change="inspectionChange"
         >
           <el-option
             v-for="item in inspectionTimes"
@@ -78,7 +78,7 @@
           type="date"
           value-format="yyyy-MM-dd"
           placeholder="选择开始日期"
-          @change="formatInfo"
+          @change="startTimeChange"
         >
         </el-date-picker>
       </el-form-item>
@@ -87,7 +87,7 @@
           v-model="ruleForm.endDate"
           type="date"
           value-format="yyyy-MM-dd"
-          @change="formatInfo"
+          @change="endTimeChange"
           placeholder="选择结束日期"
         >
         </el-date-picker>
@@ -104,37 +104,37 @@ export default {
     return {
       characters: [
         {
-          value: "一",
+          value: 1,
           label: "一",
           checked: false,
         },
         {
-          value: "二",
+          value: 2,
           label: "二",
           checked: false,
         },
         {
-          value: "三",
+          value: 3,
           label: "三",
           checked: false,
         },
         {
-          value: "四",
+          value: 4,
           label: "四",
           checked: false,
         },
         {
-          value: "五",
+          value: 5,
           label: "五",
           checked: false,
         },
         {
-          value: "六",
+          value: 6,
           label: "六",
           checked: false,
         },
         {
-          value: "日",
+          value: 7,
           label: "日",
           checked: false,
         },
@@ -217,12 +217,16 @@ export default {
         case "天":
           return 1;
         case "周":
-          let charactersLength = this.characters.filter(item => item.checked).length;
-          if(charactersLength < 1) charactersLength = 1;
+          let charactersLength = this.characters.filter(
+            (item) => item.checked
+          ).length;
+          if (charactersLength < 1) charactersLength = 1;
           return charactersLength;
         case "月":
-          let moonListLength = this.moonList.filter(item => item.checked).length;
-          if(moonListLength < 1) moonListLength = 1;
+          let moonListLength = this.moonList.filter(
+            (item) => item.checked
+          ).length;
+          if (moonListLength < 1) moonListLength = 1;
           return moonListLength;
       }
     },
@@ -230,34 +234,79 @@ export default {
       let info = "";
       switch (this.ruleForm.frequency) {
         case "天":
-          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每天${this.ruleForm.inspection}执行1次`
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每天 ${this.ruleForm.inspection} 执行1次`;
           break;
         case "周":
-          let checkedItemArr = this.characters.filter(item => item.checked);
-          let checkedInfo = checkedItemArr.map(item => item.label).join(',');
-          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每周${checkedInfo}执行，共执行${this.frequencyLength}次`
+          let checkedItemArr = this.characters.filter((item) => item.checked);
+          let checkedInfo = checkedItemArr.map((item) => item.label).join(",");
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每周${checkedInfo} ${this.ruleForm.inspection} 执行，共执行${this.frequencyLength}次`;
           break;
         case "月":
-          let monthItemArr = this.moonList.filter(item => item.checked);
-          let monthinfo = monthItemArr.map(item => item.label).join(',');
-          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每月${monthinfo}号执行，共执行${this.frequencyLength}次`
+          let monthItemArr = this.moonList.filter((item) => item.checked);
+          let monthinfo = monthItemArr.map((item) => item.label).join(",");
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每月${monthinfo}号 ${this.ruleForm.inspection} 执行，共执行${this.frequencyLength}次`;
         default:
           break;
       }
-      
+
       return info;
-    }
+    },
   },
   created() {
     this.getMoons();
   },
   methods: {
     closeSettingDate() {
-      this.$emit('closeSettingDate')
+      this.$emit("closeSettingDate");
     },
-    formatInfo(val) {
-      console.log(this.currentInfo);
-      this.$emit('updateFormatInfo', this.currentInfo);
+    formatInfo() {
+      this.$emit("updateFormatInfo", this.currentInfo);
+    },
+    frequencyChange(val) {
+      let value = 0; //天
+      switch (val) {
+        case "天":
+          value = 0;
+          break;
+        case "周":
+          value = 1;
+          break;
+        case "月":
+          value = 2;
+          break;
+        default:
+          break;
+      }
+      this.$emit("frequencyChange", value);
+    },
+    inspectionChange(val) {
+      let value = 0;
+      switch (val) {
+        case "全天":
+          value = 3;
+          break;
+        case "9:00-12:00":
+          value = 0;
+          break;
+        case "17:00-21:00":
+          value = 2;
+          break;
+        case "12.00-17:00":
+          value = 1;
+          break;
+        default:
+          break;
+      }
+      this.$emit("inspection", value);
+      this.formatInfo();
+    },
+    startTimeChange(val) {
+      this.$emit("startTime", val);
+      this.formatInfo();
+    },
+    endTimeChange(val) {
+      this.$emit("endTime", val);
+      this.formatInfo();
     },
     getMoons() {
       this.moonList = [];
@@ -271,10 +320,19 @@ export default {
     },
     checkedItem(item) {
       item.checked = !item.checked;
+      let dateArr = this.characters
+        .filter((item) => item.checked)
+        .map((it) => it.value);
+      this.$emit("dateArrays", dateArr);
+
       this.formatInfo();
     },
     checkedMoonItem(item) {
       item.checked = !item.checked;
+      let dateArr = this.moonList
+        .filter((item) => item.checked)
+        .map((it) => it.value);
+      this.$emit("dateArrays", dateArr);
       this.formatInfo();
     },
   },
@@ -376,7 +434,7 @@ export default {
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
-    margin-top: 24px;
+    margin-top: 16px;
     .moon-item {
       width: 24px;
       height: 24px;

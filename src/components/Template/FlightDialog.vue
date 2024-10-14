@@ -4,7 +4,7 @@
       <div class="task_map">
         <MapContainer></MapContainer>
         <div v-if="detailsShow">
-          <div class="task_name">【全景】比亚迪一期</div>
+          <div class="task_name">{{ taskName }}</div>
           <div class="task_airline-list">
             <div class="airline-list-warp">
               <el-switch v-model="value"></el-switch>
@@ -15,7 +15,11 @@
       </div>
       <!-- 飞行任务info -->
       <div v-if="detailsShow">
-        <FilghtTaskInfo @closeDialog="closeDialog" :taskDetails="taskDetails"></FilghtTaskInfo>
+        <FilghtTaskInfo
+          @closeDialog="closeDialog"
+          :taskDetails="taskDetails"
+          :detailsInfo="detailsInfo"
+        ></FilghtTaskInfo>
       </div>
       <!-- 飞行info -->
       <div v-if="filghtShow">
@@ -29,9 +33,14 @@
 import MapContainer from "../MapContainer.vue";
 import FilghtTaskInfo from "./FilghtTaskInfo.vue";
 import FilghtInfo from "./FilgtInfo.vue";
+import { taskInfoApI } from "@/api/TaskManager.js";
 export default {
   name: "TaskGrid",
   props: {
+    taskId: {
+      type: Number,
+      default: 0,
+    },
     detailsShow: {
       type: Boolean,
       default: false,
@@ -43,7 +52,7 @@ export default {
     taskDetails: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   components: {
     MapContainer,
@@ -53,7 +62,20 @@ export default {
   data() {
     return {
       value: false,
+      totalLine: 0,
+      taskName: ""
     };
+  },
+  mounted() {
+    if (this.detailsShow) {
+      taskInfoApI(this.taskId).then((res) => {
+        if (res.code === 200) {
+          this.detailsInfo = res.data;
+          this.totalLine = res.data.airlineNumber;
+          this.taskName = res.data.taskName;
+        }
+      });
+    }
   },
   methods: {
     closeDialog() {

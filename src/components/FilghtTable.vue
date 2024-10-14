@@ -1,6 +1,14 @@
 <template>
   <div class="flight-table">
-    <common-table :tableList="mockTableList" :columns="columns">
+    <common-table
+      :tableList="filghtList"
+      :columns="columns"
+      :total="total"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      @pageChange="pageChange"
+      @sizeChange="sizeChange"
+    >
       <!-- 自定义表头 -->
       <template #taskName-header>
         <span>任务名称/类型</span>
@@ -49,18 +57,20 @@
         <table-name-info :row="row"></table-name-info>
       </template>
       <template #creater="{ row }">
-        <div>{{ row.creater }}</div>
-        <div>{{ row.ticket_create_time }}</div>
+        <div>{{ row.taskCreateTime }}</div>
+        <div>{{ row.nickName }}</div>
       </template>
       <template #status="{ row }">
-        <el-tag :type="statusType(row.status)">{{ row.status }}</el-tag>
+        <el-tag :type="statusType(row.taskStatus)">{{
+          row.taskStatus | filterStatus
+        }}</el-tag>
         <span style="margin-left: 10px"
-          >当前轮次/总轮次({{ row.round_complete }}/{{ row.round_all }})</span
+          >当前轮次/总轮次({{ row.currentRound }}/{{ row.totalRound }})</span
         >
       </template>
-      <template #operate>
+      <template #operate="{ row }">
         <div class="operate-box">
-          <el-button type="text" @click="detailsBtn">详情</el-button>
+          <el-button type="text" @click="detailsBtn(row.taskId)">详情</el-button>
           <el-dropdown @command="operateCommand">
             <span class="el-dropdown-link el-icon-more"></span>
             <el-dropdown-menu slot="dropdown">
@@ -98,6 +108,7 @@
         @closeDialog="closeDialog"
         :detailsShow="detailsShow"
         :filghtShow="filghtShow"
+        :taskId="taskId"
       ></flight-dialog>
     </div>
     <!-- 全景预览弹窗 -->
@@ -116,22 +127,23 @@
 
 <script>
 import CommonTable from "./CommonTable.vue";
-import { mockList } from "@/utils/mock.js";
 import TableNameInfo from "./Template/TableNameInfo.vue";
 import FlightDialog from "./Template/FlightDialog.vue";
 import PanoramicDialog from "./Template/PanoramicDialog.vue";
 import FlightDataDialog from "./Template/FlightDataDialog.vue";
-import { taskListAPI } from '@/api/TaskManager.js';
+import { taskListAPI } from "@/api/TaskManager.js";
 export default {
   name: "FlightTable",
   props: {},
   data() {
     return {
+      total: 0,
       detailsShow: false,
       flightVisible: false,
       filghtShow: false,
       panoramicVisible: false,
       flyDateVisible: false,
+      filghtList: [],
       columns: [
         {
           prop: "taskName",
@@ -207,30 +219,47 @@ export default {
           color: "red",
         },
       ],
+      pageNum: 1,
+      pageSize: 10,
+      taskId: 0
     };
   },
   mounted() {
-    taskListAPI().then(res => {
-      console.log(res);
-      
-    })
+    this.initList();
+  },
+  filters: {
+    filterStatus(val) {
+      let value = "";
+      switch (val) {
+        case 0:
+          value = "待审核";
+          break;
+        case 1:
+          value = "待执行";
+          break;
+        case 2:
+          value = "执行中";
+          break;
+        case 3:
+          value = "已完成";
+          break;
+        default:
+          break;
+      }
+      return value
+    },
   },
   computed: {
-    mockTableList() {
-      return mockList;
-    },
     statusType(status) {
       return function (status) {
         switch (status) {
-          case "制作中":
+          case 2:
             return "";
-          case "已完成":
+          case 3:
             return "success";
-          case "制作失败":
-            return "danger";
-          case "待执行":
-            return "warning";
-          case "已过期":
+          case 1:
+            return "primary";
+          case 0:
             return "info";
           default:
             return "";
@@ -239,6 +268,34 @@ export default {
     },
   },
   methods: {
+    initList() {
+      const params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+      };
+      taskListAPI(params).then((res) => {
+        if (res.code === 200) {
+          this.filghtList = res.rows;
+          this.total = res.total;
+        }
+      });
+    },
+    sizeChange(params) {
+      taskListAPI(params).then((res) => {
+        if (res.code === 200) {
+          this.filghtList = res.rows;
+          this.total = res.total;
+        }
+      });
+    },
+    pageChange(params) {
+      taskListAPI(params).then((res) => {
+        if (res.code === 200) {
+          this.filghtList = res.rows;
+          this.total = res.total;
+        }
+      });
+    },
     nameCommand(itemCommand) {
       console.log(itemCommand);
     },
@@ -251,7 +308,8 @@ export default {
         this.flyDateVisible = true;
       }
     },
-    detailsBtn() {
+    detailsBtn(taskId) {
+      this.taskId = taskId;
       this.flightVisible = true;
       this.filghtShow = false;
       this.detailsShow = true;
@@ -276,7 +334,7 @@ export default {
     TableNameInfo,
     FlightDialog,
     PanoramicDialog,
-    FlightDataDialog
+    FlightDataDialog,
   },
 };
 </script>

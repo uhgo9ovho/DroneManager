@@ -21,8 +21,8 @@
               placeholder="请输入任务名称"
             ></el-input>
           </el-form-item>
-          <el-form-item label="任务类型" prop="type">
-            <el-radio-group v-model="ruleForm.type">
+          <el-form-item label="任务类型" prop="taskType">
+            <el-radio-group v-model="ruleForm.taskType" @input="changeType">
               <el-radio-button label="拍照"></el-radio-button>
               <el-radio-button label="直播"></el-radio-button>
               <el-radio-button label="全景"></el-radio-button>
@@ -33,9 +33,12 @@
           <el-form-item label="航线文件" prop="airLine">
             <el-upload
               class="upload-demo"
-              action=""
-              :auto-upload="false"
+              action="/dev-api/wayline/importKmz"
+              :headers="headers"
               multiple
+              :data="uploadData"
+              :on-change="fileChange"
+              :on-success="successUpload"
             >
               <el-button size="small" type="primary" icon="el-icon-plus"
                 >导入文件</el-button
@@ -55,13 +58,18 @@
       </div>
       <el-divider></el-divider>
       <div class="next-box">
-        <el-button class="next-btn">完成</el-button>
+        <el-button class="next-btn" :loading="loading" @click="addTaskBtn"
+          >完成</el-button
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getToken } from "@/utils/auth";
+import { addTask } from "@/api/TaskManager.js";
+import { mapState } from "vuex";
 export default {
   name: "CreateForm",
   props: {
@@ -69,12 +77,36 @@ export default {
       type: String,
       default: "",
     },
+    starttime: {
+      type: String,
+      default: "",
+    },
+    endtime: {
+      type: String,
+      default: "",
+    },
+    frequencyValue: {
+      type: Number,
+      default: "",
+    },
+    inspectionValue: {
+      type: Number,
+      default: "",
+    },
+    valArr: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
+      loading: false,
+      fileArr: [],
+      airlineNumber: 0,
+      taskTypeValue: 0,
       ruleForm: {
         taskName: "",
-        type: "上海",
+        taskType: "上海",
         airLine: "",
         date: "2024-08-12 10:30",
       },
@@ -96,12 +128,87 @@ export default {
       },
     };
   },
+  computed: {
+    headers() {
+      return {
+        Authorization: "Bearer " + getToken(),
+        tenant: "test",
+      };
+    },
+    uploadData() {
+      console.log(this.workspaceId, "asdsad");
+
+      return {
+        workspaceId: this.$store.getters.workspaceId,
+      };
+    },
+  },
   methods: {
+    successUpload(res) {
+      console.log(res);
+      this.fileArr.push(res.airline);
+    },
     openSettingDate() {
       this.$emit("openSettingDate");
     },
     outBtn() {
       this.$router.push("/flight");
+    },
+    fileChange(file, files) {
+      this.airlineNumber = files.length;
+    },
+    changeType(type) {
+      switch (type) {
+        case "拍照":
+          this.taskTypeValue = 0;
+          break;
+        case "直播":
+          this.taskTypeValue = 1;
+          break;
+        case "全景":
+          this.taskTypeValue = 2;
+          break;
+        case "三维":
+          this.taskTypeValue = 4;
+          break;
+        case "正射":
+          this.taskTypeValue = 3;
+          break;
+        default:
+          break;
+      }
+    },
+    addTaskBtn() {
+      this.loading = true;
+      const params = {
+        taskName: this.ruleForm.taskName,
+        taskType: this.taskTypeValue,
+        taskAddress: "陕西省咸阳市",
+        schedulingType: this.inspectionValue,
+        timesType: this.frequencyValue,
+        airlineNumber: this.airlineNumber, //航线数量
+        startTime: this.starttime,
+        endTime: this.endtime,
+        dateArrays: this.valArr,
+        wrjAirlineFiles: this.fileArr,
+        note: this.settingInfo
+      };
+      if (!params.timesType) delete params["dateArrays"];
+
+      addTask(params)
+        .then((res) => {
+          if (res.code === 200) {
+            this.$message.success(res.msg);
+            this.loading = false;
+            this.outBtn();
+          } else {
+            this.loading = false;
+            this.$message.success(res.msg);
+          }
+        })
+        .catch((err) => {
+          this.loading = false;
+        });
     },
   },
 };

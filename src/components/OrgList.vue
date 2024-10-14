@@ -64,6 +64,7 @@ export default {
     },
     selectOrg(row) {
       this.$store.commit("SET_ORG_ID", row.orgId);
+      this.$store.commit("SET_ORG_WORKSPACEID", row.workspaceId);
       this.$router.push({ path: this.redirect || "/" }).catch(() => {});
     },
   },

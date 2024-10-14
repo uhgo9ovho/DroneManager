@@ -9,7 +9,8 @@ const user = {
     avatar: '',
     roles: [],
     permissions: [],
-    orgId: localStorage.getItem('org_id') || 0
+    orgId: localStorage.getItem('org_id') || 0,
+    workspaceId: localStorage.getItem('workspaceId') || ''
   },
 
   mutations: {
@@ -34,6 +35,11 @@ const user = {
     SET_ORG_ID(state, id) {
       state.orgId = id;
       localStorage.setItem('org_id', id);
+    },
+    SET_ORG_WORKSPACEID(state, workspaceId) {
+      console.log(workspaceId)
+      state.workspaceId = workspaceId;
+      localStorage.setItem('workspaceId', workspaceId);
     }
   },
 

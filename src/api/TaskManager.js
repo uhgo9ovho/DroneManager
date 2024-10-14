@@ -29,9 +29,9 @@ export const addTask = (params) => {
  * 任务列表
  * @returns 
  */
-export const taskListAPI = () => {
+export const taskListAPI = (params) => {
     return request({
-        url: '/wurenji/task/list',
+        url: `/wurenji/task/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}`,
         method: 'get'
     })
 };

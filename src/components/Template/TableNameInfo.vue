@@ -7,7 +7,7 @@
       <div class="task-name">{{ row.taskName }}</div>
       <div class="right-bottom">
         <div class="air-line-popover">
-          <el-popover placement="bottom" trigger="click">
+          <el-popover placement="bottom" trigger="click" popper-class="airLine">
             <div
               v-for="(item, index) in row.airLine"
               :key="index"
@@ -34,13 +34,13 @@
               }}</el-tag>
             </div>
             <span slot="reference" style="cursor: pointer"
-              >{{ row.airLine.length }}条航线<i class="el-icon-arrow-down"
+              >{{ row.airlineNumber }}条航线<i class="el-icon-arrow-down"
                 >，</i
               ></span
             >
           </el-popover>
         </div>
-        <div class="info-details">{{ row.cycle_detail }}</div>
+        <div class="info-details">{{ row.note }}</div>
       </div>
     </div>
   </div>

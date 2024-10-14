@@ -11,10 +11,14 @@
       </div>
       <div class="nest" v-if="!taskDetails">
         <div class="task-name-type">
-          <el-popover placement="bottom-start" trigger="click">
+          <el-popover
+            placement="bottom-start"
+            trigger="click"
+            popper-class="fly-task-info"
+          >
             <span slot="reference"
-              >1 条航线 <i class="el-icon-arrow-down"></i>，
-              周期循环，每1周四执行,生效日期2024-08-01
+              >{{ airlineNumber }} 条航线 <i class="el-icon-arrow-down"></i>，
+              {{ note }}
             </span>
             <span
               style="
@@ -30,7 +34,7 @@
                 margin-bottom: 4px;
                 margin-right: 10px;
               "
-              >【全景】比亚迪一期</span
+              >{{ taskName }}</span
             >
             <el-tag size="mini">待执行</el-tag>
           </el-popover>
@@ -101,6 +105,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    detailsInfo: {
+      type: Object,
+      default: () => {},
+    },
   },
   computed: {
     plotOptions() {
@@ -108,10 +116,10 @@ export default {
         //任务信息
         return [
           {
-            label: '所属任务',
-            value: '【拍照】集贤初中东边污水巡查01'
-          }
-        ]
+            label: "所属任务",
+            value: "【拍照】集贤初中东边污水巡查01",
+          },
+        ];
       } else {
         //地块信息
         return [
@@ -143,12 +151,24 @@ export default {
           value: "19张",
         },
       ],
+      airlineNumber: "",
+      note: "",
+      taskName: ""
     };
   },
   methods: {
     closeDialog() {
       this.$emit("closeDialog");
     },
+  },
+  mounted() {
+    if (!this.taskDetails) {
+      //飞行任务详情
+      let { airlineNumber, note, taskName } = this.detailsInfo;
+      this.airlineNumber = airlineNumber;
+      this.note = note;
+      this.taskName = taskName;
+    }
   },
 };
 </script>
