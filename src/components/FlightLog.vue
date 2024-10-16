@@ -1,16 +1,16 @@
 <template>
   <div class="flight-log">
     <common-table :tableList="logList" :columns="columns" :total="total">
-      <template #airline_name="{ row }">
+      <template #taskName="{ row }">
         <div class="airline">
           <div class="airimg">
             <img src="../assets/images/fly_img.3924673b.png" alt="" />
           </div>
-          <div>{{ row.airline_name }}</div>
+          <div>{{ row.taskName }}</div>
         </div>
       </template>
-      <template #record_create_by="{ row }">
-        {{ row.create_by }}/{{ row.operator }}
+      <template #createBy="{ row }">
+        {{ row.executionTime }}
       </template>
       <template #record_status="{ row }">
         <el-tag type="success">{{ row.record_status }}</el-tag>
@@ -30,6 +30,7 @@
 import CommonTable from "./CommonTable.vue";
 import { mockList7 } from "@/utils/mock.js";
 import AirLogDialog from './Template/AirLogDialog.vue';
+import { recordListAPI } from '@/api/TaskManager.js';
 export default {
   name: "FLightLog",
   components: {
@@ -43,7 +44,7 @@ export default {
       total: 0,
       columns: [
         {
-          prop: "airline_name",
+          prop: "taskName",
           label: "飞行记录名称",
           showOverflowTooltip: true,
           slot: true,
@@ -55,32 +56,32 @@ export default {
           showOverflowTooltip: true,
         },
         {
-          prop: "record_create_by",
+          prop: "createBy",
           label: "创建人/操作人",
           slot: true,
           showOverflowTooltip: true,
         },
         {
           prop: "flight_start_time",
-          label: "起降时间",
+          label: "执行时间",
           showOverflowTooltip: true,
         },
         {
-          prop: "photo_count",
+          prop: "photoNum",
           label: "照片数",
           showOverflowTooltip: true,
         },
         {
-          prop: "problem_count",
+          prop: "remark",
           label: "标注照片数",
           showOverflowTooltip: true,
         },
-        {
-          prop: "record_status",
-          label: "照片状态",
-          showOverflowTooltip: true,
-          slot: true,
-        },
+        // {
+        //   prop: "record_status",
+        //   label: "照片状态",
+        //   showOverflowTooltip: true,
+        //   slot: true,
+        // },
         {
           prop: "operate",
           label: "操作",
@@ -88,6 +89,8 @@ export default {
           slot: true,
         },
       ],
+      pageNum: 1,
+      pageSize: 10
     };
   },
   methods: {
@@ -100,11 +103,21 @@ export default {
     },
     closeAirDialog() {
       this.showDialog = false;
+    },
+    initList() {
+      const params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
+      }
+      recordListAPI(params).then(res => {
+        if(res.code === 200) {
+          this.logList = res.rows;
+        }
+      })
     }
   },
   mounted() {
-    console.log(mockList7);
-    this.getLogList();
+    this.initList();
   },
 };
 </script>

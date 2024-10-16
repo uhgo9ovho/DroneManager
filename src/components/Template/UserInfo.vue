@@ -5,12 +5,12 @@
         <img src="../../assets/images/w700d1q75cms.jpg" alt="" />
       </div>
       <div class="user">
-        <div class="username">刘飞雁</div>
-        <div class="local">西安极限工业园区</div>
+        <div class="username">{{ userInfo.userName }}</div>
+        <div class="local">{{ orgName }}</div>
       </div>
     </div>
     <div class="certification">
-      <div class="local">西安极限工业园区</div>
+      <div class="local">{{ orgName }}</div>
       <el-tag type="info">未认证</el-tag>
     </div>
     <el-divider></el-divider>
@@ -34,15 +34,22 @@ import InviteDialog from "@/components/InviteDialog.vue";
 import { mapMutations } from "vuex";
 import { logout } from "@/api/login.js";
 import { removeToken } from '@/utils/auth.js'
+import Cookies from "js-cookie";
 export default {
   name: "Details",
   data() {
     return {
       dialogVisible: false,
+      userInfo: {},
+      orgName: ""
     };
   },
   components: {
     InviteDialog,
+  },
+  mounted() {
+    this.userInfo = JSON.parse(Cookies.get('user'))
+    this.orgName = Cookies.get('orgName')
   },
   methods: {
     ...mapMutations("app", ["SET_FILTER_BULR"]),

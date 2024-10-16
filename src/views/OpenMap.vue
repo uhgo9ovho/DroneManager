@@ -43,11 +43,11 @@ export default {
     return {
       showSetting: false,
       settingInfo: "",
-      inspectionValue: 0,
       frequencyValue: 0,
       endtime: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
       starttime: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
-      valArr: []
+      valArr: [],
+      inspectionValue: 0
     };
   },
   methods: {

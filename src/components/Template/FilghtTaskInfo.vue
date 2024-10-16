@@ -7,7 +7,7 @@
       <div class="state">已完成</div>
       <div class="title_wrap">
         <div class="tag">任务</div>
-        <div class="titles">【全景】比亚迪一期</div>
+        <div class="titles">{{ taskName }}</div>
       </div>
       <div class="nest" v-if="!taskDetails">
         <div class="task-name-type">
@@ -17,7 +17,7 @@
             popper-class="fly-task-info"
           >
             <span slot="reference"
-              >{{ airlineNumber }} 条航线 <i class="el-icon-arrow-down"></i>，
+              >{{ totalLine }} 条航线 <i class="el-icon-arrow-down"></i>，
               {{ note }}
             </span>
             <span
@@ -105,10 +105,18 @@ export default {
       type: Boolean,
       default: false,
     },
-    detailsInfo: {
-      type: Object,
-      default: () => {},
+    taskName: {
+      type: String,
+      default: ""
     },
+    totalLine: {
+      type: Number,
+      default: 0
+    },
+    note: {
+      type: String,
+      default: ""
+    }
   },
   computed: {
     plotOptions() {
@@ -151,24 +159,12 @@ export default {
           value: "19张",
         },
       ],
-      airlineNumber: "",
-      note: "",
-      taskName: ""
     };
   },
   methods: {
     closeDialog() {
       this.$emit("closeDialog");
     },
-  },
-  mounted() {
-    if (!this.taskDetails) {
-      //飞行任务详情
-      let { airlineNumber, note, taskName } = this.detailsInfo;
-      this.airlineNumber = airlineNumber;
-      this.note = note;
-      this.taskName = taskName;
-    }
   },
 };
 </script>

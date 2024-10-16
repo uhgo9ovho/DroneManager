@@ -297,7 +297,7 @@ export default {
         default:
           break;
       }
-      this.$emit("inspection", value);
+      this.$emit("schedulingType", value);
       this.formatInfo();
     },
     startTimeChange(val) {

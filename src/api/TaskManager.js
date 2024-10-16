@@ -63,9 +63,129 @@ export const heduledListAPI = () => {
  * 飞行记录列表
  * @returns 
  */
-export const recordListAPI = () => {
+export const recordListAPI = (params) => {
     return request({
-        url: '/wurenji/record/list',
+        url: `/wurenji/record/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}`,
         method: 'get'
     })
 };
+
+/**
+ * 删除任务
+ */
+export const deleteTaskAPI = (taskIds) => {
+    return request({
+        url: `/wurenji/task/${taskIds}`,
+        method: 'delete'
+    })
+}
+
+/**
+ * 预警列表
+ */
+export const warningListAPI = () => {
+    return request({
+        url: `/wurenji/warning/list`,
+        method: 'get'
+    })
+}
+
+/**
+ * 预警事件状态变更记录
+ */
+export const statusChangeAPI = (id) => {
+    return request({
+        url: `/wurenji/warning/statusList/${id}`,
+        method: 'get'
+    })
+}
+
+/**
+ * 预警详情
+ */
+export const warningDetailsAPI = (id) => {
+    return request({
+        url: `/wurenji/warning/${id}`,
+        method: 'get'
+    })
+}
+
+/**
+ * ids eg: 1,2,3,4,...
+ * 删除预警事件
+ */
+export const deleteWarningAPI = (ids) => {
+    return request({
+        url: `/wurenji/warning/delete/${ids}`,
+        method: 'get'
+    })
+}
+
+/**
+ * @params :{
+  "warnId": "18",
+  "status": "1",
+  "remark": "我想结案",
+  "photo": "alsdjflkajdsfkljalsjfdladf"
+}
+ * 修改预警事件状态
+ */
+export const updateStatusAPI = (params) => {
+    return request({
+        url: '/wurenji/warning/updateStatus',
+        method: 'post',
+        data: params
+    })
+}
+
+/**
+ * @params {
+  "warnName": "何列报",
+  "warnTypeId": 87,
+  "warnTypeName": "南话节",
+  "airLineId": 42,
+  "airLineName": "中权专",
+  "identifyAirPortId": 21,
+  "identifyAirPortName": "厂时理",
+  "identifyPhoto": "https://via.placeholder.com/400x400/2ace3d/bfff75.png",
+  "address": "辽宁省长乡县阳城县",
+  "latitude": -48.3033,
+  "longitude": 144.0611,
+  "status": "0",
+  "description": "号是极极持太义目。压从方有山众五越道边。求北交他。放例方需入。"
+}
+ * 新增预警事件
+ */
+export const addWarningAPI = (params) => {
+    return request({
+        url: '/wurenji/warning/add',
+        method: 'post',
+        data: params
+    })
+}
+
+/**
+ * @params {
+  "id": 1,
+  "warnName": "热系委",
+  "warnTypeId": 27,
+  "warnTypeName": "切下明",
+  "airLineId": 31,
+  "airLineName": "方速文",
+  "identifyAirPortId": 8,
+  "identifyAirPortName": "运阶研",
+  "identifyPhoto": "https://via.placeholder.com/400x400/ff2281/55a3ef.png",
+  "address": "内蒙古自治区济林市甘泉县",
+  "latitude": -70.3366,
+  "longitude": -15.8136,
+  "description": "拉般到道。到构白百又。接论参。统值目。什斯参难力样变十。"
+}
+ * 编辑预警事件
+ */
+export const editWarningAPI = (params) => {
+    return request({
+        url: '/wurenji/warning/edit',
+        method: 'post',
+        data: params
+    })
+}

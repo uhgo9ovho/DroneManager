@@ -18,7 +18,9 @@
         <FilghtTaskInfo
           @closeDialog="closeDialog"
           :taskDetails="taskDetails"
-          :detailsInfo="detailsInfo"
+          :taskName="taskName"
+          :totalLine="totalLine"
+          :note="note"
         ></FilghtTaskInfo>
       </div>
       <!-- 飞行info -->
@@ -63,15 +65,16 @@ export default {
     return {
       value: false,
       totalLine: 0,
-      taskName: ""
+      taskName: "",
+      note: "",
     };
   },
-  mounted() {
+  created() {
     if (this.detailsShow) {
       taskInfoApI(this.taskId).then((res) => {
         if (res.code === 200) {
-          this.detailsInfo = res.data;
           this.totalLine = res.data.airlineNumber;
+          this.note = res.data.note;
           this.taskName = res.data.taskName;
         }
       });

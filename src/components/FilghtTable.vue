@@ -70,14 +70,16 @@
       </template>
       <template #operate="{ row }">
         <div class="operate-box">
-          <el-button type="text" @click="detailsBtn(row.taskId)">详情</el-button>
+          <el-button type="text" @click="detailsBtn(row.taskId)"
+            >详情</el-button
+          >
           <el-dropdown @command="operateCommand">
             <span class="el-dropdown-link el-icon-more"></span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
                 v-for="(item, index) in operateOptions"
                 :key="index"
-                :command="item.label"
+                :command="beforeHandleCommand(row, item.label)"
                 :style="{ color: item.color }"
                 ><i class="iconfont" :class="item.icon"></i>
                 {{ item.label }}</el-dropdown-item
@@ -131,7 +133,7 @@ import TableNameInfo from "./Template/TableNameInfo.vue";
 import FlightDialog from "./Template/FlightDialog.vue";
 import PanoramicDialog from "./Template/PanoramicDialog.vue";
 import FlightDataDialog from "./Template/FlightDataDialog.vue";
-import { taskListAPI } from "@/api/TaskManager.js";
+import { taskListAPI, deleteTaskAPI } from "@/api/TaskManager.js";
 export default {
   name: "FlightTable",
   props: {},
@@ -221,7 +223,7 @@ export default {
       ],
       pageNum: 1,
       pageSize: 10,
-      taskId: 0
+      taskId: 0,
     };
   },
   mounted() {
@@ -246,7 +248,7 @@ export default {
         default:
           break;
       }
-      return value
+      return value;
     },
   },
   computed: {
@@ -300,12 +302,45 @@ export default {
       console.log(itemCommand);
     },
     statusCommand(itemCommand) {},
+    beforeHandleCommand(row, label) {
+      return {
+        row,
+        label
+      };
+    },
     operateCommand(itemCommand) {
       console.log(itemCommand);
-      if (itemCommand === "成果") {
-        this.panoramicVisible = true;
-      } else if (itemCommand === "排期") {
-        this.flyDateVisible = true;
+      switch (itemCommand.label) {
+        case "成果":
+          this.panoramicVisible = true;
+          break;
+        case "排期":
+          this.flyDateVisible = true;
+          break;
+        case "挂起":
+          break;
+        case "删除":
+          this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+          })
+            .then(() => {
+              deleteTaskAPI(itemCommand.row.taskId).then((res) => {
+                if (res.code === 200) {
+                  this.initList()
+                  this.$message({
+                    type: "success",
+                    message: "删除成功!",
+                  });
+                } else {
+                  this.$message.error('删除失败')
+                }
+              });
+            });
+          break;
+        default:
+          break;
       }
     },
     detailsBtn(taskId) {

@@ -33,6 +33,8 @@
 
 <script>
 import { getDepartmentList } from "@/api/user.js";
+import { getInfo } from "@/api/login.js";
+import Cookies from "js-cookie";
 export default {
   name: "OrgList",
   data() {
@@ -59,13 +61,24 @@ export default {
     getOrgList() {
       //获取组织列表
       getDepartmentList(this.page).then((res) => {
-        this.orgList = res.rows;
+        if (res.code === 200) {
+          this.orgList = res.rows;
+        }
       });
     },
     selectOrg(row) {
-      this.$store.commit("SET_ORG_ID", row.orgId);
-      this.$store.commit("SET_ORG_WORKSPACEID", row.workspaceId);
-      this.$router.push({ path: this.redirect || "/" }).catch(() => {});
+      console.log(row);
+      
+      getInfo().then((res) => {
+        if (res.code === 200) {
+          this.$store.commit("SET_ORG_ID", row.orgId);
+          this.$store.commit("SET_ORG_WORKSPACEID", row.workspaceId);
+          this.$router.push({ path: this.redirect || "/" }).catch(() => {});
+          let userInfo = res.user;
+          Cookies.set('user', JSON.stringify(userInfo), { expires: 30 });
+          Cookies.set('orgName', row.orgName);
+        }
+      });
     },
   },
   mounted() {

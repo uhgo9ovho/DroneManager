@@ -115,6 +115,7 @@ import WarningDialog from "./Template/WarningDialog.vue";
 import EventInfo from "./Template/EventInfo.vue";
 import NeglectDialog from "./Template/NeglectDialog.vue";
 import HandleDialog from "./Template/HandleDialog.vue";
+import { warningListAPI } from '@/api/TaskManager.js';
 export default {
   name: "FlightTable",
   props: {},
@@ -213,6 +214,9 @@ export default {
         }
       };
     },
+  },
+  mounted() {
+    warningListAPI()
   },
   methods: {
     closeNeglectDialog() {

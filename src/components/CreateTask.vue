@@ -39,6 +39,7 @@
               :data="uploadData"
               :on-change="fileChange"
               :on-success="successUpload"
+              :on-remove="removeFile"
             >
               <el-button size="small" type="primary" icon="el-icon-plus"
                 >导入文件</el-button
@@ -69,7 +70,6 @@
 <script>
 import { getToken } from "@/utils/auth";
 import { addTask } from "@/api/TaskManager.js";
-import { mapState } from "vuex";
 export default {
   name: "CreateForm",
   props: {
@@ -99,32 +99,34 @@ export default {
     },
   },
   data() {
+    let validatePass2 = (rule, value, callback) => {
+      if(this.settingInfo) {
+        callback()
+      } else {
+        callback(new Error('请设置排期'))
+      }
+    };
     return {
+      hasExist: false,
       loading: false,
       fileArr: [],
       airlineNumber: 0,
       taskTypeValue: 0,
       ruleForm: {
         taskName: "",
-        taskType: "上海",
+        taskType: "",
         airLine: "",
-        date: "2024-08-12 10:30",
+        date: this.settingInfo,
       },
       rules: {
         taskName: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { required: true, message: "请输入任务名称", trigger: "blur" },
         ],
-        type: [
-          { required: true, message: "请选择活动资源", trigger: "change" },
+        taskType: [
+          { required: true, message: "请选择任务类型", trigger: "change" },
         ],
-        date: [
-          {
-            type: "date",
-            required: true,
-            message: "请设置排期时间",
-            trigger: "change",
-          },
-        ],
+        airLine: [{ validator: this.validatePass, trigger: "change" }],
+        date: [{ validator: validatePass2, trigger: "change" }],
       },
     };
   },
@@ -144,9 +146,27 @@ export default {
     },
   },
   methods: {
-    successUpload(res) {
-      console.log(res);
-      this.fileArr.push(res.airline);
+    validatePass(rule, value, callback) {
+      if (!this.fileArr.length) {
+        if (!this.hasExist) callback(new Error("请选择航线文件"));
+        callback(new Error("该文件名称已经存在，请更改名称"));
+      } else {
+        callback();
+      }
+    },
+    removeFile(file) {
+      this.fileArr = this.fileArr.filter((item) => item.uid != file.uid);
+    },
+    successUpload(res, file) {
+      if (res.code == 200) {
+        let response = { ...res.airline };
+        response["uid"] = file.uid;
+        this.fileArr.push(response);
+        this.hasExist = false;
+      } else {
+        this.hasExist = true;
+      }
+      this.$refs["checkerForm"].validateField(["airLine"]);
     },
     openSettingDate() {
       this.$emit("openSettingDate");
@@ -179,36 +199,43 @@ export default {
       }
     },
     addTaskBtn() {
-      this.loading = true;
-      const params = {
-        taskName: this.ruleForm.taskName,
-        taskType: this.taskTypeValue,
-        taskAddress: "陕西省咸阳市",
-        schedulingType: this.inspectionValue,
-        timesType: this.frequencyValue,
-        airlineNumber: this.airlineNumber, //航线数量
-        startTime: this.starttime,
-        endTime: this.endtime,
-        dateArrays: this.valArr,
-        wrjAirlineFiles: this.fileArr,
-        note: this.settingInfo
-      };
-      if (!params.timesType) delete params["dateArrays"];
+      this.$refs["ruleForm"].validate((valid) => {
+        if (valid) {
+          this.loading = true;
+          const params = {
+            taskName: this.ruleForm.taskName,
+            taskType: this.taskTypeValue,
+            taskAddress: "陕西省咸阳市",
+            schedulingType: this.inspectionValue,
+            timesType: this.frequencyValue,
+            airlineNumber: this.airlineNumber, //航线数量
+            startTime: this.starttime,
+            endTime: this.endtime,
+            dateArrays: this.valArr,
+            wrjAirlineFiles: this.fileArr,
+            note: this.settingInfo,
+          };
+          if (!params.timesType) delete params["dateArrays"];
 
-      addTask(params)
-        .then((res) => {
-          if (res.code === 200) {
-            this.$message.success(res.msg);
-            this.loading = false;
-            this.outBtn();
-          } else {
-            this.loading = false;
-            this.$message.success(res.msg);
-          }
-        })
-        .catch((err) => {
-          this.loading = false;
-        });
+          addTask(params)
+            .then((res) => {
+              if (res.code === 200) {
+                this.$message.success(res.msg);
+                this.loading = false;
+                this.outBtn();
+              } else {
+                this.loading = false;
+                this.$message.success(res.msg);
+              }
+            })
+            .catch((err) => {
+              this.loading = false;
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
   },
 };

@@ -76,6 +76,7 @@ import AIDialog from "./Template/AIDialog.vue";
 import DateTitle from "./Template/DateTitle.vue";
 import SortDayList from "./Template/SortDayList.vue";
 import SortMonthList from "./Template/SortMonthList.vue";
+import { heduledListAPI } from '@/api/TaskManager.js';
 export default {
   name: "FlightDate",
   components: {
@@ -88,9 +89,21 @@ export default {
     return {
       showAIDialog: false,
       isDay: true,
+      pageNum: 1,
+      pageSize: 10
     };
   },
+  mounted() {
+    this.initList()
+  },
   methods: {
+    initList() {
+      const params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
+      }
+      heduledListAPI(params)
+    },
     handleClose() {
       this.showAIDialog = false;
     },
