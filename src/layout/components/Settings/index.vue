@@ -31,7 +31,6 @@
 
           <div class="drawer-item">
             <span>主题颜色</span>
-            <theme-picker style="float: right;height: 26px;margin: -3px 8px 0 0;" @change="themeChange" />
           </div>
         </div>
 
@@ -74,10 +73,8 @@
 </template>
 
 <script>
-import ThemePicker from '@/components/ThemePicker'
 
 export default {
-  components: { ThemePicker },
   data() {
     return {
       theme: this.$store.state.settings.theme,

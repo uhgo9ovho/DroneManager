@@ -105,6 +105,7 @@
 </template>
 
 <script>
+// import mqtt from 'mqtt';
 export default {
   data() {
     return {
@@ -122,6 +123,8 @@ export default {
     surePlan() {
         this.showPlan = false;
     }
+  },
+  mounted() {
   }
 };
 </script>

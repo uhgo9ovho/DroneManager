@@ -279,9 +279,10 @@ export default {
     },
   },
   mounted() {
-    this.ws = new WebSocketClient(
-      "ws://172.16.40.226:6789/api/v1/ws?ws-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3b3Jrc3BhY2VfaWQiOiJhNzJjYjUxNC02NWYxLTRhZTYtYTA3Yy01ODk4OThiNWI2YjEiLCJzdWIiOiJqa3lDbG91ZEFwaTIwMjQiLCJ1c2VyX3R5cGUiOiIxIiwibmJmIjoxNzI4NjMxMDMxLCJsb2ciOiJMb2dnZXJbY29tLmRqaS5zYW1wbGUuY29tbW9uLm1vZGVsLkN1c3RvbUNsYWltXSIsImlzcyI6IkRKSV9KS1kiLCJpZCI6IjExMTEiLCJleHAiOjE5MDg2MzEwMzEsImlhdCI6MTcyODYzMTAzMSwidXNlcm5hbWUiOiJ6bCJ9.D48LQJfrVj4Eu1-vYY-8ozsqyHyw1TbvWdd1OjasnzY"
-    );
+    // this.ws = new WebSocketClient(
+    //   "ws://172.16.40.226:6789/api/v1/ws?ws-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3b3Jrc3BhY2VfaWQiOiJhNzJjYjUxNC02NWYxLTRhZTYtYTA3Yy01ODk4OThiNWI2YjEiLCJzdWIiOiJqa3lDbG91ZEFwaTIwMjQiLCJ1c2VyX3R5cGUiOiIxIiwibmJmIjoxNzI4NjMxMDMxLCJsb2ciOiJMb2dnZXJbY29tLmRqaS5zYW1wbGUuY29tbW9uLm1vZGVsLkN1c3RvbUNsYWltXSIsImlzcyI6IkRKSV9KS1kiLCJpZCI6IjExMTEiLCJleHAiOjE5MDg2MzEwMzEsImlhdCI6MTcyODYzMTAzMSwidXNlcm5hbWUiOiJ6bCJ9.D48LQJfrVj4Eu1-vYY-8ozsqyHyw1TbvWdd1OjasnzY"
+    // );
+    
   },
   methods: {
     Callback(data) {

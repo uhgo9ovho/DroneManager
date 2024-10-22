@@ -54,7 +54,7 @@
           </div>
         </div>
         <div class="sort-day" v-if="isDay">
-          <sort-day-list></sort-day-list>
+          <sort-day-list :sortList="sortList"></sort-day-list>
         </div>
         <div class="sort-month" v-else>
           <sort-month-list></sort-month-list>
@@ -76,7 +76,7 @@ import AIDialog from "./Template/AIDialog.vue";
 import DateTitle from "./Template/DateTitle.vue";
 import SortDayList from "./Template/SortDayList.vue";
 import SortMonthList from "./Template/SortMonthList.vue";
-import { heduledListAPI } from '@/api/TaskManager.js';
+import { heduledListAPI } from "@/api/TaskManager.js";
 export default {
   name: "FlightDate",
   components: {
@@ -90,19 +90,24 @@ export default {
       showAIDialog: false,
       isDay: true,
       pageNum: 1,
-      pageSize: 10
+      pageSize: 10,
+      sortList: []
     };
   },
   mounted() {
-    this.initList()
+    this.initList();
   },
   methods: {
     initList() {
       const params = {
         pageNum: this.pageNum,
-        pageSize: this.pageSize
-      }
-      heduledListAPI(params)
+        pageSize: this.pageSize,
+      };
+      heduledListAPI(params).then((res) => {
+        if (res.code === 200) {
+          this.sortList = res.rows;
+        }
+      });
     },
     handleClose() {
       this.showAIDialog = false;

@@ -56,7 +56,6 @@
         <el-form-item
           label="巡检时段"
           prop="inspection"
-          v-if="ruleForm.frequency == '天'"
         >
           <el-select
             v-model="ruleForm.inspection"
@@ -88,6 +87,16 @@
           >
           </el-date-picker>
         </el-form-item>
+        <el-form-item>
+          <div class="scheduleFooter">
+            <el-button class="greyBtnColor" @click="handleClose"
+              >取消</el-button
+            >
+            <el-button class="pri-btn" type="primary" @click="updateDate"
+              >确定</el-button
+            >
+          </div>
+        </el-form-item>
       </el-form>
     </el-drawer>
   </div>
@@ -100,6 +109,10 @@ export default {
     flyDateVisible: {
       type: Boolean,
       default: false,
+    },
+    flightDataInfo: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -115,37 +128,37 @@ export default {
       },
       characters: [
         {
-          value: "一",
+          value: 1,
           label: "一",
           checked: false,
         },
         {
-          value: "二",
+          value: 2,
           label: "二",
           checked: false,
         },
         {
-          value: "三",
+          value: 3,
           label: "三",
           checked: false,
         },
         {
-          value: "四",
+          value: 4,
           label: "四",
           checked: false,
         },
         {
-          value: "五",
+          value: 5,
           label: "五",
           checked: false,
         },
         {
-          value: "六",
+          value: 6,
           label: "六",
           checked: false,
         },
         {
-          value: "日",
+          value: 7,
           label: "日",
           checked: false,
         },
@@ -189,7 +202,7 @@ export default {
   computed: {
     frequencyLength() {
       switch (this.ruleForm.frequency) {
-        case "天":
+        case "日":
           return 1;
         case "周":
           let charactersLength = this.characters.filter(
@@ -210,6 +223,7 @@ export default {
     handleClose() {
       this.$emit("closeFlightDateDialog");
     },
+    updateDate() {},
     getMoons() {
       this.moonList = [];
       for (let i = 1; i <= 31; i++) {
@@ -226,25 +240,88 @@ export default {
     checkedMoonItem(item) {
       item.checked = !item.checked;
     },
+    formatDate(currentDate) {
+      const date = new Date(currentDate);
+      const formattedDate =
+        date.getFullYear() +
+        "-" +
+        String(date.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(date.getDate()).padStart(2, "0");
+        return formattedDate
+    },
   },
   mounted() {
     this.getMoons();
+    this.ruleForm.frequency =
+      this.flightDataInfo.timesType == 1
+        ? "周"
+        : this.flightDataInfo.timesType == 2
+        ? "月"
+        : "日";
+    this.ruleForm.inspection =
+      this.flightDataInfo.schedulingType == 3
+        ? "全天"
+        : this.flightDataInfo.schedulingType == 2
+        ? "17:00-21:00"
+        : this.flightDataInfo.schedulingType == 1
+        ? "12.00-17:00"
+        : "9:00-12:00";
+    this.ruleForm.startDate = this.formatDate(this.flightDataInfo.startTime);
+    this.ruleForm.endDate = this.formatDate(this.flightDataInfo.endTime);
+    if(this.flightDataInfo.timesType == 1) {
+      //周
+      this.characters.forEach(item => {
+        if(this.flightDataInfo.dateArrays.includes(item.value)) {
+          item.checked = true;
+        }
+      });
+    } else if(this.flightDataInfo.timesType == 2) {
+      //月
+      this.moonList.forEach(item => {
+        if(this.flightDataInfo.dateArrays.includes(item.value)) {
+          item.checked = true;
+        }
+      });
+    }
   },
 };
 </script>
 
 <style lang="scss">
 .flight-data-dialog {
+  .scheduleFooter {
+    margin-top: 200px;
+    .greyBtnColor {
+      width: 136px;
+      height: 40px;
+      border-radius: 100px;
+      border: 0;
+      color: #000;
+      background: #e2e4e4;
+    }
+    .pri-btn {
+      width: 204px;
+      height: 40px;
+      background: #0271e3;
+      border-radius: 100px;
+      margin-left: 16px;
+    }
+  }
+  .el-drawer {
+    width: 420px !important;
+  }
   .el-drawer__header {
     color: #000;
   }
   .el-drawer__body {
     padding-left: 20px;
     .inspection-select {
-        width: 356px;
+      width: 356px;
     }
-    .el-date-editor.el-input, .el-date-editor.el-input__inner {
-        width: 356px;
+    .el-date-editor.el-input,
+    .el-date-editor.el-input__inner {
+      width: 356px;
     }
     .week {
       width: 100%;

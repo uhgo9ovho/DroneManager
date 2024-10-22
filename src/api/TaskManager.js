@@ -60,6 +60,14 @@ export const heduledListAPI = () => {
 };
 
 /**
+ * 查询航线
+ */
+export const searchLineAPI = (taskId) => {
+    return request({
+        url: `/wurenji/airline/list?taskId=${taskId}`
+    })
+}
+/**
  * 飞行记录列表
  * @returns 
  */

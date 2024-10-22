@@ -1,16 +1,13 @@
 <template>
   <div id="app" :class="{'bulr': addFilter}">
     <router-view />
-    <theme-picker />
   </div>
 </template>
 
 <script>
-import ThemePicker from "@/components/ThemePicker";
 import { mapState } from 'vuex';
 export default {
   name: "App",
-  components: { ThemePicker },
   computed: {
     ...mapState('app', ['addFilter'])
   },

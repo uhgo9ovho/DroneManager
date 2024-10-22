@@ -37,7 +37,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </template>
-      <template #status-header>
+      <template #status-header="{ row }">
         <span>本轮状态</span>
         <el-dropdown @command="statusCommand">
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
@@ -46,7 +46,7 @@
             <el-dropdown-item
               v-for="(item, index) in statusOptions"
               :key="index"
-              :command="item"
+              :command="beforeHandleCommand(row)"
               >{{ item }}</el-dropdown-item
             >
           </el-dropdown-menu>
@@ -121,6 +121,7 @@
     <div v-if="flyDateVisible">
       <FlightDataDialog
         :flyDateVisible="flyDateVisible"
+        :flightDataInfo="flightDataInfo"
         @closeFlightDateDialog="closeFlightDateDialog"
       ></FlightDataDialog>
     </div>
@@ -139,6 +140,7 @@ export default {
   props: {},
   data() {
     return {
+      flightDataInfo: {},
       total: 0,
       detailsShow: false,
       flightVisible: false,
@@ -301,11 +303,14 @@ export default {
     nameCommand(itemCommand) {
       console.log(itemCommand);
     },
+    beforeHandleCommand(row) {
+      return row;
+    },
     statusCommand(itemCommand) {},
     beforeHandleCommand(row, label) {
       return {
         row,
-        label
+        label,
       };
     },
     operateCommand(itemCommand) {
@@ -315,6 +320,7 @@ export default {
           this.panoramicVisible = true;
           break;
         case "排期":
+          this.flightDataInfo = itemCommand.row;
           this.flyDateVisible = true;
           break;
         case "挂起":
@@ -324,20 +330,19 @@ export default {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
             type: "warning",
-          })
-            .then(() => {
-              deleteTaskAPI(itemCommand.row.taskId).then((res) => {
-                if (res.code === 200) {
-                  this.initList()
-                  this.$message({
-                    type: "success",
-                    message: "删除成功!",
-                  });
-                } else {
-                  this.$message.error('删除失败')
-                }
-              });
+          }).then(() => {
+            deleteTaskAPI(itemCommand.row.taskId).then((res) => {
+              if (res.code === 200) {
+                this.initList();
+                this.$message({
+                  type: "success",
+                  message: "删除成功!",
+                });
+              } else {
+                this.$message.error("删除失败");
+              }
             });
+          });
           break;
         default:
           break;

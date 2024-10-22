@@ -166,7 +166,7 @@ export default {
       } else {
         this.hasExist = true;
       }
-      this.$refs["checkerForm"].validateField(["airLine"]);
+      this.$refs["ruleForm"].validateField(["airLine"]);
     },
     openSettingDate() {
       this.$emit("openSettingDate");

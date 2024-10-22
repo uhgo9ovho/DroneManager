@@ -64,6 +64,12 @@ import FlightDialog from "./FlightDialog.vue";
 import AddAirLineDialog from './AddAirLineDialog.vue';
 export default {
   name: "DayList",
+  props: {
+    sortList: {
+      type: Array,
+      default: () => []
+    }
+  },
   components: {
     AirItemInfo,
     FlightDialog,

@@ -7,9 +7,9 @@
       <div class="task-name">{{ row.taskName }}</div>
       <div class="right-bottom">
         <div class="air-line-popover">
-          <el-popover placement="bottom" trigger="click" popper-class="airLine">
+          <el-popover placement="bottom" trigger="click" popper-class="airLine" @show="showPopover">
             <div
-              v-for="(item, index) in row.airLine"
+              v-for="(item, index) in airLineList"
               :key="index"
               style="margin: 8px 0"
             >
@@ -27,10 +27,10 @@
                   margin-bottom: 4px;
                   margin-right: 10px;
                 "
-                >{{ item.lineName }}</span
+                >{{ item }}</span
               >
               <el-tag size="mini" :type="statusType(item.lineStatus)">{{
-                item.lineStatus
+                '待执行'
               }}</el-tag>
             </div>
             <span slot="reference" style="cursor: pointer"
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { searchLineAPI } from '@/api/TaskManager.js';
 export default {
   name: "TableNameInfo",
   props: {
@@ -54,6 +55,11 @@ export default {
       type: Object,
       default: () => {},
     },
+  },
+  data() {
+    return {
+      airLineList: []
+    }
   },
   computed: {
     statusType(status) {
@@ -71,6 +77,19 @@ export default {
       };
     },
   },
+  methods: {
+    showPopover() {
+      searchLineAPI(this.row.taskId).then(res => {
+        console.log(res);
+        if(res.code === 200) {
+          let rows = res.rows;
+          this.airLineList = rows.map(item => item.lineName);
+        }
+      })
+      
+      
+    }
+  }
 };
 </script>
 
@@ -85,8 +104,8 @@ export default {
     border-radius: 8px;
     margin-right: 18px;
     img {
-      width: 100%;
-      height: 100%;
+      width: 48px;
+      height: 48px;
       border-radius: 8px;
     }
   }
