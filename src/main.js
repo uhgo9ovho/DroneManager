@@ -20,6 +20,7 @@ import './permission' // permission control
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree } from "@/utils/ruoyi";
 //引入自定义icon
 import '../font_4643341_2ci6nu9hegh/iconfont.css'
+
 // 全局方法挂载
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm
@@ -30,7 +31,14 @@ Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
 
 Vue.use(plugins)
-
+Vue.directive('removeAriaHidden', {
+  bind(el, binding) {
+    const ariaEls = el.querySelectorAll('.el-radio__original')
+    ariaEls.forEach((item) => {
+      item.removeAttribute('aria-hidden')
+    })
+  }
+})
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

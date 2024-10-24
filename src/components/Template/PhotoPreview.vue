@@ -1,73 +1,81 @@
 <template>
   <div class="photo-preview">
     <div class="imgPrewBox">
-      <div class="innerImgBox">
-        <ImageZoom
-          src="http://fsimage.guihuao.com/images/38615a57-7181-4962-bdb1-b640614d6947/4928517202866343937.jpeg?imageMogr2/thumbnail/400x"
-          :isEdit="isEdit"
-          @handleMouseUp="handleMouseUp"
-          @startLister="startLister"
-          ref="imageZoom"
-        />
-      </div>
-      <div class="operateBox" v-if="isChecked">
-        <div class="markType" :class="{ actived: isEdit }" @click="editBtn">
-          <i class="el-icon-edit"></i>
+      <div v-if="false">
+        <div class="innerImgBox">
+          <ImageZoom
+            src="http://fsimage.guihuao.com/images/38615a57-7181-4962-bdb1-b640614d6947/4928517202866343937.jpeg?imageMogr2/thumbnail/400x"
+            :isEdit="isEdit"
+            @handleMouseUp="handleMouseUp"
+            @startLister="startLister"
+            ref="imageZoom"
+          />
         </div>
-        <div class="operateBtns">
-          <div class="feixiangbet disabled">
-            <i class="el-icon-share"></i>
+        <div class="operateBox" v-if="isChecked">
+          <div class="markType" :class="{ actived: isEdit }" @click="editBtn">
+            <i class="el-icon-edit"></i>
           </div>
-          <div class="xiazaibtn">
-            <i class="el-icon-download"></i>
-          </div>
-        </div>
-      </div>
-      <div class="download" v-else>
-        <i class="el-icon-download"></i>
-      </div>
-      <div class="mark">
-        问题标注
-        <el-switch v-model="isChecked"></el-switch>
-      </div>
-      <div class="close" @click="closePreview">
-        <i class="el-icon-close"></i>
-      </div>
-      <div
-        class="deleteBtn"
-        @click.stop="clearDrawBtn"
-        :style="getPosition"
-        v-show="isShow"
-      >
-        <i class="el-icon-close"></i>
-      </div>
-      <div class="typeList" :style="getListPosition" v-if="isShow">
-        <div class="top">
-          <div class="title">选择问题</div>
-          <div class="search">
-            <i class="el-icon-search"></i>
+          <div class="operateBtns">
+            <div class="feixiangbet disabled">
+              <i class="el-icon-share"></i>
+            </div>
+            <div class="xiazaibtn">
+              <i class="el-icon-download"></i>
+            </div>
           </div>
         </div>
-        <div class="inputBox">
-          <el-input id="typeInput" type="text" placeholder="搜索" />
+        <div class="download" v-else>
+          <i class="el-icon-download"></i>
         </div>
-        <div class="tipstitle">
-          <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="常用" name="common"></el-tab-pane>
-            <el-tab-pane label="全部" name="all"></el-tab-pane>
-          </el-tabs>
+        <div class="mark">
+          问题标注
+          <el-switch v-model="isChecked"></el-switch>
         </div>
-        <div class="typeList_ul">
-          <div
-            class="typeList_li"
-            v-for="(item, index) in typeList"
-            :key="index"
-            @click="selectItem(item)"
-          >
-            {{ item }}
+        <div class="close" @click="closePreview">
+          <i class="el-icon-close"></i>
+        </div>
+        <div
+          class="deleteBtn"
+          @click.stop="clearDrawBtn"
+          :style="getPosition"
+          v-show="isShow"
+        >
+          <i class="el-icon-close"></i>
+        </div>
+        <div class="typeList" :style="getListPosition" v-if="isShow">
+          <div class="top">
+            <div class="title">选择问题</div>
+            <div class="search">
+              <i class="el-icon-search"></i>
+            </div>
           </div>
+          <div class="inputBox">
+            <el-input id="typeInput" type="text" placeholder="搜索" />
+          </div>
+          <div class="tipstitle">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+              <el-tab-pane label="常用" name="common"></el-tab-pane>
+              <el-tab-pane label="全部" name="all"></el-tab-pane>
+            </el-tabs>
+          </div>
+          <div class="typeList_ul">
+            <div
+              class="typeList_li"
+              v-for="(item, index) in typeList"
+              :key="index"
+              @click="selectItem(item)"
+            >
+              {{ item }}
+            </div>
+          </div>
+          <div class="typeList_ul"></div>
         </div>
-        <div class="typeList_ul"></div>
+      </div>
+      <div class="quanjing" v-else>
+        <div class="img_box" ref="panorama"></div>
+        <div class="close" @click="closePreview">
+          <i class="el-icon-close"></i>
+        </div>
       </div>
     </div>
   </div>
@@ -77,6 +85,12 @@
 import ImageZoom from "./ImageZoom.vue";
 export default {
   name: "PhotoPreview",
+  props: {
+    currentUrl: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {
       isEdit: false,
@@ -141,6 +155,14 @@ export default {
     ImageZoom,
   },
   methods: {
+    loadPanorama() {
+      pannellum.viewer(this.$refs.panorama, {
+        type: "equirectangular",
+        panorama: this.currentUrl,
+        autoLoad: true,
+        autoRotate: -2,
+      });
+    },
     handleClick() {},
     closePreview() {
       this.$emit("closePreview");
@@ -185,6 +207,9 @@ export default {
       this.windowW = document.documentElement.clientWidth;
       this.windowH = document.documentElement.clientHeight;
     });
+    this.$nextTick(() => {
+      this.loadPanorama();
+    });
   },
 };
 </script>
@@ -209,6 +234,21 @@ export default {
     max-height: 900px;
     border-radius: 12px;
     position: relative;
+    .quanjing {
+      .img_box {
+        border-radius: 8px;
+        position: relative;
+        width: 754px;
+        height: 566px;
+        background-color: #fff;
+        user-select: none;
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 8px;
+        }
+      }
+    }
     .innerImgBox {
       border-radius: 8px;
       position: relative;

@@ -197,3 +197,24 @@ export const editWarningAPI = (params) => {
         data: params
     })
 }
+
+/**
+ * 任务列表的一键起飞
+ */
+export const takeoffAPI = (params) => {
+    return request({
+        url: `/wurenji/scheduling/testFly`,
+        method: 'post',
+        data: params
+    })
+}
+
+/**
+ * 获取航线轨迹
+ */
+export const airLineAPI = (params) => {
+    return request({
+        url: `/wurenji/record/getLine?orgId=${params.orgId}&startTime=${params.startTime}&endTime=${params.endTime}`,
+        method: 'get'
+    })
+}

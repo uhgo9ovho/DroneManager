@@ -15,13 +15,13 @@
       <template #record_status="{ row }">
         <el-tag type="success">{{ row.record_status }}</el-tag>
       </template>
-      <template #operate>
-        <el-button class="look-btn" @click="lookBtn">查看</el-button>
+      <template #operate="{ row }">
+        <el-button class="look-btn" @click="lookBtn(row)">查看</el-button>
       </template>
     </common-table>
     <!-- 查看弹窗 -->
      <div v-if="showDialog">
-      <AirLogDialog @closeAirDialog="closeAirDialog"></AirLogDialog>
+      <AirLogDialog @closeAirDialog="closeAirDialog" :row="row"></AirLogDialog>
      </div>
   </div>
 </template>
@@ -90,7 +90,8 @@ export default {
         },
       ],
       pageNum: 1,
-      pageSize: 10
+      pageSize: 10,
+      row: {}
     };
   },
   methods: {
@@ -98,7 +99,8 @@ export default {
       this.logList = mockList7.items;
       this.total = mockList7.total;
     },
-    lookBtn() {
+    lookBtn(row) {
+      this.row = row;
       this.showDialog = true;
     },
     closeAirDialog() {
@@ -111,7 +113,11 @@ export default {
       }
       recordListAPI(params).then(res => {
         if(res.code === 200) {
+          res.rows.forEach(item => {
+            item.photoNum = item.resultList.length;
+          })
           this.logList = res.rows;
+          
         }
       })
     }

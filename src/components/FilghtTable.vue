@@ -70,7 +70,7 @@
       </template>
       <template #operate="{ row }">
         <div class="operate-box">
-          <el-button type="text" @click="detailsBtn(row.taskId)"
+          <el-button type="text" @click="detailsBtn(row)"
             >详情</el-button
           >
           <el-dropdown @command="operateCommand">
@@ -98,7 +98,7 @@
               line-height: 32px;
               font-size: 14px;
             "
-            @click="flightBtn"
+            @click="flightBtn(row)"
             >飞行</el-button
           >
         </div>
@@ -110,7 +110,7 @@
         @closeDialog="closeDialog"
         :detailsShow="detailsShow"
         :filghtShow="filghtShow"
-        :taskId="taskId"
+        :row="row"
       ></flight-dialog>
     </div>
     <!-- 全景预览弹窗 -->
@@ -225,7 +225,7 @@ export default {
       ],
       pageNum: 1,
       pageSize: 10,
-      taskId: 0,
+      row: {},
     };
   },
   mounted() {
@@ -348,13 +348,14 @@ export default {
           break;
       }
     },
-    detailsBtn(taskId) {
-      this.taskId = taskId;
+    detailsBtn(row) {
+      this.row = row;
       this.flightVisible = true;
       this.filghtShow = false;
       this.detailsShow = true;
     },
-    flightBtn() {
+    flightBtn(row) {
+      this.row = row;
       this.flightVisible = true;
       this.detailsShow = false;
       this.filghtShow = true;

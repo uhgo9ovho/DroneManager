@@ -25,7 +25,7 @@
       </div>
       <!-- 飞行info -->
       <div v-if="filghtShow">
-        <FilghtInfo @closeDialog="closeDialog"></FilghtInfo>
+        <FilghtInfo @closeDialog="closeDialog" :row="row"></FilghtInfo>
       </div>
     </div>
   </div>
@@ -39,9 +39,9 @@ import { taskInfoApI } from "@/api/TaskManager.js";
 export default {
   name: "TaskGrid",
   props: {
-    taskId: {
-      type: Number,
-      default: 0,
+    row: {
+      type: Object,
+      default: () => {},
     },
     detailsShow: {
       type: Boolean,
@@ -71,7 +71,7 @@ export default {
   },
   created() {
     if (this.detailsShow) {
-      taskInfoApI(this.taskId).then((res) => {
+      taskInfoApI(this.row.taskId).then((res) => {
         if (res.code === 200) {
           this.totalLine = res.data.airlineNumber;
           this.note = res.data.note;

@@ -14,10 +14,12 @@
         </div>
       </div>
       <div class="select">
-        <span>选择航线 (1) </span>
+        <span>选择航线 ({{ options.length }}) </span>
         <div class="list">
           <div class="li" v-for="(item, index) in options" :key="index">
-            <el-radio v-model="item.value" label="1">{{ item.label }}</el-radio>
+            <el-radio-group v-model="radio" v-removeAriaHidden>
+              <el-radio :label="item.lineName"></el-radio>
+            </el-radio-group>
             <div class="task-status task-executed">{{ item.status }}</div>
           </div>
         </div>
@@ -38,7 +40,12 @@
           </div>
         </div>
         <div class="fly blueBtnColor">
-          <el-button icon="iconfont el-icon-ico">起飞</el-button>
+          <el-button
+            icon="iconfont el-icon-ico"
+            v-loading="loading"
+            @click="takeOff"
+            >起飞</el-button
+          >
         </div>
       </div>
     </div>
@@ -46,21 +53,64 @@
 </template>
 
 <script>
+import { takeoffAPI } from "@/api/TaskManager.js";
 export default {
+  props: {
+    row: {
+      type: Object,
+      default: () => {},
+    },
+  },
   data() {
     return {
-      options: [
-        {
-          value: "比亚迪一期",
-          label: "比亚迪一期",
-          status: "待执行",
-        },
-      ],
+      options: [],
+      radio: "",
+      loading: false,
     };
+  },
+  mounted() {
+    this.getAirLineList();
   },
   methods: {
     closeDialog() {
       this.$emit("closeDialog");
+    },
+    getAirLineList() {
+      this.options = this.row.wrjAirlineFiles;
+    },
+    takeOff() {
+      if (!this.radio) {
+        this.$message.error("请选择航线");
+        return;
+      }
+      this.loading = true;
+      let currentAirLine = this.row.wrjAirlineFiles.filter(
+        (item) => item.lineName == this.radio
+      )[0];
+      const { airlineId, waylineId, sign, objectKey } = currentAirLine;
+      const params = {
+        airlineId,
+        wayLineId: waylineId,
+        sign,
+        objectKey,
+        taskId: this.row.taskId,
+        taskName: this.row.taskName,
+        workspaceId: localStorage.getItem("workspaceId"),
+      };
+      takeoffAPI(params)
+        .then((res) => {
+          if (res.code == 200) {
+            this.$message.success("起飞成功");
+            this.loading = false;
+            this.$router.push('/videoMap')
+          } else {
+            this.$message.error("起飞失败");
+            this.loading = false;
+          }
+        })
+        .catch(() => {
+          this.loading = false;
+        });
     },
   },
 };

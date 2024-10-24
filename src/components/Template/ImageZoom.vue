@@ -71,7 +71,6 @@ export default {
         },
         { crossOrigin: "anonymous" }
       );
-      if(!this.isEdit) return;
       // 监听框选操作
       this.canvas.on("mouse:down", this.handleMouseDown);
       this.canvas.on("mouse:move", this.handleMouseMove);
@@ -82,6 +81,7 @@ export default {
       this.canvas.on("object:moving", this.handleObjectMoving);
     },
     handleMouseDown(event) {
+      if(!this.isEdit) return;
       const pointer = this.canvas.getPointer(event.e);
       const activeObject = this.canvas.findTarget(event.e);
 
@@ -129,6 +129,7 @@ export default {
     },
 
     handleMouseMove(event) {
+      if(!this.isEdit) return;
       if (!this.isDrawing) return;
       const activeObject = event.target;
 
@@ -148,6 +149,7 @@ export default {
     },
 
     handleObjectMoving(event) {
+      if(!this.isEdit) return;
       const activeObject = event.target;
       if (activeObject && activeObject.type === "rect") {
         const left = activeObject.left;
@@ -182,6 +184,7 @@ export default {
     },
 
     handleMouseUp() {
+      if(!this.isEdit) return;
       // 框选完成后获取位置
       if (this.selectionRect) {
         const left = this.selectionRect.left;
@@ -208,6 +211,7 @@ export default {
     },
 
     handleMouseWheel(event) {
+      if(!this.isEdit) return;
       const delta = event.e.deltaY;
       const zoomFactor = 1.1;
       let zoom = delta < 0 ? zoomFactor : 1 / zoomFactor;

@@ -5,7 +5,7 @@
         <i class="el-icon-close"></i>
       </div>
       <div class="title">
-        <span>【拍照】西安航投以东污水巡查01</span>
+        <span>{{ row.taskName }}</span>
       </div>
       <div class="nest">
         <span>执行机场：西安-周至</span>
@@ -15,7 +15,7 @@
       <div class="main">
         <div class="img_list">
           <div class="header">
-            <div class="number">拍摄照片 <span>(21)</span></div>
+            <div class="number">拍摄照片 <span>({{ row.resultList.length }})</span></div>
             <div class="filter">
               <el-checkbox>问题照片</el-checkbox>
               <div class="problem">
@@ -28,10 +28,10 @@
               class="img_item"
               v-for="(item, index) in imgOptions"
               :key="index"
-              @click="previewBtn"
+              @click="previewBtn(item)"
             >
               <img
-                src="http://fsimage.guihuao.com/images/38615a57-7181-4962-bdb1-b640614d6947/4928517202866343937.jpeg?imageMogr2/thumbnail/400x"
+                :src="item"
                 alt=""
               />
               <div class="download">
@@ -60,7 +60,7 @@
               <div class="line">
                 <div>
                   <span>
-                    21
+                    {{ row.resultList.length }}
                     <span class="unit">&nbsp;张</span></span
                   >
                   <div class="photo">
@@ -132,7 +132,7 @@
     </div>
     <!-- 照片预览组件 -->
     <div v-if="preview">
-      <PhotoPreview @closePreview="closePreview"></PhotoPreview>
+      <PhotoPreview @closePreview="closePreview" :currentUrl="currentUrl"></PhotoPreview>
     </div>
   </div>
 </template>
@@ -140,30 +140,42 @@
 <script>
 import MapContainer from "../MapContainer.vue";
 import PhotoPreview from "./PhotoPreview.vue";
+import { airLineAPI } from '@/api/TaskManager.js';
 export default {
   name: "AirLogDialog",
+  props: {
+    row: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data() {
     return {
-      imgOptions: [
-        1, 3, 4, 5, 6, 7, 8, 9, 0, 2, 11, 21, 22, 23, 24, 25, 256, 2626, 263,
-        234, 324, 234, 2344, 2343, 2342, 2341,
-      ],
+      imgOptions: [],
       vedioVisible: true,
       preview: false,
+      currentUrl: ""
     };
   },
   components: {
     MapContainer,
     PhotoPreview,
   },
+  mounted() {
+    this.getImageUrl()
+  },
   methods: {
+    getImageUrl() {
+      this.imgOptions = this.row.resultList.map(item => 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + item.objectKey);      
+    },
     showVideo() {
       this.vedioVisible = true;
     },
     showMap() {
       this.vedioVisible = false;
     },
-    previewBtn() {
+    previewBtn(url) {
+      this.currentUrl = url;
       this.preview = true;
     },
     closePreview() {

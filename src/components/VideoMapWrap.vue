@@ -4,13 +4,7 @@
       <map-container></map-container>
     </div>
     <div v-else :style="{ width: mapWidth, height: mapHeight }">
-      <video
-        id="jswebrtc"
-        ref="jswebrtc"
-        autoplay
-        width="100%"
-        height="100%"
-      ></video>
+      <div id="J_prismPlayer"></div>
     </div>
     <!-- 顶部信息 -->
     <div class="topinfoBox">
@@ -136,7 +130,7 @@
                   <i class="iconfont el-icon-xinhao"></i>
                 </div>
               </div>
-              <div class="goback_plan redBtnColor">退出</div>
+              <div class="goback_plan redBtnColor" @click="outVideo">退出</div>
             </div>
           </div>
         </div>
@@ -183,6 +177,7 @@ import AirPortVideo from "./Template/AirPortVideo.vue";
 import FlyRemote from "./Template/FlyRemote.vue";
 import WebSocketClient from "@/utils/websocket.js";
 import { mapState } from "vuex";
+import Aliplayer from "aliyun-aliplayer";
 export default {
   name: "VideoMapWrap",
   data() {
@@ -232,7 +227,8 @@ export default {
       tempVertical_speed: 0,
       tempElevation: 0,
       tempWind_speed: 0,
-      tempHumidity: 0
+      tempHumidity: 0,
+      player: null,
     };
   },
   components: {
@@ -260,13 +256,15 @@ export default {
         if (val.host.vertical_speed)
           this.tempVertical_speed = val.host.vertical_speed.toFixed(2);
 
-        if (val.host.elevation) this.tempElevation = val.host.elevation.toFixed(2);
+        if (val.host.elevation)
+          this.tempElevation = val.host.elevation.toFixed(2);
 
-        if (val.host.wind_speed) this.tempWind_speed = val.host.wind_speed.toFixed(2);
+        if (val.host.wind_speed)
+          this.tempWind_speed = val.host.wind_speed.toFixed(2);
 
         if (val.host.humidity) this.tempHumidity = val.host.humidity.toFixed(2);
 
-        if(val.host.mode_code == '0') {
+        if (val.host.mode_code == "0") {
           //待机状态
           this.tempElevation = 0;
           this.tempHeight = 0;
@@ -282,29 +280,31 @@ export default {
     // this.ws = new WebSocketClient(
     //   "ws://172.16.40.226:6789/api/v1/ws?ws-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3b3Jrc3BhY2VfaWQiOiJhNzJjYjUxNC02NWYxLTRhZTYtYTA3Yy01ODk4OThiNWI2YjEiLCJzdWIiOiJqa3lDbG91ZEFwaTIwMjQiLCJ1c2VyX3R5cGUiOiIxIiwibmJmIjoxNzI4NjMxMDMxLCJsb2ciOiJMb2dnZXJbY29tLmRqaS5zYW1wbGUuY29tbW9uLm1vZGVsLkN1c3RvbUNsYWltXSIsImlzcyI6IkRKSV9KS1kiLCJpZCI6IjExMTEiLCJleHAiOjE5MDg2MzEwMzEsImlhdCI6MTcyODYzMTAzMSwidXNlcm5hbWUiOiJ6bCJ9.D48LQJfrVj4Eu1-vYY-8ozsqyHyw1TbvWdd1OjasnzY"
     // );
-    
+    this.initPlayer();
   },
   methods: {
+    outVideo() {
+      this.$router.go(-1);
+    },
     Callback(data) {
       console.log(data);
     },
-    // initVideo(url) {
-    //   if (this.player) {
-    //     this.player.destroy();
-    //     this.player = null;
-    //   }
-
-    //   let videoDom = document.getElementById("jswebrtc");
-    //   this.player = new JSWebrtc.Player(url, {
-    //     video: videoDom,
-    //     autoplay: true,
-    //     onplay: (obj) => {
-    //       videoDom.addEventListener("canplay", function (e) {
-    //         videoDom.play();
-    //       });
-    //     },
-    //   });
-    // },
+    initPlayer() {
+      this.player = new Aliplayer(
+        {
+          id: "J_prismPlayer",
+          width: "100%",
+          height: "100%",
+          source:
+            "artc://drone.szyfu.com/wrjFly/7CTDLCE00A6Y68?auth_key=1729758285-0-0-0576c7d561811e0dc702fa03b0887cdd",
+          isLive: true,
+          autoplay: true
+        },
+        function (player) {
+          console.log("success");
+        }
+      );
+    },
     showTools() {
       this.toolsVisible = true;
     },
