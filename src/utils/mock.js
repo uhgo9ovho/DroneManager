@@ -12544,3 +12544,114 @@ export const mockList7 = {
   "total": 808,
   "total_pages": 41
 }
+
+export const mockList8 = {
+  "current": 1,
+  "is_next": 1,
+  "is_prev": 0,
+  "items": [
+    {
+      "data_time": "2024-10-27",
+      "fxjc": 2,
+      "fxwt": 1,
+      "qjmx": 0,
+      "swmx": 0,
+      "tjrw": 0,
+      "zsmx": 0,
+      "zxrw": 2
+    },
+    {
+      "data_time": "2024-10-26",
+      "fxjc": 0,
+      "fxwt": 0,
+      "qjmx": 0,
+      "swmx": 0,
+      "tjrw": 0,
+      "zsmx": 0,
+      "zxrw": 0
+    },
+    {
+      "data_time": "2024-10-25",
+      "fxjc": 14,
+      "fxwt": 0,
+      "qjmx": 6,
+      "swmx": 0,
+      "tjrw": 10,
+      "zsmx": 0,
+      "zxrw": 14
+    },
+    {
+      "data_time": "2024-10-24",
+      "fxjc": 15,
+      "fxwt": 3,
+      "qjmx": 0,
+      "swmx": 0,
+      "tjrw": 0,
+      "zsmx": 0,
+      "zxrw": 15
+    },
+    {
+      "data_time": "2024-10-23",
+      "fxjc": 14,
+      "fxwt": 0,
+      "qjmx": 0,
+      "swmx": 0,
+      "tjrw": 0,
+      "zsmx": 0,
+      "zxrw": 14
+    },
+    {
+      "data_time": "2024-10-22",
+      "fxjc": 14,
+      "fxwt": 0,
+      "qjmx": 0,
+      "swmx": 0,
+      "tjrw": 1,
+      "zsmx": 0,
+      "zxrw": 14
+    },
+    {
+      "data_time": "2024-10-21",
+      "fxjc": 13,
+      "fxwt": 3,
+      "qjmx": 0,
+      "swmx": 0,
+      "tjrw": 0,
+      "zsmx": 0,
+      "zxrw": 13
+    },
+    {
+      "data_time": "2024-10-20",
+      "fxjc": 0,
+      "fxwt": 0,
+      "qjmx": 0,
+      "swmx": 0,
+      "tjrw": 0,
+      "zsmx": 0,
+      "zxrw": 0
+    },
+    {
+      "data_time": "2024-10-19",
+      "fxjc": 3,
+      "fxwt": 0,
+      "qjmx": 0,
+      "swmx": 0,
+      "tjrw": 0,
+      "zsmx": 0,
+      "zxrw": 3
+    },
+    {
+      "data_time": "2024-10-18",
+      "fxjc": 9,
+      "fxwt": 1,
+      "qjmx": 0,
+      "swmx": 0,
+      "tjrw": 0,
+      "zsmx": 0,
+      "zxrw": 9
+    }
+  ],
+  "page_size": 10,
+  "total": 28,
+  "total_pages": 3
+}

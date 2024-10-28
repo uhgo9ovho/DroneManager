@@ -1,8 +1,8 @@
 <template>
   <div class="task-wait-card">
     <div style="flex: 1.7 1 0%">
-      <div class="task-time">{{ info.plan_end_time }} 计划起飞</div>
-      <div class="task-name2">{{ info.airline_name }}</div>
+      <div class="task-time">{{ info.formatTime }} 计划起飞</div>
+      <div class="task-name2">{{ info.taskName }}</div>
     </div>
     <i class="el-icon-info"></i>
     <div class="task-num">
@@ -10,7 +10,7 @@
       <span class="task-num-error">(未飞行)</span>
     </div>
     <div class="task-change" :class="[info.operator ? '' : 'hidden']">
-      排期调整({{ info.operator }})
+      排期调整({{ info.createBy }})
     </div>
     <div class="task-btn" @click="takeOffBtn">
       <div>起飞</div>

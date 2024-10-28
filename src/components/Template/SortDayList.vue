@@ -18,11 +18,11 @@
                   <div
                     v-for="(item2, index) in airInfos"
                     :key="index"
-                    v-show="item.airline_name"
+                    v-show="item.taskName"
                   >
                     <div
                       class="task-past-card"
-                      v-if="formatTime(item2.plan_window[0]) === item.time"
+                      v-if="formatTime(item2.formatTime) === item.time || airTime(item2.formatTime) === item.time"
                     >
                       <AirItemInfo
                         :info="item2"
@@ -30,7 +30,7 @@
                       ></AirItemInfo>
                     </div>
                   </div>
-                  <div v-if="!item.airline_name">
+                  <div v-if="!item.taskName">
                     <div class="task-card3" @click="addAirBtn">
                       <div class="icon-add">+</div>
                     </div>
@@ -140,6 +140,14 @@ export default {
       };
     },
   },
+  watch: {
+    sortList(arr) {
+      if(arr) {
+        this.airInfos = arr;
+        this.getAirLines();
+      }
+    }
+  },
   methods: {
     addAirBtn() {
       this.addAirShow = true;
@@ -203,28 +211,42 @@ export default {
       this.currentTime = hours + ":" + minutes;
     },
     formatTime(timeStr) {
+      console.log(timeStr.replace(/^0/, "").replace(/:00$/, ""));
+      
       return timeStr.replace(/^0/, "").replace(/:00$/, "");
+    },
+    airTime(time) {
+      switch (time) {
+        case "10:30:00":
+          return "10:00"
+        case "14:30:00":
+          return "14:00"
+        default:
+          break;
+      }
     },
     getAirLines() {
       this.airLines.forEach((item1) => {
-        const match = mockList4.find(
-          (item2) => this.formatTime(item2.plan_window[0]) === item1.time
+        const match = this.sortList.find(
+          (item2) => {
+            item2.formatTime = item2.scheduledTime.split(' ')[1];
+            return this.formatTime(item2.formatTime) === item1.time || this.airTime(item2.formatTime) === item1.time
+          }
         );
-        console.log(match);
-
+          
         if (match) {
           // 将 match 对象中的属性复制到 item1 中
           Object.keys(match).forEach((key) => {
             item1[key] = match[key];
           });
         }
+        
       });
     },
   },
   mounted() {
     this.updateTime();
-    this.getAirLines();
-    this.airInfos = mockList4;
+    
     this.timer = setInterval(this.updateTime, 1000);
     this.checkTimeAndStart();
   },

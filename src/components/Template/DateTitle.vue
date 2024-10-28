@@ -72,6 +72,7 @@ export default {
       // 获取对应的星期几名称
       this.dayOfWeekName = daysOfWeek[dayOfWeekNumber];
       this.date = this.isDay ? formattedDate : formattedMonth;
+      this.$emit('formattedDate',formattedDate)
     },
     dateChange(val) {
       const date = new Date(val);

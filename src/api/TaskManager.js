@@ -52,9 +52,9 @@ export const taskInfoApI = (id) => {
  * 计划飞行列表
  * @returns 
  */
-export const heduledListAPI = () => {
+export const heduledListAPI = (date) => {
     return request({
-        url: '/wurenji/scheduling/scheduledList',
+        url: `/wurenji/scheduling/list?date=${date}`,
         method: 'get'
     })
 };

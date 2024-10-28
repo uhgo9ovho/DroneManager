@@ -1,6 +1,6 @@
 <template>
   <div class="video-map-wrap">
-    <div :style="{ width: mapWidth, height: mapHeight }" v-if="!showMap">
+    <div :style="{ width: mapWidth, height: mapHeight }" v-if="showMap">
       <map-container></map-container>
     </div>
     <div v-else :style="{ width: mapWidth, height: mapHeight }">
@@ -137,7 +137,7 @@
       </div>
     </div>
     <!-- 控制按钮 -->
-    <el-popconfirm :title="title" v-if="!showMap">
+    <el-popconfirm :title="title" v-if="!showMap" @confirm="confirmPhoto()">
       <div class="bottomControlBox" slot="reference">
         <div class="innerbottomBox">
           <el-tooltip
@@ -148,6 +148,12 @@
           >
             <i class="iconfont el-icon-xiangji"></i>
           </el-tooltip>
+        </div>
+      </div>
+    </el-popconfirm>
+    <el-popconfirm :title="title" v-if="!showMap" @confirm="confirm()">
+      <div class="bottomControlBox1" slot="reference">
+        <div class="innerbottomBox">
           <el-tooltip
             class="item"
             effect="dark"
@@ -164,13 +170,14 @@
     <!-- 机巢视角预览 -->
     <AirPortVideo></AirPortVideo>
     <!-- 控制无人机操作界面 -->
-    <div v-if="!showMap">
+    <div v-if="showRemote">
       <FlyRemote></FlyRemote>
     </div>
   </div>
 </template>
 
 <script>
+let player = null;
 import MapContainer from "./MapContainer.vue";
 import FlyVideoBox from "./Template/FlyVideoBox.vue";
 import AirPortVideo from "./Template/AirPortVideo.vue";
@@ -184,6 +191,7 @@ export default {
     return {
       ws: null,
       showMap: true,
+      showRemote: false,
       mapWidth: "100vw",
       mapHeight: "100vh",
       taskOptions: [
@@ -221,14 +229,12 @@ export default {
           btnText: "开启",
         },
       ],
-      player: null,
       tempHeight: 0,
       tempHorizontal_speed: 0,
       tempVertical_speed: 0,
       tempElevation: 0,
       tempWind_speed: 0,
       tempHumidity: 0,
-      player: null,
     };
   },
   components: {
@@ -275,14 +281,34 @@ export default {
         }
       }
     },
+    showMap(val) {
+      if (!val) {
+        this.$nextTick(() => {
+          this.initPlayer();
+          player.on("rtsFallback", function (event) {
+            // event.paramData.reason 降级的原因
+            // event.paramData.fallbackUrl 降级到的地址
+            console.log(event,'降级');
+            
+          });
+        });
+      }
+    },
   },
   mounted() {
     // this.ws = new WebSocketClient(
     //   "ws://172.16.40.226:6789/api/v1/ws?ws-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3b3Jrc3BhY2VfaWQiOiJhNzJjYjUxNC02NWYxLTRhZTYtYTA3Yy01ODk4OThiNWI2YjEiLCJzdWIiOiJqa3lDbG91ZEFwaTIwMjQiLCJ1c2VyX3R5cGUiOiIxIiwibmJmIjoxNzI4NjMxMDMxLCJsb2ciOiJMb2dnZXJbY29tLmRqaS5zYW1wbGUuY29tbW9uLm1vZGVsLkN1c3RvbUNsYWltXSIsImlzcyI6IkRKSV9KS1kiLCJpZCI6IjExMTEiLCJleHAiOjE5MDg2MzEwMzEsImlhdCI6MTcyODYzMTAzMSwidXNlcm5hbWUiOiJ6bCJ9.D48LQJfrVj4Eu1-vYY-8ozsqyHyw1TbvWdd1OjasnzY"
     // );
-    this.initPlayer();
+    // player.on("error", function () {
+    //     console.log(123);
+    //     _this.initPlayer()
+    //   });
   },
   methods: {
+    confirm(e) {
+      this.showRemote = true;
+    },
+    confirmPhoto() {},
     outVideo() {
       this.$router.go(-1);
     },
@@ -290,17 +316,24 @@ export default {
       console.log(data);
     },
     initPlayer() {
-      this.player = new Aliplayer(
+      let _this = this;
+      player = new Aliplayer(
         {
           id: "J_prismPlayer",
           width: "100%",
           height: "100%",
           source:
-            "artc://drone.szyfu.com/wrjFly/7CTDLCE00A6Y68?auth_key=1729758285-0-0-0576c7d561811e0dc702fa03b0887cdd",
+            "artc://drone.szyfu.com/wrjFly/7CTDLCE00A6Y68",
+          rtsFallbackSource: "https://drone.szyfu.com/wrjFly/7CTDLCE00A6Y68.flv",
+          autoplay: true,
           isLive: true,
-          autoplay: true
+          rePlay: false,
+          playsinline: true,
+          preload: true,
+          controlBarVisibility: "hover",
+          useH5Prism: true,
         },
-        function (player) {
+        function () {
           console.log("success");
         }
       );
@@ -740,7 +773,22 @@ export default {
         cursor: pointer;
       }
       .el-icon-kongzhi {
-        margin-left: 20px;
+        margin-left: 100px;
+      }
+    }
+  }
+  .bottomControlBox1 {
+    position: absolute;
+    z-index: 1000;
+    bottom: 20px;
+    left: 55%;
+    transform: translateX(-50%);
+    .innerbottomBox {
+      display: flex;
+      color: #fff;
+      i {
+        font-size: 32px;
+        cursor: pointer;
       }
     }
   }

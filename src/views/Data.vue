@@ -3,6 +3,7 @@
     <div class="top">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="预警事件" name="warningEvent"></el-tab-pane>
+        <el-tab-pane label="统计报告" name="statisticalReports"></el-tab-pane>
       </el-tabs>
       <div class="operate-box">
         <div
@@ -23,11 +24,15 @@
     <div class="task-list-grid" v-if="currentTab == 'warningEvent'">
       <warning-event></warning-event>
     </div>
+    <div class="task-list-grid" v-else>
+      <StatisticalReports></StatisticalReports>
+    </div>
   </div>
 </template>
 
 <script>
 import WarningEvent from "../components/WarningEvent.vue";
+import StatisticalReports from "../components/StatisticalReports.vue";
 export default {
   name: "Flight",
   data() {
@@ -67,6 +72,7 @@ export default {
   },
   components: {
     WarningEvent,
+    StatisticalReports
   },
   computed: {
     checkedTip() {

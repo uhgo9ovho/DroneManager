@@ -34,7 +34,10 @@
             </el-tooltip>
           </div>
           <div>
-            <date-title :isDay="isDay"></date-title>
+            <date-title
+              :isDay="isDay"
+              @formattedDate="formattedDate"
+            ></date-title>
           </div>
           <div class="date-type-switch">
             <div class="type-switch">
@@ -91,23 +94,20 @@ export default {
       isDay: true,
       pageNum: 1,
       pageSize: 10,
-      sortList: []
+      sortList: [],
     };
   },
-  mounted() {
-    this.initList();
-  },
+  mounted() {},
   methods: {
-    initList() {
-      const params = {
-        pageNum: this.pageNum,
-        pageSize: this.pageSize,
-      };
-      heduledListAPI(params).then((res) => {
+    initList(date) {
+      heduledListAPI(date).then((res) => {
         if (res.code === 200) {
           this.sortList = res.rows;
         }
       });
+    },
+    formattedDate(date) {
+      this.initList(date);
     },
     handleClose() {
       this.showAIDialog = false;
