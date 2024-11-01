@@ -9,13 +9,15 @@
       </div>
       <div class="nest">
         <span>执行机场：西安-周至</span>
-        <span>起飞时间：2024-09-03 10:25:35</span>
+        <span>起飞时间：{{ row.completeTime }}</span>
       </div>
       <el-divider></el-divider>
       <div class="main">
         <div class="img_list">
           <div class="header">
-            <div class="number">拍摄照片 <span>({{ row.resultList.length }})</span></div>
+            <div class="number">
+              拍摄照片 <span>({{ row.resultList.length }})</span>
+            </div>
             <div class="filter">
               <el-checkbox>问题照片</el-checkbox>
               <div class="problem">
@@ -30,14 +32,11 @@
               :key="index"
               @click="previewBtn(item)"
             >
-              <img
-                :src="item"
-                alt=""
-              />
+              <img :src="item.url" alt="" />
               <div class="download">
                 <i class="el-icon-download"></i>
               </div>
-              <div class="introduce">12:54:40</div>
+              <div class="introduce">{{ item.createTime | formatTime }}</div>
             </div>
           </div>
         </div>
@@ -103,15 +102,14 @@
                 航迹轨迹
               </div>
             </div>
-            <div class="record-vedio" v-show="vedioVisible">
+            <div class="record-vedio" v-if="vedioVisible">
               <div class="video-window">
                 <video
-                  muted="muted"
-                  id="recordVideoA"
-                  src="https://flysee-business.oss-cn-hangzhou.aliyuncs.com/agora/d50f5faad4422da9f9e1038b1ccf05c6_1581F6Q8D241H00CRJLB_0.mp4"
-                  type="video/mp4"
-                  controls="controls"
-                  controlslist=""
+                  id="videoElement"
+                  controls
+                  crossOrigin="anonymous"
+                  autoplay
+                  muted
                   style="
                     height: 100%;
                     width: 100%;
@@ -123,8 +121,8 @@
                 </video>
               </div>
             </div>
-            <div class="record-map" v-show="!vedioVisible">
-              <MapContainer></MapContainer>
+            <div class="record-map" v-else>
+              <MapContainer :airLineData="airLineData"></MapContainer>
             </div>
           </div>
         </div>
@@ -132,7 +130,10 @@
     </div>
     <!-- 照片预览组件 -->
     <div v-if="preview">
-      <PhotoPreview @closePreview="closePreview" :currentUrl="currentUrl"></PhotoPreview>
+      <PhotoPreview
+        @closePreview="closePreview"
+        :currentUrl="currentUrl"
+      ></PhotoPreview>
     </div>
   </div>
 </template>
@@ -140,33 +141,182 @@
 <script>
 import MapContainer from "../MapContainer.vue";
 import PhotoPreview from "./PhotoPreview.vue";
-import { airLineAPI } from '@/api/TaskManager.js';
+import { airLineAPI } from "@/api/TaskManager.js";
+import flvjs from "flv.js";
 export default {
   name: "AirLogDialog",
   props: {
     row: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
       imgOptions: [],
       vedioVisible: true,
       preview: false,
-      currentUrl: ""
+      currentUrl: "",
+      airLineData: [],
+      isPlay: false,
+      player: null,
+      timerId: null,
     };
+  },
+  filters: {
+    formatTime(time) {
+      const dateString = time;
+
+      // 将字符串解析为 Date 对象
+      const date = new Date(dateString);
+
+      // 获取小时、分钟、秒
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+      const seconds = date.getSeconds().toString().padStart(2, "0");
+
+      // 格式化输出
+      return `${hours}:${minutes}:${seconds}`;
+    },
   },
   components: {
     MapContainer,
     PhotoPreview,
   },
   mounted() {
-    this.getImageUrl()
+    this.getImageUrl();
+    this.getAirLine();
+    this.$nextTick(() => {
+      this.createVideo();
+    });
+  },
+  beforeDestroy() {
+    this.destoryVideo();
   },
   methods: {
+    destoryVideo() {
+      if (this.player) {
+        this.player.pause(); // 暂停播放数据流
+        this.player.unload(); // 取消数据流加载
+        this.player.detachMediaElement(); // 将播放实例从节点中取出
+        this.player.destroy(); // 销毁播放实例
+        this.player = null;
+      }
+    },
+    createVideo() {
+      if(!this.row.recordVideo) return;
+      if (flvjs.isSupported()) {
+        var videoElement = document.getElementById("videoElement");
+        this.player = flvjs.createPlayer(
+          {
+            type: "flv",
+            isLive: true,
+            hasAudio: false,
+            url: 'https://wurenji02.oss-cn-beijing.aliyuncs.com/'+this.row.recordVideo, // 自己的flv视频流
+            enableWorker: false, //启用 Web Worker 进程来加速视频的解码和处理过程
+            stashInitialSize: 32 * 1024, // 初始缓存大小。单位：字节。建议针对直播：调整为1024kb
+            stashInitialTime: 0.2, // 缓存初始时间。单位：秒。建议针对直播：调整为200毫秒
+            seekType: "range", // 建议将其设置为“range”模式，以便更快地加载视频数据，提高视频的实时性。
+            lazyLoad: false, //关闭懒加载模式，从而提高视频的实时性。建议针对直播：调整为false
+            lazyLoadMaxDuration: 0.2, // 懒加载的最大时长。单位：秒。建议针对直播：调整为200毫秒
+            deferLoadAfterSourceOpen: false,
+          },
+          {
+            cors: true, // 是否跨域
+            // enableWorker: true, // 是否多线程工作
+            enableStashBuffer: false, // 是否启用缓存
+            // stashInitialSize: 128, // 缓存大小(kb)  默认384kb
+            autoCleanupSourceBuffer: true, // 是否自动清理缓存
+          }
+        );
+        this.player.attachMediaElement(videoElement); //挂载元素
+        this.player.load(); //加载流
+        this.player.play(); //播放流
+        // 追帧
+        if (this.timerId !== null) {
+          clearInterval(this.timerId);
+        }
+        this.timerId = setInterval(() => {
+          if (videoElement.buffered.length > 0) {
+            const end = videoElement.buffered.end(0); // 视频结尾时间
+            const current = videoElement.currentTime; //  视频当前时间
+            const diff = end - current; // 相差时间
+            console.log(diff);
+            const diffCritical = 4; // 这里设定了超过4秒以上就进行跳转
+            const diffSpeedUp = 1; // 这里设置了超过1秒以上则进行视频加速播放
+            const maxPlaybackRate = 4; // 自定义设置允许的最大播放速度
+            let playbackRate = 1.0; // 播放速度
+            if (diff > diffCritical) {
+              console.log("相差超过4秒，进行跳转");
+              videoElement.currentTime = end - 1.5;
+              playbackRate = Math.max(1, Math.min(diffCritical, 16));
+            } else if (diff > diffSpeedUp) {
+              console.log("相差超过1秒，进行加速");
+              playbackRate = Math.max(1, Math.min(diff, maxPlaybackRate, 16));
+            }
+            videoElement.playbackRate = playbackRate;
+            // if (videoElement.paused) {
+            //   this.videoForm.player.play();
+            // }
+          }
+        }, 1000);
+      }
+      // 报错重连
+      this.player.on(flvjs.Events.ERROR, (err, errdet) => {
+        // 参数 err 是一级异常，errdet 是二级异常
+        if (err == flvjs.ErrorTypes.MEDIA_ERROR) {
+          console.log("媒体错误");
+          if (errdet == flvjs.ErrorDetails.MEDIA_FORMAT_UNSUPPORTED) {
+            console.log("媒体格式不支持");
+          }
+        }
+        if (err == flvjs.ErrorTypes.NETWORK_ERROR) {
+          console.log("网络错误");
+          if (errdet == flvjs.ErrorDetails.NETWORK_STATUS_CODE_INVALID) {
+            console.log("http状态码异常");
+          }
+        }
+        if (err == flvjs.ErrorTypes.OTHER_ERROR) {
+          console.log("其他异常：", errdet);
+        }
+        if (this.player) {
+          this.destoryVideo();
+          this.createVideo();
+        }
+      });
+    },
+
+    timestamp(time) {
+      // 定义日期时间字符串
+      const dateStr = time;
+      // 创建日期对象
+      const date = new Date(dateStr);
+      // 转换为时间戳（秒数）
+      const timestamp = date.getTime();
+
+      return timestamp;
+    },
+    getAirLine() {
+      const params = {
+        startTime: `${this.timestamp(this.row.executionTime)}`,
+        endTime: `${this.timestamp(this.row.completeTime)}`,
+        orgId: localStorage.getItem("org_id"),
+      };
+
+      airLineAPI(params).then((res) => {
+        if (res.code == 200) {
+          this.airLineData = res.data;
+        }
+      });
+    },
     getImageUrl() {
-      this.imgOptions = this.row.resultList.map(item => 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + item.objectKey);      
+      this.imgOptions = this.row.resultList.map((item) => {
+        return {
+          url:
+            "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
+          createTime: item.createTime,
+        };
+      });
     },
     showVideo() {
       this.vedioVisible = true;
@@ -182,7 +332,7 @@ export default {
       this.preview = false;
     },
     closeAirDialog() {
-        this.$emit('closeAirDialog')
+      this.$emit("closeAirDialog");
     },
   },
 };

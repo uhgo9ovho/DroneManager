@@ -96,6 +96,7 @@ export default {
         taskId: this.row.taskId,
         taskName: this.row.taskName,
         workspaceId: localStorage.getItem("workspaceId"),
+        taskType: this.row.taskType
       };
       takeoffAPI(params)
         .then((res) => {

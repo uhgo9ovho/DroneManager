@@ -154,7 +154,7 @@ export default {
           label: "任务名称/类型",
           showOverflowTooltip: true,
           slot: true,
-          minWidth: "200",
+          minWidth: "220",
         },
         {
           prop: "airPort",

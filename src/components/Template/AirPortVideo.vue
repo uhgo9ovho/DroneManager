@@ -1,16 +1,97 @@
 <template>
-  <div class="left-window-position"></div>
+  <div
+    class="flyVideoBox left-window-position"
+    @click="changeVideo"
+    :style="{ width: videoWidth, height: videoHeight }"
+  >
+    <div class="wrap wrap_window">
+      <div v-if="mainView === 'map' || mainView === 'video2'" :style="{ width: videoWidth, height: videoHeight }">
+        <div id="J_prismPlayer3"></div>
+      </div>
+      <div v-else :style="{ width: mapWidth, height: mapHeight }">
+        <map-container></map-container>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import MapContainer from "../MapContainer.vue";
+import Aliplayer from "aliyun-aliplayer";
+import "aliyun-aliplayer/build/skins/default/aliplayer-min.css";
+let player = null;
 export default {
-
-}
+  props: {
+    mainView: {
+      type: String,
+      default: "map"
+    }
+  },
+  data() {
+    return {
+      showAirPort: true,
+      mapWidth: "130px",
+      mapHeight: "80px",
+      videoWidth: "130px",
+      videoHeight: "80px",
+    };
+  },
+  watch: {
+    mainView: {
+      handler(val) {
+        if (val === 'map' || val === 'video2') {
+          this.$nextTick(() => {
+            this.initPlayer();
+            player.on("rtsFallback", function (event) {
+              console.log(event, "降级");
+            });
+            player.on("rtsTraceId", function (event) {
+              console.log("EVENT rtsTraceId", event.paramData);
+            });
+          });
+        } else {
+          player.dispose();
+        }
+      },
+      immediate: true,
+    },
+  },
+  methods: {
+    changeVideo() {
+      this.$emit("changeVideo", 'video1');
+      this.showAirPort = !this.showAirPort;
+    },
+    initPlayer() {
+      let _this = this;
+      player = new Aliplayer(
+        {
+          id: "J_prismPlayer3",
+          width: "100%",
+          height: "100%",
+          source: "artc://drone.szyfu.com/wrjFlyDock/7CTDLCE00A6Y68",
+          // rtsFallbackSource: "https://drone.szyfu.com/wrjFly/7CTDLCE00A6Y68.flv",
+          autoplay: true,
+          mute: true,
+          isLive: true,
+          playsinline: true,
+          preload: true,
+        },
+        function (player) {
+          console.log("success");
+          player.play();
+        }
+      );
+    },
+  },
+  components: {
+    MapContainer,
+  },
+};
 </script>
 
 <style lang="scss">
 .left-window-position {
-    height: 80px;
+  height: 80px;
   width: 130px;
   overflow: hidden;
   border-radius: 8px;
@@ -19,6 +100,26 @@ export default {
   bottom: calc(32px + 120px);
   left: 10px;
   z-index: 99;
-  background-color: pink;
+
+  .wrap {
+    pointer-events: all;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+  }
+  .wrap_window {
+    bottom: 0;
+    right: 0;
+    z-index: 999;
+    border-radius: 6px;
+    overflow: hidden;
+    video {
+      width: 100%;
+      height: 100%;
+    }
+    #myVideo::-webkit-media-controls {
+      display: none !important;
+    }
+  }
 }
 </style>

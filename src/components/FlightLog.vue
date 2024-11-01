@@ -1,6 +1,14 @@
 <template>
   <div class="flight-log">
-    <common-table :tableList="logList" :columns="columns" :total="total">
+    <common-table
+      :tableList="logList"
+      :columns="columns"
+      :total="total"
+      @sizeChange="sizeChange"
+      @pageChange="pageChange"
+      :pageSize="pageSize"
+      :pageNum="pageNum"
+    >
       <template #taskName="{ row }">
         <div class="airline">
           <div class="airimg">
@@ -10,7 +18,7 @@
         </div>
       </template>
       <template #createBy="{ row }">
-        {{ row.executionTime }}
+        {{ row.createBy }}
       </template>
       <template #record_status="{ row }">
         <el-tag type="success">{{ row.record_status }}</el-tag>
@@ -20,22 +28,22 @@
       </template>
     </common-table>
     <!-- 查看弹窗 -->
-     <div v-if="showDialog">
+    <div v-if="showDialog">
       <AirLogDialog @closeAirDialog="closeAirDialog" :row="row"></AirLogDialog>
-     </div>
+    </div>
   </div>
 </template>
 
 <script>
 import CommonTable from "./CommonTable.vue";
 import { mockList7 } from "@/utils/mock.js";
-import AirLogDialog from './Template/AirLogDialog.vue';
-import { recordListAPI } from '@/api/TaskManager.js';
+import AirLogDialog from "./Template/AirLogDialog.vue";
+import { recordListAPI } from "@/api/TaskManager.js";
 export default {
   name: "FLightLog",
   components: {
     CommonTable,
-    AirLogDialog
+    AirLogDialog,
   },
   data() {
     return {
@@ -62,7 +70,7 @@ export default {
           showOverflowTooltip: true,
         },
         {
-          prop: "flight_start_time",
+          prop: "executionTime",
           label: "执行时间",
           showOverflowTooltip: true,
         },
@@ -91,14 +99,10 @@ export default {
       ],
       pageNum: 1,
       pageSize: 10,
-      row: {}
+      row: {},
     };
   },
   methods: {
-    getLogList() {
-      this.logList = mockList7.items;
-      this.total = mockList7.total;
-    },
     lookBtn(row) {
       this.row = row;
       this.showDialog = true;
@@ -109,18 +113,28 @@ export default {
     initList() {
       const params = {
         pageNum: this.pageNum,
-        pageSize: this.pageSize
-      }
-      recordListAPI(params).then(res => {
-        if(res.code === 200) {
-          res.rows.forEach(item => {
+        pageSize: this.pageSize,
+      };
+      recordListAPI(params).then((res) => {
+        if (res.code === 200) {
+          res.rows.forEach((item) => {
             item.photoNum = item.resultList.length;
-          })
+          });
           this.logList = res.rows;
-          
+          this.total = res.total;
         }
-      })
-    }
+      });
+    },
+    pageChange(val) {      
+      this.pageSize = val.pageSize;
+      this.pageNum = val.pageNum;
+      this.initList()
+    },
+    sizeChange(val) {
+      this.pageNum = val.pageNum;
+      this.pageSize = val.pageSize;
+      this.initList()
+    },
   },
   mounted() {
     this.initList();

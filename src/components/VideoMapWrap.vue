@@ -1,9 +1,30 @@
 <template>
   <div class="video-map-wrap">
-    <div :style="{ width: mapWidth, height: mapHeight }" v-if="showMap">
+    <div
+      :style="{ width: mapWidth, height: mapHeight }"
+      v-if="mainView === 'map'"
+    >
       <map-container></map-container>
     </div>
-    <div v-else :style="{ width: mapWidth, height: mapHeight }">
+    <div
+      v-else-if="mainView === 'video1'"
+      :style="{ width: mapWidth, height: mapHeight }"
+    >
+      <FlyVideoBox
+        @changeVideo="changeVideo"
+        :mainView="mainView"
+        mapWidth="100vw"
+        mapHeight="100vh"
+        videoWidth="100vw"
+        videoHeight="100vh"
+        bottom="0"
+        left="0"
+      ></FlyVideoBox>
+    </div>
+    <div
+      v-else-if="mainView === 'video2'"
+      :style="{ width: mapWidth, height: mapHeight }"
+    >
       <div id="J_prismPlayer"></div>
     </div>
     <!-- 顶部信息 -->
@@ -166,9 +187,12 @@
       </div>
     </el-popconfirm>
     <!-- 飞行视角预览 -->
-    <FlyVideoBox @changeVideo="changeVideo"></FlyVideoBox>
+    <FlyVideoBox @changeVideo="changeVideo" :mainView="mainView"></FlyVideoBox>
     <!-- 机巢视角预览 -->
-    <AirPortVideo></AirPortVideo>
+    <AirPortVideo
+      @changeVideo="changeVideo"
+      :mainView="mainView"
+    ></AirPortVideo>
     <!-- 控制无人机操作界面 -->
     <div v-if="showRemote">
       <FlyRemote></FlyRemote>
@@ -185,10 +209,15 @@ import FlyRemote from "./Template/FlyRemote.vue";
 import WebSocketClient from "@/utils/websocket.js";
 import { mapState } from "vuex";
 import Aliplayer from "aliyun-aliplayer";
+import "aliyun-aliplayer/build/skins/default/aliplayer-min.css";
+import { getquipmentToken } from "@/api/user.js";
+import Cookies from "js-cookie";
 export default {
   name: "VideoMapWrap",
   data() {
     return {
+      mainView: "map",
+      lastView: null, // 用于记录上一次内容
       ws: null,
       showMap: true,
       showRemote: false,
@@ -281,30 +310,46 @@ export default {
         }
       }
     },
-    showMap(val) {
-      if (!val) {
+    mainView(val) {
+      if (val != "map") {
         this.$nextTick(() => {
           this.initPlayer();
           player.on("rtsFallback", function (event) {
             // event.paramData.reason 降级的原因
             // event.paramData.fallbackUrl 降级到的地址
-            console.log(event,'降级');
-            
+            console.log(event, "降级");
+          });
+          player.on("rtsTraceId", function (event) {
+            console.log("EVENT rtsTraceId", event.paramData);
           });
         });
       }
     },
   },
   mounted() {
-    // this.ws = new WebSocketClient(
-    //   "ws://172.16.40.226:6789/api/v1/ws?ws-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3b3Jrc3BhY2VfaWQiOiJhNzJjYjUxNC02NWYxLTRhZTYtYTA3Yy01ODk4OThiNWI2YjEiLCJzdWIiOiJqa3lDbG91ZEFwaTIwMjQiLCJ1c2VyX3R5cGUiOiIxIiwibmJmIjoxNzI4NjMxMDMxLCJsb2ciOiJMb2dnZXJbY29tLmRqaS5zYW1wbGUuY29tbW9uLm1vZGVsLkN1c3RvbUNsYWltXSIsImlzcyI6IkRKSV9KS1kiLCJpZCI6IjExMTEiLCJleHAiOjE5MDg2MzEwMzEsImlhdCI6MTcyODYzMTAzMSwidXNlcm5hbWUiOiJ6bCJ9.D48LQJfrVj4Eu1-vYY-8ozsqyHyw1TbvWdd1OjasnzY"
-    // );
-    // player.on("error", function () {
-    //     console.log(123);
-    //     _this.initPlayer()
-    //   });
+    this.getEQToken();
   },
   methods: {
+    //获取设备token
+    getEQToken() {
+      const userId = JSON.parse(Cookies.get("user")).userId;
+      console.log(JSON.parse(Cookies.get("user")), "aaa");
+      const username = JSON.parse(Cookies.get("user")).userName;
+      const params = {
+        workspaceId: localStorage.getItem("workspaceId"),
+        userId,
+        username,
+      };
+      getquipmentToken(params).then((res) => {
+        console.log(res);
+        if (res.code === 200) {
+          const token = res.data.data["ws-token"];
+          this.ws = new WebSocketClient(
+            `ws://172.16.40.226:6789/api/v1/ws?ws-token=${token}`
+          );
+        }
+      });
+    },
     confirm(e) {
       this.showRemote = true;
     },
@@ -323,18 +368,22 @@ export default {
           width: "100%",
           height: "100%",
           source:
-            "artc://drone.szyfu.com/wrjFly/7CTDLCE00A6Y68",
-          rtsFallbackSource: "https://drone.szyfu.com/wrjFly/7CTDLCE00A6Y68.flv",
+            this.mainView == "video2"
+              ? "artc://drone.szyfu.com/wrjFly/7CTDLCE00A6Y68"
+              : "artc://drone.szyfu.com/wrjFlyDrone/7CTDLCE00A6Y68",
+          rtsFallbackSource:
+            this.mainView == "video2"
+              ? ""
+              : "https://drone.szyfu.com/wrjFlyDrone/7CTDLCE00A6Y68.m3u8",
           autoplay: true,
+          mute: true,
           isLive: true,
-          rePlay: false,
           playsinline: true,
           preload: true,
-          controlBarVisibility: "hover",
-          useH5Prism: true,
         },
-        function () {
+        function (player) {
           console.log("success");
+          player.play();
         }
       );
     },
@@ -344,8 +393,14 @@ export default {
     closeDebug() {
       this.toolsVisible = false;
     },
-    changeVideo() {
-      this.showMap = !this.showMap;
+    changeVideo(view) {
+      // 只有在点击的内容不是当前大屏内容时才切换
+      if (this.mainView !== view) {
+        this.mainView = view;
+      } else {
+        // 如果点击的是当前显示内容，则返回地图
+        this.mainView = "map";
+      }
     },
   },
 };

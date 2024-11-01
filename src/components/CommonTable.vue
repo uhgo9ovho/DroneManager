@@ -129,6 +129,8 @@ export default {
      */
     handleSizeChange(size) {
       const { sortBy, sortOrder } = this;
+      console.log(size);
+      
       this.$emit("sizeChange", {
         pageNum: 1,
         pageSize: size,

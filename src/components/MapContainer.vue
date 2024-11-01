@@ -6,6 +6,12 @@ import AMapLoader from "@amap/amap-jsapi-loader";
 let map;
 export default {
   name: "map-view",
+  props: {
+    airLineData: {
+      type: Array,
+      default: () => [],
+    },
+  },
   mounted() {
     this.initAMap();
   },
@@ -14,6 +20,10 @@ export default {
   },
   methods: {
     initAMap() {
+      let center = [];
+      if (this.airLineData.length) {
+        center = [this.airLineData[0].longitude, this.airLineData[0].latitude];
+      }
       window._AMapSecurityConfig = {
         securityJsCode: "a849215e9c2d7b24f79e9f0032b1726d",
       };
@@ -33,7 +43,7 @@ export default {
             // 设置地图容器id
             viewMode: "2D", // 是否为3D地图模式
             zoom: 11, // 初始化地图级别
-            center: [116.397428, 39.90923], // 初始化地图中心点位置
+            center: center.length ? center : [108.984924, 34.34199], // 初始化地图中心点位置
             layers: [layer],
             resizeEnable: true,
           });
@@ -42,83 +52,45 @@ export default {
             interval: 180, //刷新间隔时间 默认180s
           });
           map.add(traffic);
-          // AMap.plugin(
-          //   ["AMap.Scale", "AMap.Geolocation"],
-          //   function () {
-          //     let toolbar = new AMap.Scale();
-          //     // let MapType = new AMap.MapType();
-          //     let Geolocation = new AMap.Geolocation();
-          //     map.addControl(toolbar);
-          //     // map.addControl(MapType);
-          //     map.addControl(Geolocation);
-          //   }
-          // );
+          AMap.plugin(["AMap.Scale", "AMap.Geolocation"], function () {
+            let toolbar = new AMap.Scale();
+            let Geolocation = new AMap.Geolocation();
+            map.addControl(toolbar);
+            map.addControl(Geolocation);
+          });
           //自定义marker（标记点）
           const markerContent = `<div class="custom-content-marker">
 <img src="//a.amap.com/jsapi_demos/static/demo-center/icons/dir-via-marker.png">
 </div>`;
-          const position = new AMap.LngLat(116.397428, 39.90923); //经纬度
+          const position = new AMap.LngLat(108.984924, 34.34199); //经纬度
           const marker = new AMap.Marker({
             position: position,
             content: markerContent, //将 html 传给 content
             offset: new AMap.Pixel(-13, -30), //以 icon 的 [center bottom] 为原点
           });
-          marker.on('click', this.markerClick)
           map.add(marker);
-          // function clearMarker() {
-          //   map.remove(marker);
-          // }
-          // document.querySelector(".close-btn").onclick = clearMarker;
-          //   polygon 面
-          const pathArr = [
-            [
-              [
-                [121.7789, 31.3102],
-                [121.7279, 31.3548],
-                [121.5723, 31.4361],
-                [121.5093, 31.4898],
-                [121.5624, 31.4864],
-                [121.5856, 31.4547],
-                [121.7694, 31.3907],
-                [121.796, 31.3456],
-                [121.7789, 31.3102],
-              ],
-            ],
-          ];
-          const polygon = new AMap.Polygon({
-            path: pathArr, //多边形路径
-            fillColor: "#ccebc5", //多边形填充颜色
-            strokeOpacity: 1, //线条透明度
-            fillOpacity: 0.5, //填充透明度
-            strokeColor: "#2b8cbe", //线条颜色
-            strokeWeight: 1, //线条宽度
-            strokeStyle: "dashed", //线样式
-            strokeDasharray: [5, 5], //轮廓的虚线和间隙的样式
+          var polyline = new AMap.Polyline({
+            path: this.formatAirLine(AMap),
+            strokeWeight: 2, //线条宽度
+            strokeColor: "red", //线条颜色
+            lineJoin: "round", //折线拐点连接处样式
           });
-          //鼠标移入更改样式
-          polygon.on("mouseover", () => {
-            polygon.setOptions({
-              fillOpacity: 0.7, //多边形填充透明度
-              fillColor: "#7bccc4",
-            });
-          });
-          //鼠标移出恢复样式
-          polygon.on("mouseout", () => {
-            polygon.setOptions({
-              fillOpacity: 0.5,
-              fillColor: "#ccebc5",
-            });
-          });
-          map.add(polygon);
+          map.add(polyline);
         })
         .catch((e) => {
           console.log(e);
         });
     },
-    markerClick() {
-      console.log(123);
-      
-    }
+    formatAirLine(AMap) {
+      const arr = this.airLineData.map((item) => {
+        return {
+          lat: item.latitude, //纬度
+          lon: item.longitude, //经度
+        };
+      });
+      let path = arr.map((item) => new AMap.LngLat(item.lon, item.lat));
+      return path;
+    },
   },
 };
 </script>

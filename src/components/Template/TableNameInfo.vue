@@ -4,10 +4,17 @@
       <img src="../../assets/images/fly_img.3924673b.png" alt="" />
     </div>
     <div class="info-right">
-      <div class="task-name">{{ row.taskName }}</div>
+      <div class="task-name">
+        【{{ row.taskType | filterType }}】{{ row.taskName }}
+      </div>
       <div class="right-bottom">
         <div class="air-line-popover">
-          <el-popover placement="bottom" trigger="click" popper-class="airLine" @show="showPopover">
+          <el-popover
+            placement="bottom"
+            trigger="click"
+            popper-class="airLine"
+            @show="showPopover"
+          >
             <div
               v-for="(item, index) in airLineList"
               :key="index"
@@ -30,7 +37,7 @@
                 >{{ item }}</span
               >
               <el-tag size="mini" :type="statusType(item.lineStatus)">{{
-                '待执行'
+                "待执行"
               }}</el-tag>
             </div>
             <span slot="reference" style="cursor: pointer"
@@ -47,7 +54,7 @@
 </template>
 
 <script>
-import { searchLineAPI } from '@/api/TaskManager.js';
+import { searchLineAPI } from "@/api/TaskManager.js";
 export default {
   name: "TableNameInfo",
   props: {
@@ -58,8 +65,27 @@ export default {
   },
   data() {
     return {
-      airLineList: []
-    }
+      airLineList: [],
+    };
+  },
+  filters: {
+    filterType(type) {
+      console.log(type);
+      switch (type) {
+        case 0:
+          return "拍照";
+        case 1:
+          return "直播";
+        case 2:
+          return "全景";
+        case 3:
+          return "正射";
+        case 4:
+          return "三维";
+        default:
+          break;
+      }
+    },
   },
   computed: {
     statusType(status) {
@@ -79,17 +105,15 @@ export default {
   },
   methods: {
     showPopover() {
-      searchLineAPI(this.row.taskId).then(res => {
+      searchLineAPI(this.row.taskId).then((res) => {
         console.log(res);
-        if(res.code === 200) {
+        if (res.code === 200) {
           let rows = res.rows;
-          this.airLineList = rows.map(item => item.lineName);
+          this.airLineList = rows.map((item) => item.lineName);
         }
-      })
-      
-      
-    }
-  }
+      });
+    },
+  },
 };
 </script>
 

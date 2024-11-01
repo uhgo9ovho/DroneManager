@@ -167,3 +167,13 @@ export const imgUrl = (url) => {
         responseType: "blob",
     })
 }
+
+//获取设备服务器token
+
+export const getquipmentToken = (params) => {
+    return request({
+        url: "/wrj/org/getTokenForwebUserUrl",
+        method: 'post',
+        data: params
+    })
+}
