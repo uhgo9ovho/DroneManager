@@ -3,6 +3,7 @@
 </template>
   <script>
 import AMapLoader from "@amap/amap-jsapi-loader";
+import { wgs84ToGcj02 } from "@/utils/CoordinateTransformation.js";
 let map;
 export default {
   name: "map-view",
@@ -12,6 +13,11 @@ export default {
       default: () => [],
     },
   },
+  data() {
+    return {
+      lonlatArr: []
+    }
+  },
   mounted() {
     this.initAMap();
   },
@@ -20,10 +26,6 @@ export default {
   },
   methods: {
     initAMap() {
-      let center = [];
-      if (this.airLineData.length) {
-        center = [this.airLineData[0].longitude, this.airLineData[0].latitude];
-      }
       window._AMapSecurityConfig = {
         securityJsCode: "a849215e9c2d7b24f79e9f0032b1726d",
       };
@@ -33,6 +35,16 @@ export default {
         // plugins: ["AMap.Scale"], //需要使用的的插件列表，如比例尺'AMap.Scale'，支持添加多个如：['...','...']
       })
         .then((AMap) => {
+          let center = [];
+          if (this.airLineData.length) {
+            this.lonlatArr = this.airLineData.map((item) => {
+              let originArr = [item.longitude, item.latitude];
+              return wgs84ToGcj02(originArr[0], originArr[1])
+            });
+            console.log(this.lonlatArr);
+
+            center = [this.lonlatArr[0][0], this.lonlatArr[0][1]];
+          }
           const layer = new AMap.createDefaultLayer({
             zooms: [3, 20], //可见级别
             visible: true, //是否可见
@@ -42,7 +54,7 @@ export default {
           map = new AMap.Map("container", {
             // 设置地图容器id
             viewMode: "2D", // 是否为3D地图模式
-            zoom: 11, // 初始化地图级别
+            zoom: 15, // 初始化地图级别
             center: center.length ? center : [108.984924, 34.34199], // 初始化地图中心点位置
             layers: [layer],
             resizeEnable: true,
@@ -62,7 +74,7 @@ export default {
           const markerContent = `<div class="custom-content-marker">
 <img src="//a.amap.com/jsapi_demos/static/demo-center/icons/dir-via-marker.png">
 </div>`;
-          const position = new AMap.LngLat(108.984924, 34.34199); //经纬度
+          const position = new AMap.LngLat(this.lonlatArr[0][0], this.lonlatArr[0][1]); //经纬度
           const marker = new AMap.Marker({
             position: position,
             content: markerContent, //将 html 传给 content
@@ -82,13 +94,7 @@ export default {
         });
     },
     formatAirLine(AMap) {
-      const arr = this.airLineData.map((item) => {
-        return {
-          lat: item.latitude, //纬度
-          lon: item.longitude, //经度
-        };
-      });
-      let path = arr.map((item) => new AMap.LngLat(item.lon, item.lat));
+      let path = this.lonlatArr.map((item) => new AMap.LngLat(item[0], item[1]));
       return path;
     },
   },
