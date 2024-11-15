@@ -324,8 +324,8 @@ export default {
     showMap() {
       this.vedioVisible = false;
     },
-    previewBtn(url) {
-      this.currentUrl = url;
+    previewBtn(url) {      
+      this.currentUrl = url.url;
       this.preview = true;
     },
     closePreview() {

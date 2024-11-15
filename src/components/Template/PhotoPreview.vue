@@ -1,10 +1,10 @@
 <template>
   <div class="photo-preview">
     <div class="imgPrewBox">
-      <div v-if="false">
+      <div v-if="true">
         <div class="innerImgBox">
           <ImageZoom
-            src="http://fsimage.guihuao.com/images/38615a57-7181-4962-bdb1-b640614d6947/4928517202866343937.jpeg?imageMogr2/thumbnail/400x"
+            :src="currentUrl"
             :isEdit="isEdit"
             @handleMouseUp="handleMouseUp"
             @startLister="startLister"

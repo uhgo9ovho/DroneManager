@@ -70,15 +70,9 @@ export default {
             map.addControl(toolbar);
             map.addControl(Geolocation);
           });
-          //自定义marker（标记点）
-          const markerContent = `<div class="custom-content-marker">
-<img src="//a.amap.com/jsapi_demos/static/demo-center/icons/dir-via-marker.png">
-</div>`;
           const position = new AMap.LngLat(this.lonlatArr[0][0], this.lonlatArr[0][1]); //经纬度
           const marker = new AMap.Marker({
             position: position,
-            content: markerContent, //将 html 传给 content
-            offset: new AMap.Pixel(-13, -30), //以 icon 的 [center bottom] 为原点
           });
           map.add(marker);
           var polyline = new AMap.Polyline({

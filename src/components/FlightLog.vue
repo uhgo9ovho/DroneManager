@@ -151,6 +151,7 @@ export default {
     .airimg {
       width: 48px;
       height: 48px;
+      margin-right: 10px;
       img {
         width: 100%;
         height: 100%;

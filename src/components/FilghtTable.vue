@@ -25,7 +25,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </template>
-      <template #airPort-header>
+      <!-- <template #airPort-header>
         <span>机场</span>
         <el-dropdown>
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
@@ -36,7 +36,7 @@
             <el-dropdown-item>螺蛳粉</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </template>
+      </template> -->
       <template #status-header="{ row }">
         <span>本轮状态</span>
         <el-dropdown @command="statusCommand">

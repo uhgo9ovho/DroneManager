@@ -145,7 +145,7 @@
                   <div class="panel">
                     <div class="remainder" style="width: 30%"></div>
                   </div>
-                  <div class="textNum">28%</div>
+                  <div class="textNum">{{ capacity_percent }}%</div>
                 </div>
                 <div class="signal_info">
                   <i class="iconfont el-icon-xinhao"></i>
@@ -258,12 +258,13 @@ export default {
           btnText: "开启",
         },
       ],
-      tempHeight: 0,
-      tempHorizontal_speed: 0,
-      tempVertical_speed: 0,
-      tempElevation: 0,
-      tempWind_speed: 0,
-      tempHumidity: 0,
+      tempHeight: '-',
+      tempHorizontal_speed: '-',
+      tempVertical_speed: '-',
+      tempElevation: '-',
+      tempWind_speed: '-',
+      tempHumidity: '-',
+      capacity_percent: '-'
     };
   },
   components: {
@@ -280,8 +281,8 @@ export default {
   },
   watch: {
     statusInfo(val) {
-      console.log(val, "aaweq");
-
+      console.log(val);
+      
       if (val.host) {
         if (val.host.height) this.tempHeight = val.host.height.toFixed(2);
 
@@ -299,14 +300,16 @@ export default {
 
         if (val.host.humidity) this.tempHumidity = val.host.humidity.toFixed(2);
 
+        if(val.host.capacity_percent) this.capacity_percent = val.host.capacity_percent;
+
         if (val.host.mode_code == "0") {
           //待机状态
-          this.tempElevation = 0;
-          this.tempHeight = 0;
-          this.tempHorizontal_speed = 0;
-          this.tempHumidity = 0;
-          this.tempVertical_speed = 0;
-          this.tempWind_speed = 0;
+          this.tempElevation = '-';
+          this.tempHeight = '-';
+          this.tempHorizontal_speed = '-';
+          this.tempHumidity = '-';
+          this.tempVertical_speed = '-';
+          this.tempWind_speed = '-';
         }
       }
     },
@@ -345,7 +348,7 @@ export default {
         if (res.code === 200) {
           const token = res.data.data["ws-token"];
           this.ws = new WebSocketClient(
-            `ws://172.16.40.226:6789/api/v1/ws?ws-token=${token}`
+            `ws://8.136.97.59:6789/api/v1/ws?ws-token=${token}`
           );
         }
       });
