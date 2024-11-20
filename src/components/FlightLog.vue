@@ -114,6 +114,7 @@ export default {
       const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
+        orgId: localStorage.getItem('org_id')
       };
       recordListAPI(params).then((res) => {
         if (res.code === 200) {

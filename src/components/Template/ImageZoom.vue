@@ -319,7 +319,7 @@ export default {
     // 删除选中的矩形框和标注文字
     removeSelectedBoxAndText() {
       const activeObject = this.canvas.getActiveObject();
-      if (activeObject && activeObject.type === 'rect') {
+      if (activeObject && activeObject.type === 'rect') {         
         // 查找该矩形框的标注文字
         const boundText = this.textMap.get(activeObject);
 

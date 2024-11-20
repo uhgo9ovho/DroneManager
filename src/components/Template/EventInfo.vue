@@ -4,7 +4,7 @@
       <img src="../../assets/images/fly_img.3924673b.png" alt="" />
     </div>
     <div class="info-right">
-      <div class="task-name">{{ row.taskName }} <i class="iconfont el-icon-xingxing1" style="color: #f0bb50;"></i></div>
+      <div class="task-name">{{ row.warnName }}</div>
       <div class="right-bottom">
         <div class="air-line-popover">
           <el-popover placement="bottom" trigger="click">

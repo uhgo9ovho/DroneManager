@@ -133,6 +133,9 @@
       <PhotoPreview
         @closePreview="closePreview"
         :currentUrl="currentUrl"
+        :lon="lon"
+        :lat="lat"
+        :row="row"
       ></PhotoPreview>
     </div>
   </div>
@@ -161,6 +164,8 @@ export default {
       isPlay: false,
       player: null,
       timerId: null,
+      lon: "",
+      lat: ""
     };
   },
   filters: {
@@ -315,6 +320,8 @@ export default {
           url:
             "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
           createTime: item.createTime,
+          lat: item.lat,
+          lon: item.lon
         };
       });
     },
@@ -324,8 +331,10 @@ export default {
     showMap() {
       this.vedioVisible = false;
     },
-    previewBtn(url) {      
-      this.currentUrl = url.url;
+    previewBtn(item) {      
+      this.currentUrl = item.url;
+      this.lon = item.lon;
+      this.lat = item.lat;
       this.preview = true;
     },
     closePreview() {

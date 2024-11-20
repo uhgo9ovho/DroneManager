@@ -72,7 +72,7 @@ export default {
         const params = {
           orgDeptName: this.ruleForm.name,
           isOrg: 0,
-          orgId: 7
+          orgId: +localStorage.getItem('org_id')
         }
         addDept(params).then((res) => {
           console.log(res);

@@ -12,6 +12,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    longitude: {
+      type: Number,
+      default: 0
+    },
+    latitude: {
+      type: Number,
+      default: 0
+    }
   },
   data() {
     return {
@@ -44,6 +52,9 @@ export default {
             console.log(this.lonlatArr);
 
             center = [this.lonlatArr[0][0], this.lonlatArr[0][1]];
+          }
+          if(this.latitude && this.longitude) {
+            center = [this.longitude, this.latitude]
           }
           const layer = new AMap.createDefaultLayer({
             zooms: [3, 20], //可见级别

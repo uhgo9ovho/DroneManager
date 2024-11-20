@@ -95,7 +95,7 @@ export default {
           id: "J_prismPlayer2",
           width: "100%",
           height: "100%",
-          source: "artc://drone.szyfu.com/wrjFlyDrone/7CTDLCE00A6Y68",
+          source: "artc://drone.szyfu.com/wrjFlyDrone/1581F6Q8D23CT00A4491",
           // rtsFallbackSource: "https://drone.szyfu.com/wrjFly/7CTDLCE00A6Y68.flv",
           autoplay: true,
           mute: true,

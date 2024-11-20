@@ -73,7 +73,7 @@ export const searchLineAPI = (taskId) => {
  */
 export const recordListAPI = (params) => {
     return request({
-        url: `/wurenji/record/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}`,
+        url: `/wurenji/record/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${params.orgId}`,
         method: 'get'
     })
 };
@@ -91,9 +91,9 @@ export const deleteTaskAPI = (taskIds) => {
 /**
  * 预警列表
  */
-export const warningListAPI = () => {
+export const warningListAPI = (params) => {
     return request({
-        url: `/wurenji/warning/list`,
+        url: `/wurenji/warning/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}`,
         method: 'get'
     })
 }
@@ -216,5 +216,38 @@ export const airLineAPI = (params) => {
     return request({
         url: `/wurenji/record/getLine?orgId=${params.orgId}&startTime=${params.startTime}&endTime=${params.endTime}`,
         method: 'get'
+    })
+}
+
+/**
+ * 获取问题类型列表
+ */
+export const dictListAPI = (warn_type) => {
+    return request({
+        url: '/system/dict/data/list?dictType=' + warn_type,
+        method: 'get'
+    })
+}
+
+/**
+ * 上传图片
+ */
+export const uploadAPI = (file) => {
+    return request({
+        url: '/common/upload',
+        method: 'post',
+        data: file,
+        headers: {'Content-Type': 'multipart/form-data'}
+    })
+}
+
+/**
+ * 修改预警事件状态
+ */
+export const updateWarningStatusAPI = (params) => {
+    return request({
+        url: '/wurenji/warning/updateStatus',
+        method: 'post',
+        data: params
     })
 }

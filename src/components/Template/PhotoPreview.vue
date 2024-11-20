@@ -42,7 +42,15 @@
         >
           <i class="el-icon-close"></i>
         </div>
-        <div class="typeList" :style="getListPosition" v-if="isShow">
+        <div
+          class="sureBtn"
+          @click.stop="sureDrawBtn"
+          :style="getPosition2"
+          v-show="showSure"
+        >
+          <i class="el-icon-check"></i>
+        </div>
+        <div class="typeList" :style="getListPosition" v-if="isShowSelect">
           <div class="top">
             <div class="title">选择问题</div>
             <div class="search">
@@ -65,7 +73,7 @@
               :key="index"
               @click="selectItem(item)"
             >
-              {{ item }}
+              {{ item.dictLabel }}
             </div>
           </div>
           <div class="typeList_ul"></div>
@@ -78,16 +86,31 @@
         </div>
       </div>
     </div>
+    <div id="map"></div>
   </div>
 </template>
 
 <script>
 import ImageZoom from "./ImageZoom.vue";
+import { addWarningAPI, uploadAPI, dictListAPI } from "@/api/TaskManager.js";
+import AMapLoader from "@amap/amap-jsapi-loader";
 export default {
   name: "PhotoPreview",
   props: {
     currentUrl: {
       type: String,
+      default: "",
+    },
+    row: {
+      type: Object,
+      default: () => {},
+    },
+    lon: {
+      type: Number,
+      default: "",
+    },
+    lat: {
+      type: Number,
       default: "",
     },
   },
@@ -104,29 +127,14 @@ export default {
       windowH: document.documentElement.clientHeight,
       clientX: 0,
       clientY: 0,
-      typeList: [
-        "暴露垃圾",
-        "松材线虫病",
-        "在建农房",
-        "涉水人员",
-        "积存建筑垃",
-        "疑似烟火",
-        "渣土乱倒",
-        "焚烧秸秆",
-        "交通标志线模糊",
-        "车辆违停",
-        "水域不洁",
-        "附属房建材",
-        "危房隐患",
-        "乱堆物料",
-        "人行道机动车停放",
-        "附属房建筑",
-        "裸土未覆盖",
-        "水域污染源",
-        "施工废弃料",
-        "流动摊贩",
-      ],
+      typeList: [],
       isShow: false,
+      showSure: false,
+      isShowSelect: false,
+      currentName: "",
+      currentTypeName: "",
+      currentId: "",
+      address: ""
     };
   },
   computed: {
@@ -134,6 +142,12 @@ export default {
       return {
         top: `${this.top + 6}px`,
         left: `${this.left - 25}px`,
+      };
+    },
+    getPosition2() {
+      return {
+        top: `${this.top + 6}px`,
+        left: `${this.left - 55}px`,
       };
     },
     getListPosition() {
@@ -173,8 +187,12 @@ export default {
     handleMouseUp(selectedArea) {
       if (!selectedArea.width || !selectedArea.height) {
         this.isShow = false;
+        this.isShowSelect = false;
+        this.showSure = false;
       } else {
         this.isShow = true;
+        this.showSure = false;
+        this.isShowSelect = true;
       }
       console.log(selectedArea, "asdasd");
       this.top = selectedArea.y2;
@@ -187,6 +205,7 @@ export default {
     },
     startLister() {
       this.isShow = false;
+      this.showSure = false;
       document.addEventListener("mousemove", this.getPos);
     },
     getPos(event) {
@@ -196,19 +215,119 @@ export default {
     clearDrawBtn() {
       this.$refs.imageZoom.removeSelectedBoxAndText();
       this.isShow = false;
+      this.isShowSelect = false;
+      this.showSure = false;
+    },
+    sureDrawBtn() {
+      this.isShow = false;
+      this.showSure = false;
+      this.generateImageURL();
     },
     selectItem(item) {
-      this.$refs.imageZoom.addTextToSelectedBox(item);
-      this.isShow = false;
+      this.$refs.imageZoom.addTextToSelectedBox(item.dictLabel);
+      this.currentName = item.dictLabel;
+      this.currentTypeName = item.remark;
+      this.currentId = item.dictValue;
+      this.isShow = true;
+      this.showSure = true;
+      this.isShowSelect = false;
+    },
+    generateImageURL() {
+      // 将整个 canvas 内容转换为 Data URL
+      const canvasDOM = this.$refs.imageZoom.$refs.canvas;
+      if (canvasDOM) {
+        canvasDOM.toBlob((blob) => {
+          if (blob) {
+            // 2. 使用 FormData 包装 Blob
+            console.log(blob);
+
+            const formData = new FormData();
+            formData.append("file", blob, "annotated-image.png"); // 'file' 是后端接收的字段名
+            uploadAPI(formData).then((res) => {
+              console.log(res);
+              const resUrl = res.url;
+              if (res.code == 200) {
+                //上传成功
+                const params = {
+                  warnName: this.currentName,
+                  warnTypeId: this.currentId,
+                  warnTypeName: this.currentTypeName,
+                  airLineId: this.row.airlineId,
+                  airLineName: this.row.lineName,
+                  identifyAirPortId: this.row.airportId,
+                  identifyAirPortName: this.row.airportName,
+                  identifyPhoto: resUrl,
+                  address: this.address,
+                  latitude: this.lat,
+                  longitude: this.lon,
+                  status: "0",
+                  description: "",
+                };
+                console.log(params);
+                
+                addWarningAPI(params);
+              }
+            });
+          }
+        });
+      }
+    },
+    getDictList() {
+      dictListAPI("warn_type").then((res) => {
+        if (res.code === 200) {
+          this.typeList = res.rows;
+        }
+      });
+    },
+    initMap() {
+      let that = this;
+      window._AMapSecurityConfig = {
+        securityJsCode: "f145984ab52478cebc55714607c75fe2",
+      };
+      AMapLoader.load({
+        // 高德开发者密钥 ：平台申请
+        key: "49ff50358471485520abb2c43a08faaa",
+        // 高德API版本: 2.0
+        version: "2.0",
+        // 加载高德内置插件
+        plugins: ["AMap.Geocoder", "AMap.Geolocation"],
+        willReadFrequently: true,
+      })
+        .then((AMap) => {
+          // 绘制地图
+          const AMAP = new AMap.Map("map", {
+            resizeEnable: true,
+          });
+          console.log(AMAP);
+          
+          const Geocoder = new AMap.Geocoder();
+
+          // 根据获取到的经纬度进行逆地理编码
+          
+          // Geocoder.getAddress([116.310003, 39.991957], (status, { regeocode }) => {
+          Geocoder.getAddress([that.lon, that.lat], (status, { regeocode }) => {
+            if (status === "complete" && regeocode) {
+              // address即经纬度转换后的地点名称
+              that.address = regeocode?.formattedAddress;
+              console.log(that.address);
+              
+            }
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     },
   },
   mounted() {
+    this.getDictList();
+    this.initMap();
     window.addEventListener("resize", () => {
       this.windowW = document.documentElement.clientWidth;
       this.windowH = document.documentElement.clientHeight;
     });
     this.$nextTick(() => {
-      this.loadPanorama();
+      // this.loadPanorama();
     });
   },
 };
@@ -227,6 +346,11 @@ export default {
   align-items: center;
   background-color: rgba(29, 29, 31, 0.8);
   backdrop-filter: blur(5px);
+  #id {
+    width: 100px;
+    height: 100px;
+    z-index: 10001;
+  }
   .imgPrewBox {
     width: 100vh;
     height: 75vh;
@@ -358,6 +482,17 @@ export default {
       background-color: #fff;
       border-radius: 15px;
       color: brown;
+      text-align: center;
+      line-height: 25px;
+    }
+    .sureBtn {
+      position: absolute;
+      cursor: pointer;
+      width: 25px;
+      height: 25px;
+      background-color: #fff;
+      border-radius: 15px;
+      color: green;
       text-align: center;
       line-height: 25px;
     }

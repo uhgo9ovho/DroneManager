@@ -6,7 +6,8 @@
       </div>
       <div class="issue-photo-wrap">
         <div class="innerImgBox">
-          <ImageZoom :src="src" :width="904" :height="720"></ImageZoom>
+          <!-- <ImageZoom :src="row.identifyPhoto" :width="904" :height="720"></ImageZoom> -->
+          <img :src="row.identifyPhoto" alt="">
         </div>
         <div class="download">
           <i class="el-icon-download"></i>
@@ -36,31 +37,31 @@
       </div>
       <div class="issue-info-wrap">
         <div class="issue-content-wrap">
-          <div class="issue-name">0906-0041-积存建筑垃圾</div>
-          <div class="issue-date">2024-09-06 13:06:46</div>
+          <div class="issue-name">{{ row.warnName }}</div>
+          <div class="issue-date">{{ row.identifyTime }}</div>
           <el-divider></el-divider>
           <div class="issue-attr-wrap">
             <i class="iconfont el-icon-jiankong"></i>
             <div class="issue-attr">位置</div>
           </div>
           <div class="issue-value">
-            陕西省西安市周至县集贤镇南环路-水寨村东南约289米
+            {{ row.address }}
           </div>
           <div class="issue-attr-wrap">
             <i class="iconfont el-icon-ico"></i>
             <div class="issue-attr">拍摄机场</div>
           </div>
-          <div class="issue-value">西安-周至</div>
+          <div class="issue-value">{{ row.identifyAirPortName }}</div>
           <div class="issue-attr-wrap">
             <i class="iconfont el-icon-feiji"></i>
             <div class="issue-attr">拍摄航线</div>
           </div>
           <div class="issue-value">
-            【拍照】集贤初中北边污水巡查0101,【拍照】集贤初中北边污水巡查0101
+            {{ row.airLineName }}
           </div>
         </div>
         <div class="issue-map-wrap">
-            <MapContainer></MapContainer>
+            <MapContainer :longitude="row.longitude" :latitude="row.latitude"></MapContainer>
         </div>
       </div>
     </div>
@@ -72,6 +73,12 @@ import ImageZoom from "./ImageZoom.vue";
 import MapContainer from "../MapContainer.vue";
 export default {
   name: "WarningDialog",
+  props: {
+    row: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data() {
     return {
       src: "https://today-obs.line-scdn.net/0hfBxQo9YUOW1FKCot-XdGOn1-NRx2TiNkZxt1XDQrYVo7BH84fkdqDmZ6b0FgSn9vZU8kAzUhNAk9THZpfg/w644",
@@ -184,6 +191,10 @@ export default {
         height: 100%;
         background-color: #fff;
         user-select: none;
+        img {
+          width: 904px;
+          height: 720px;
+        }
       }
       .download {
         width: 40px;

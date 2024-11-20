@@ -1,6 +1,14 @@
 <template>
   <div class="flight-table">
-    <common-table :tableList="mockTableList" :columns="columns">
+    <common-table
+      :tableList="warningList"
+      :columns="columns"
+      :total="total"
+      @sizeChange="sizeChange"
+      @pageChange="pageChange"
+      :pageSize="pageSize"
+      :pageNum="pageNum"
+    >
       <!-- 自定义表头 -->
       <template #taskName-header>
         <span>事件</span>
@@ -17,7 +25,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </template>
-      <template #airPort-header>
+      <!-- <template #airPort-header>
         <span>发现机场</span>
         <el-dropdown>
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
@@ -28,7 +36,7 @@
             <el-dropdown-item>螺蛳粉</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </template>
+      </template> -->
       <template #status-header>
         <span>事件状态</span>
         <el-dropdown @command="statusCommand">
@@ -45,19 +53,18 @@
         </el-dropdown>
       </template>
       <!-- 内容插槽 -->
-      <template #taskName="{ row }">
+      <template #warnName="{ row }">
         <event-info :row="row"></event-info>
       </template>
-      <template #creater="{ row }">
-        <div>{{ row.ticket_create_time }}</div>
-      </template>
       <template #status="{ row }">
-        <el-tag :type="statusType(row.status)">{{ row.status }}</el-tag>
+        <el-tag :type="statusType(row.status)">{{
+          statusTitle(row.status)
+        }}</el-tag>
       </template>
-      <template #operate>
+      <template #operate="{ row }">
         <div class="operate-box">
-          <el-button type="text" @click="detailsBtn">详情</el-button>
-          <el-dropdown @command="operateCommand">
+          <el-button type="text" @click="detailsBtn(row)">详情</el-button>
+          <el-dropdown @command="operateCommand(row)">
             <span class="el-dropdown-link el-icon-more"></span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
@@ -81,7 +88,7 @@
               line-height: 32px;
               font-size: 14px;
             "
-            @click="flightBtn"
+            @click="flightBtn(row)"
             >处理</el-button
           >
         </div>
@@ -89,19 +96,26 @@
     </common-table>
     <!-- 预警详情弹窗 -->
     <div v-if="warningVisible">
-      <warning-dialog @closeWarningDialog="closeWarningDialog"></warning-dialog>
+      <warning-dialog
+        @closeWarningDialog="closeWarningDialog"
+        :row="itemRow"
+      ></warning-dialog>
     </div>
     <!-- 忽略弹窗 -->
     <div v-if="neglectVisible">
       <NeglectDialog
         :neglectVisible="neglectVisible"
         @closeNeglectDialog="closeNeglectDialog"
+        :itemRow="itemRow"
+        @updateList="updateList"
       ></NeglectDialog>
     </div>
     <!-- 处理弹窗 -->
     <div v-if="handleVisible">
       <HandleDialog
         :handleVisible="handleVisible"
+        @updateList="updateList"
+        :itemRow="itemRow"
         @closeHandleDialog="closeHandleDialog"
       ></HandleDialog>
     </div>
@@ -115,7 +129,7 @@ import WarningDialog from "./Template/WarningDialog.vue";
 import EventInfo from "./Template/EventInfo.vue";
 import NeglectDialog from "./Template/NeglectDialog.vue";
 import HandleDialog from "./Template/HandleDialog.vue";
-import { warningListAPI } from '@/api/TaskManager.js';
+import { warningListAPI } from "@/api/TaskManager.js";
 export default {
   name: "FlightTable",
   props: {},
@@ -124,24 +138,24 @@ export default {
       warningVisible: false,
       neglectVisible: false,
       handleVisible: false,
+      total: 0,
       columns: [
         {
-          prop: "taskName",
+          prop: "warnName",
           label: "任务名称/类型",
           showOverflowTooltip: true,
           slot: true,
           minWidth: "200",
         },
         {
-          prop: "airPort",
+          prop: "identifyAirPortName",
           label: "机场",
           showOverflowTooltip: true,
         },
         {
-          prop: "creater",
+          prop: "identifyTime",
           label: "发现时间",
           showOverflowTooltip: false,
-          slot: true,
         },
         {
           prop: "status",
@@ -185,30 +199,51 @@ export default {
           label: "忽略",
           icon: "el-icon-hulve",
         },
-        {
-          label: "设为典型",
-          icon: "el-icon-xingxing",
-        },
+        // {
+        //   label: "设为典型",
+        //   icon: "el-icon-xingxing",
+        // },
       ],
+      pageNum: 1,
+      pageSize: 10,
+      warningList: [],
+      itemRow: {},
     };
   },
   computed: {
-    mockTableList() {
-      return mockList;
-    },
-    statusType(status) {
+    statusType() {
       return function (status) {
         switch (status) {
-          case "制作中":
-            return "";
-          case "已完成":
-            return "success";
-          case "制作失败":
-            return "danger";
-          case "待执行":
+          case "0":
             return "warning";
-          case "已过期":
-            return "info";
+          case "5":
+            return 'info'
+          default:
+            break;
+        }
+      };
+    },
+    statusTitle(status) {
+      return function (status) {
+        switch (status) {
+          case "0":
+            return "新发现";
+          case "1":
+            return "已上报";
+          case "2":
+            return "已受理";
+          case "3":
+            return "已办结";
+          case "4":
+            return "已超期";
+          case "5":
+            return "已忽略";
+          case "6":
+            return "典型";
+          case "7":
+            return "取消典型";
+          case "8":
+            return "审核";
           default:
             return "";
         }
@@ -216,9 +251,34 @@ export default {
     },
   },
   mounted() {
-    warningListAPI()
+    this.getWarningList();
   },
   methods: {
+    updateList() {
+      this.getWarningList();
+    },
+    pageChange(val) {
+      this.pageSize = val.pageSize;
+      this.pageNum = val.pageNum;
+      this.getWarningList();
+    },
+    sizeChange(val) {
+      this.pageNum = val.pageNum;
+      this.pageSize = val.pageSize;
+      this.getWarningList();
+    },
+    getWarningList() {
+      const params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+      };
+      warningListAPI(params).then((res) => {
+        if (res.code === 200) {
+          this.warningList = res.rows;
+          this.total = res.total;
+        }
+      });
+    },
     closeNeglectDialog() {
       this.neglectVisible = false;
     },
@@ -230,15 +290,15 @@ export default {
     },
     statusCommand(itemCommand) {},
     operateCommand(itemCommand) {
-      console.log(itemCommand);
-      if (itemCommand === "忽略") {
-        this.neglectVisible = true;
-      }
+      this.neglectVisible = true;
+      this.itemRow = itemCommand;
     },
-    detailsBtn() {
+    detailsBtn(row) {
+      this.itemRow = row;
       this.warningVisible = true;
     },
-    flightBtn() {
+    flightBtn(row) {
+      this.itemRow = row;
       this.handleVisible = true;
     },
     closeHandleDialog() {

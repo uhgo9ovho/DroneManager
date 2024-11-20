@@ -20,10 +20,12 @@
       </el-input>
       <el-upload
         class="upload-demo"
-        action="https://jsonplaceholder.typicode.com/posts/"
+        action="/dev-api/common/upload"
+        :headers="headers"
         multiple
         :limit="3"
         :file-list="fileList"
+        :on-success="successUpload"
       >
         <el-button size="small" type="primary">点击上传</el-button>
       </el-upload>
@@ -38,6 +40,8 @@
 </template>
 
 <script>
+import { getToken } from "@/utils/auth";
+import { updateWarningStatusAPI } from '@/api/TaskManager.js';
 export default {
   name: "NeglectDialog",
   props: {
@@ -45,19 +49,51 @@ export default {
       type: Boolean,
       default: false,
     },
+    itemRow: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
       eventName: "",
       textarea: "",
-      fileList: []
+      fileList: [],
+      url: ""
     };
   },
+  computed: {
+    headers() {
+      return {
+        Authorization: "Bearer " + getToken(),
+        tenant: "test",
+      };
+    },
+  },
+  mounted() {
+    this.eventName = this.itemRow.warnName;
+  },
   methods: {
+    successUpload(res) {
+      this.url = res.url;
+    },
     closeDialog() {
       this.$emit("closeHandleDialog");
     },
     sureBtn() {
+      const params = {
+        warnId: this.itemRow.id,
+        status: "3", //办结
+        remark: `${this.eventName} ${this.textarea}`,
+        photo: this.url,
+      };
+      updateWarningStatusAPI(params).then((res) => {
+        if (res.code === 200) {
+          this.closeDialog();
+          this.$message.success("事件状态更新成功！");
+          this.$emit("updateList");
+        }
+      });
       this.closeDialog();
     },
   },

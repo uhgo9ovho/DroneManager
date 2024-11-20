@@ -372,8 +372,8 @@ export default {
           height: "100%",
           source:
             this.mainView == "video2"
-              ? "artc://drone.szyfu.com/wrjFly/7CTDLCE00A6Y68"
-              : "artc://drone.szyfu.com/wrjFlyDrone/7CTDLCE00A6Y68",
+              ? "artc://drone.szyfu.com/wrjFlyDock/7CTDLCE00A6Y68"
+              : "artc://drone.szyfu.com/wrjFlyDrone/1581F6Q8D23CT00A4491",
           rtsFallbackSource:
             this.mainView == "video2"
               ? ""

@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { updateWarningStatusAPI } from "@/api/TaskManager.js";
 export default {
   name: "NeglectDialog",
   props: {
@@ -41,6 +42,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    itemRow: {
+      type: Object,
+      default: () => {}
+    }
   },
   data() {
     return {
@@ -83,7 +88,18 @@ export default {
       this.$emit("closeNeglectDialog");
     },
     sureBtn() {
-      this.closeDialog();
+      const params = {
+        warnId: this.itemRow.id,
+        status: "5", //忽略
+        remark: `${this.nature} ${this.textarea}`
+      }
+      updateWarningStatusAPI(params).then((res) => {
+        if (res.code === 200) {
+          this.closeDialog();
+          this.$message.success('事件状态更新成功！');
+          this.$emit('updateList')
+        }
+      });
     },
   },
 };
