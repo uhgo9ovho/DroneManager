@@ -8,6 +8,7 @@
             :isEdit="isEdit"
             @handleMouseUp="handleMouseUp"
             @startLister="startLister"
+            @location="location"
             ref="imageZoom"
           />
         </div>
@@ -134,7 +135,8 @@ export default {
       currentName: "",
       currentTypeName: "",
       currentId: "",
-      address: ""
+      address: "",
+      locationArr: []
     };
   },
   computed: {
@@ -183,6 +185,9 @@ export default {
     },
     editBtn() {
       this.isEdit = !this.isEdit;
+    },
+    location(arr) {
+      this.locationArr = arr;
     },
     handleMouseUp(selectedArea) {
       if (!selectedArea.width || !selectedArea.height) {
@@ -262,6 +267,7 @@ export default {
                   longitude: this.lon,
                   status: "0",
                   description: "",
+                  rectangles: this.locationArr
                 };
                 console.log(params);
                 

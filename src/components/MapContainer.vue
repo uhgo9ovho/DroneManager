@@ -81,7 +81,7 @@ export default {
             map.addControl(toolbar);
             map.addControl(Geolocation);
           });
-          let position;
+          let position = null;
           if (this.airLineData.length) {
             position = new AMap.LngLat(
               this.lonlatArr[0][0],
@@ -90,17 +90,20 @@ export default {
           } else if (this.latitude && this.longitude) {
             position = new AMap.LngLat(this.longitude, this.latitude); //经纬度
           }
-          var markerContent =
-            "" +
-            '<div class="custom-content-marker">' +
-            '   <img src="/airIcon.png">' +
-            "</div>";
-          const marker = new AMap.Marker({
-            position: position,
-            content: markerContent,
-          });
-          marker.on("click", this.markerClick);
-          map.add(marker);
+          if (position) {
+            var markerContent =
+              "" +
+              '<div class="custom-content-marker">' +
+              '   <img src="/airIcon.png">' +
+              "</div>";
+            const marker = new AMap.Marker({
+              position: position,
+              content: markerContent,
+            });
+            marker.on("click", this.markerClick);
+            map.add(marker);
+          }
+
           if (this.lonlatArr.length) {
             var polyline = new AMap.Polyline({
               path: this.formatAirLine(AMap),

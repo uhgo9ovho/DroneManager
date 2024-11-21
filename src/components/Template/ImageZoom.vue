@@ -196,6 +196,7 @@ export default {
 
         console.log(`起点位置: (${left}, ${top})`);
         console.log(`结束位置: (${right}, ${bottom})`);
+        this.$emit('location',[left, top, right, bottom])
         if (!this.hasPos) {
           this.$emit("handleMouseUp", {
             x1: left,

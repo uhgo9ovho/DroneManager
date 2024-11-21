@@ -526,7 +526,7 @@ export default {
         width: 400px;
         margin-left: 64px;
         overflow: hidden;
-        height: 572px;
+        height: 562px;
         .record-detail-wrap {
           width: 400px;
           height: 100%;
@@ -537,7 +537,7 @@ export default {
           flex-direction: column;
           .info {
             height: 148px;
-            margin-bottom: 85px;
+            margin-bottom: 60px;
             .line {
               height: 64px;
               display: flex;
