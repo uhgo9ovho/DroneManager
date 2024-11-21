@@ -415,6 +415,8 @@ export default {
       display: flex;
       margin-top: 8px;
       height: calc(100% - 93px);
+      flex: 1;
+      overflow: auto;
       .img_list {
         flex: 1;
         width: calc(100% - 400px);

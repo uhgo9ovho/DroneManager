@@ -251,3 +251,13 @@ export const updateWarningStatusAPI = (params) => {
         data: params
     })
 }
+
+/**
+ * 获取设备信息
+ */
+export const deviceInfoAPI = (params) => {
+    return request({
+        url:`crm/device/list?orgId=${params.orgId}&deviceType=${params.deviceType}`,
+        method: 'get',
+    })
+}

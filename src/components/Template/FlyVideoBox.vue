@@ -2,22 +2,11 @@
   <div
     class="flyVideoBox right-window-position"
     @click="changeVideo"
-    :style="{
-      width: videoWidth,
-      height: videoHeight,
-      bottom: bottom,
-      left: left,
-    }"
+    :style="{ width: '100%', height: '100%' }"
   >
     <div class="wrap wrap_window">
-      <div
-        v-if="mainView === 'map' || mainView === 'video1'"
-        :style="{ width: videoWidth, height: videoHeight }"
-      >
+      <div :style="{ width: '100%', height: '100%' }">
         <div id="J_prismPlayer2"></div>
-      </div>
-      <div v-else :style="{ width: mapWidth, height: mapHeight }">
-        <map-container></map-container>
       </div>
     </div>
   </div>
@@ -64,25 +53,16 @@ export default {
       showVideo: true,
     };
   },
-  watch: {
-    mainView: {
-      handler(val) {
-        if (val === "map" || val === "video1") {
-          this.$nextTick(() => {
-            this.initPlayer();
-            player.on("rtsFallback", function (event) {
-              console.log(event, "降级");
-            });
-            player.on("rtsTraceId", function (event) {
-              console.log("EVENT rtsTraceId", event.paramData);
-            });
-          });
-        } else {
-          player.dispose();
-        }
-      },
-      immediate: true,
-    },
+  mounted() {
+    this.$nextTick(() => {
+      this.initPlayer();
+      player.on("rtsFallback", function (event) {
+        console.log(event, "降级");
+      });
+      player.on("rtsTraceId", function (event) {
+        console.log("EVENT rtsTraceId", event.paramData);
+      });
+    });
   },
   methods: {
     changeVideo() {
@@ -118,16 +98,19 @@ export default {
 
 <style lang="scss">
 .right-window-position {
-  height: 80px;
-  width: 130px;
+  // height: 80px;
+  // width: 130px;
   overflow: hidden;
   border-radius: 8px;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
-  position: absolute;
-  // bottom: calc(32px + 28px);
+  // position: absolute;
+  // bottom: calc(32px + 120px);
   // left: 10px;
   z-index: 99;
+
   .wrap {
+    width: 100%;
+    height: 100%;
     pointer-events: all;
     position: absolute;
     display: flex;
@@ -136,7 +119,6 @@ export default {
   .wrap_window {
     bottom: 0;
     right: 0;
-    z-index: 999;
     border-radius: 6px;
     overflow: hidden;
     video {

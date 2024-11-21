@@ -14,17 +14,17 @@ export default {
     },
     longitude: {
       type: Number,
-      default: 0
+      default: 0,
     },
     latitude: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data() {
     return {
-      lonlatArr: []
-    }
+      lonlatArr: [],
+    };
   },
   mounted() {
     this.initAMap();
@@ -47,14 +47,14 @@ export default {
           if (this.airLineData.length) {
             this.lonlatArr = this.airLineData.map((item) => {
               let originArr = [item.longitude, item.latitude];
-              return wgs84ToGcj02(originArr[0], originArr[1])
+              return wgs84ToGcj02(originArr[0], originArr[1]);
             });
             console.log(this.lonlatArr);
 
             center = [this.lonlatArr[0][0], this.lonlatArr[0][1]];
           }
-          if(this.latitude && this.longitude) {
-            center = [this.longitude, this.latitude]
+          if (this.latitude && this.longitude) {
+            center = [this.longitude, this.latitude];
           }
           const layer = new AMap.createDefaultLayer({
             zooms: [3, 20], //可见级别
@@ -65,7 +65,7 @@ export default {
           map = new AMap.Map("container", {
             // 设置地图容器id
             viewMode: "2D", // 是否为3D地图模式
-            zoom: 15, // 初始化地图级别
+            zoom: 18, // 初始化地图级别
             center: center.length ? center : [108.984924, 34.34199], // 初始化地图中心点位置
             layers: [layer],
             resizeEnable: true,
@@ -81,26 +81,48 @@ export default {
             map.addControl(toolbar);
             map.addControl(Geolocation);
           });
-          const position = new AMap.LngLat(this.lonlatArr[0][0], this.lonlatArr[0][1]); //经纬度
+          let position;
+          if (this.airLineData.length) {
+            position = new AMap.LngLat(
+              this.lonlatArr[0][0],
+              this.lonlatArr[0][1]
+            ); //经纬度
+          } else if (this.latitude && this.longitude) {
+            position = new AMap.LngLat(this.longitude, this.latitude); //经纬度
+          }
+          var markerContent =
+            "" +
+            '<div class="custom-content-marker">' +
+            '   <img src="/airIcon.png">' +
+            "</div>";
           const marker = new AMap.Marker({
             position: position,
+            content: markerContent,
           });
+          marker.on("click", this.markerClick);
           map.add(marker);
-          var polyline = new AMap.Polyline({
-            path: this.formatAirLine(AMap),
-            strokeWeight: 2, //线条宽度
-            strokeColor: "red", //线条颜色
-            lineJoin: "round", //折线拐点连接处样式
-          });
-          map.add(polyline);
+          if (this.lonlatArr.length) {
+            var polyline = new AMap.Polyline({
+              path: this.formatAirLine(AMap),
+              strokeWeight: 2, //线条宽度
+              strokeColor: "red", //线条颜色
+              lineJoin: "round", //折线拐点连接处样式
+            });
+            map.add(polyline);
+          }
         })
         .catch((e) => {
           console.log(e);
         });
     },
     formatAirLine(AMap) {
-      let path = this.lonlatArr.map((item) => new AMap.LngLat(item[0], item[1]));
+      let path = this.lonlatArr.map(
+        (item) => new AMap.LngLat(item[0], item[1])
+      );
       return path;
+    },
+    markerClick() {
+      this.$emit("toVideoMap");
     },
   },
 };

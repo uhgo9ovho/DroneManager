@@ -1,32 +1,20 @@
 <template>
   <div class="video-map-wrap">
-    <div
-      :style="{ width: mapWidth, height: mapHeight }"
-      v-if="mainView === 'map'"
-    >
-      <map-container></map-container>
+    <!-- 全屏 div，显示地图或视频 -->
+    <div class="full-screen">
+      <component :is="fullScreenComponent" />
     </div>
-    <div
-      v-else-if="mainView === 'video1'"
-      :style="{ width: mapWidth, height: mapHeight }"
-    >
-      <FlyVideoBox
-        @changeVideo="changeVideo"
-        :mainView="mainView"
-        mapWidth="100vw"
-        mapHeight="100vh"
-        videoWidth="100vw"
-        videoHeight="100vh"
-        bottom="0"
-        left="0"
-      ></FlyVideoBox>
+
+    <!-- 小 div 1，点击后与全屏 div 交换 -->
+    <div class="small-div small-div-1" @click="handleClick(0)">
+      <component :is="smallComponent[0]" />
     </div>
-    <div
-      v-else-if="mainView === 'video2'"
-      :style="{ width: mapWidth, height: mapHeight }"
-    >
-      <div id="J_prismPlayer"></div>
+
+    <!-- 小 div 2，点击后与全屏 div 交换 -->
+    <div class="small-div small-div-2" @click="handleClick(1)">
+      <component :is="smallComponent[1]" />
     </div>
+
     <!-- 顶部信息 -->
     <div class="topinfoBox">
       <div class="toppaln">
@@ -122,7 +110,7 @@
             <div class="weather_info">
               <div>
                 <p>天气</p>
-                <p>无雨雪</p>
+                <p>{{ tempRainfall }}</p>
               </div>
               <div>
                 <p>风速</p>
@@ -145,7 +133,7 @@
                   <div class="panel">
                     <div class="remainder" style="width: 30%"></div>
                   </div>
-                  <div class="textNum">{{ capacity_percent }}%</div>
+                  <div class="textNum">{{ tempCapacityPercent }}%</div>
                 </div>
                 <div class="signal_info">
                   <i class="iconfont el-icon-xinhao"></i>
@@ -158,7 +146,7 @@
       </div>
     </div>
     <!-- 控制按钮 -->
-    <el-popconfirm :title="title" v-if="!showMap" @confirm="confirmPhoto()">
+    <el-popconfirm :title="title" v-if="showMap" @confirm="confirmPhoto()">
       <div class="bottomControlBox" slot="reference">
         <div class="innerbottomBox">
           <el-tooltip
@@ -172,7 +160,7 @@
         </div>
       </div>
     </el-popconfirm>
-    <el-popconfirm :title="title" v-if="!showMap" @confirm="confirm()">
+    <el-popconfirm :title="title" v-if="showMap" @confirm="confirm()">
       <div class="bottomControlBox1" slot="reference">
         <div class="innerbottomBox">
           <el-tooltip
@@ -187,12 +175,12 @@
       </div>
     </el-popconfirm>
     <!-- 飞行视角预览 -->
-    <FlyVideoBox @changeVideo="changeVideo" :mainView="mainView"></FlyVideoBox>
+    <!-- <FlyVideoBox @changeVideo="changeVideo" :mainView="mainView"></FlyVideoBox> -->
     <!-- 机巢视角预览 -->
-    <AirPortVideo
+    <!-- <AirPortVideo
       @changeVideo="changeVideo"
       :mainView="mainView"
-    ></AirPortVideo>
+    ></AirPortVideo> -->
     <!-- 控制无人机操作界面 -->
     <div v-if="showRemote">
       <FlyRemote></FlyRemote>
@@ -216,10 +204,12 @@ export default {
   name: "VideoMapWrap",
   data() {
     return {
+      fullScreenComponent: "MapContainer",
+      smallComponent: ["FlyVideoBox", "AirPortVideo"],
       mainView: "map",
       lastView: null, // 用于记录上一次内容
       ws: null,
-      showMap: true,
+      showMap: false,
       showRemote: false,
       mapWidth: "100vw",
       mapHeight: "100vh",
@@ -258,13 +248,15 @@ export default {
           btnText: "开启",
         },
       ],
-      tempHeight: '-',
-      tempHorizontal_speed: '-',
-      tempVertical_speed: '-',
-      tempElevation: '-',
-      tempWind_speed: '-',
-      tempHumidity: '-',
-      capacity_percent: '-'
+      tempHeight: "-",
+      tempHorizontal_speed: "-",
+      tempVertical_speed: "-",
+      tempElevation: "-",
+      tempWind_speed: "-",
+      tempHumidity: "-",
+      capacity_percent: "-",
+      tempRainfall: "-",
+      tempCapacityPercent: "-"
     };
   },
   components: {
@@ -281,9 +273,15 @@ export default {
   },
   watch: {
     statusInfo(val) {
-      console.log(val);
-      
       if (val.host) {
+        this.tempRainfall =
+          val.host.rainfall == "1"
+            ? "小雨"
+            : val.host.rainfall == "2"
+            ? "中雨"
+            : val.host.rainfall == "3"
+            ? "大雨"
+            : "无雨";
         if (val.host.height) this.tempHeight = val.host.height.toFixed(2);
 
         if (val.host.horizontal_speed)
@@ -300,32 +298,18 @@ export default {
 
         if (val.host.humidity) this.tempHumidity = val.host.humidity.toFixed(2);
 
-        if(val.host.capacity_percent) this.capacity_percent = val.host.capacity_percent;
-
-        if (val.host.mode_code == "0") {
-          //待机状态
-          this.tempElevation = '-';
-          this.tempHeight = '-';
-          this.tempHorizontal_speed = '-';
-          this.tempHumidity = '-';
-          this.tempVertical_speed = '-';
-          this.tempWind_speed = '-';
-        }
-      }
-    },
-    mainView(val) {
-      if (val != "map") {
-        this.$nextTick(() => {
-          this.initPlayer();
-          player.on("rtsFallback", function (event) {
-            // event.paramData.reason 降级的原因
-            // event.paramData.fallbackUrl 降级到的地址
-            console.log(event, "降级");
-          });
-          player.on("rtsTraceId", function (event) {
-            console.log("EVENT rtsTraceId", event.paramData);
-          });
-        });
+        if (val.host.capacity_percent)
+          this.capacity_percent = val.host.capacity_percent;
+        if (val.host.battery) this.tempCapacityPercent = val.host.capacity_percent
+          if (val.host.mode_code == "0") {
+            //待机状态
+            this.tempElevation = "-";
+            this.tempHeight = "-";
+            this.tempHorizontal_speed = "-";
+            this.tempHumidity = "-";
+            this.tempVertical_speed = "-";
+            this.tempWind_speed = "-";
+          }
       }
     },
   },
@@ -333,6 +317,25 @@ export default {
     this.getEQToken();
   },
   methods: {
+    handleClick(index) {
+      [this.fullScreenComponent, this.smallComponent[index]] = [
+        this.smallComponent[index],
+        this.fullScreenComponent,
+      ];
+      this.updateOutdoorContentVisibility(index);
+    },
+    updateOutdoorContentVisibility(index) {
+      console.log(index, this.fullScreenComponent);
+      // 检查条件：当 index 是 1 并且大屏显示的不是地图
+      if (
+        (index === 0 && this.fullScreenComponent !== "MapContainer") ||
+        (index === 1 && this.fullScreenComponent === "FlyVideoBox")
+      ) {
+        this.showMap = true;
+      } else {
+        this.showMap = false;
+      }
+    },
     //获取设备token
     getEQToken() {
       const userId = JSON.parse(Cookies.get("user")).userId;
@@ -344,7 +347,6 @@ export default {
         username,
       };
       getquipmentToken(params).then((res) => {
-        console.log(res);
         if (res.code === 200) {
           const token = res.data.data["ws-token"];
           this.ws = new WebSocketClient(
@@ -362,33 +364,6 @@ export default {
     },
     Callback(data) {
       console.log(data);
-    },
-    initPlayer() {
-      let _this = this;
-      player = new Aliplayer(
-        {
-          id: "J_prismPlayer",
-          width: "100%",
-          height: "100%",
-          source:
-            this.mainView == "video2"
-              ? "artc://drone.szyfu.com/wrjFlyDock/7CTDLCE00A6Y68"
-              : "artc://drone.szyfu.com/wrjFlyDrone/1581F6Q8D23CT00A4491",
-          rtsFallbackSource:
-            this.mainView == "video2"
-              ? ""
-              : "https://drone.szyfu.com/wrjFlyDrone/7CTDLCE00A6Y68.m3u8",
-          autoplay: true,
-          mute: true,
-          isLive: true,
-          playsinline: true,
-          preload: true,
-        },
-        function (player) {
-          console.log("success");
-          player.play();
-        }
-      );
     },
     showTools() {
       this.toolsVisible = true;
@@ -415,6 +390,35 @@ export default {
   height: 100vh;
   position: relative;
   overflow: hidden;
+  .full-screen {
+    width: 100%;
+    height: 100%;
+    /* position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0; */
+    background-color: lightblue;
+  }
+
+  .small-div {
+    position: absolute;
+    bottom: 20px;
+    height: 80px;
+    width: 130px;
+    background-color: lightgray;
+    cursor: pointer;
+    z-index: 100;
+  }
+
+  .small-div-1 {
+    left: 20px;
+  }
+
+  .small-div-2 {
+    left: 20px;
+    bottom: 120px;
+  }
   .topinfoBox {
     position: absolute;
     top: 0;
