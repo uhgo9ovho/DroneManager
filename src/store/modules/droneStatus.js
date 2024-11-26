@@ -4,7 +4,7 @@ const state = {
 const mutations = {
     GET_DRONE_INFO(state, info) {
         if (info.data) {
-            state.statusInfo = info.data;
+            state.statusInfo = info;
 
         }
     }

@@ -451,7 +451,7 @@ export default {
           display: flex;
           flex-wrap: wrap;
           overflow: auto;
-          margin-top: 24px;
+          margin-top: 12px;
           align-content: flex-start;
           .img_item {
             width: 128px;

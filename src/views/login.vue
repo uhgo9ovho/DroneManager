@@ -125,6 +125,7 @@ import { encrypt, decrypt } from "@/utils/jsencrypt";
 import SvgIcon from "@/components/SvgIcon/index.vue";
 import OrgList from "../components/OrgList.vue";
 import QRCode from "qrcodejs2";
+import { setToken } from "@/utils/auth";
 export default {
   name: "Login",
   data() {
@@ -176,7 +177,7 @@ export default {
         if (val) {
           this.getQRCode();
         } else {
-          this.stopPolling()
+          this.stopPolling();
         }
       },
     },
@@ -244,7 +245,7 @@ export default {
         scene: time,
         is_hyline: 1,
         auto_color: "red",
-        page: "pages/index",
+        page: "pages/scanLogin/scanLogin",
       };
       getQRCodeAPI(params).then((res) => {
         console.log(res);
@@ -272,18 +273,24 @@ export default {
             this.stopPolling();
             return this.$message.error("二维码过期,请刷新");
           }
-          const status = statusResponse.data.state;
+          if (statusResponse.data) {
+            const status = statusResponse.data.state;
 
-          // 根据状态更新消息
-          switch (status) {
-            case "lock":
-              this.statusMessage = "二维码已扫描";
-              break;
-            case "cancel":
-              this.statusMessage = "取消登录";
-              break;
-            default:
-              this.statusMessage = "等待扫描...";
+            // 根据状态更新消息
+            switch (status) {
+              case "lock":
+                this.statusMessage = "二维码已扫描";
+                break;
+              case "cancel":
+                this.statusMessage = "取消登录";
+                break;
+              default:
+                this.statusMessage = "等待扫描...";
+            }
+          } else {
+            setToken(statusResponse.msg);
+            this.showOrg = true;
+            this.stopPolling();
           }
         } catch (error) {
           this.stopPolling();
@@ -313,8 +320,7 @@ export default {
       this.getQRCode();
     },
   },
-  mounted() {
-  },
+  mounted() {},
 };
 </script>
 

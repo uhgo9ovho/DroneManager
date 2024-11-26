@@ -53,7 +53,7 @@ export default {
       return "你暂无可进入的组织";
     },
     tip() {
-      if (this.hasOrg) return "**** 已在以下企业或组织绑定了账号";
+      if (this.hasOrg) return "";
       return "**** 暂未绑定任何企业或组织，你可以申请加入企业或组织";
     },
   },

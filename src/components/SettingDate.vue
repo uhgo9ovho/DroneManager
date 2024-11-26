@@ -323,6 +323,8 @@ export default {
       let dateArr = this.characters
         .filter((item) => item.checked)
         .map((it) => it.value);
+        console.log(dateArr,'datearr');
+        
       this.$emit("dateArrays", dateArr);
 
       this.formatInfo();

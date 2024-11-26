@@ -75,12 +75,12 @@ export default {
             interval: 180, //刷新间隔时间 默认180s
           });
           map.add(traffic);
-          AMap.plugin(["AMap.Scale", "AMap.Geolocation"], function () {
-            let toolbar = new AMap.Scale();
-            let Geolocation = new AMap.Geolocation();
-            map.addControl(toolbar);
-            map.addControl(Geolocation);
-          });
+          // AMap.plugin(["AMap.Scale", "AMap.Geolocation"], function () {
+          //   let toolbar = new AMap.Scale();
+          //   let Geolocation = new AMap.Geolocation();
+          //   map.addControl(toolbar);
+          //   map.addControl(Geolocation);
+          // });
           let position = null;
           if (this.airLineData.length) {
             position = new AMap.LngLat(

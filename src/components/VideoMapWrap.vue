@@ -145,6 +145,10 @@
         </div>
       </div>
     </div>
+    <!-- 进度条 -->
+    <div class="progress">
+      <el-progress :percentage="percentage"></el-progress>
+    </div>
     <!-- 控制按钮 -->
     <el-popconfirm :title="title" v-if="showMap" @confirm="confirmPhoto()">
       <div class="bottomControlBox" slot="reference">
@@ -174,13 +178,6 @@
         </div>
       </div>
     </el-popconfirm>
-    <!-- 飞行视角预览 -->
-    <!-- <FlyVideoBox @changeVideo="changeVideo" :mainView="mainView"></FlyVideoBox> -->
-    <!-- 机巢视角预览 -->
-    <!-- <AirPortVideo
-      @changeVideo="changeVideo"
-      :mainView="mainView"
-    ></AirPortVideo> -->
     <!-- 控制无人机操作界面 -->
     <div v-if="showRemote">
       <FlyRemote></FlyRemote>
@@ -198,7 +195,7 @@ import WebSocketClient from "@/utils/websocket.js";
 import { mapState } from "vuex";
 import Aliplayer from "aliyun-aliplayer";
 import "aliyun-aliplayer/build/skins/default/aliplayer-min.css";
-import { getquipmentToken } from "@/api/user.js";
+import { getquipmentToken, postDrc } from "@/api/user.js";
 import Cookies from "js-cookie";
 export default {
   name: "VideoMapWrap",
@@ -256,7 +253,8 @@ export default {
       tempHumidity: "-",
       capacity_percent: "-",
       tempRainfall: "-",
-      tempCapacityPercent: "-"
+      tempCapacityPercent: "-",
+      percentage: 0
     };
   },
   components: {
@@ -273,35 +271,34 @@ export default {
   },
   watch: {
     statusInfo(val) {
-      if (val.host) {
-        this.tempRainfall =
-          val.host.rainfall == "1"
-            ? "小雨"
-            : val.host.rainfall == "2"
-            ? "中雨"
-            : val.host.rainfall == "3"
-            ? "大雨"
-            : "无雨";
-        if (val.host.height) this.tempHeight = val.host.height.toFixed(2);
+      if (val.biz_code === "device_osd") {
+        //无人机数据（正在飞行中）
+        if (val.data.host) {
+          this.tempRainfall =
+            val.data.host.rainfall == "1"
+              ? "小雨"
+              : val.data.host.rainfall == "2"
+              ? "中雨"
+              : val.data.host.rainfall == "3"
+              ? "大雨"
+              : "无雨";
+          this.tempHeight = val.data.host.height.toFixed(2);
 
-        if (val.host.horizontal_speed)
-          this.tempHorizontal_speed = val.host.horizontal_speed.toFixed(2);
+          this.tempHorizontal_speed = val.data.host.horizontal_speed.toFixed(2);
 
-        if (val.host.vertical_speed)
-          this.tempVertical_speed = val.host.vertical_speed.toFixed(2);
+          this.tempVertical_speed = val.data.host.vertical_speed.toFixed(2);
 
-        if (val.host.elevation)
-          this.tempElevation = val.host.elevation.toFixed(2);
+          this.tempElevation = val.data.host.elevation.toFixed(2);
 
-        if (val.host.wind_speed)
-          this.tempWind_speed = val.host.wind_speed.toFixed(2);
+          this.tempWind_speed = val.data.host.wind_speed.toFixed(2);
+          if (val.data.host.humidity) {
+            this.tempHumidity = val.data.host.humidity.toFixed(2);
+          }
 
-        if (val.host.humidity) this.tempHumidity = val.host.humidity.toFixed(2);
+          this.capacity_percent = val.data.host.capacity_percent;
 
-        if (val.host.capacity_percent)
-          this.capacity_percent = val.host.capacity_percent;
-        if (val.host.battery) this.tempCapacityPercent = val.host.capacity_percent
-          if (val.host.mode_code == "0") {
+          this.tempCapacityPercent = val.data.host.capacity_percent;
+          if (val.data.host.mode_code == "0") {
             //待机状态
             this.tempElevation = "-";
             this.tempHeight = "-";
@@ -310,6 +307,10 @@ export default {
             this.tempVertical_speed = "-";
             this.tempWind_speed = "-";
           }
+        }
+      } else if (val.biz_code === "flighttask_progress") {
+        //飞行进度
+        this.percentage = val.data.output.progress.percent;
       }
     },
   },
@@ -355,7 +356,10 @@ export default {
         }
       });
     },
-    confirm(e) {
+    async confirm(e) {
+      const result = await postDrc({})
+      console.log(result,'result');
+      
       this.showRemote = true;
     },
     confirmPhoto() {},
@@ -419,6 +423,18 @@ export default {
     left: 20px;
     bottom: 120px;
   }
+  .progress {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    width: 100%;
+    .el-progress-bar {
+      padding-right: 0;
+    }
+    .el-progress__text {
+      display: none;
+    }
+  }
   .topinfoBox {
     position: absolute;
     top: 0;
@@ -447,9 +463,12 @@ export default {
       width: 100%;
       padding: 0 16px;
       box-sizing: border-box;
+      justify-content: space-between;
+      align-items: center;
       .toppaln_left {
         padding-top: 9px;
         background-image: none;
+        flex: 1;
         .flight_name {
           color: #fff;
           font-size: 14px;
@@ -457,13 +476,14 @@ export default {
           line-height: 20px;
           text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
           background-image: none;
-          width: 470px;
         }
         .nestListBox {
           width: 200px;
           margin-top: 4px;
           display: flex;
-          flex-direction: column;
+          // flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
           background-image: none;
           .select_nest {
             background-image: none;
@@ -505,7 +525,6 @@ export default {
           .debug_control {
             position: absolute;
             left: 200px;
-            bottom: 6px;
             background-image: none;
             cursor: pointer;
             .el-tooltip {

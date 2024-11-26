@@ -177,3 +177,14 @@ export const getquipmentToken = (params) => {
         data: params
     })
 }
+// DRC 链路
+const DRC_API_PREFIX = '/control/jky/api/v1'
+const workspaceId = localStorage.getItem("workspaceId") || ''
+// 获取 mqtt 连接认证
+export const postDrc = (body) => {
+    return request({
+        url: `${DRC_API_PREFIX}/workspaces/${workspaceId}/drc/connect`,
+        method: 'post',
+        data: body
+    })
+}
