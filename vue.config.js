@@ -7,7 +7,7 @@ function resolve(dir) {
 
 const CompressionPlugin = require('compression-webpack-plugin')
 
-const name = process.env.VUE_APP_TITLE || '若依管理系统' // 网页标题
+const name = process.env.VUE_APP_TITLE || '城市空天智慧管理平台' // 网页标题
 
 const port = process.env.port || process.env.npm_config_port || 80 // 端口
 
@@ -35,10 +35,10 @@ module.exports = {
     proxy: {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
-        // target: `http://172.16.40.21:9002`,
-        target: `http://172.16.40.41:9002`,
+        target: `http://172.16.40.21:9002`, //巧莲
+        // target: `http://172.16.40.41:9002`, //ch
         // target: `http://172.16.40.126:8080`,
-        // target: `http://8.136.97.59:9002/`,
+        // target: `http://8.136.97.59:9002/`,//线上
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''

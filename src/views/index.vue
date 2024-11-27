@@ -305,7 +305,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  // flex-grow: 2;
   .title-box {
     display: flex;
     justify-content: space-between;
@@ -387,7 +386,6 @@ export default {
   }
   .content-box {
     overflow: auto;
-    flex: 1;
   }
   .overview {
     display: flex;

@@ -9,8 +9,13 @@
       center
     >
       <div class="title">扫二维码即可加入你的组织</div>
-      <div class="tip">邀请有效期至2024-08-06 11:51</div>
-      <div class="box-code" ref="qrCodeUrl"></div>
+      <!-- <div class="box-code" ref="qrCodeUrl"></div> -->
+      <el-image
+        :src="url"
+        class="box-code"
+        v-loading="loading"
+      >
+      </el-image>
       <div class="refresh" @click="refresh">刷新二维码</div>
     </el-dialog>
   </div>
@@ -18,12 +23,15 @@
 
 <script>
 import QRCode from "qrcodejs2";
+import { InvitationCodeAPI } from "@/api/user.js";
 export default {
   name: "InviteDialog",
   data() {
     return {
       qrcode: null,
       qrcodeStatus: true,
+      url: "",
+      loading: false,
     };
   },
   props: {
@@ -47,16 +55,38 @@ export default {
       });
     },
     refresh() {
-        this.qrcode.makeCode('https://www.google.com/')
-    }
+      this.getCode()
+    },
+    getCode() {
+      this.loading = true;
+      const orgid = localStorage.getItem("org_id");
+      const page = "pages/scanLogin/scanLogin";
+      InvitationCodeAPI(orgid, page)
+        .then((res) => {
+          if (res.code == 200) {
+            this.loading = false;
+            this.url = "data:image/png;base64," + res.msg;
+            console.log(this.url);
+          } else {
+            this.loading = false;
+          }
+        })
+        .catch((err) => {
+          this.loading = false;
+        });
+    },
   },
   mounted() {
     this.$nextTick(() => {
-      this.creatQrCode();
+      this.getCode();
     });
   },
 };
 </script>
 
 <style lang="scss">
+.el-image {
+  width: 100px;
+  height: 100px;
+}
 </style>

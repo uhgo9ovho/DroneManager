@@ -34,7 +34,7 @@ export default {
   name: "NavBar",
   data() {
     return {
-      logoUrl: logoImg,
+      logoUrl: "/icon.ico",
     };
   },
   components: { UserInfo, Notification },

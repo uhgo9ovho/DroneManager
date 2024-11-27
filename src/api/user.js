@@ -188,3 +188,11 @@ export const postDrc = (body) => {
         data: body
     })
 }
+
+//邀请成员二维码
+export const InvitationCodeAPI = (orgId,page) => {
+    return request({
+        url: `/loginCnt/getInvitationCode?organizationId=${orgId}&page=${page}`,
+        method: 'get'
+    })
+}
