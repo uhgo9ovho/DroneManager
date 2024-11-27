@@ -31,7 +31,7 @@ class WebSocketClient {
     onmessage(e) {
         if (e.data) {
             const data = JSON.parse(e.data);
-            console.log(data);
+            // console.log(data);
             store.dispatch('droneStatus/getDroneInfo', data);
             const type = 'message';
             if (type in this._callbacks) {

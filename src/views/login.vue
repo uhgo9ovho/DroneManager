@@ -139,7 +139,7 @@ export default {
       showOrg: false,
       loginForm: {
         username: "admin",
-        password: "admin123",
+        password: "Admin123..",
         rememberMe: false,
         code: "",
         uuid: "",
@@ -224,6 +224,7 @@ export default {
             Cookies.remove("username");
             Cookies.remove("password");
             Cookies.remove("rememberMe");
+            sessionStorage.setItem('password', encrypt(this.loginForm.password));
           }
           this.$store
             .dispatch("Login", this.loginForm)

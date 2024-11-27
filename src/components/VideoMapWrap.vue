@@ -195,7 +195,8 @@ import WebSocketClient from "@/utils/websocket.js";
 import { mapState } from "vuex";
 import Aliplayer from "aliyun-aliplayer";
 import "aliyun-aliplayer/build/skins/default/aliplayer-min.css";
-import { getquipmentToken, postDrc } from "@/api/user.js";
+import { getquipmentToken, connectDRCAPI } from "@/api/user.js";
+import { UranusMqtt } from "@/utils/mqtt";
 import Cookies from "js-cookie";
 export default {
   name: "VideoMapWrap",
@@ -254,7 +255,8 @@ export default {
       capacity_percent: "-",
       tempRainfall: "-",
       tempCapacityPercent: "-",
-      percentage: 0
+      percentage: 0,
+      mqttState: null,
     };
   },
   components: {
@@ -270,6 +272,53 @@ export default {
     },
   },
   watch: {
+    showMap: {
+      handler(val) {
+        if (val) {
+          connectDRCAPI({}).then((res) => {
+            console.log(res, "aaa");
+            if (res.code === 0) {
+              const { address, client_id, username, password, expire_time } =
+                res.data;
+                const userInfo =JSON.parse(Cookies.get('user')); 
+                console.log(userInfo,'userInfo');
+                
+              // this.mqttState = new UranusMqtt(address, {
+              //   clientId: client_id,
+              //   username: `${userInfo.userName}_test`,
+              //   password: sessionStorage.getItem('password'),
+              // });
+              this.mqttState = new UranusMqtt("mqtt://broker.emqx.io:8083", {
+                clientId: 'emqx_vue_b557e2',
+                username: `emqx_test`,
+                password: 'emqx_test',
+              });  
+              console.log(this.mqttState,'sda');
+                        
+              this.mqttState.initMqtt();
+              // @TODO: 校验 expire_time
+              // mqttState.value = new UranusMqtt(address, {
+              //   clientId: client_id,
+              //   username,
+              //   password,
+              // });
+              // mqttState.value?.initMqtt();
+              // mqttState.value?.on(
+              //   "onStatus",
+              //   (statusOptions) => {
+              //     // @TODO: 异常case
+              //   }
+              // );
+
+              // store.commit("SET_MQTT_STATE", mqttState.value);
+              // store.commit("SET_CLIENT_ID", client_id);
+            }
+            return;
+          });
+        }
+      },
+      immediate: true,
+    },
     statusInfo(val) {
       if (val.biz_code === "device_osd") {
         //无人机数据（正在飞行中）
@@ -297,7 +346,6 @@ export default {
 
           this.capacity_percent = val.data.host.capacity_percent;
 
-          this.tempCapacityPercent = val.data.host.capacity_percent;
           if (val.data.host.mode_code == "0") {
             //待机状态
             this.tempElevation = "-";
@@ -311,6 +359,8 @@ export default {
       } else if (val.biz_code === "flighttask_progress") {
         //飞行进度
         this.percentage = val.data.output.progress.percent;
+      } else if (val.biz_code === "dock_osd") {
+        this.tempCapacityPercent = val.data.host.capacity_percent;
       }
     },
   },
@@ -357,9 +407,6 @@ export default {
       });
     },
     async confirm(e) {
-      const result = await postDrc({})
-      console.log(result,'result');
-      
       this.showRemote = true;
     },
     confirmPhoto() {},

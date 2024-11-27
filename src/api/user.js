@@ -181,13 +181,13 @@ export const getquipmentToken = (params) => {
 const DRC_API_PREFIX = '/control/jky/api/v1'
 const workspaceId = localStorage.getItem("workspaceId") || ''
 // 获取 mqtt 连接认证
-export const postDrc = (body) => {
-    return request({
-        url: `${DRC_API_PREFIX}/workspaces/${workspaceId}/drc/connect`,
-        method: 'post',
-        data: body
-    })
-}
+// export const postDrc = (body) => {
+//     return request({
+//         url: `${DRC_API_PREFIX}/workspaces/${workspaceId}/drc/connect`,
+//         method: 'post',
+//         data: body
+//     })
+// }
 
 //邀请成员二维码
 export const InvitationCodeAPI = (orgId,page) => {
@@ -196,3 +196,28 @@ export const InvitationCodeAPI = (orgId,page) => {
         method: 'get'
     })
 }
+
+//获取 mqtt 连接认证
+export const connectDRCAPI = (params) => {
+    return request({
+        url: `/drc/workspaces/${workspaceId}/drc/connect`,
+        method: 'post',
+        data: params
+    })
+};
+
+//获取无人机控制权检验
+export const enterDRCAPI = () => {
+    return request({
+        url: `/drc/workspaces/${workspaceId}/drc/enter`,
+        method: 'get'
+    })
+};
+
+//退出无人机控制
+export const exitDRCAPI = () => {
+    return request({
+        url: `/drc/workspaces/${workspaceId}/drc/exit`,
+        method: 'get'
+    })
+};
