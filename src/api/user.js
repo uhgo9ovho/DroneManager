@@ -207,10 +207,11 @@ export const connectDRCAPI = (params) => {
 };
 
 //获取无人机控制权检验
-export const enterDRCAPI = () => {
+export const enterDRCAPI = (params) => {
     return request({
         url: `/drc/workspaces/${workspaceId}/drc/enter`,
-        method: 'get'
+        method: 'post',
+        data: params
     })
 };
 
@@ -218,6 +219,7 @@ export const enterDRCAPI = () => {
 export const exitDRCAPI = () => {
     return request({
         url: `/drc/workspaces/${workspaceId}/drc/exit`,
-        method: 'get'
+        method: 'post',
+        data: params
     })
 };

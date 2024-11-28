@@ -251,13 +251,13 @@ export const updateWarningStatusAPI = (params) => {
         data: params
     })
 }
-
+const workspaceId = localStorage.getItem("workspaceId") || ''
 /**
  * 获取设备信息
  */
 export const deviceInfoAPI = (params) => {
     return request({
-        url:`crm/device/list?orgId=${params.orgId}&deviceType=${params.deviceType}`,
+        url:`system/hms/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&workspaceId=${workspaceId}`,
         method: 'get',
     })
 }

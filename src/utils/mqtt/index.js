@@ -31,6 +31,11 @@ export class UranusMqtt extends EventEmitter {
         })
         this._hasInit = true
         if (this._client) {
+            this._client.on('connect', () => {
+                console.log('connect success');
+                
+            })
+
             this._client.on('reconnect', this._onReconnect)
 
             // 消息监听

@@ -11,6 +11,7 @@
 <script>
 import { deviceInfoAPI } from "@/api/TaskManager.js";
 import MapContainer from "../components/MapContainer.vue";
+import { mapActions } from 'vuex'
 export default {
   name: "AirPort",
   data() {
@@ -24,6 +25,7 @@ export default {
     MapContainer,
   },
   methods: {
+    ...mapActions('droneStatus', ['getDeviceSN']),
     toVideoMap() {
       this.$router.push("/videoMap");
     },
@@ -36,10 +38,10 @@ export default {
         .then((res) => {
           this.showMap = false;
           if (res.code === 200) {
+            this.getDeviceSN(res.rows[0].deviceId)
             let lonlatArr = res.rows[0].location.split(",");
             this.longitude = +lonlatArr[0];
             this.latitude = +lonlatArr[1];
-            console.log(this.longitude, this.latitude);
             this.showMap = true;
           }
         })

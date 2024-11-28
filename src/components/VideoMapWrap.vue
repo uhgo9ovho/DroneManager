@@ -195,9 +195,10 @@ import WebSocketClient from "@/utils/websocket.js";
 import { mapState } from "vuex";
 import Aliplayer from "aliyun-aliplayer";
 import "aliyun-aliplayer/build/skins/default/aliplayer-min.css";
-import { getquipmentToken, connectDRCAPI } from "@/api/user.js";
+import { getquipmentToken, connectDRCAPI, enterDRCAPI } from "@/api/user.js";
 import { UranusMqtt } from "@/utils/mqtt";
 import Cookies from "js-cookie";
+import { getToken } from "@/utils/auth";
 export default {
   name: "VideoMapWrap",
   data() {
@@ -257,6 +258,7 @@ export default {
       tempCapacityPercent: "-",
       percentage: 0,
       mqttState: null,
+      client_id: "",
     };
   },
   components: {
@@ -266,7 +268,7 @@ export default {
     FlyRemote,
   },
   computed: {
-    ...mapState("droneStatus", ["statusInfo"]),
+    ...mapState("droneStatus", ["statusInfo", "deviceSN"]),
     title() {
       return "当前无人控制该设备，是否确认继续申请控制权？";
     },
@@ -280,38 +282,15 @@ export default {
             if (res.code === 0) {
               const { address, client_id, username, password, expire_time } =
                 res.data;
-                const userInfo =JSON.parse(Cookies.get('user')); 
-                console.log(userInfo,'userInfo');
-                
-              // this.mqttState = new UranusMqtt(address, {
-              //   clientId: client_id,
-              //   username: `${userInfo.userName}_test`,
-              //   password: sessionStorage.getItem('password'),
-              // });
-              this.mqttState = new UranusMqtt("mqtt://broker.emqx.io:8083", {
-                clientId: 'emqx_vue_b557e2',
-                username: `emqx_test`,
-                password: 'emqx_test',
-              });  
-              console.log(this.mqttState,'sda');
-                        
-              this.mqttState.initMqtt();
-              // @TODO: 校验 expire_time
-              // mqttState.value = new UranusMqtt(address, {
-              //   clientId: client_id,
-              //   username,
-              //   password,
-              // });
-              // mqttState.value?.initMqtt();
-              // mqttState.value?.on(
-              //   "onStatus",
-              //   (statusOptions) => {
-              //     // @TODO: 异常case
-              //   }
-              // );
+              const userInfo = JSON.parse(Cookies.get("user"));
+              this.client_id = client_id;
+              this.mqttState = new UranusMqtt(address, {
+                clientId: client_id,
+                username: `${userInfo.userName}_test`,
+                password: getToken(),
+              });
 
-              // store.commit("SET_MQTT_STATE", mqttState.value);
-              // store.commit("SET_CLIENT_ID", client_id);
+              this.mqttState.initMqtt();
             }
             return;
           });
@@ -360,7 +339,8 @@ export default {
         //飞行进度
         this.percentage = val.data.output.progress.percent;
       } else if (val.biz_code === "dock_osd") {
-        this.tempCapacityPercent = val.data.host.capacity_percent;
+        this.tempCapacityPercent =
+          val.data.host.drone_charge_state.capacity_percent;
       }
     },
   },
@@ -406,8 +386,20 @@ export default {
         }
       });
     },
-    async confirm(e) {
-      this.showRemote = true;
+    confirm(e) {
+      const params = {
+        clientId: this.client_id,
+        dockSn: this.deviceSN,
+      };
+      enterDRCAPI(params).then((res) => {
+        console.log(res, "res");
+        if (res.code === 0) {
+          //成功获取控制权
+          this.showRemote = true;
+        } else {
+          this.$message.error(res.message);
+        }
+      });
     },
     confirmPhoto() {},
     outVideo() {
@@ -493,17 +485,9 @@ export default {
     transition: all 0.5s;
     background-image: linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.30196078431372547) 2%,
-      transparent 98%
+      rgba(0, 0, 0, 0.5490196078431373) 2%,
+      rgba(0, 0, 0, 0.45098039215686275) 98%
     );
-    :hover {
-      transition: all 0.5s;
-      background-image: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.5490196078431373) 2%,
-        rgba(0, 0, 0, 0.45098039215686275) 98%
-      );
-    }
     .toppaln {
       display: flex;
       height: 100%;
