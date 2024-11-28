@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { deviceInfoAPI } from "@/api/TaskManager.js";
+import { airPostAPI } from "@/api/TaskManager.js";
 import MapContainer from "../components/MapContainer.vue";
 import { mapActions } from 'vuex'
 export default {
@@ -34,7 +34,7 @@ export default {
         orgId: localStorage.getItem("org_id"),
         deviceType: 1,
       };
-      deviceInfoAPI(params)
+      airPostAPI(params)
         .then((res) => {
           this.showMap = false;
           if (res.code === 200) {

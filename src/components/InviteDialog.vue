@@ -10,12 +10,7 @@
     >
       <div class="title">扫二维码即可加入你的组织</div>
       <!-- <div class="box-code" ref="qrCodeUrl"></div> -->
-      <el-image
-        :src="url"
-        class="box-code"
-        v-loading="loading"
-      >
-      </el-image>
+      <el-image :src="url" class="box-code" v-loading="loading"> </el-image>
       <div class="refresh" @click="refresh">刷新二维码</div>
     </el-dialog>
   </div>
@@ -24,6 +19,7 @@
 <script>
 import QRCode from "qrcodejs2";
 import { InvitationCodeAPI } from "@/api/user.js";
+import Cookies from "js-cookie";
 export default {
   name: "InviteDialog",
   data() {
@@ -55,13 +51,15 @@ export default {
       });
     },
     refresh() {
-      this.getCode()
+      this.getCode();
     },
     getCode() {
       this.loading = true;
-      const orgid = localStorage.getItem("org_id");
-      const page = "pages/scanLogin/scanLogin";
-      InvitationCodeAPI(orgid, page)
+      const page = "pages/scanLogin/invite/invite";
+      const userInfo = JSON.parse(Cookies.get("user"));
+      const orgName = Cookies.get("orgName");
+      const scene = `${userInfo.orgId}_${userInfo.userName}`;
+      InvitationCodeAPI(scene, page)
         .then((res) => {
           if (res.code == 200) {
             this.loading = false;
@@ -79,6 +77,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.getCode();
+      console.log(JSON.parse(Cookies.get("user")), "asdsadasw");
     });
   },
 };

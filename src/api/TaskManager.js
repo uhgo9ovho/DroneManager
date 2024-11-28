@@ -253,11 +253,31 @@ export const updateWarningStatusAPI = (params) => {
 }
 const workspaceId = localStorage.getItem("workspaceId") || ''
 /**
- * 获取设备信息
+ * 获取设备信息列表
  */
 export const deviceInfoAPI = (params) => {
     return request({
         url:`system/hms/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&workspaceId=${workspaceId}`,
         method: 'get',
+    })
+}
+
+/**
+ * 获取机场位置
+ */
+export const airPostAPI = (params) => {
+    return request({
+        url: `crm/device/list?orgId${params.orgId}&deviceType=${params.deviceType}`,
+        method: 'get'
+    })
+};
+
+/**
+ * 获取预警信息照片和时间
+ */
+export const getWarningPhotosAPI = (warnId) => {
+    return request({
+        url: `/wurenji/warning/picHis/list?warnId=${warnId}`,
+        method: 'get'
     })
 }

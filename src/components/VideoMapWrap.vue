@@ -195,7 +195,7 @@ import WebSocketClient from "@/utils/websocket.js";
 import { mapState } from "vuex";
 import Aliplayer from "aliyun-aliplayer";
 import "aliyun-aliplayer/build/skins/default/aliplayer-min.css";
-import { getquipmentToken, connectDRCAPI, enterDRCAPI } from "@/api/user.js";
+import { getquipmentToken, connectDRCAPI, enterDRCAPI, authorityAPI } from "@/api/user.js";
 import { UranusMqtt } from "@/utils/mqtt";
 import Cookies from "js-cookie";
 import { getToken } from "@/utils/auth";
@@ -337,10 +337,15 @@ export default {
         }
       } else if (val.biz_code === "flighttask_progress") {
         //飞行进度
-        this.percentage = val.data.output.progress.percent;
+        this.percentage = val.data.output.progress.progress;
       } else if (val.biz_code === "dock_osd") {
-        this.tempCapacityPercent =
-          val.data.host.drone_charge_state.capacity_percent;
+        if (val.data.host.drone_charge_state && val.data.host.drone_charge_state.capacity_percent) {
+          this.tempCapacityPercent =
+            val.data.host.drone_charge_state.capacity_percent;
+        }
+      } else if(val.biz_code === 'control_source_change') {
+        console.log('抢夺控制权');
+        
       }
     },
   },
@@ -381,7 +386,8 @@ export default {
         if (res.code === 200) {
           const token = res.data.data["ws-token"];
           this.ws = new WebSocketClient(
-            `ws://8.136.97.59:6789/api/v1/ws?ws-token=${token}`
+            // `ws://8.136.97.59:6789/api/v1/ws?ws-token=${token}` //线上
+            `ws://172.16.40.226:6789/api/v1/ws?ws-token=${token}` //本地
           );
         }
       });
@@ -394,10 +400,15 @@ export default {
       enterDRCAPI(params).then((res) => {
         console.log(res, "res");
         if (res.code === 0) {
-          //成功获取控制权
+          //打开控制页面
           this.showRemote = true;
+
+          //抢夺控制权
+          // authorityAPI({}, this.deviceSN).then(res => {
+          //   console.log(res,'ddfgrdherth');
+          // })
         } else {
-          this.$message.error(res.message);
+          this.$message.error(res.msg);
         }
       });
     },

@@ -6,7 +6,6 @@
       </div>
       <div class="issue-photo-wrap">
         <div class="innerImgBox">
-          <!-- <ImageZoom :src="row.identifyPhoto" :width="904" :height="720"></ImageZoom> -->
           <img :src="row.identifyPhoto" alt="">
         </div>
         <div class="download">
@@ -71,6 +70,7 @@
 <script>
 import ImageZoom from "./ImageZoom.vue";
 import MapContainer from "../MapContainer.vue";
+import { getWarningPhotosAPI } from '@/api/TaskManager.js';
 export default {
   name: "WarningDialog",
   props: {
@@ -132,9 +132,13 @@ export default {
       });
       item.checked = true;
     },
+    getPhotoList() {
+      getWarningPhotosAPI(this.row.id)
+    }
   },
   mounted() {
     this.getDatesInRange();
+    this.getPhotoList()
   },
 };
 </script>

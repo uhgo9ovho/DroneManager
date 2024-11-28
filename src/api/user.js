@@ -190,7 +190,7 @@ const workspaceId = localStorage.getItem("workspaceId") || ''
 // }
 
 //邀请成员二维码
-export const InvitationCodeAPI = (orgId,page) => {
+export const InvitationCodeAPI = (orgId, page) => {
     return request({
         url: `/loginCnt/getInvitationCode?organizationId=${orgId}&page=${page}`,
         method: 'get'
@@ -223,3 +223,12 @@ export const exitDRCAPI = () => {
         data: params
     })
 };
+
+//抢夺控制权
+export const authorityAPI = (params,sn) => {
+    return request({
+        url: `/drc/${sn}/authority/flight`,
+        method: 'post',
+        data: params
+    })
+}

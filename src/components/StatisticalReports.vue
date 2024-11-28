@@ -78,7 +78,7 @@ export default {
     },
   },
   mounted() {
-    warningListAPI();
+    // warningListAPI();
   },
   methods: {
     detailsBtn() {
