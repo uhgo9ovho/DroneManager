@@ -179,26 +179,32 @@
       </div>
     </el-popconfirm>
     <!-- 控制无人机操作界面 -->
+    <!-- <div> -->
     <div v-if="showRemote">
-      <FlyRemote></FlyRemote>
+      <FlyRemote @onMouseUp="onMouseUp" @onMouseDown="onMouseDown"></FlyRemote>
     </div>
   </div>
 </template>
 
 <script>
-let player = null;
 import MapContainer from "./MapContainer.vue";
 import FlyVideoBox from "./Template/FlyVideoBox.vue";
 import AirPortVideo from "./Template/AirPortVideo.vue";
 import FlyRemote from "./Template/FlyRemote.vue";
 import WebSocketClient from "@/utils/websocket.js";
-import { mapState } from "vuex";
-import Aliplayer from "aliyun-aliplayer";
+import { mapState, mapActions } from "vuex";
 import "aliyun-aliplayer/build/skins/default/aliplayer-min.css";
-import { getquipmentToken, connectDRCAPI, enterDRCAPI, authorityAPI } from "@/api/user.js";
+import {
+  getquipmentToken,
+  connectDRCAPI,
+  enterDRCAPI,
+  authorityAPI,
+  exitDRCAPI,
+} from "@/api/user.js";
 import { UranusMqtt } from "@/utils/mqtt";
 import Cookies from "js-cookie";
 import { getToken } from "@/utils/auth";
+import { useManualControl } from "@/utils/mqtt/use-manual-control";
 export default {
   name: "VideoMapWrap",
   data() {
@@ -259,6 +265,10 @@ export default {
       percentage: 0,
       mqttState: null,
       client_id: "",
+      flightController: false, //是否可以控制无人机
+      handleKeyup: null,
+      handleEmergencyStop: null,
+      resetControlState: null,
     };
   },
   components: {
@@ -274,6 +284,14 @@ export default {
     },
   },
   watch: {
+    mqttState: {
+      handler(val) {
+        if (val) {
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
     showMap: {
       handler(val) {
         if (val) {
@@ -289,7 +307,7 @@ export default {
                 username: `${userInfo.userName}_test`,
                 password: getToken(),
               });
-
+              this.getMqttState(this.mqttState);
               this.mqttState.initMqtt();
             }
             return;
@@ -337,15 +355,17 @@ export default {
         }
       } else if (val.biz_code === "flighttask_progress") {
         //飞行进度
-        this.percentage = val.data.output.progress.progress;
+        this.percentage = val.data.output.progress.percent;
       } else if (val.biz_code === "dock_osd") {
-        if (val.data.host.drone_charge_state && val.data.host.drone_charge_state.capacity_percent) {
+        if (
+          val.data.host.drone_charge_state &&
+          val.data.host.drone_charge_state.capacity_percent
+        ) {
           this.tempCapacityPercent =
             val.data.host.drone_charge_state.capacity_percent;
         }
-      } else if(val.biz_code === 'control_source_change') {
-        console.log('抢夺控制权');
-        
+      } else if (val.biz_code === "control_source_change") {
+        console.log("抢夺控制权");
       }
     },
   },
@@ -353,6 +373,7 @@ export default {
     this.getEQToken();
   },
   methods: {
+    ...mapActions("droneStatus", ["getToicpSubPub", "getMqttState"]),
     handleClick(index) {
       [this.fullScreenComponent, this.smallComponent[index]] = [
         this.smallComponent[index],
@@ -402,18 +423,50 @@ export default {
         if (res.code === 0) {
           //打开控制页面
           this.showRemote = true;
+          this.flightController = true; //已控制无人机
+          const topic = {
+            pubTopic: res.data.pub[0],
+            subTopic: res.data.sub[0],
+          };
+          const { handleKeyup, handleEmergencyStop, resetControlState } =
+            useManualControl(topic, this.flightController);
+          console.log(handleKeyup, "handleKeyup");
+          this.handleKeyup = handleKeyup;
+          this.resetControlState = resetControlState;
+          this.handleEmergencyStop = handleEmergencyStop;
+          this.getToicpSubPub(topic);
 
           //抢夺控制权
           // authorityAPI({}, this.deviceSN).then(res => {
           //   console.log(res,'ddfgrdherth');
           // })
         } else {
-          this.$message.error(res.msg);
+          this.$message.error(res.message || res.msg);
         }
       });
     },
+    onMouseDown(type) {
+      this.handleKeyup(type);
+    },
+    onMouseUp() {
+      this.resetControlState();
+    },
     confirmPhoto() {},
     outVideo() {
+      const params = {
+        clientId: this.client_id,
+        dockSn: this.deviceSN,
+      };
+      if (this.flightController) {
+        exitDRCAPI(params).then((res) => {
+          if (res.code === 0) {
+            this.flightController = false; //退出控制
+            this.getToicpSubPub({});
+            this.$message.success("Exit flight control");
+            this.mqttState?.destroyed();
+          }
+        });
+      }
       this.$router.go(-1);
     },
     Callback(data) {

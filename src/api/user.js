@@ -216,7 +216,7 @@ export const enterDRCAPI = (params) => {
 };
 
 //退出无人机控制
-export const exitDRCAPI = () => {
+export const exitDRCAPI = (params) => {
     return request({
         url: `/drc/workspaces/${workspaceId}/drc/exit`,
         method: 'post',

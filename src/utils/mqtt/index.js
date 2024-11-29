@@ -50,7 +50,9 @@ export class UranusMqtt extends EventEmitter {
     }
 
     // 发布
-    publishMqtt = (topic, bodyr, opts) => {
+    publishMqtt = (topic, body, opts) => {
+        console.log(topic,'发布');
+        
         if (!this._client?.connected) {
             this.initMqtt()
         }
@@ -89,6 +91,8 @@ export class UranusMqtt extends EventEmitter {
     }
 
     _onMessage = (topic, payload, packet) => {
+        console.log(topic,'message');
+        
         this.emit('onMessageMqtt', { topic, payload, packet })
     }
 

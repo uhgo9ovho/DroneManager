@@ -89,13 +89,13 @@ export const constantRoutes = [
         meta: { title: '数据', icon: 'el-icon-shuju' },
         active: false,
       },
-      {
-        path: 'plots',
-        component: () => import('@/views/Plots.vue'),
-        name: 'Plots',
-        meta: { title: '地块', icon: 'el-icon-dikuai' },
-        active: false,
-      },
+      // {
+      //   path: 'plots',
+      //   component: () => import('@/views/Plots.vue'),
+      //   name: 'Plots',
+      //   meta: { title: '地块', icon: 'el-icon-dikuai' },
+      //   active: false,
+      // },
       {
         path: 'contacts',
         component: () => import('@/views/Contacts.vue'),

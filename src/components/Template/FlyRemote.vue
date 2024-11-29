@@ -5,42 +5,42 @@
     <div class="cameraMoudle">广角镜头</div>
     <div class="fly_control_plan">
       <div class="to_fly">
-        <div class="keyupBox">
+        <div class="keyupBox" @mousedown="onMouseDown(KeyCode.KEY_W)" @mouseup="onMouseUp">
           <div>
             <i class="iconfont el-icon-jiantou1"></i>
             <span>W</span>
             <div class="keyBox_hover_background"></div>
           </div>
         </div>
-        <div class="keydownBox">
+        <div class="keydownBox" @mousedown="onMouseDown(KeyCode.KEY_S)" @mouseup="onMouseUp">
           <div>
             <i class="iconfont el-icon-jiantou1"></i>
             <span>S</span>
             <div class="keyBox_hover_background"></div>
           </div>
         </div>
-        <div class="keyleftBox">
+        <div class="keyleftBox" @mousedown="onMouseDown(KeyCode.KEY_A)" @mouseup="onMouseUp">
           <div>
             <i class="iconfont el-icon-jiantou1"></i>
             <span>A</span>
             <div class="keyBox_hover_background"></div>
           </div>
         </div>
-        <div class="keyrightBox">
+        <div class="keyrightBox" @mousedown="onMouseDown(KeyCode.KEY_D)" @mouseup="onMouseUp">
           <div>
             <i class="iconfont el-icon-jiantou1"></i>
             <span>D</span>
             <div class="keyBox_hover_background"></div>
           </div>
         </div>
-        <div class="keylevorotaBox">
+        <div class="keylevorotaBox" @mousedown="onMouseDown(KeyCode.KEY_Q)" @mouseup="onMouseUp">
           <div>
             <i class="iconfont el-icon-chexiao"></i>
             <span>Q</span>
             <div class="keylevorotaBox_hover_background"></div>
           </div>
         </div>
-        <div class="keydextroBox">
+        <div class="keydextroBox" @mousedown="onMouseDown(KeyCode.KEY_E)" @mouseup="onMouseUp">
           <div>
             <i class="iconfont el-icon-fanhui"></i>
             <span>E</span>
@@ -106,12 +106,18 @@
 
 <script>
 // import mqtt from 'mqtt';
+import { useManualControl, KeyCode } from '@/utils/mqtt/use-manual-control';
+import {mapState } from 'vuex';
 export default {
   data() {
     return {
       lenses: "广角镜头",
-      showPlan: false
+      showPlan: false,
+      KeyCode: null
     };
+  },
+  computed: {
+    ...mapState('droneStatus', ['topic'])
   },
   methods: {
     clearPlan() {
@@ -122,9 +128,19 @@ export default {
     },
     surePlan() {
         this.showPlan = false;
+    },
+    onMouseDown(type) {
+      console.log(type);
+      this.$emit('onMouseDown',type);
+    },
+    onMouseUp() {
+      this.$emit('onMouseUp')
     }
   },
   mounted() {
+    console.log(KeyCode);
+    this.KeyCode = KeyCode;
+    
   }
 };
 </script>

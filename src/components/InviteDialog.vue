@@ -84,8 +84,8 @@ export default {
 </script>
 
 <style lang="scss">
-.el-image {
-  width: 100px;
-  height: 100px;
-}
+// .el-image {
+//   width: 100px;
+//   height: 100px;
+// }
 </style>

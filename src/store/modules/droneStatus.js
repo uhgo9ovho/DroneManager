@@ -1,6 +1,8 @@
 const state = {
     statusInfo: {},
-    deviceSN: ""
+    deviceSN: "",
+    topic: {},
+    mqttState: null
 }
 const mutations = {
     GET_DRONE_INFO(state, info) {
@@ -10,6 +12,12 @@ const mutations = {
     },
     GET_DEVICE_SN(state, info) {
         state.deviceSN = info;
+    },
+    GET_SUB_PUB(state, data) {
+        state.topic = data;
+    },
+    GET_MQTT_STATE(state, obj) {
+        state.mqttState = obj;
     }
 }
 
@@ -20,6 +28,12 @@ const actions = {
     getDeviceSN({ commit }, data) {
         
         commit('GET_DEVICE_SN', data)
+    },
+    getToicpSubPub({commit}, data) {
+        commit('GET_SUB_PUB', data);
+    },
+    getMqttState({commit}, obj) {
+        commit('GET_MQTT_STATE', obj);
     }
 }
 
