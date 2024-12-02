@@ -6,6 +6,7 @@ import 'nprogress/nprogress.css'
 import { getToken } from '@/utils/auth'
 import { isRelogin } from '@/utils/request'
 import { constantRoutes } from "@/router";
+import Cookies from 'js-cookie';
 NProgress.configure({ showSpinner: false })
 
 const whiteList = ['/login', '/register', '/videoMap']
@@ -23,12 +24,13 @@ function activePath(path) {
 };
 router.beforeEach((to, from, next) => {
   const path = to.path.substring(1);
+  const orgArr = Cookies.get('orgList');
   activePath(path)
   NProgress.start()
   // next()
   if (getToken()) {
     /* has token*/
-    if (to.path === '/login') {
+    if (to.path === '/login' && !orgArr) {
       next({ path: '/' })
       NProgress.done()
     } else {

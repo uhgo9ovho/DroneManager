@@ -75,7 +75,9 @@ export default {
               localStorage.removeItem('org_id');
               localStorage.removeItem('workspaceId');
               sessionStorage.removeItem('password');
-              Cookies.remove('user')
+              Cookies.remove('user');
+              Cookies.remove('orgName');
+              Cookies.remove('orgList');
               this.$router.push('/login')
               this.$message({
                 type: "success",

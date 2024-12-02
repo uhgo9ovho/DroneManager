@@ -61,7 +61,14 @@ export default {
   },
   methods: {
     backLogin() {
-      removeToken();
+      removeToken("Admin-Token");
+      localStorage.removeItem("org_id");
+      localStorage.removeItem("workspaceId");
+      sessionStorage.removeItem("password");
+      Cookies.remove("user");
+      Cookies.remove("orgList");
+      Cookies.remove("orgName");
+
       this.$emit("backLogin");
     },
     getOrgList() {
@@ -69,6 +76,7 @@ export default {
       getDepartmentList(this.params).then((res) => {
         if (res.code === 200) {
           this.orgList = res.rows;
+          Cookies.set("orgList", JSON.stringify(res.rows), { expires: 10 });
         }
       });
     },

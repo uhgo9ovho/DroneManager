@@ -185,6 +185,11 @@ export default {
   created() {
     this.getCode();
     this.getCookie();
+    const orgArr = JSON.parse(Cookies.get('orgList'));
+    if(orgArr && orgArr.length) {
+      //证明是在获取列表之后刷新了页面
+      this.showOrg = true;
+    }
   },
   methods: {
     backLogin() {
