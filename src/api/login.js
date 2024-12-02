@@ -31,7 +31,7 @@ export function register(data) {
   })
 }
 
-// 获取用户详细信息
+// 获取用户userId
 export function getInfo() {
   return request({
     url: '/loginCnt/getInfo',

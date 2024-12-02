@@ -72,6 +72,10 @@ export default {
           logout().then((res) => {
             if (res.code === 200) {
               removeToken('Admin-Token');
+              localStorage.removeItem('org_id');
+              localStorage.removeItem('workspaceId');
+              sessionStorage.removeItem('password');
+              Cookies.remove('user')
               this.$router.push('/login')
               this.$message({
                 type: "success",

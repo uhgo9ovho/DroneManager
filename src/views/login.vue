@@ -113,7 +113,7 @@
     </div>
 
     <div v-else class="org-box">
-      <org-list></org-list>
+      <org-list @backLogin="backLogin"></org-list>
     </div>
   </div>
 </template>
@@ -187,6 +187,12 @@ export default {
     this.getCookie();
   },
   methods: {
+    backLogin() {
+      this.showOrg = false;
+      this.loading = false;
+      this.loginForm.code = "";
+      this.$refs.loginForm.resetFields()
+    },
     getCode() {
       getCodeImg().then((res) => {
         this.captchaEnabled =

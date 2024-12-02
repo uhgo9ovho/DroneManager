@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取列表组织
 export const getDepartmentList = (params) => {
     return request({
-        url: `/wrj/org/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}`,
+        url: `/wrj/org/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&userId=${params.userId}`,
         method: 'get'
     })
 };

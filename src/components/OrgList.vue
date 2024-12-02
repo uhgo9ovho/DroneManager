@@ -1,6 +1,6 @@
 <template>
   <div class="org">
-    <div class="back-icon el-icon-back"></div>
+    <div class="back-icon el-icon-back" @click="backLogin"></div>
     <div class="title">{{ title }}</div>
     <div class="tip">{{ tip }}</div>
     <div class="un-org" v-if="!hasOrg">
@@ -35,15 +35,17 @@
 import { getDepartmentList } from "@/api/user.js";
 import { getInfo } from "@/api/login.js";
 import Cookies from "js-cookie";
+import { removeToken } from "@/utils/auth";
 export default {
   name: "OrgList",
   data() {
     return {
       hasOrg: true,
       orgList: [],
-      page: {
+      params: {
         pageNum: 1,
         pageSize: 10,
+        userId: null,
       },
     };
   },
@@ -58,31 +60,37 @@ export default {
     },
   },
   methods: {
+    backLogin() {
+      removeToken();
+      this.$emit("backLogin");
+    },
     getOrgList() {
       //获取组织列表
-      getDepartmentList(this.page).then((res) => {
+      getDepartmentList(this.params).then((res) => {
         if (res.code === 200) {
           this.orgList = res.rows;
         }
       });
     },
     selectOrg(row) {
-      console.log(row);
-      
+      this.$store.commit("SET_ORG_ID", row.orgId);
+      this.$store.commit("SET_ORG_WORKSPACEID", row.workspaceId);
+      Cookies.set("orgName", row.orgName);
+      this.$router.push({ path: this.redirect || "/" }).catch(() => {});
+    },
+    getUserInfo() {
       getInfo().then((res) => {
         if (res.code === 200) {
-          this.$store.commit("SET_ORG_ID", row.orgId);
-          this.$store.commit("SET_ORG_WORKSPACEID", row.workspaceId);
-          this.$router.push({ path: this.redirect || "/" }).catch(() => {});
           let userInfo = res.user;
-          Cookies.set('user', JSON.stringify(userInfo), { expires: 30 });
-          Cookies.set('orgName', row.orgName);
+          Cookies.set("user", JSON.stringify(userInfo), { expires: 30 });
+          this.params.userId = userInfo.userId;
+          this.getOrgList();
         }
       });
     },
   },
   mounted() {
-    this.getOrgList();
+    this.getUserInfo();
   },
 };
 </script>
