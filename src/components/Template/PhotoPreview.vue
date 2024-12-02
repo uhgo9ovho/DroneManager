@@ -95,6 +95,7 @@
 import ImageZoom from "./ImageZoom.vue";
 import { addWarningAPI, uploadAPI, dictListAPI } from "@/api/TaskManager.js";
 import AMapLoader from "@amap/amap-jsapi-loader";
+import Cookies from 'js-cookie';
 export default {
   name: "PhotoPreview",
   props: {
@@ -247,7 +248,7 @@ export default {
             console.log(blob);
 
             const formData = new FormData();
-            formData.append("file", blob, "annotated-image.png"); // 'file' 是后端接收的字段名
+            formData.append("file", blob, new Date().getTime()); // 'file' 是后端接收的字段名
             uploadAPI(formData).then((res) => {
               console.log(res);
               const resUrl = res.url;
@@ -267,8 +268,12 @@ export default {
                   longitude: this.lon,
                   status: "0",
                   description: "",
-                  rectangles: this.locationArr
+                  rectangles: `${this.locationArr}`,
+                  orgId: localStorage.getItem('org_id'),
+                  orgName: Cookies.get('orgName')
                 };
+                console.log(params, 'params');
+                
                 console.log(params);
                 
                 addWarningAPI(params);
@@ -326,6 +331,7 @@ export default {
     },
   },
   mounted() {
+    
     this.getDictList();
     this.initMap();
     window.addEventListener("resize", () => {

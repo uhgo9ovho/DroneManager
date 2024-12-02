@@ -93,7 +93,7 @@ export const deleteTaskAPI = (taskIds) => {
  */
 export const warningListAPI = (params) => {
     return request({
-        url: `/wurenji/warning/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}`,
+        url: `/wurenji/warning/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${params.orgId}`,
         method: 'get'
     })
 }
@@ -279,5 +279,14 @@ export const getWarningPhotosAPI = (warnId) => {
     return request({
         url: `/wurenji/warning/picHis/list?warnId=${warnId}`,
         method: 'get'
+    })
+}
+
+/**
+ * 获取任务记录照片
+ */
+export const getLogPhotosAPI = (flightRecordId) => {
+    return request({
+        url: `/wurenji/result/list?flightRecordId=${flightRecordId}`
     })
 }

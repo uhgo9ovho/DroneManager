@@ -36,9 +36,8 @@
 
 <script>
 import CommonTable from "./CommonTable.vue";
-import { mockList7 } from "@/utils/mock.js";
 import AirLogDialog from "./Template/AirLogDialog.vue";
-import { recordListAPI } from "@/api/TaskManager.js";
+import { recordListAPI, getLogPhotosAPI } from "@/api/TaskManager.js";
 export default {
   name: "FLightLog",
   components: {
@@ -104,8 +103,16 @@ export default {
   },
   methods: {
     lookBtn(row) {
-      this.row = row;
-      this.showDialog = true;
+      console.log(row);
+
+      getLogPhotosAPI(row.recordId).then((res) => {
+        if (res.code === 200) {
+          row.photoNum = res.rows.length;
+          row.resultList = res.rows;
+          this.showDialog = true;
+          this.row = row;
+        }
+      });
     },
     closeAirDialog() {
       this.showDialog = false;
@@ -114,27 +121,25 @@ export default {
       const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
-        orgId: localStorage.getItem('org_id')
+        orgId: localStorage.getItem("org_id"),
       };
       recordListAPI(params).then((res) => {
         if (res.code === 200) {
-          res.rows.forEach((item) => {
-            item.photoNum = item.resultList.length;
-          });
+          
           this.logList = res.rows;
           this.total = res.total;
         }
       });
     },
-    pageChange(val) {      
+    pageChange(val) {
       this.pageSize = val.pageSize;
       this.pageNum = val.pageNum;
-      this.initList()
+      this.initList();
     },
     sizeChange(val) {
       this.pageNum = val.pageNum;
       this.pageSize = val.pageSize;
-      this.initList()
+      this.initList();
     },
   },
   mounted() {

@@ -271,6 +271,7 @@ export default {
       const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
+        orgId: localStorage.getItem('org_id')
       };
       warningListAPI(params).then((res) => {
         if (res.code === 200) {
