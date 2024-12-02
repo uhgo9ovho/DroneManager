@@ -17,9 +17,9 @@ import request from '@/utils/request';
     } 
  * @returns 
  */
-export const addTask = (params) => {
+export const addAndEditTask = (params) => {
     return request({
-        url: '/wurenji/task/addTask',
+        url: '/wurenji/task/addAndEditTask',
         method: 'post',
         data: params
     })

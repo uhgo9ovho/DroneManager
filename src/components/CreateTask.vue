@@ -69,7 +69,7 @@
 
 <script>
 import { getToken } from "@/utils/auth";
-import { addTask } from "@/api/TaskManager.js";
+import { addAndEditTask } from "@/api/TaskManager.js";
 export default {
   name: "CreateForm",
   props: {
@@ -217,7 +217,7 @@ export default {
           };
           if (!params.timesType) delete params["dateArrays"];
 
-          addTask(params)
+          addAndEditTask(params)
             .then((res) => {
               if (res.code === 200) {
                 this.$message.success(res.msg);
@@ -225,7 +225,7 @@ export default {
                 this.outBtn();
               } else {
                 this.loading = false;
-                this.$message.success(res.msg);
+                this.$message.error(res.msg);
               }
             })
             .catch((err) => {

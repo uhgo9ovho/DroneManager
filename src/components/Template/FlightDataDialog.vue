@@ -16,7 +16,11 @@
         <el-form-item label="重复频率" prop="checkedCities">
           <div class="frequency-box">
             <span>每</span>
-            <el-select v-model="ruleForm.frequency" placeholder="请选择">
+            <el-select
+              v-model="ruleForm.frequency"
+              placeholder="请选择"
+              @change="frequencyChange"
+            >
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -30,7 +34,7 @@
               >次</span
             >
           </div>
-          <div class="week" v-if="ruleForm.frequency == '周'">
+          <div class="week" v-if="ruleForm.frequency == 1">
             <div
               class="week-item"
               :class="{ 'is-active': item.checked }"
@@ -41,7 +45,7 @@
               {{ item.label }}
             </div>
           </div>
-          <div class="moon" v-if="ruleForm.frequency == '月'">
+          <div class="moon" v-if="ruleForm.frequency == 2">
             <div
               class="moon-item"
               :class="{ 'is-active': item.checked }"
@@ -53,10 +57,7 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item
-          label="巡检时段"
-          prop="inspection"
-        >
+        <el-form-item label="巡检时段" prop="inspection">
           <el-select
             v-model="ruleForm.inspection"
             placeholder="请选择"
@@ -103,6 +104,7 @@
 </template>
 
 <script>
+import { addAndEditTask } from "@/api/TaskManager";
 const now = new Date();
 export default {
   props: {
@@ -118,7 +120,7 @@ export default {
   data() {
     return {
       ruleForm: {
-        frequency: "天",
+        frequency: "",
         inspection: "",
         checkedCharacters: [],
         startDate: `${now.getFullYear()}-${
@@ -159,50 +161,51 @@ export default {
         },
         {
           value: 7,
-          label: "日",
+          label: "天",
           checked: false,
         },
       ],
       options: [
         {
-          value: "天",
+          value: 0,
           label: "天",
         },
         {
-          value: "周",
+          value: 1,
           label: "周",
         },
         {
-          value: "月",
+          value: 2,
           label: "月",
         },
       ],
       rules: {},
       inspectionTimes: [
         {
-          value: "全天",
+          value: 3,
           label: "全天",
         },
         {
-          value: "9:00-12:00",
+          value: 0,
           label: "9:00-12:00",
         },
         {
-          value: "12:00-17:00",
+          value: 1,
           label: "12:00-17:00",
         },
         {
-          value: "17:00-21:00",
+          value: 2,
           label: "17:00-21:00",
         },
       ],
       moonList: [],
+      dateArr: [],
     };
   },
   computed: {
     frequencyLength() {
       switch (this.ruleForm.frequency) {
-        case "日":
+        case "天":
           return 1;
         case "周":
           let charactersLength = this.characters.filter(
@@ -223,7 +226,37 @@ export default {
     handleClose() {
       this.$emit("closeFlightDateDialog");
     },
-    updateDate() {},
+    frequencyChange(val) {
+      let value = 0; //天
+      switch (val) {
+        case "天":
+          value = 0;
+          break;
+        case "周":
+          value = 1;
+          break;
+        case "月":
+          value = 2;
+          break;
+        default:
+          break;
+      }
+    },
+    updateDate() {
+      const params = {
+        timesType: this.ruleForm.frequency,
+        dateArrays: this.dateArr,
+        schedulingType: this.ruleForm.inspection,
+        startTime: this.formatDate(this.ruleForm.startDate),
+        endTime: this.formatDate(this.ruleForm.endDate),
+        taskId: this.flightDataInfo.taskId,
+      };
+      if (!params.timesType) delete params["dateArrays"];
+
+      addAndEditTask(params).then((res) => {
+        console.log(res, "aaa");
+      });
+    },
     getMoons() {
       this.moonList = [];
       for (let i = 1; i <= 31; i++) {
@@ -236,9 +269,21 @@ export default {
     },
     checkedItem(item) {
       item.checked = !item.checked;
+      this.dateArr = this.characters.filter((item) => {
+        if (item.checked) {
+          return item.value;
+        }
+      }).map(it => it.value);
     },
     checkedMoonItem(item) {
+      console.log(item);
+      
       item.checked = !item.checked;
+      this.dateArr = this.moonList.filter((item) => {
+        if (item.checked) {
+          return item.value;
+        }
+      }).map(it => it.value);
     },
     formatDate(currentDate) {
       const date = new Date(currentDate);
@@ -248,38 +293,26 @@ export default {
         String(date.getMonth() + 1).padStart(2, "0") +
         "-" +
         String(date.getDate()).padStart(2, "0");
-        return formattedDate
+      return formattedDate;
     },
   },
   mounted() {
     this.getMoons();
-    this.ruleForm.frequency =
-      this.flightDataInfo.timesType == 1
-        ? "周"
-        : this.flightDataInfo.timesType == 2
-        ? "月"
-        : "日";
-    this.ruleForm.inspection =
-      this.flightDataInfo.schedulingType == 3
-        ? "全天"
-        : this.flightDataInfo.schedulingType == 2
-        ? "17:00-21:00"
-        : this.flightDataInfo.schedulingType == 1
-        ? "12.00-17:00"
-        : "9:00-12:00";
+    this.ruleForm.frequency = this.flightDataInfo.timesType;
+    this.ruleForm.inspection = this.flightDataInfo.schedulingType;
     this.ruleForm.startDate = this.formatDate(this.flightDataInfo.startTime);
     this.ruleForm.endDate = this.formatDate(this.flightDataInfo.endTime);
-    if(this.flightDataInfo.timesType == 1) {
+    if (this.flightDataInfo.timesType == 1) {
       //周
-      this.characters.forEach(item => {
-        if(this.flightDataInfo.dateArrays.includes(item.value)) {
+      this.characters.forEach((item) => {
+        if (this.flightDataInfo.dateArrays.includes(item.value)) {
           item.checked = true;
         }
       });
-    } else if(this.flightDataInfo.timesType == 2) {
+    } else if (this.flightDataInfo.timesType == 2) {
       //月
-      this.moonList.forEach(item => {
-        if(this.flightDataInfo.dateArrays.includes(item.value)) {
+      this.moonList.forEach((item) => {
+        if (this.flightDataInfo.dateArrays.includes(item.value)) {
           item.checked = true;
         }
       });

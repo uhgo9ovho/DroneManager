@@ -92,7 +92,7 @@ export default {
     handleClick(tab) {
       this.currentTab = tab.name;
     },
-    addTask() {
+    addAndEditTask() {
       this.$router.push('/openMap')
     }
   },
