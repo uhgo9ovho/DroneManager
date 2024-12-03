@@ -250,6 +250,7 @@ export default {
         startTime: this.formatDate(this.ruleForm.startDate),
         endTime: this.formatDate(this.ruleForm.endDate),
         taskId: this.flightDataInfo.taskId,
+        airlineNumber: this.flightDataInfo.airlineNumber
       };
       if (!params.timesType) delete params["dateArrays"];
 

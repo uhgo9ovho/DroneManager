@@ -371,6 +371,7 @@ export default {
   },
   mounted() {
     this.getEQToken();
+    console.log(process.env.VUE_APP_WS_URL, "asdas");
   },
   methods: {
     ...mapActions("droneStatus", ["getToicpSubPub", "getMqttState"]),
@@ -396,7 +397,6 @@ export default {
     //获取设备token
     getEQToken() {
       const userId = JSON.parse(Cookies.get("user")).userId;
-      console.log(JSON.parse(Cookies.get("user")), "aaa");
       const username = JSON.parse(Cookies.get("user")).userName;
       const params = {
         workspaceId: localStorage.getItem("workspaceId"),
@@ -408,7 +408,7 @@ export default {
           const token = res.data.data["ws-token"];
           this.ws = new WebSocketClient(
             // `ws://8.136.97.59:6789/api/v1/ws?ws-token=${token}` //线上
-            `ws://172.16.40.226:6789/api/v1/ws?ws-token=${token}` //本地
+            `${process.env.VUE_APP_WS_URL}?ws-token=${token}` //本地
           );
         }
       });
