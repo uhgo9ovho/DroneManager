@@ -8,6 +8,7 @@ import permission from './modules/permission'
 import settings from './modules/settings'
 import getters from './getters'
 import droneStatus from './modules/droneStatus'
+import changeStatus from './modules/changeStatus'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -18,7 +19,8 @@ const store = new Vuex.Store({
     tagsView,
     permission,
     settings,
-    droneStatus
+    droneStatus,
+    changeStatus
   },
   getters
 })

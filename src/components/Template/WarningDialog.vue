@@ -6,12 +6,9 @@
       </div>
       <div class="issue-photo-wrap">
         <div class="innerImgBox">
-          <img
-            :src="url"
-            alt=""
-          />
+          <img :src="url" alt="" />
         </div>
-        <div class="download">
+        <div class="download" @click="downloadBtn">
           <i class="el-icon-download"></i>
         </div>
         <div class="time-line-wrap">
@@ -77,6 +74,7 @@
 import ImageZoom from "./ImageZoom.vue";
 import MapContainer from "../MapContainer.vue";
 import { getWarningPhotosAPI } from "@/api/TaskManager.js";
+import { downloadPhoto } from "@/utils/ruoyi";
 export default {
   name: "WarningDialog",
   props: {
@@ -87,9 +85,8 @@ export default {
   },
   data() {
     return {
-      src: "https://today-obs.line-scdn.net/0hfBxQo9YUOW1FKCot-XdGOn1-NRx2TiNkZxt1XDQrYVo7BH84fkdqDmZ6b0FgSn9vZU8kAzUhNAk9THZpfg/w644",
       timeOptions: [],
-      url: ""
+      url: "",
     };
   },
   components: {
@@ -97,41 +94,11 @@ export default {
     MapContainer,
   },
   methods: {
+    downloadBtn() {
+      downloadPhoto(this.url, this.url+'.png')
+    },
     closeWarningDialog() {
       this.$emit("closeWarningDialog");
-    },
-    getDatesInRange() {
-      const currentDate = new Date();
-      const twoWeeksAgo = new Date();
-      twoWeeksAgo.setDate(currentDate.getDate() - 14);
-
-      let datesArray = [];
-
-      while (twoWeeksAgo <= currentDate) {
-        let year = twoWeeksAgo.getFullYear();
-        let month = (twoWeeksAgo.getMonth() + 1).toString().padStart(2, "0"); // 月份从0开始，所以要加1
-        let day = twoWeeksAgo.getDate().toString().padStart(2, "0");
-
-        let timeString = `${year}/${month}/${day}`;
-
-        // 计算距离今天多少天前
-        let daysAgo = Math.round(
-          (currentDate - twoWeeksAgo) / (1000 * 60 * 60 * 24)
-        );
-        let text = daysAgo === 0 ? "今天" : `${daysAgo}天前`;
-
-        // 构建对象并添加到数组
-        datesArray.push({
-          time: timeString,
-          text: text,
-          checked: text == "1天前" ? true : false,
-        });
-
-        // 日期加一天
-        twoWeeksAgo.setDate(twoWeeksAgo.getDate() + 1);
-      }
-
-      // this.timeOptions = datesArray.reverse();
     },
     switchImage(item) {
       this.url = item.url;
@@ -147,8 +114,9 @@ export default {
           // 获取当前日期
           const currentDate = new Date();
           this.timeOptions = responseData.map((item, index) => {
-            if(index === 0) {
-              this.url = "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.pic
+            if (index === 0) {
+              this.url =
+                "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.pic;
             }
             const photoDate = new Date(item.photodate);
 
@@ -191,7 +159,6 @@ export default {
     },
   },
   mounted() {
-    this.getDatesInRange();
     this.getPhotoList();
   },
 };

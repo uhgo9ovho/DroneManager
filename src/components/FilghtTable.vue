@@ -81,6 +81,7 @@
                 :key="index"
                 :command="beforeHandleCommand(row, item.label)"
                 :style="{ color: item.color }"
+                v-show="!(item.label == '成果' && row.taskType !== 2)"
                 ><i class="iconfont" :class="item.icon"></i>
                 {{ item.label }}</el-dropdown-item
               >

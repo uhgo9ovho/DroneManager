@@ -1,5 +1,9 @@
 
+import JSZip from 'jszip'
+import FileSaver from 'file-saver'
 
+import { Message } from 'element-ui'
+import store from '@/store';
 /**
  * 通用js方法封装处理
  * Copyright (c) 2019 ruoyi
@@ -88,7 +92,7 @@ export function selectDictLabel(datas, value) {
 
 // 回显数据字典（字符串、数组）
 export function selectDictLabels(datas, value, separator) {
-  if (value === undefined || value.length ===0) {
+  if (value === undefined || value.length === 0) {
     return "";
   }
   if (Array.isArray(value)) {
@@ -230,4 +234,59 @@ export function tansParams(params) {
 // 验证是否为blob格式
 export function blobValidate(data) {
   return data.type !== 'application/json'
+}
+
+//下载单张图片
+export function downloadPhoto(link, picName) {
+  let img = new Image()
+  img.setAttribute('crossOrigin', 'Anonymous')
+  img.onload = function () {
+    let canvas = document.createElement('canvas')
+    let context = canvas.getContext('2d')
+    canvas.width = img.width
+    canvas.height = img.height
+    context.drawImage(img, 0, 0, img.width, img.height)
+    let url = canvas.toDataURL('images/png')
+    let a = document.createElement('a')
+    let event = new MouseEvent('click')
+    a.download = picName || 'default.png'
+    a.href = url
+    a.dispatchEvent(event)
+  }
+  img.src = link + '?v=' + Date.now()
+}
+
+/**
+多张图片以压缩包的形式下载
+imgsList： 存放多张图片路径的数组 base64
+**/
+export async function downloadImagesAsZip(imageUrls, zipFileName = 'images.zip') {
+  const zip = new JSZip();
+
+  // 将图片文件添加到 zip
+  for (const [index, url] of imageUrls.entries()) {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const fileName = `image_${index + 1}.${blob.type.split('/')[1]}`; // 自动根据 MIME 类型命名
+      zip.file(fileName, blob);
+    } catch (error) {
+      console.error(`Error downloading image ${url}:`, error);
+    }
+  }
+
+  // 生成 ZIP 文件并触发下载
+  zip
+    .generateAsync({ type: 'blob' })
+    .then((content) => {
+      FileSaver.saveAs(content, zipFileName);
+      console.log(store,'store');
+      
+      store.commit('changeStatus/CHANGE_DOWNLOAD_STATUS',false);
+      Message.success('下载完成');
+    })
+    .catch((error) => {
+      console.error('Error generating ZIP file:', error);
+      Message.error('下载失败');
+    });
 }

@@ -69,9 +69,10 @@
                       effect="dark"
                       content="下载原图照片"
                       placement="top"
+                      
                     >
-                      <em style="cursor: pointer; color: #4678ff">
-                        <i class="el-icon-download"></i>
+                      <em style="cursor: pointer; color: #4678ff" @click="downloadBtn">
+                        <i :class="downloadICON"></i>
                         <em>下载</em>
                       </em>
                     </el-tooltip>
@@ -145,6 +146,8 @@
 import MapContainer from "../MapContainer.vue";
 import PhotoPreview from "./PhotoPreview.vue";
 import { airLineAPI } from "@/api/TaskManager.js";
+import { downloadImagesAsZip } from '@/utils/ruoyi';
+import { mapState, mapMutations } from 'vuex'
 import flvjs from "flv.js";
 export default {
   name: "AirLogDialog",
@@ -188,6 +191,16 @@ export default {
     MapContainer,
     PhotoPreview,
   },
+  computed: {
+    ...mapState('changeStatus', ['downloadStatus']),
+    downloadICON() {
+      if(this.downloadStatus) {
+        //开始下载
+        return 'el-icon-loading'
+      }
+      return 'el-icon-download'
+    }
+  },
   mounted() {
     this.getImageUrl();
     this.getAirLine();
@@ -199,6 +212,7 @@ export default {
     this.destoryVideo();
   },
   methods: {
+    ...mapMutations('changeStatus', ['CHANGE_DOWNLOAD_STATUS']),
     destoryVideo() {
       if (this.player) {
         this.player.pause(); // 暂停播放数据流
@@ -207,6 +221,13 @@ export default {
         this.player.destroy(); // 销毁播放实例
         this.player = null;
       }
+    },
+    downloadBtn() {
+      if(this.downloadStatus) return this.$message.warning('正在下载，请勿重复点击');
+      this.$message.success('开始打包下载，请稍等片刻');
+      this.CHANGE_DOWNLOAD_STATUS(true);
+      const imgUrlArr = this.imgOptions.map(item => item.url);
+      downloadImagesAsZip(imgUrlArr)
     },
     createVideo() {
       if(!this.row.recordVideo) return;
@@ -241,30 +262,6 @@ export default {
         if (this.timerId !== null) {
           clearInterval(this.timerId);
         }
-        this.timerId = setInterval(() => {
-          if (videoElement.buffered.length > 0) {
-            const end = videoElement.buffered.end(0); // 视频结尾时间
-            const current = videoElement.currentTime; //  视频当前时间
-            const diff = end - current; // 相差时间
-            console.log(diff);
-            const diffCritical = 4; // 这里设定了超过4秒以上就进行跳转
-            const diffSpeedUp = 1; // 这里设置了超过1秒以上则进行视频加速播放
-            const maxPlaybackRate = 4; // 自定义设置允许的最大播放速度
-            let playbackRate = 1.0; // 播放速度
-            if (diff > diffCritical) {
-              console.log("相差超过4秒，进行跳转");
-              videoElement.currentTime = end - 1.5;
-              playbackRate = Math.max(1, Math.min(diffCritical, 16));
-            } else if (diff > diffSpeedUp) {
-              console.log("相差超过1秒，进行加速");
-              playbackRate = Math.max(1, Math.min(diff, maxPlaybackRate, 16));
-            }
-            videoElement.playbackRate = playbackRate;
-            // if (videoElement.paused) {
-            //   this.videoForm.player.play();
-            // }
-          }
-        }, 1000);
       }
       // 报错重连
       this.player.on(flvjs.Events.ERROR, (err, errdet) => {
@@ -360,7 +357,7 @@ export default {
   align-items: center;
   background-color: rgba(29, 29, 31, 0.8);
   backdrop-filter: blur(5px);
-  z-index: 9999;
+  z-index: 1010;
   .outer {
     background-color: #fff;
     width: calc(100% - 160px);

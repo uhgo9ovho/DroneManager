@@ -41,7 +41,7 @@
 
 <script>
 import { getToken } from "@/utils/auth";
-import { updateWarningStatusAPI } from '@/api/TaskManager.js';
+import { updateWarningStatusAPI } from "@/api/TaskManager.js";
 export default {
   name: "NeglectDialog",
   props: {
@@ -59,7 +59,7 @@ export default {
       eventName: "",
       textarea: "",
       fileList: [],
-      url: ""
+      url: "",
     };
   },
   computed: {
@@ -89,12 +89,11 @@ export default {
       };
       updateWarningStatusAPI(params).then((res) => {
         if (res.code === 200) {
-          this.closeDialog();
           this.$message.success("事件状态更新成功！");
           this.$emit("updateList");
+          this.closeDialog();
         }
       });
-      this.closeDialog();
     },
   },
 };
