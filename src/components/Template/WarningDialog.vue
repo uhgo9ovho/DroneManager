@@ -6,7 +6,10 @@
       </div>
       <div class="issue-photo-wrap">
         <div class="innerImgBox">
-          <img :src="row.identifyPhoto" alt="">
+          <img
+            :src="url"
+            alt=""
+          />
         </div>
         <div class="download">
           <i class="el-icon-download"></i>
@@ -60,7 +63,10 @@
           </div>
         </div>
         <div class="issue-map-wrap">
-            <MapContainer :longitude="row.longitude" :latitude="row.latitude"></MapContainer>
+          <MapContainer
+            :longitude="row.longitude"
+            :latitude="row.latitude"
+          ></MapContainer>
         </div>
       </div>
     </div>
@@ -70,24 +76,25 @@
 <script>
 import ImageZoom from "./ImageZoom.vue";
 import MapContainer from "../MapContainer.vue";
-import { getWarningPhotosAPI } from '@/api/TaskManager.js';
+import { getWarningPhotosAPI } from "@/api/TaskManager.js";
 export default {
   name: "WarningDialog",
   props: {
     row: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
       src: "https://today-obs.line-scdn.net/0hfBxQo9YUOW1FKCot-XdGOn1-NRx2TiNkZxt1XDQrYVo7BH84fkdqDmZ6b0FgSn9vZU8kAzUhNAk9THZpfg/w644",
       timeOptions: [],
+      url: ""
     };
   },
   components: {
     ImageZoom,
-    MapContainer
+    MapContainer,
   },
   methods: {
     closeWarningDialog() {
@@ -124,21 +131,68 @@ export default {
         twoWeeksAgo.setDate(twoWeeksAgo.getDate() + 1);
       }
 
-      this.timeOptions = datesArray.reverse();
+      // this.timeOptions = datesArray.reverse();
     },
     switchImage(item) {
+      this.url = item.url;
       this.timeOptions.forEach((it) => {
         it.checked = false;
       });
       item.checked = true;
     },
     getPhotoList() {
-      getWarningPhotosAPI(this.row.id)
-    }
+      getWarningPhotosAPI(this.row.id).then((res) => {
+        if (res.code === 200) {
+          const responseData = res.rows;
+          // 获取当前日期
+          const currentDate = new Date();
+          this.timeOptions = responseData.map((item, index) => {
+            if(index === 0) {
+              this.url = "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.pic
+            }
+            const photoDate = new Date(item.photodate);
+
+            // 计算时间差（以天为单位）
+            const timeDiffInMs = currentDate - photoDate;
+            const timeDiffInDays = Math.floor(
+              timeDiffInMs / (1000 * 60 * 60 * 24)
+            );
+
+            // 根据时间差生成描述文本
+            let text = "";
+            if (timeDiffInDays < 7) {
+              text = `${timeDiffInDays}天前`;
+            } else if (timeDiffInDays < 14) {
+              text = "一周前";
+            } else if (timeDiffInDays < 21) {
+              text = "两周前";
+            } else if (timeDiffInDays < 30) {
+              text = "三周前";
+            } else if (timeDiffInDays < 60) {
+              text = "一个月前";
+            } else if (timeDiffInDays < 365) {
+              const months = Math.floor(timeDiffInDays / 30);
+              text = `${months}个月前`;
+            } else {
+              const years = Math.floor(timeDiffInDays / 365);
+              text = `${years}年前`;
+            }
+
+            return {
+              time: item.photo_time,
+              url: "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.pic,
+              text: text,
+              checked: index === 0, // 第一个对象的checked为true
+            };
+          });
+          console.log(this.timeOptions);
+        }
+      });
+    },
   },
   mounted() {
     this.getDatesInRange();
-    this.getPhotoList()
+    this.getPhotoList();
   },
 };
 </script>

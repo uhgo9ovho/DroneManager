@@ -19,7 +19,7 @@ import request from '@/utils/request';
  */
 export const addAndEditTask = (params) => {
     return request({
-        url: '/wurenji/task/addAndEditTask',
+        url: '/wurenji/task/addTask',
         method: 'post',
         data: params
     })
@@ -54,7 +54,7 @@ export const taskInfoApI = (id) => {
  */
 export const heduledListAPI = (date) => {
     return request({
-        url: `/wurenji/scheduling/list?date=${date}`,
+        url: `/wurenji/scheduling/list?date=${date}&orgId=${localStorage.getItem('org_id')}`,
         method: 'get'
     })
 };
