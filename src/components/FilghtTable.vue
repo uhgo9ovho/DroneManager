@@ -123,6 +123,7 @@
         :flyDateVisible="flyDateVisible"
         :flightDataInfo="flightDataInfo"
         @closeFlightDateDialog="closeFlightDateDialog"
+        @changeVisible="changeVisible"
       ></FlightDataDialog>
     </div>
   </div>
@@ -272,6 +273,10 @@ export default {
     },
   },
   methods: {
+    changeVisible() {
+      this.flyDateVisible = false;
+      this.initList();
+    },
     initList() {
       const params = {
         pageNum: this.pageNum,

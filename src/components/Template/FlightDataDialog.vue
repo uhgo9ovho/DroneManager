@@ -64,7 +64,7 @@
             class="inspection-select"
           >
             <el-option
-              v-for="item in inspectionTimes"
+              v-for="item in pickerOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -77,6 +77,9 @@
             v-model="ruleForm.startDate"
             type="date"
             placeholder="选择开始日期"
+            value-format="yyyy-MM-dd"
+            :picker-options="startPicker"
+            @change="changeStartDate"
           >
           </el-date-picker>
         </el-form-item>
@@ -85,6 +88,8 @@
             v-model="ruleForm.endDate"
             type="date"
             placeholder="选择结束日期"
+            value-format="yyyy-MM-dd"
+            :picker-options="endPicker"
           >
           </el-date-picker>
         </el-form-item>
@@ -119,6 +124,17 @@ export default {
   },
   data() {
     return {
+      startPicker: {
+        disabledDate: (time) => {
+          return time.getTime() < Date.now() - 8.64e7;
+        },
+        selectableRange:
+          new Date().getHours() +
+          ":" +
+          (new Date().getMinutes() + 1) +
+          ":00" +
+          " - 23:59:59",
+      },
       ruleForm: {
         frequency: "",
         inspection: "",
@@ -180,7 +196,7 @@ export default {
         },
       ],
       rules: {},
-      inspectionTimes: [
+      pickerOptions: [
         {
           value: 3,
           label: "全天",
@@ -203,17 +219,34 @@ export default {
     };
   },
   computed: {
+    endPicker: (vm) => {      
+      return {
+        disabledDate: (time) => {
+          let beginDateVal = `${vm.ruleForm.startDate}`;
+          if (beginDateVal) {
+            return (
+              time.getTime() <
+              new Date(beginDateVal).getTime() +
+                1 * 24 * 60 * 60 * 1000 -
+                16.64e7
+            );
+          } else {
+            return time.getTime() < Date.now() - 8.64e7;
+          }
+        },
+      };
+    },
     frequencyLength() {
       switch (this.ruleForm.frequency) {
-        case "天":
+        case 0:
           return 1;
-        case "周":
+        case 1:
           let charactersLength = this.characters.filter(
             (item) => item.checked
           ).length;
           if (charactersLength < 1) charactersLength = 1;
           return charactersLength;
-        case "月":
+        case 2:
           let moonListLength = this.moonList.filter(
             (item) => item.checked
           ).length;
@@ -221,8 +254,46 @@ export default {
           return moonListLength;
       }
     },
+    currentInfo() {
+      let info = "";
+      switch (this.ruleForm.frequency) {
+        case 0:
+          const inspection = this.pickerOptions.filter(
+            (item) => item.value == this.ruleForm.inspection
+          )[0].label;
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每天 ${inspection} 执行1次`;
+          break;
+        case 1:
+          let checkedItemArr = this.characters.filter((item) => item.checked);
+          let checkedInfo = checkedItemArr.map((item) => item.label).join(",");
+          const inspection1 = this.pickerOptions.filter(
+            (item) => item.value == this.ruleForm.inspection
+          )[0].label;
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每周${checkedInfo} ${inspection1} 执行，共执行${this.frequencyLength}次`;
+          break;
+        case 2:
+          let monthItemArr = this.moonList.filter((item) => item.checked);
+          let monthinfo = monthItemArr.map((item) => item.label).join(",");
+          const inspection2 = this.pickerOptions.filter(
+            (item) => item.value == this.ruleForm.inspection
+          )[0].label;
+
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每月${monthinfo}号 ${inspection2} 执行，共执行${this.frequencyLength}次`;
+        default:
+          break;
+      }
+
+      return info;
+    },
   },
   methods: {
+    changeStartDate(date) {
+      const startDate = new Date(date);
+      const endDate = new Date(this.ruleForm.endDate);
+      if(startDate.getTime() > endDate.getTime()) {
+        this.ruleForm.endDate = date;
+      }
+    },
     handleClose() {
       this.$emit("closeFlightDateDialog");
     },
@@ -250,12 +321,20 @@ export default {
         startTime: this.formatDate(this.ruleForm.startDate),
         endTime: this.formatDate(this.ruleForm.endDate),
         taskId: this.flightDataInfo.taskId,
-        airlineNumber: this.flightDataInfo.airlineNumber
+        airlineNumber: this.flightDataInfo.airlineNumber,
+        note: this.currentInfo,
+        orgId: localStorage.getItem("org_id"),
       };
       if (!params.timesType) delete params["dateArrays"];
 
       addAndEditTask(params).then((res) => {
         console.log(res, "aaa");
+        if (res.code === 200) {
+          this.$message.success(res.msg);
+          this.$emit("changeVisible");
+        } else {
+          this.$message.error(res.msg);
+        }
       });
     },
     getMoons() {
@@ -270,21 +349,25 @@ export default {
     },
     checkedItem(item) {
       item.checked = !item.checked;
-      this.dateArr = this.characters.filter((item) => {
-        if (item.checked) {
-          return item.value;
-        }
-      }).map(it => it.value);
+      this.dateArr = this.characters
+        .filter((item) => {
+          if (item.checked) {
+            return item.value;
+          }
+        })
+        .map((it) => it.value);
     },
     checkedMoonItem(item) {
       console.log(item);
-      
+
       item.checked = !item.checked;
-      this.dateArr = this.moonList.filter((item) => {
-        if (item.checked) {
-          return item.value;
-        }
-      }).map(it => it.value);
+      this.dateArr = this.moonList
+        .filter((item) => {
+          if (item.checked) {
+            return item.value;
+          }
+        })
+        .map((it) => it.value);
     },
     formatDate(currentDate) {
       const date = new Date(currentDate);

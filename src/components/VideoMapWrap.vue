@@ -372,6 +372,10 @@ export default {
   mounted() {
     this.getEQToken();
     console.log(process.env.VUE_APP_WS_URL, "asdas");
+    // this.ws = new WebSocketClient(
+    //
+    //         `${process.env.VUE_APP_WS_URL}?ws-token=ksjdgbkadbfgadbfg` //本地
+    //       );
   },
   methods: {
     ...mapActions("droneStatus", ["getToicpSubPub", "getMqttState"]),

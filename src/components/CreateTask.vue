@@ -100,10 +100,10 @@ export default {
   },
   data() {
     let validatePass2 = (rule, value, callback) => {
-      if(this.settingInfo) {
-        callback()
+      if (this.settingInfo) {
+        callback();
       } else {
-        callback(new Error('请设置排期'))
+        callback(new Error("请设置排期"));
       }
     };
     return {
@@ -214,6 +214,7 @@ export default {
             dateArrays: this.valArr,
             wrjAirlineFiles: this.fileArr,
             note: this.settingInfo,
+            orgId: localStorage.getItem("org_id"),
           };
           if (!params.timesType) delete params["dateArrays"];
 

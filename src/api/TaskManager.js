@@ -31,7 +31,7 @@ export const addAndEditTask = (params) => {
  */
 export const taskListAPI = (params) => {
     return request({
-        url: `/wurenji/task/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}`,
+        url: `/wurenji/task/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${localStorage.getItem('org_id')}`,
         method: 'get'
     })
 };

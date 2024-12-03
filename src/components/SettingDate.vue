@@ -79,6 +79,7 @@
           value-format="yyyy-MM-dd"
           placeholder="选择开始日期"
           @change="startTimeChange"
+          :picker-options="startPicker"
         >
         </el-date-picker>
       </el-form-item>
@@ -88,6 +89,7 @@
           type="date"
           value-format="yyyy-MM-dd"
           @change="endTimeChange"
+          :picker-options="endPicker"
           placeholder="选择结束日期"
         >
         </el-date-picker>
@@ -102,6 +104,17 @@ export default {
   name: "SettingDate",
   data() {
     return {
+      startPicker: {
+        disabledDate: (time) => {
+          return time.getTime() < Date.now() - 8.64e7;
+        },
+        selectableRange:
+          new Date().getHours() +
+          ":" +
+          (new Date().getMinutes() + 1) +
+          ":00" +
+          " - 23:59:59",
+      },
       characters: [
         {
           value: 1,
@@ -185,6 +198,23 @@ export default {
     };
   },
   computed: {
+    endPicker: (vm) => {
+      return {
+        disabledDate: (time) => {
+          let beginDateVal = `${vm.ruleForm.startDate}`;
+          if (beginDateVal) {
+            return (
+              time.getTime() <
+              new Date(beginDateVal).getTime() +
+                1 * 24 * 60 * 60 * 1000 -
+                16.64e7
+            );
+          } else {
+            return time.getTime() < Date.now() - 8.64e7;
+          }
+        },
+      };
+    },
     times() {
       // 初始化数组和起始时间
       let times = [];
@@ -301,6 +331,11 @@ export default {
       this.formatInfo();
     },
     startTimeChange(val) {
+      const startDate = new Date(val);
+      const endDate = new Date(this.ruleForm.endDate);
+      if (startDate.getTime() > endDate.getTime()) {
+        this.ruleForm.endDate = val;
+      }
       this.$emit("startTime", val);
       this.formatInfo();
     },
@@ -323,8 +358,8 @@ export default {
       let dateArr = this.characters
         .filter((item) => item.checked)
         .map((it) => it.value);
-        console.log(dateArr,'datearr');
-        
+      console.log(dateArr, "datearr");
+
       this.$emit("dateArrays", dateArr);
 
       this.formatInfo();
