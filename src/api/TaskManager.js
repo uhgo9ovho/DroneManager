@@ -287,6 +287,17 @@ export const getWarningPhotosAPI = (warnId) => {
  */
 export const getLogPhotosAPI = (flightRecordId) => {
     return request({
-        url: `/wurenji/result/list?flightRecordId=${flightRecordId}`
+        url: `/wurenji/result/list?flightRecordId=${flightRecordId}`,
+        method: 'get'
+    })
+}
+/**
+ * 新增飞行排期
+ */
+export const addSchedulingAPI = (params) => {
+    return request({
+        url: '/wurenji/scheduling/addScheduling',
+        method: 'post',
+        data: params
     })
 }
