@@ -2,10 +2,10 @@
 
 ```bash
 # 克隆项目
-git clone https://gitee.com/y_project/RuoYi-Vue
+git clone https://github.com/uhgo9ovho/DroneManager.git
 
 # 进入项目目录
-cd ruoyi-ui
+cd DroneManager
 
 # 安装依赖
 npm install
@@ -17,7 +17,7 @@ npm install --registry=https://registry.npmmirror.com
 npm run dev
 ```
 
-浏览器访问 http://localhost:80
+浏览器访问 http://localhost:1024
 
 ## 发布
 
