@@ -23,6 +23,8 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+            :unlink-panels="true"
+            :picker-options="pickerOptions"
           >
           </el-date-picker>
         </div>
@@ -44,8 +46,8 @@
             {{ item.tips }}
           </div>
           <div class="item-nums">
-            {{ item.totalFights }} <span>{{ item.totalUnit }}</span> /{{
-              item.dayFilghts
+            {{ item.total }} <span>{{ item.totalUnit }}</span> /{{
+              item.dailyAverage
             }}
             <span>{{ item.dayUnit }}</span>
           </div>
@@ -110,6 +112,9 @@ import jstx from "@/assets/icons/减少通行.png";
 import jsrc from "@/assets/icons/减少人次.png";
 import jycb from "@/assets/icons/节约成本.png";
 import jspt from "@/assets/icons/减少碳排.png";
+
+import { getstatisticsDataAPI } from "@/api/index.js";
+
 export default {
   data() {
     return {
@@ -137,38 +142,42 @@ export default {
         },
       ],
       date: "",
+      timeRange: {
+        startTime: 0,
+        endTime: 0,
+      },
       isShow: false,
       currentDate: "",
       overOptions: [
         {
           icon: jiaci,
-          tips: "总架次/日均架次",
-          totalFights: "68",
-          dayFilghts: "8.5",
+          tips: "总架次 / 日均架次",
+          total: "68",
+          dailyAverage: "8.5",
           totalUnit: "次",
           dayUnit: "次",
         },
         {
           icon: jiaci1,
-          tips: "飞行里程/日均时常",
-          totalFights: "68",
-          dayFilghts: "8.5",
+          tips: "飞行里程 / 日均时常",
+          total: "68",
+          dailyAverage: "8.5",
           totalUnit: "公里",
           dayUnit: "小时",
         },
         {
           icon: tpsp,
-          tips: "总架次/日均架次",
-          totalFights: "68",
-          dayFilghts: "8.5",
+          tips: "图片 / 视频",
+          total: "68",
+          dailyAverage: "8.5",
           totalUnit: "张",
           dayUnit: "个",
         },
         {
           icon: qj,
-          tips: "总架次/日均架次",
-          totalFights: "68",
-          dayFilghts: "8.5",
+          tips: "全景 / 三维",
+          total: "68",
+          dailyAverage: "8.5",
           totalUnit: "张",
           dayUnit: "个",
         },
@@ -225,12 +234,152 @@ export default {
           tips: "减少排碳",
         },
       ],
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now();
+        },
+      },
     };
   },
   mounted() {
     this.getDateRange("week");
+    this.timeRange = this.getTimeRangeTimestamps("week");
+    console.log(this.timeRange);
+    this.getstatisticsData();
   },
   methods: {
+    convertToTimestamp(dateString) {
+      // 创建日期对象
+      const date = new Date(dateString);
+
+      // 检查日期对象是否有效
+      if (isNaN(date.getTime())) {
+        throw new Error("Invalid date string");
+      }
+
+      // 转换为时间戳（毫秒数）
+      const timestamp = date.getTime();
+
+      // 返回时间戳
+      return timestamp;
+    },
+    updateOverOptionsInPlace(options, data) {
+      options.forEach((option) => {
+        switch (option.tips) {
+          case "总架次 / 日均架次":
+            option.total = data.total;
+            option.dailyAverage = data.dailyAverage;
+            break;
+          case "飞行里程 / 日均时常":
+            option.total = data.flyDistance;
+            option.dailyAverage = data.avgFlyTime;
+            break;
+          case "图片 / 视频":
+            option.total = data.totalPhotoNum;
+            option.dailyAverage = data.totalVideoNum;
+            break;
+          case "全景 / 三维":
+            option.total = data.totalPanoramaNum;
+            option.dailyAverage = data.total3dNum;
+            break;
+          default:
+            break;
+        }
+      });
+    },
+
+    updateEventOptions(options, data) {
+      options.forEach((option) => {
+        switch (option.tips) {
+          case "预警事件":
+            option.number = data.totalWarningNum;
+            break;
+          case "交办事件":
+            option.number = data.totalAssignNum;
+            break;
+          case "提交任务数":
+            option.number = data.totalSubmitNum;
+            break;
+          case "任务架次":
+            option.number = data.totalTaskNum;
+            break;
+          default:
+            break;
+        }
+      });
+    },
+
+    updateFooterOptions(options, data) {
+      options.forEach((option) => {
+        switch (option.tips) {
+          case "减少通行":
+            option.number = data.reducePass;
+            break;
+          case "减少人次":
+            option.number = data.reduceManual;
+            break;
+          case "节约成本":
+            option.number = data.saveCost;
+            break;
+          case "减少排碳":
+            option.number = data.reducePass;
+            break;
+          default:
+            break;
+        }
+      });
+    },
+    getTimeRangeTimestamps(period) {
+      const nowMillis = Date.now(); // 当前时间的毫秒级时间戳
+      let startDateMillis = nowMillis; // 初始化为当前时间的毫秒级时间戳
+
+      // 根据 period 设置起始日期
+      const validPeriods = ["week", "month", "threeMonths", "year"];
+      if (!validPeriods.includes(period)) {
+        throw new Error(`Invalid period. Use "${validPeriods.join('", "')}".`);
+      }
+
+      const tempDate = new Date(nowMillis); // 创建一个基于当前毫秒级时间戳的Date对象
+      switch (period) {
+        case "week":
+          tempDate.setDate(tempDate.getDate() - 7);
+          break;
+        case "month":
+          tempDate.setMonth(tempDate.getMonth() - 1);
+          break;
+        case "threeMonths":
+          tempDate.setMonth(tempDate.getMonth() - 3);
+          break;
+        case "year":
+          tempDate.setFullYear(tempDate.getFullYear() - 1);
+          break;
+      }
+
+      startDateMillis = tempDate.getTime(); // 获取修改后的起始日期的毫秒级时间戳
+
+      // 返回包含起始和结束时间戳（毫秒级）的对象
+      return {
+        startTime: startDateMillis,
+        endTime: nowMillis,
+      };
+    },
+
+    getstatisticsData() {
+      const params = {
+        startTime: `${this.timeRange.startTime}`,
+        endTime: `${this.timeRange.endTime}`,
+        orgId: localStorage.getItem("org_id"),
+      };
+
+      getstatisticsDataAPI(params).then((res) => {
+        if (res.code == 200) {
+          this.updateOverOptionsInPlace(this.overOptions, res.data);
+          this.updateEventOptions(this.eventOptions, res.data);
+          this.updateFooterOptions(this.footerOptions, res.data);
+        }
+      });
+    },
+
     handleClick(tab, e) {
       const period = tab.name;
       if (period == "other") {
@@ -238,12 +387,18 @@ export default {
         this.$refs.datepicke.focus();
       } else {
         this.getDateRange(period);
+        this.timeRange = this.getTimeRangeTimestamps(period);
+        this.getstatisticsData();
         this.isShow = false;
       }
     },
     changeDate(e) {
       console.log(e[0]);
       const formatDateArr = e.map((item) => this.formatDateToYMD(item));
+      // console.log('e',e);
+      this.timeRange.startTime = this.convertToTimestamp(e[0]);
+      this.timeRange.endTime = this.convertToTimestamp(e[1]);
+      this.getstatisticsData();
       console.log(formatDateArr);
       this.currentDate = formatDateArr.join("-");
     },
@@ -305,15 +460,18 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+
   .title-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 20px 0 10px 0;
+
     .title-left {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
+
       .index-title {
         height: 50px;
         font-family: Alibaba PuHuiTi 3, Alibaba PuHuiTi 30;
@@ -325,6 +483,7 @@ export default {
         font-style: normal;
         text-transform: none;
       }
+
       .date {
         height: 22px;
         font-family: Alibaba PuHuiTi 3, Alibaba PuHuiTi 30;
@@ -339,13 +498,16 @@ export default {
         margin-bottom: 5px;
       }
     }
+
     .title-right {
       position: relative;
+
       .is-top {
         .el-tabs__nav-wrap::after {
           height: 0;
         }
       }
+
       .el-tabs__nav-wrap
         .el-tabs__nav-scroll
         .el-tabs__nav
@@ -357,9 +519,11 @@ export default {
         border-radius: 16px;
         z-index: 0;
       }
+
       .is-active {
         color: #fff !important;
       }
+
       .el-tabs__nav-wrap .el-tabs__nav-scroll .el-tabs__nav .el-tabs__item {
         width: 72px;
         line-height: 32px;
@@ -373,6 +537,7 @@ export default {
         text-align: center;
         padding: 0;
       }
+
       .dateValueDay {
         position: absolute;
         top: 0;
@@ -384,15 +549,18 @@ export default {
       }
     }
   }
+
   .content-box {
     overflow: auto;
   }
+
   .overview {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 10px;
     flex-wrap: wrap;
+
     .overview-item {
       width: 402px;
       height: 266px;
@@ -405,9 +573,11 @@ export default {
       flex-flow: column;
       margin-top: 10px;
       border-radius: 12px;
+
       .el-image {
         margin-bottom: 27px;
       }
+
       .item-tips {
         font-family: PingFang SC, PingFang SC;
         font-weight: 400;
@@ -419,6 +589,7 @@ export default {
         text-transform: none;
         margin-bottom: 10px;
       }
+
       .item-nums {
         font-family: Alibaba PuHuiTi 3-105 Heavy;
         font-weight: 900;
@@ -428,6 +599,7 @@ export default {
         text-align: left;
         font-style: normal;
         text-transform: none;
+
         span {
           font-family: Alibaba PuHuiTi 3-55 Regular;
           font-weight: 400;
@@ -441,6 +613,7 @@ export default {
       }
     }
   }
+
   .events-box {
     background-color: #fff;
     width: 100%;
@@ -460,6 +633,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+
       .item-imgBox {
         width: 114px;
         height: 93px;
@@ -470,6 +644,7 @@ export default {
         align-items: center;
         margin-right: 35px;
       }
+
       .item-info {
         .number {
           font-family: Alibaba PuHuiTi 3-105 Heavy;
@@ -481,6 +656,7 @@ export default {
           font-style: normal;
           text-transform: none;
           margin-bottom: 10px;
+
           span {
             font-family: Alibaba PuHuiTi 3-55 Regular;
             font-weight: 400;
@@ -492,6 +668,7 @@ export default {
             text-transform: none;
           }
         }
+
         .tips {
           font-family: PingFang SC, PingFang SC;
           font-weight: 400;
@@ -506,6 +683,7 @@ export default {
       }
     }
   }
+
   .footer-box {
     width: 100%;
     height: 222px;
@@ -516,6 +694,7 @@ export default {
     align-items: center;
     margin-top: 24px;
     padding: 0 20px;
+
     .footer-item {
       width: 377px;
       height: 134px;
@@ -525,6 +704,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+
       .item-imgBox {
         width: 72px;
         height: 72px;
@@ -535,6 +715,7 @@ export default {
         align-items: center;
         margin-right: 35px;
       }
+
       .item-info {
         .number {
           font-family: Alibaba PuHuiTi 3-105 Heavy;
@@ -545,6 +726,7 @@ export default {
           text-align: left;
           font-style: normal;
           text-transform: none;
+
           span {
             font-family: Alibaba PuHuiTi 3-55 Regular;
             font-weight: 400;
@@ -556,6 +738,7 @@ export default {
             text-transform: none;
           }
         }
+
         .tips {
           font-family: PingFang SC, PingFang SC;
           font-weight: 400;
