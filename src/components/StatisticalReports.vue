@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     detailsBtn() {
-
+      this.$router.push('/wordPreview')
     },
   },
   components: {

@@ -57,6 +57,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/wordPreview',
+    component: () => import('@/views/WordPreview'),
+    hidden: true
+  },
+  {
     path: '',
     component: Layout,
     redirect: 'index',
