@@ -44,11 +44,20 @@ export default {
     },
   },
   watch: {
-    isDay() {
-      this.formatDate(new Date(this.date));
+    isDay(val) {
+      if (val) {
+        this.formatDate(this.getCurrentDate());
+      }
     },
   },
   methods: {
+    getCurrentDate() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0"); // 月份从0开始，需要加1
+      const day = String(now.getDate()).padStart(2, "0");
+      return `${year}/${month}/${day}`;
+    },
     formatDate(DateObj) {
       // 提取年份、月份和日期
       const year = DateObj.getFullYear();
@@ -72,7 +81,9 @@ export default {
       // 获取对应的星期几名称
       this.dayOfWeekName = daysOfWeek[dayOfWeekNumber];
       this.date = this.isDay ? formattedDate : formattedMonth;
-      this.$emit('formattedDate',formattedDate)
+      console.log(this.date, "asdqwerwfg");
+
+      this.$emit("formattedDate", formattedDate);
     },
     dateChange(val) {
       const date = new Date(val);

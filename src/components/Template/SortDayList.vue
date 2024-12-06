@@ -22,7 +22,10 @@
                   >
                     <div
                       class="task-past-card"
-                      v-if="formatTime(item2.formatTime) === item.time || airTime(item2.formatTime) === item.time"
+                      v-if="
+                        formatTime(item2.formatTime) === item.time ||
+                        airTime(item2.formatTime) === item.time
+                      "
                     >
                       <AirItemInfo
                         :info="item2"
@@ -31,9 +34,14 @@
                     </div>
                   </div>
                   <div v-if="!item.taskName">
-                    <div class="task-card3" @click="addAirBtn">
+                    <div
+                      class="task-card3"
+                      @click="addAirBtn(item)"
+                      v-if="isShowAddBtn(item.time)"
+                    >
                       <div class="icon-add">+</div>
                     </div>
+                    <div class="task-card3" v-else></div>
                   </div>
                 </div>
               </div>
@@ -48,32 +56,45 @@
     </div>
     <!--  详情弹窗 -->
     <div v-if="visible">
-      <FlightDialog @closeDialog="closeDialog" :detailsShow="true" :taskDetails="true"></FlightDialog>
+      <FlightDialog
+        @closeDialog="closeDialog"
+        :detailsShow="true"
+        :taskDetails="true"
+      ></FlightDialog>
     </div>
     <!-- 添加航线弹窗 -->
-     <div v-if="addAirShow">
-      <AddAirLineDialog :addAirShow="addAirShow" @closeLineDialog="closeLineDialog"></AddAirLineDialog>
-     </div>
+    <div v-if="addAirShow">
+      <AddAirLineDialog
+        @updateData="updateData"
+        :currentDate="currentDate"
+        :startTime="startTime"
+        :addAirShow="addAirShow"
+        @closeLineDialog="closeLineDialog"
+      ></AddAirLineDialog>
+    </div>
   </div>
 </template>
 
 <script>
-import { mockList4 } from "@/utils/mock.js";
 import AirItemInfo from "./AirItemInfo.vue";
 import FlightDialog from "./FlightDialog.vue";
-import AddAirLineDialog from './AddAirLineDialog.vue';
+import AddAirLineDialog from "./AddAirLineDialog.vue";
 export default {
   name: "DayList",
   props: {
     sortList: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
+    currentDate: {
+      type: String,
+      default: "",
+    },
   },
   components: {
     AirItemInfo,
     FlightDialog,
-    AddAirLineDialog
+    AddAirLineDialog,
   },
   data() {
     return {
@@ -131,6 +152,7 @@ export default {
       shouldMove: false, //是否开始移动
       visible: false,
       addAirShow: false,
+      startTime: "",
     };
   },
   computed: {
@@ -139,17 +161,43 @@ export default {
         top: `${this.top}px`,
       };
     },
+    isShowAddBtn() {
+      let that = this;
+      return function (time) {
+
+        if (that.currentTime) {
+          return that.compareTime(time, that.currentTime);
+        }
+      };
+    },
   },
   watch: {
     sortList(arr) {
-      if(arr) {
+      if (arr) {
         this.airInfos = arr;
         this.getAirLines();
       }
-    }
+    },
   },
   methods: {
-    addAirBtn() {
+    compareTime(time1, time2) {
+      const [hour1, minute1] = time1.split(":").map(Number);
+      const [hour2, minute2] = time2.split(":").map(Number);
+
+      if (hour1 > hour2 || (hour1 === hour2 && minute1 > minute2)) {
+        return true; // time1 大于 time2
+      } else if (hour1 === hour2 && minute1 === minute2) {
+        return true; // 两个时间相等
+      } else {
+        return false; // time1 小于 time2
+      }
+    },
+    updateData(currentDate) {
+      this.$emit("updateData", currentDate);
+    },
+    addAirBtn(item) {
+      console.log(item);
+      this.startTime = item.time;
       this.addAirShow = true;
     },
     closeLineDialog() {
@@ -176,7 +224,6 @@ export default {
         this.shouldMove = true;
         // 计算已经过去的分钟数
         const minutesPastNine = Math.floor((now - nineAM) / 60000) * 1.16;
-        
 
         this.top = minutesPastNine; // 根据过去的分钟数设置初始 top 值
         this.startMoving();
@@ -196,7 +243,7 @@ export default {
         this.top += 1.16;
       }, 60000); // 每60,000毫秒(1分钟) 增加1px
     },
-    
+
     updateTime() {
       var now = new Date();
       var hours = now.getHours();
@@ -211,42 +258,40 @@ export default {
       this.currentTime = hours + ":" + minutes;
     },
     formatTime(timeStr) {
-      console.log(timeStr.replace(/^0/, "").replace(/:00$/, ""));
-      
       return timeStr.replace(/^0/, "").replace(/:00$/, "");
     },
     airTime(time) {
       switch (time) {
         case "10:30:00":
-          return "10:00"
+          return "10:00";
         case "14:30:00":
-          return "14:00"
+          return "14:00";
         default:
           break;
       }
     },
     getAirLines() {
       this.airLines.forEach((item1) => {
-        const match = this.sortList.find(
-          (item2) => {
-            item2.formatTime = item2.scheduledTime.split(' ')[1];
-            return this.formatTime(item2.formatTime) === item1.time || this.airTime(item2.formatTime) === item1.time
-          }
-        );
-          
+        const match = this.sortList.find((item2) => {
+          item2.formatTime = item2.scheduledTime.split(" ")[1];
+          return (
+            this.formatTime(item2.formatTime) === item1.time ||
+            this.airTime(item2.formatTime) === item1.time
+          );
+        });
+
         if (match) {
           // 将 match 对象中的属性复制到 item1 中
           Object.keys(match).forEach((key) => {
             item1[key] = match[key];
           });
         }
-        
       });
     },
   },
   mounted() {
     this.updateTime();
-    
+
     this.timer = setInterval(this.updateTime, 1000);
     this.checkTimeAndStart();
   },

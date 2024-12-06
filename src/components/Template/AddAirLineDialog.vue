@@ -16,34 +16,36 @@
         ></el-input>
         <i class="el-icon-close" @click="handleClose"></i>
       </div>
-      <div class="add-task-content">
+      <!-- <div class="add-task-content">
         <div class="select-task-title">已选航线</div>
         <div class="select-task">【全覆盖】西安-周至-3000mB01</div>
-      </div>
+      </div> -->
       <div class="add-task-list">
         <div class="add-task-left-list">
           <div
             class="left-item"
-            :class="{ 'left-item-selected': item.ticket_id == currentId }"
+            :class="{ 'left-item-selected': item.taskId == currentId }"
             v-for="item in airLineList"
             :key="item.ticket_id"
-            @click="checkedLine(item.ticket_id)"
+            @click="checkedLine(item)"
           >
             <div class="hidden_line" style="flex: 1 1 0%; text-align: start">
-              {{ item.ticket_name }} ({{ item.airlines.length }})
+              【{{ item.taskType | filterType }}】{{ item.taskName }} ({{
+                item.wrjAirlineFiles.length
+              }})
             </div>
           </div>
         </div>
         <div class="add-task-right-list">
           <div
             class="right-item"
-            :class="{'right-item-selected': item.airline_code == code}"
+            :class="{ 'right-item-selected': item.airlineId == code }"
             v-for="item in currentList"
-            :key="item.airline_code"
-            @click="selectAirLine(item.airline_code)"
+            :key="item.airlineId"
+            @click="selectAirLine(item)"
           >
-            <div class="hidden_line">{{ item.airline_name }}</div>
-            <i class="el-icon-check" v-if="item.airline_code == code"></i>
+            <div class="hidden_line">{{ item.lineName }}</div>
+            <i class="el-icon-check" v-if="item.airlineId == code"></i>
           </div>
         </div>
       </div>
@@ -58,7 +60,7 @@
 </template>
 
 <script>
-import { mockList6 } from "@/utils/mock.js";
+import { taskListAPI, addSchedulingAPI } from "@/api/TaskManager.js";
 export default {
   name: "AddAirLineDialog",
   props: {
@@ -66,45 +68,95 @@ export default {
       type: Boolean,
       default: false,
     },
+    startTime: {
+      type: String,
+      default: "",
+    },
+    currentDate: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
       taskName: "",
       airLineList: [],
       currentId: 0,
-      code: ""
+      code: "",
+      checkedItem: null,
     };
+  },
+  filters: {
+    filterType(val) {
+      switch (val) {
+        case 0:
+          return "拍照";
+        case 1:
+          return "直播";
+        case 2:
+          return "全景";
+        case 3:
+          return "正射";
+        case 4:
+          return "三维";
+        default:
+          break;
+      }
+    },
   },
   computed: {
     currentList() {
       if (this.currentId) {
-        const currentArr = mockList6.filter(
-          (item) => item.ticket_id == this.currentId
-        )[0].airlines;
+        const currentArr = this.airLineList.filter(
+          (item) => item.taskId == this.currentId
+        )[0].wrjAirlineFiles;
         console.log(currentArr);
         return currentArr;
       } else {
-        return []
+        return [];
       }
     },
   },
   methods: {
+    initList() {
+      const params = {
+        pageNum: "",
+        pageSize: "",
+      };
+      taskListAPI(params).then((res) => {
+        if (res.code === 200) {
+          this.airLineList = res.rows;
+        }
+      });
+    },
     handleClose() {
       this.$emit("closeLineDialog");
     },
     sureBtn() {
-      this.handleClose();
+      const params = {
+        airlineId: this.code, //航线id
+        taskId: this.checkedItem.taskId, //任务id
+        orgId: localStorage.getItem("org_id"), //组织id
+        startTime: `${this.currentDate} ${this.startTime}`,
+      };
+
+      addSchedulingAPI(params).then((res) => {
+        if (res.code === 200) {
+          this.$emit('updateData', this.currentDate);
+          this.handleClose();
+        }
+      });
     },
-    checkedLine(id) {
-      this.currentId = id;
+    checkedLine(item) {
+      this.currentId = item.taskId;
+      this.checkedItem = item;
     },
-    selectAirLine(code) {
-        this.code = code;
-    }
+    selectAirLine(item) {
+      this.code = item.airlineId;
+    },
   },
   mounted() {
-    console.log(mockList6);
-    this.airLineList = mockList6;
+    this.initList();
   },
 };
 </script>

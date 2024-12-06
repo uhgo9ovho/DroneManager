@@ -57,7 +57,7 @@
           </div>
         </div>
         <div class="sort-day" v-if="isDay">
-          <sort-day-list :sortList="sortList"></sort-day-list>
+          <sort-day-list @updateData="updateData" :currentDate="currentDate" :sortList="sortList"></sort-day-list>
         </div>
         <div class="sort-month" v-else>
           <sort-month-list></sort-month-list>
@@ -95,10 +95,14 @@ export default {
       pageNum: 1,
       pageSize: 10,
       sortList: [],
+      currentDate: ""
     };
   },
   mounted() {},
   methods: {
+    updateData(currentDate) {
+      this.initList(currentDate)
+    },
     initList(date) {
       heduledListAPI(date).then((res) => {
         if (res.code === 200) {
@@ -107,6 +111,7 @@ export default {
       });
     },
     formattedDate(date) {
+      this.currentDate = date;
       this.initList(date);
     },
     handleClose() {
