@@ -1,7 +1,9 @@
 <template>
   <div class="navbar">
     <div class="logo" @click="toHome">
-      <img :src="logoUrl" alt="" style="width: 32px; height: 32px" />
+      <img :src="logoUrl" alt="" style="width: 32px; height: 32px"/>
+      <div class="title">城市空天智慧管理平台</div>
+
     </div>
     <div class="user-info">
       <el-popover placement="top-start" width="370" trigger="click" popper-class="popper-notification">
@@ -27,40 +29,42 @@
 </template>
 
 <script>
-import logoImg from "@/assets/logo/logo.png";
-import UserInfo from "@/components/Template/UserInfo.vue";
-import Notification from "@/components/Notification.vue";
+import logoImg from '@/assets/logo/logo.png'
+import UserInfo from '@/components/Template/UserInfo.vue'
+import Notification from '@/components/Notification.vue'
+
 export default {
-  name: "NavBar",
+  name: 'NavBar',
   data() {
     return {
-      logoUrl: "/icon.ico",
-    };
+      logoUrl: '/icon.ico'
+    }
   },
   components: { UserInfo, Notification },
   computed: {},
   methods: {
     toggleSideBar() {
-      this.$store.dispatch("app/toggleSideBar");
+      this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-      this.$confirm("确定注销并退出系统吗？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('确定注销并退出系统吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
-          this.$store.dispatch("LogOut").then(() => {
-            location.href = "/index";
-          });
+          this.$store.dispatch('LogOut').then(() => {
+            location.href = '/index'
+          })
         })
-        .catch(() => {});
+        .catch(() => {
+        })
     },
     toHome() {
-      this.$router.push("/index");
-    },
-  },
-};
+      this.$router.push('/index')
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -73,31 +77,51 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   .logo {
-    width: 128px;
+    //width: 128px;
+    width: auto;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    margin-left: 50px;
+
+
+    .title {
+      margin-left: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      color: #fff;
+      font-weight: 500;
+    }
   }
+
   .user-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-right: 15px;
+
     .el-badge {
       margin-right: 43px;
+
       .el-icon-icon {
         color: #fff;
         font-size: 24px;
         transition: transform 0.3s ease;
+
         &:hover {
           transform: scale(1.5);
         }
+
         cursor: pointer;
       }
     }
+
     .user {
       cursor: pointer;
     }

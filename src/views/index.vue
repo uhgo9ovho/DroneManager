@@ -24,8 +24,8 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             :unlink-panels="true"
-            :picker-options="pickerOptions"
           >
+            <!-- :picker-options="pickerOptions" -->
           </el-date-picker>
         </div>
       </div>
@@ -234,13 +234,14 @@ export default {
           tips: "减少排碳",
         },
       ],
-      pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() > Date.now();
-        },
-      },
+      // pickerOptions: {
+      //   disabledDate(time) {
+      //     return time.getTime() > Date.now();
+      //   },
+      // },
     };
   },
+  computed: {},
   mounted() {
     this.getDateRange("week");
     this.timeRange = this.getTimeRangeTimestamps("week");

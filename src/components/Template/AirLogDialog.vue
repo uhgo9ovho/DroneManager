@@ -32,11 +32,14 @@
               :key="index"
               @click="previewBtn(item)"
             >
-              <img :src="item.url" alt="" />
+              <img :src="item.url" alt=""/>
               <div class="download">
                 <i class="el-icon-download"></i>
               </div>
               <div class="introduce">{{ item.createTime | formatTime }}</div>
+              <div class="alarm">
+                <img :src="alarm" alt="" class="alarm-img"/>1
+              </div>
             </div>
           </div>
         </div>
@@ -69,7 +72,7 @@
                       effect="dark"
                       content="下载原图照片"
                       placement="top"
-                      
+
                     >
                       <em style="cursor: pointer; color: #4678ff" @click="downloadBtn">
                         <i :class="downloadICON"></i>
@@ -143,58 +146,63 @@
 </template>
 
 <script>
-import MapContainer from "../MapContainer.vue";
-import PhotoPreview from "./PhotoPreview.vue";
-import { airLineAPI } from "@/api/TaskManager.js";
-import { downloadImagesAsZip } from '@/utils/ruoyi';
+import alarm from '@/assets/images/alarm.png'
+
+import MapContainer from '../MapContainer.vue'
+import PhotoPreview from './PhotoPreview.vue'
+import { airLineAPI } from '@/api/TaskManager.js'
+import { downloadImagesAsZip } from '@/utils/ruoyi'
 import { mapState, mapMutations } from 'vuex'
-import flvjs from "flv.js";
+import flvjs from 'flv.js'
+
 export default {
-  name: "AirLogDialog",
+  name: 'AirLogDialog',
   props: {
     row: {
       type: Object,
-      default: () => {},
-    },
+      default: () => {
+      }
+    }
   },
   data() {
     return {
       imgOptions: [],
       vedioVisible: true,
       preview: false,
-      currentUrl: "",
+      currentUrl: '',
       airLineData: [],
       isPlay: false,
       player: null,
       timerId: null,
-      lon: "",
-      lat: ""
-    };
+      lon: '',
+      lat: '',
+      alarm: alarm
+    }
   },
   filters: {
     formatTime(time) {
-      const dateString = time;
+      const dateString = time
 
       // 将字符串解析为 Date 对象
-      const date = new Date(dateString);
+      const date = new Date(dateString)
 
       // 获取小时、分钟、秒
-      const hours = date.getHours().toString().padStart(2, "0");
-      const minutes = date.getMinutes().toString().padStart(2, "0");
-      const seconds = date.getSeconds().toString().padStart(2, "0");
+      const hours = date.getHours().toString().padStart(2, '0')
+      const minutes = date.getMinutes().toString().padStart(2, '0')
+      const seconds = date.getSeconds().toString().padStart(2, '0')
 
       // 格式化输出
-      return `${hours}:${minutes}:${seconds}`;
-    },
+      return `${hours}:${minutes}:${seconds}`
+    }
   },
   components: {
     MapContainer,
-    PhotoPreview,
+    PhotoPreview
   },
   computed: {
     ...mapState('changeStatus', ['downloadStatus']),
     downloadICON() {
-      if(this.downloadStatus) {
+      if (this.downloadStatus) {
         //开始下载
         return 'el-icon-loading'
       }
@@ -202,146 +210,146 @@ export default {
     }
   },
   mounted() {
-    this.getImageUrl();
-    this.getAirLine();
+    this.getImageUrl()
+    this.getAirLine()
     this.$nextTick(() => {
-      this.createVideo();
-    });
+      this.createVideo()
+    })
   },
   beforeDestroy() {
-    this.destoryVideo();
+    this.destoryVideo()
   },
   methods: {
     ...mapMutations('changeStatus', ['CHANGE_DOWNLOAD_STATUS']),
     destoryVideo() {
       if (this.player) {
-        this.player.pause(); // 暂停播放数据流
-        this.player.unload(); // 取消数据流加载
-        this.player.detachMediaElement(); // 将播放实例从节点中取出
-        this.player.destroy(); // 销毁播放实例
-        this.player = null;
+        this.player.pause() // 暂停播放数据流
+        this.player.unload() // 取消数据流加载
+        this.player.detachMediaElement() // 将播放实例从节点中取出
+        this.player.destroy() // 销毁播放实例
+        this.player = null
       }
     },
     downloadBtn() {
-      if(this.downloadStatus) return this.$message.warning('正在下载，请勿重复点击');
-      this.$message.success('开始打包下载，请稍等片刻');
-      this.CHANGE_DOWNLOAD_STATUS(true);
-      const imgUrlArr = this.imgOptions.map(item => item.url);
+      if (this.downloadStatus) return this.$message.warning('正在下载，请勿重复点击')
+      this.$message.success('开始打包下载，请稍等片刻')
+      this.CHANGE_DOWNLOAD_STATUS(true)
+      const imgUrlArr = this.imgOptions.map(item => item.url)
       downloadImagesAsZip(imgUrlArr)
     },
     createVideo() {
-      if(!this.row.recordVideo) return;
+      if (!this.row.recordVideo) return
       if (flvjs.isSupported()) {
-        var videoElement = document.getElementById("videoElement");
+        var videoElement = document.getElementById('videoElement')
         this.player = flvjs.createPlayer(
           {
-            type: "flv",
+            type: 'flv',
             isLive: true,
             hasAudio: false,
-            url: 'https://wurenji02.oss-cn-beijing.aliyuncs.com/'+this.row.recordVideo, // 自己的flv视频流
+            url: 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + this.row.recordVideo, // 自己的flv视频流
             enableWorker: false, //启用 Web Worker 进程来加速视频的解码和处理过程
             stashInitialSize: 32 * 1024, // 初始缓存大小。单位：字节。建议针对直播：调整为1024kb
             stashInitialTime: 0.2, // 缓存初始时间。单位：秒。建议针对直播：调整为200毫秒
-            seekType: "range", // 建议将其设置为“range”模式，以便更快地加载视频数据，提高视频的实时性。
+            seekType: 'range', // 建议将其设置为“range”模式，以便更快地加载视频数据，提高视频的实时性。
             lazyLoad: false, //关闭懒加载模式，从而提高视频的实时性。建议针对直播：调整为false
             lazyLoadMaxDuration: 0.2, // 懒加载的最大时长。单位：秒。建议针对直播：调整为200毫秒
-            deferLoadAfterSourceOpen: false,
+            deferLoadAfterSourceOpen: false
           },
           {
             cors: true, // 是否跨域
             // enableWorker: true, // 是否多线程工作
             enableStashBuffer: false, // 是否启用缓存
             // stashInitialSize: 128, // 缓存大小(kb)  默认384kb
-            autoCleanupSourceBuffer: true, // 是否自动清理缓存
+            autoCleanupSourceBuffer: true // 是否自动清理缓存
           }
-        );
-        this.player.attachMediaElement(videoElement); //挂载元素
-        this.player.load(); //加载流
-        this.player.play(); //播放流
+        )
+        this.player.attachMediaElement(videoElement) //挂载元素
+        this.player.load() //加载流
+        this.player.play() //播放流
         // 追帧
         if (this.timerId !== null) {
-          clearInterval(this.timerId);
+          clearInterval(this.timerId)
         }
       }
       // 报错重连
       this.player.on(flvjs.Events.ERROR, (err, errdet) => {
         // 参数 err 是一级异常，errdet 是二级异常
         if (err == flvjs.ErrorTypes.MEDIA_ERROR) {
-          console.log("媒体错误");
+          console.log('媒体错误')
           if (errdet == flvjs.ErrorDetails.MEDIA_FORMAT_UNSUPPORTED) {
-            console.log("媒体格式不支持");
+            console.log('媒体格式不支持')
           }
         }
         if (err == flvjs.ErrorTypes.NETWORK_ERROR) {
-          console.log("网络错误");
+          console.log('网络错误')
           if (errdet == flvjs.ErrorDetails.NETWORK_STATUS_CODE_INVALID) {
-            console.log("http状态码异常");
+            console.log('http状态码异常')
           }
         }
         if (err == flvjs.ErrorTypes.OTHER_ERROR) {
-          console.log("其他异常：", errdet);
+          console.log('其他异常：', errdet)
         }
         if (this.player) {
-          this.destoryVideo();
-          this.createVideo();
+          this.destoryVideo()
+          this.createVideo()
         }
-      });
+      })
     },
 
     timestamp(time) {
       // 定义日期时间字符串
-      const dateStr = time;
+      const dateStr = time
       // 创建日期对象
-      const date = new Date(dateStr);
+      const date = new Date(dateStr)
       // 转换为时间戳（秒数）
-      const timestamp = date.getTime();
+      const timestamp = date.getTime()
 
-      return timestamp;
+      return timestamp
     },
     getAirLine() {
       const params = {
         startTime: `${this.timestamp(this.row.executionTime)}`,
         endTime: `${this.timestamp(this.row.completeTime)}`,
-        orgId: localStorage.getItem("org_id"),
-      };
+        orgId: localStorage.getItem('org_id')
+      }
 
       airLineAPI(params).then((res) => {
         if (res.code == 200) {
-          this.airLineData = res.data;
+          this.airLineData = res.data
         }
-      });
+      })
     },
     getImageUrl() {
       this.imgOptions = this.row.resultList.map((item) => {
         return {
           url:
-            "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
+            'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + item.objectKey,
           createTime: item.createTime,
           lat: item.lat,
           lon: item.lon
-        };
-      });
+        }
+      })
     },
     showVideo() {
-      this.vedioVisible = true;
+      this.vedioVisible = true
     },
     showMap() {
-      this.vedioVisible = false;
+      this.vedioVisible = false
     },
-    previewBtn(item) {      
-      this.currentUrl = item.url;
-      this.lon = item.lon;
-      this.lat = item.lat;
-      this.preview = true;
+    previewBtn(item) {
+      this.currentUrl = item.url
+      this.lon = item.lon
+      this.lat = item.lat
+      this.preview = true
     },
     closePreview() {
-      this.preview = false;
+      this.preview = false
     },
     closeAirDialog() {
-      this.$emit("closeAirDialog");
-    },
-  },
-};
+      this.$emit('closeAirDialog')
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -358,6 +366,7 @@ export default {
   background-color: rgba(29, 29, 31, 0.8);
   backdrop-filter: blur(5px);
   z-index: 1010;
+
   .outer {
     background-color: #fff;
     width: calc(100% - 160px);
@@ -368,6 +377,7 @@ export default {
     border-radius: 12px;
     padding: 32px;
     position: relative;
+
     .task-back {
       overflow: hidden;
       width: 36px;
@@ -382,10 +392,12 @@ export default {
       align-items: center;
       font-size: 16px;
       cursor: pointer;
+
       i {
         color: #fff;
       }
     }
+
     .title {
       color: #6e6e73;
       font-size: 16px;
@@ -400,6 +412,7 @@ export default {
       -webkit-box-pack: justify;
       -ms-flex-pack: justify;
       justify-content: space-between;
+
       span {
         color: #1d1d1f;
         font-size: 18px;
@@ -408,15 +421,18 @@ export default {
         letter-spacing: 0;
       }
     }
+
     .main {
       display: flex;
       margin-top: 8px;
       height: calc(100% - 93px);
       flex: 1;
       overflow: auto;
+
       .img_list {
         flex: 1;
         width: calc(100% - 400px);
+
         .header {
           display: flex;
           justify-content: space-between;
@@ -424,6 +440,7 @@ export default {
           font-size: 16px;
           color: #1d1d1f;
           line-height: 20px;
+
           .number {
             display: flex;
             justify-content: space-between;
@@ -432,16 +449,19 @@ export default {
             color: #1d1d1f;
             line-height: 20px;
           }
+
           .filter {
             display: flex;
             width: 176px;
             justify-content: space-between;
+
             .problem {
               font-size: 14px;
               color: #6e6e73;
             }
           }
         }
+
         .container {
           width: 100%;
           height: calc(100% - 51px);
@@ -450,6 +470,7 @@ export default {
           overflow: auto;
           margin-top: 12px;
           align-content: flex-start;
+
           .img_item {
             width: 128px;
             height: 128px;
@@ -460,14 +481,39 @@ export default {
             justify-content: center;
             align-items: center;
             position: relative;
+
             img {
               width: 100%;
               height: 100%;
               border-radius: 8px;
             }
+
+            .alarm {
+              width: 32px;
+              height: 18px;
+              background: #fff;
+              border-radius: 6px;
+              color: red;
+              margin-top: 5px;
+              padding-top: 2px;
+              text-align: center;
+              line-height: 18px;
+              position: absolute;
+              right: 6px;
+              bottom: 6px;
+              display: flex;
+              justify-content: center;
+
+              .alarm-img{
+                heigth: auto;
+                width: 10px;
+              }
+            }
+
             .download {
               display: none;
             }
+
             .introduce {
               display: flex;
               justify-content: space-between;
@@ -482,9 +528,11 @@ export default {
               font-size: 12px;
               color: #fff;
             }
+
             &:hover {
               border-radius: 8px;
               border: 3px solid #0271e3;
+
               .download {
                 width: 28px;
                 height: 28px;
@@ -500,6 +548,7 @@ export default {
                 align-items: center;
                 cursor: pointer;
               }
+
               .introduce {
                 width: 128px;
                 height: 28px;
@@ -519,11 +568,13 @@ export default {
           }
         }
       }
+
       .right {
         width: 400px;
         margin-left: 64px;
         overflow: hidden;
         height: 562px;
+
         .record-detail-wrap {
           width: 400px;
           height: 100%;
@@ -532,16 +583,20 @@ export default {
           overflow-x: hidden;
           display: flex;
           flex-direction: column;
+
           .info {
             height: 148px;
             margin-bottom: 60px;
+
             .line {
               height: 64px;
               display: flex;
               justify-content: space-between;
+
               div {
                 width: 152px;
                 height: 64px;
+
                 span {
                   color: #1d1d1f;
                   font-size: 28px;
@@ -549,17 +604,20 @@ export default {
                   line-height: 36px;
                   display: flex;
                 }
+
                 .unit {
                   font-size: 14px;
                   font-weight: 400;
                   margin-left: 5px;
                 }
+
                 div {
                   font-weight: 400;
                   font-size: 14px;
                   color: #6e6e73;
                   line-height: 16px;
                 }
+
                 .photo {
                   font-weight: 400;
                   font-size: 14px;
@@ -569,6 +627,7 @@ export default {
               }
             }
           }
+
           .btn {
             display: flex;
             font-size: 16px;
@@ -576,18 +635,22 @@ export default {
             font-weight: 400;
             color: #86868c;
             margin-bottom: 20px;
+
             .video {
               margin-right: 32px;
               cursor: pointer;
             }
+
             .flyMap {
               cursor: pointer;
             }
+
             .actived {
               font-weight: 500;
               color: #1d1d1f;
             }
           }
+
           .record-vedio {
             width: 100%;
             font-weight: 500;
@@ -595,11 +658,13 @@ export default {
             color: #1d1d1f;
             line-height: 20px;
           }
+
           .video-window {
             width: 100%;
             height: 300px;
             border-radius: 10px;
           }
+
           .record-map {
             width: 400px;
             height: 300px;
@@ -614,6 +679,7 @@ export default {
             right: 32px;
             top: 402px;
             transition: all 0.5s ease;
+
             #container {
               border-radius: 10px;
             }
