@@ -2,14 +2,23 @@
   <div class="qj-gird">
     <div class="qj-container">
       <div class="qj-view-position">
-        <div class="panoramaComp"></div>
-        <div class="qj-list-position">
+        <div class="panoramaComp">
+          <iframe
+            :src="panoramaUrl"
+            width="100%"
+            height="100%"
+            frameborder="0"
+            allowfullscreen
+          >
+          </iframe>
+        </div>
+        <!-- <div class="qj-list-position">
           <div class="list-outer">
             <div class="qj-list-warp">
               <div class="qj-item"></div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="qj-map-info-wrap">
         <div class="task_back" @click="closeDialog">
@@ -25,7 +34,7 @@
             >
               <i class="el-icon-share"></i>
             </el-tooltip>
-            <div class="title">【全景】比亚迪一期</div>
+            <div class="title">【全景】{{ flightDataInfo.taskName }}</div>
             <div class="nest">2024-08-19</div>
             <el-divider></el-divider>
             <div class="qj-info-item">
@@ -34,7 +43,7 @@
                 <div class="msg">全景地址</div>
               </div>
               <div class="qj-content">
-                陕西省西安市周至县九峰镇,108省道北193米,集财路东北256米附近
+                {{ flightDataInfo.taskAddress }}
               </div>
             </div>
             <div class="qj-info-item">
@@ -42,14 +51,16 @@
                 <i class="iconfont el-icon-guijifeihang"></i>
                 <div class="msg">拍摄机场</div>
               </div>
-              <div class="qj-content">西安-周至</div>
+              <div class="qj-content">{{ flightDataInfo.airportName }}</div>
             </div>
             <div class="qj-info-item">
               <div class="qj-title">
                 <i class="iconfont el-icon-feiji"></i>
                 <div class="msg">航线名称</div>
               </div>
-              <div class="qj-content">【全景】比亚迪一期</div>
+              <div class="qj-content">
+                【全景】{{ flightDataInfo.taskName }}
+              </div>
             </div>
           </div>
         </div>
@@ -65,15 +76,27 @@
 import MapContainer from "../MapContainer.vue";
 export default {
   name: "PanoramicDialog",
+  props: {
+    flightDataInfo: {
+      type: Object,
+      default: () => {},
+    },
+  },
   data() {
-    return {};
+    return {
+      // panoramaUrl: this.flightDataInfo.wrjAirlineFiles[0]
+      panoramaUrl: 'http://www.szyfu.com/krpano/DJI_20241204160323_0001_V/tour.html'
+    };
+  },
+  mounted() {
+    console.log(this.flightDataInfo);
   },
   components: {
     MapContainer,
   },
   methods: {
     closeDialog() {
-        this.$emit('closeQJDialog')
+      this.$emit("closeQJDialog");
     },
   },
 };

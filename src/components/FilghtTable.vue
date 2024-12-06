@@ -116,7 +116,7 @@
     </div>
     <!-- 全景预览弹窗 -->
     <div v-if="panoramicVisible">
-      <PanoramicDialog @closeQJDialog="closeQJDialog"></PanoramicDialog>
+      <PanoramicDialog @closeQJDialog="closeQJDialog" :flightDataInfo="flightDataInfo"></PanoramicDialog>
     </div>
     <!-- 飞行排期弹窗 -->
     <div v-if="flyDateVisible">
@@ -142,6 +142,7 @@ export default {
   props: {},
   data() {
     return {
+      wrjFullview: null,
       flightDataInfo: {},
       total: 0,
       detailsShow: false,
@@ -215,10 +216,10 @@ export default {
           label: "排期",
           icon: "el-icon-paiqi",
         },
-        {
-          label: "挂起",
-          icon: "el-icon-3duihuacopy",
-        },
+        // {
+        //   label: "挂起",
+        //   icon: "el-icon-3duihuacopy",
+        // },
         {
           label: "删除",
           icon: "el-icon-shanchu",
@@ -324,6 +325,7 @@ export default {
       switch (itemCommand.label) {
         case "成果":
           this.panoramicVisible = true;
+          this.flightDataInfo = itemCommand.row;
           break;
         case "排期":
           this.flightDataInfo = itemCommand.row;
