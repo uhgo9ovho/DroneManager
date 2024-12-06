@@ -497,16 +497,22 @@ export default {
               margin-top: 5px;
               padding-top: 2px;
               text-align: center;
-              line-height: 18px;
+              line-height: 15px;
               position: absolute;
               right: 6px;
               bottom: 6px;
               display: flex;
               justify-content: center;
+              align-items: center;
 
               .alarm-img{
-                heigth: auto;
-                width: 10px;
+                width: 12px;
+                height: 12px;
+                border-radius: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-right: 2px;
               }
             }
 
