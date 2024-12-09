@@ -40,4 +40,7 @@ thead th {
   background-color: #efefef;
   font-weight: bold;
 }
+tbody  tr td {
+  text-align: center;
+}
 </style>

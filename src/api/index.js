@@ -10,3 +10,13 @@ export const getstatisticsDataAPI = (params) => {
     method: 'get'
   })
 }
+
+/**
+ * 获取日报详情
+ */
+export const getDayReportAPI = (params) => {
+  return request({
+    url: `/wurenji/report/getDayReport?orgId=${params.orgId}&begin_date=${params.begin_date}`,
+    method: 'get'
+  })
+};

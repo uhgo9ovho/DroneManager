@@ -36,9 +36,9 @@ module.exports = {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
         // target: `http://172.16.40.21:9002`, //巧莲
-        // target: `http://172.16.40.41:9002`, //ch
+        target: `http://172.16.40.41:9002`, //ch
         // target: `http://172.16.40.126:9002`, //王高
-        target: `https://jky.szyfu.com:9003/prod-api/`,//线上
+        // target: `https://jky.szyfu.com:9003/prod-api/`,//线上
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''

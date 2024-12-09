@@ -270,12 +270,13 @@ export default {
                   description: "",
                   rectangles: `${this.locationArr}`,
                   orgId: localStorage.getItem('org_id'),
-                  orgName: Cookies.get('orgName')
+                  orgName: Cookies.get('orgName'),
+                  recordId:this.row.recordId
                 };
                 console.log(params, 'params');
-                
+
                 console.log(params);
-                
+
                 addWarningAPI(params);
               }
             });
@@ -310,18 +311,18 @@ export default {
             resizeEnable: true,
           });
           console.log(AMAP);
-          
+
           const Geocoder = new AMap.Geocoder();
 
           // 根据获取到的经纬度进行逆地理编码
-          
+
           // Geocoder.getAddress([116.310003, 39.991957], (status, { regeocode }) => {
           Geocoder.getAddress([that.lon, that.lat], (status, { regeocode }) => {
             if (status === "complete" && regeocode) {
               // address即经纬度转换后的地点名称
               that.address = regeocode?.formattedAddress;
               console.log(that.address);
-              
+
             }
           });
         })
@@ -331,7 +332,7 @@ export default {
     },
   },
   mounted() {
-    
+
     this.getDictList();
     this.initMap();
     window.addEventListener("resize", () => {
