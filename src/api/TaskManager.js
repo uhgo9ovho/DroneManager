@@ -267,7 +267,7 @@ export const deviceInfoAPI = (params) => {
  */
 export const airPostAPI = (params) => {
     return request({
-        url: `crm/device/list?orgId${params.orgId}&deviceType=${params.deviceType}`,
+        url: `crm/device/list?orgId=${params.orgId}&deviceType=${params.deviceType}`,
         method: 'get'
     })
 };

@@ -33,7 +33,7 @@
           <el-form-item label="航线文件" prop="airLine">
             <el-upload
               class="upload-demo"
-              action="/dev-api/wayline/importKmz"
+              :action="uploadUrl"
               :headers="headers"
               multiple
               :data="uploadData"
@@ -107,6 +107,7 @@ export default {
       }
     };
     return {
+      uploadUrl: process.env.VUE_APP_BASE_API + "/wayline/importKmz",
       hasExist: false,
       loading: false,
       fileArr: [],

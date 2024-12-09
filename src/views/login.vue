@@ -185,8 +185,8 @@ export default {
   created() {
     this.getCode();
     this.getCookie();
-    const orgArr = JSON.parse(Cookies.get('orgList'));
-    if(orgArr && orgArr.length) {
+    const orgArr = JSON.parse(Cookies.get("orgList"));
+    if (orgArr && orgArr.length) {
       //证明是在获取列表之后刷新了页面
       this.showOrg = true;
     }
@@ -196,7 +196,7 @@ export default {
       this.showOrg = false;
       this.loading = false;
       this.loginForm.code = "";
-      this.$refs.loginForm.resetFields()
+      this.$refs.loginForm.resetFields();
     },
     getCode() {
       getCodeImg().then((res) => {
@@ -235,12 +235,20 @@ export default {
             Cookies.remove("username");
             Cookies.remove("password");
             Cookies.remove("rememberMe");
-            sessionStorage.setItem('password', encrypt(this.loginForm.password));
+            sessionStorage.setItem(
+              "password",
+              encrypt(this.loginForm.password)
+            );
           }
           this.$store
             .dispatch("Login", this.loginForm)
-            .then(() => {
-              this.showOrg = true;
+            .then((res) => {
+              if (res.code == 200) {
+                this.showOrg = true;
+              } else {
+                this.$message.error(res.msg);
+              }
+              this.loading = false;
             })
             .catch(() => {
               this.loading = false;

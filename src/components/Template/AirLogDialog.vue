@@ -613,7 +613,6 @@ export default {
             position: absolute;
             right: 32px;
             top: 402px;
-            transition: all 0.5s ease;
             #container {
               border-radius: 10px;
             }
