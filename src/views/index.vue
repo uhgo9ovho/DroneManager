@@ -100,10 +100,10 @@
 </template>
 
 <script>
-import jiaci from "@/assets/icons/架次.png";
-import jiaci1 from "@/assets/icons/架次(1).png";
-import tpsp from "@/assets/icons/图片视频.png";
-import qj from "@/assets/icons/全景三维.png";
+import jiaci from "@/assets/icons/jiaci.png";
+import jiaci1 from "@/assets/icons/jiaci1.png";
+import tpsp from "@/assets/icons/tpsp.png";
+import qj from "@/assets/icons/qj.png";
 import yjsj from "@/assets/icons/预警事件.png";
 import jbsj from "@/assets/icons/交办事件.png";
 import tjrws from "@/assets/icons/提交任务数.png";

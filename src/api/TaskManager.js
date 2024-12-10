@@ -301,3 +301,14 @@ export const addSchedulingAPI = (params) => {
         data: params
     })
 }
+
+/**
+ * 生成航线
+ */
+export const getAirLineAPI = (params) => {
+    return request({
+        url: '/wayline/drawLine',
+        method:'post',
+        data: params
+    })
+}

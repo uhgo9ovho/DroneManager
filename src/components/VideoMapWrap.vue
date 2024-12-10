@@ -284,6 +284,7 @@ export default {
       handleKeyup: null,
       handleEmergencyStop: null,
       resetControlState: null,
+      unsubscribe: null
     };
   },
   components: {
@@ -301,7 +302,7 @@ export default {
   watch: {
     showRemote(val) {
       if(!val) {
-        UranusMqtt.unsubscribe()
+        this.unsubscribe()
       }
     },
     mqttState: {
@@ -470,17 +471,18 @@ export default {
                 subTopic: res.data.sub[0],
                 sn: this.deviceSN
               };
-              const { handleKeyup, handleEmergencyStop, resetControlState } =
+              const { handleKeyup, handleEmergencyStop, resetControlState, unsubscribe } =
                 useManualControl(topic, this.flightController);
               this.handleKeyup = handleKeyup;
               this.resetControlState = resetControlState;
               this.handleEmergencyStop = handleEmergencyStop;
+              this.unsubscribe = unsubscribe;
               this.getToicpSubPub(topic);
 
               //抢夺控制权
-              // authorityAPI({}, this.deviceSN).then(res => {
-              //   console.log(res,'ddfgrdherth');
-              // })
+              authorityAPI({}, this.deviceSN).then(res => {
+                console.log(res,'ddfgrdherth');
+              })
             } else {
               this.$message.error(res.message || res.msg);
             }

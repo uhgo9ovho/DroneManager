@@ -44,7 +44,6 @@ export const userMqtt = (deviceTopicInfo) => {
     }
     function unsubscribeDrc() {
         // 销毁已订阅事件
-        debugger
         cacheSubscribeArr.forEach(item => {
             mqttState?.off('onMessageMqtt', item.callback)
             mqttState?.unsubscribeMqtt(item.topic)

@@ -48,7 +48,7 @@ export function useManualControl(deviceTopicInfo, isCurrentFlightController) {
         myInterval = setInterval(() => {
             body.data.seq = seq++
             seq++
-            mqttHooks?.publishMqtt(deviceTopicInfo.pubTopic, body, { qos: 0 })
+            mqttHooks?.publishMqtt(deviceTopicInfo.pubTopic, body, { qos: 1 })
             console.log(seq, deviceTopicInfo);
         }, 50)
     };
