@@ -21,6 +21,7 @@ import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, 
 //引入自定义icon
 import '../font_4643341_2ci6nu9hegh/iconfont.css'
 
+
 // 全局方法挂载
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm
