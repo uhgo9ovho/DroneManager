@@ -2,10 +2,10 @@
   <div class="task-info">
     <div class="taskImage">
       <p class="calendar">
-        {{ row.data_time.split('-')[2] }} <em>{{ dayOfWeek }}</em>
+        {{ row.dateTime.split('-')[2] }} <em>{{ dayOfWeek }}</em>
       </p>
     </div>
-    <div class="task-title">{{ row.data_time }}</div>
+    <div class="task-title">{{ row.dateTime }}</div>
   </div>
 </template>
 
@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     dayOfWeek() {
-      const today = new Date(this.row.data_time);
+      const today = new Date(this.row.dateTime);
       // 获取星期几 (0 表示星期日，1 表示星期一，以此类推)
       const dayOfWeek = today.getDay();
       // 获取星期几

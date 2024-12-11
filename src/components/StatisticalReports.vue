@@ -1,8 +1,16 @@
 <template>
   <div class="flight-table">
-    <common-table :tableList="mockTableList" :columns="columns">
+    <common-table
+      :tableList="flyRecordTable"
+      :columns="columns"
+      :total="total"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      @pageChange="pageChange"
+      @sizeChange="sizeChange"
+    >
       <!-- 内容插槽 -->
-      <template #data_time="{ row }">
+      <template #dateTime="{ row }">
         <data-time :row="row"></data-time>
       </template>
       <template #operate>
@@ -13,90 +21,136 @@
     </common-table>
   </div>
 </template>
-  
-  <script>
-import CommonTable from "./CommonTable.vue";
-import { mockList8 } from "@/utils/mock.js";
-import { warningListAPI } from "@/api/TaskManager.js";
-import DataTime from "./Template/DataTime.vue";
+
+<script>
+import CommonTable from './CommonTable.vue'
+import { mockList8 } from '@/utils/mock.js'
+import DataTime from './Template/DataTime.vue'
+import { getFlyRecordTableAPI } from '@/api'
+
 export default {
-  name: "FlightTable",
-  props: {},
+  name: 'FlightTable',
+  props: {
+    reportParams: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       columns: [
         {
-          prop: "data_time",
-          label: "报告时间",
+          prop: 'dateTime',
+          label: '报告时间',
           showOverflowTooltip: true,
           slot: true,
-          minWidth: "200",
+          minWidth: '200'
         },
         {
-          prop: "fxjc",
-          label: "飞机架次",
-          showOverflowTooltip: true,
+          prop: 'flightNum',
+          label: '飞机架次',
+          showOverflowTooltip: true
         },
         {
-          prop: "tjrw",
-          label: "提交/执行任务数",
+          prop: 'questNum',
+          label: '任务数',
+          showOverflowTooltip: false
+        },
+        {
+          prop: 'problemNum',
+          label: '发现问题数',
+          showOverflowTooltip: false
+        },
+        {
+          prop: 'panoramicNum',
+          label: '全景',
+          showOverflowTooltip: false
+        },
+        {
+          prop: 'threeDimensionalNum',
+          label: '三维',
+          showOverflowTooltip: false
+        },
+        {
+          prop: 'orthographicNum',
+          label: '正射',
+          showOverflowTooltip: false
+        },
+        {
+          prop: 'operate',
+          label: '操作',
           showOverflowTooltip: false,
-        },
-        {
-          prop: "fxwt",
-          label: "发现问题数",
-          showOverflowTooltip: false,
-        },
-        {
-          prop: "qjmx",
-          label: "全景",
-          showOverflowTooltip: false,
-        },
-        {
-          prop: "swmx",
-          label: "三维",
-          showOverflowTooltip: false,
-        },
-        {
-          prop: "zsmx",
-          label: "正射",
-          showOverflowTooltip: false,
-        },
-        {
-          prop: "operate",
-          label: "操作",
-          showOverflowTooltip: false,
-          width: "200px",
-          slot: true,
-        },
+          width: '200px',
+          slot: true
+        }
       ],
-    };
+      flyRecordTable: [],
+      total: 0,
+      pageNum: 1,
+      pageSize: 10
+    }
   },
   computed: {
     mockTableList() {
-      return mockList8.items;
-    },
+      return mockList8.items
+    }
   },
   mounted() {
-    // warningListAPI();
+    console.log('para',this.reportParams)
+    this.getFlyRecordTable()
+
   },
   methods: {
     detailsBtn() {
       this.$router.push('/wordPreview')
     },
+
+    //获取报告列表
+    getFlyRecordTable() {
+      const params = {
+        beginTime: this.reportParams.beginTime,
+        endTime: this.reportParams.endTime,
+        orgId: localStorage.getItem('org_id') || 0,
+        tableType: this.reportParams.tableType,
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
+      }
+      getFlyRecordTableAPI(params)
+        .then((res) => {
+          if (res.code === 0) {
+            this.flyRecordTable = res.rows
+            // console.log('this.flyRecordTable', this.flyRecordTable)
+            this.total = res.total
+          } else {
+          }
+        })
+        .catch(() => {
+        })
+    },
+    pageChange(params) {
+      this.pageNum = params.pageNum
+      this.pageSize = params.pageSize
+      this.getFlyRecordTable()
+    },
+    sizeChange(params) {
+      this.pageNum = params.pageNum
+      this.pageSize = params.pageSize
+      this.getFlyRecordTable()
+    }
   },
   components: {
     CommonTable,
     DataTime
-  },
-};
+  }
+}
 </script>
-  
-  <style lang="scss">
+
+<style lang="scss">
 .flight-table {
   .filter-icon {
     margin-left: 5px;
     vertical-align: text-top;
+
     &:hover {
       cursor: pointer;
       transform: scale(1.3);

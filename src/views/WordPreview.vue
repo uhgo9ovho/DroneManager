@@ -42,8 +42,8 @@
         <div class="sub-section">
           <h3>(三) 提交任务</h3>
 
-          <div id="app">
-            <PieChart :questData="report.quest" />
+          <div id="app" v-if="isShow">
+            <PieChart :questData="questData"/>
           </div>
         </div>
         <div class="sub-section">
@@ -62,10 +62,6 @@
         </div>
         <div class="sub-section">
           <h3>(五) 成果汇总</h3>
-          <!--          <ReportTable-->
-          <!--            :columns="resultTable.columns"-->
-          <!--            :rows="resultTable.rows"-->
-          <!--          />-->
           <ReportTable2
             :headers="['成果机场 / 类型', '照片数量', '全景数量', '三维数量', '正射影像数量']"
             :data="productListData"
@@ -161,31 +157,31 @@
             </div>
 
           </div>
-<!--          <div class="orthoList">-->
-<!--            <h3>模型详情</h3>-->
-<!--          </div>-->
+          <!--          <div class="orthoList">-->
+          <!--            <h3>模型详情</h3>-->
+          <!--          </div>-->
         </div>
-<!--        <div-->
-<!--          class="attachment"-->
-<!--          v-for="(attachment, index) in report.attachments"-->
-<!--          :key="'attachment-' + index"-->
-<!--        >-->
-<!--          <h3>{{ attachment.title }}</h3>-->
-<!--          <ReportTable-->
-<!--            :columns="attachment.table.columns"-->
-<!--            :rows="attachment.table.rows"-->
-<!--          />-->
-<!--          <div class="image-section">-->
-<!--            <img-->
-<!--              :src="attachment.image"-->
-<!--              width="400"-->
-<!--            />-->
-<!--            <img-->
-<!--              :src="attachment.imageMap"-->
-<!--              width="400"-->
-<!--            />-->
-<!--          </div>-->
-<!--        </div>-->
+        <!--        <div-->
+        <!--          class="attachment"-->
+        <!--          v-for="(attachment, index) in report.attachments"-->
+        <!--          :key="'attachment-' + index"-->
+        <!--        >-->
+        <!--          <h3>{{ attachment.title }}</h3>-->
+        <!--          <ReportTable-->
+        <!--            :columns="attachment.table.columns"-->
+        <!--            :rows="attachment.table.rows"-->
+        <!--          />-->
+        <!--          <div class="image-section">-->
+        <!--            <img-->
+        <!--              :src="attachment.image"-->
+        <!--              width="400"-->
+        <!--            />-->
+        <!--            <img-->
+        <!--              :src="attachment.imageMap"-->
+        <!--              width="400"-->
+        <!--            />-->
+        <!--          </div>-->
+        <!--        </div>-->
       </div>
     </div>
 
@@ -212,12 +208,11 @@ import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 import photo from '../assets/images/login-background0.jpg'
 import { getDayReportAPI } from '@/api/index.js'
-import PieChart from '@/components/PieChart.vue';
-
+import PieChart from '@/components/PieChart.vue'
 
 export default {
   name: 'App',
-  components: { ReportTable, ReportTable1, ReportTable2,PieChart },
+  components: { ReportTable, ReportTable1, ReportTable2, PieChart },
   data() {
     return {
       title: '城市空天智慧管理平台',
@@ -261,8 +256,8 @@ export default {
           }
         ],
         quest: {
-          '正射': 1,
-          '全景': 16,
+          '正射': 5,
+          '全景': 6
         },
         problem: [
           {
@@ -366,7 +361,12 @@ export default {
               'http://img.99wenzhangwang.com/d/file/202112/miymotiiz53.jpg'
           }
         ]
-      }
+      },
+      isShow: false
+      // questData: {
+      //   '正射': null,
+      //   '全景': null,
+      // },
       // valueTable: {
       //   columns: ['替代人工', '节约成本', '减少碳排'],
       //   rows: [['16人次/102.891公里', '2.68万元', '0.03吨']]
@@ -421,19 +421,13 @@ export default {
     getDayReport() {
       const params = {
         orgId: localStorage.getItem('org_id'),
-        begin_date: 1733453757000
+        begin_date: 1733626557000
       }
       getDayReportAPI(params)
         .then((res) => {
           if (res.code === 200) {
-            // this.reportList = res.data
-            // this.getDeviceSN(res.rows[0].deviceId)
-            // let lonlatArr = res.rows[0].location.split(",");
-            // this.longitude = +lonlatArr[0];
-            // this.latitude = +lonlatArr[1];
-            // this.showMap = true;
             this.report = res.data
-            // this.report.flightMileage = parseFloat(this.report.flightMileage).toFixed(0);
+            this.isShow = true
           }
         })
         .catch((err) => {
@@ -563,6 +557,9 @@ export default {
   }
   ,
   computed: {
+    questData() {
+      return this.report.quest
+    },
     modelListLength() {
       return this.report.modelList.length
     }
@@ -584,7 +581,7 @@ export default {
     overall() {
       return [
         this.report.reportTime + '，共有' + this.report.deviceNum + '台无人机正常工作，共计飞行架次'
-        + this.report.sortieNum + '次' + '、飞行总时长' + this.report.totalTime + '分钟' + '、飞行里程' + this.report.totalMileage + '米。',
+        + this.report.sortieNum + '次' + '、飞行总时长' + this.report.totalTime + '分钟' + '、飞行里程' + this.report.totalMileage.toFixed(0) + '米。',
         '当日提交任务总数' + this.report.questNum + '个，分别为照片任务' + this.report.photoQuestNum + '个、全景任务' + this.report.panoramaQuestNum +
         '个、正射任务' + this.report.orthoQuestNum + '个、三维任务' + this.report.threeDQuestNum + '个；当日共执行任务' + this.report.executeQuestNum +
         '次，分别执行了照片任务' + this.report.executePhotoNum + '个、全景任务' + this.report.executePanoramaQuestNum + '个、正射任务' + this.report.executeOrthoQuestNum +
@@ -627,10 +624,10 @@ export default {
   ,
   mounted() {
     this.getDayReport()
-    const url = 'http://api.tianditu.gov.cn/staticimage?center=116.40,39.93&width=500&height=500&zoom=12&layers=vec_c,cva_c%20&markers=116.34867,39.94593&tk=3b33593a6ce1ae84375ec06b89a8aace'
-    fetch(url).then(res => {
-
-    })
+    // const url = 'http://api.tianditu.gov.cn/staticimage?center=116.40,39.93&width=500&height=500&zoom=12&layers=vec_c,cva_c%20&markers=116.34867,39.94593&tk=3b33593a6ce1ae84375ec06b89a8aace'
+    // fetch(url).then(res => {
+    //
+    // })
   }
 }
 </script>

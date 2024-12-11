@@ -20,3 +20,14 @@ export const getDayReportAPI = (params) => {
     method: 'get'
   })
 };
+
+/**
+* 报告列表接口
+*/
+export const getFlyRecordTableAPI = (params) => {
+  return request({
+    url: '/wurenji/report/getFlyRecordTable',
+    method: 'post',
+    data: params
+  })
+}

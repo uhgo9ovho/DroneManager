@@ -31,8 +31,8 @@
       <td>{{ task.threeDNum }}</td>
       <td>{{ task.orthoNum }}</td>
       <td>{{ task.photoNum + task.panoramaNum + task.threeDNum + task.orthoNum }}</td>
-      <td>{{ task.flyTime.toFixed(2) }}</td>
-      <td>{{ task.flyMileage.toFixed(2) }}</td>
+      <td>{{ task.flyTime.toFixed(0) }}</td>
+      <td>{{ task.flyMileage.toFixed(0) }}</td>
     </tr>
     <tr>
       <td>总计</td>
@@ -41,8 +41,8 @@
       <td>{{ totalThreeDNum }}</td>
       <td>{{ totalOrthoNum }}</td>
       <td>{{ totalFlightCount }}</td>
-      <td>{{ totalFlyTime.toFixed(2) }}</td>
-      <td>{{ totalFlyMileage.toFixed(2) }}</td>
+      <td>{{ totalFlyTime.toFixed(0) }}</td>
+      <td>{{ totalFlyMileage.toFixed(0) }}</td>
     </tr>
     </tbody>
   </table>
