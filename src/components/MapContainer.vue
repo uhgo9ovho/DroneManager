@@ -131,6 +131,8 @@ export default {
             const marker = new AMap.Marker({
               position: position,
               content: markerContent,
+              offset: new AMap.Pixel(-10, -34)
+
             });
             marker.on("click", this.markerClick);
             map.add(marker);

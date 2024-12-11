@@ -5,7 +5,8 @@ const state = {
     isDrawText: "",
     type: 3, //1 点  2 线  3 面
     taskType: 0,
-    pointsList: []
+    pointsList: [],
+    airlineList: []
 }
 const mutations = {
     CHANGE_DOWNLOAD_STATUS(state, flag) {
@@ -22,11 +23,14 @@ const mutations = {
         const params = {
             type: state.type,
             taskType: state.taskType,
-            pointsList: result
+            pointsList: result,
+            workspaceId: localStorage.getItem('workspaceId')
         }
         getAirLineAPI(params).then(res=> {
             if(res.code == 200) {
-                state.pointsList = res.lineList[0].pointsList.map(item => [item.lon, item.lat]);
+                state.airlineList = res.airlineList;
+                state.pointsList = res.airlineList[0].drawLineInfo.pointsList.map(item => [item.lon, item.lat]);
+
                 console.log(state.pointsList);
             }
         })

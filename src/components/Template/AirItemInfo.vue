@@ -1,19 +1,34 @@
 <template>
-  <div class="task-wait-card">
+  <div class="task-wait-card" :class="{'shikuang': info.schedulingStatus == 1}">
     <div style="flex: 1.7 1 0%">
       <div class="task-time">{{ info.formatTime }} 计划起飞</div>
       <div class="task-name2">{{ info.taskName }}</div>
     </div>
-    <i class="el-icon-info"></i>
+    <i class="el-icon-info" v-if="info.scheduledType === 1"></i>
     <div class="task-num">
       {{ info.schedule_text }}
-      <span class="task-num-error">(未飞行)</span>
+      <span class="task-num-error">{{
+        info.scheduledType | filterSchedulingType
+      }}</span>
     </div>
     <div class="task-change" :class="[info.operator ? '' : 'hidden']">
       排期调整({{ info.createBy }})
     </div>
-    <div class="task-btn" @click="takeOffBtn">
+    <div
+      class="task-btn"
+      @click="takeOffBtn"
+      v-if="info.schedulingStatus === 3 || info.schedulingStatus === 0"
+    >
+      <!-- 待执行和已执行 -->
       <div>起飞</div>
+      <div
+        class="iconfont el-icon-guijifeihang"
+        style="font-size: 12px; margin-left: 5px"
+      ></div>
+    </div>
+    <div class="task-btn2" v-if="info.schedulingStatus === 1">
+      <!-- 正在飞行 -->
+      <div>实况</div>
       <div
         class="iconfont el-icon-guijifeihang"
         style="font-size: 12px; margin-left: 5px"
@@ -32,7 +47,13 @@
     </div>
     <!-- 起飞和删除弹窗 -->
     <div v-if="dialogVisible">
-      <TakeOffDialog @handleClose="handleClose" :dialogVisible="dialogVisible" :isDel="isDel"></TakeOffDialog>
+      <TakeOffDialog
+        @handleClose="handleClose"
+        :dialogVisible="dialogVisible"
+        :isDel="isDel"
+        :info="info"
+        @updateData="updateData"
+      ></TakeOffDialog>
     </div>
   </div>
 </template>
@@ -56,7 +77,24 @@ export default {
       isDel: false,
     };
   },
+  filters: {
+    filterSchedulingType(val) {
+      switch (val) {
+        case 0:
+          return "";
+        case 1:
+          return "手动新增";
+        case 3:
+          return "";
+        default:
+          break;
+      }
+    },
+  },
   methods: {
+    updateData() {
+      this.$emit("updateData");
+    },
     handleCommand(command) {
       if (command == "details") {
         this.$emit("openDialog");
@@ -69,15 +107,20 @@ export default {
     takeOffBtn() {
       this.dialogVisible = true;
       this.isDel = false;
+      console.log(this.info);
     },
     handleClose() {
       this.dialogVisible = false;
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss">
+.shikuang {
+  background: #000 !important;
+  color: #fff !important;
+}
 .task-wait-card {
   flex: 1;
   height: 60px;
@@ -128,6 +171,19 @@ export default {
     border-radius: 16px;
     background-color: #fff;
     color: #0271e3;
+  }
+  .task-btn2 {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-right: 30px;
+    width: 84px;
+    height: 32px;
+    border-radius: 16px;
+    background-color: #000;
+    color: #fff;
   }
   .task-change {
     font-weight: 400;

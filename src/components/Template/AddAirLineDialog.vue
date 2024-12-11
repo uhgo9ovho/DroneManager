@@ -110,7 +110,6 @@ export default {
         const currentArr = this.airLineList.filter(
           (item) => item.taskId == this.currentId
         )[0].wrjAirlineFiles;
-        console.log(currentArr);
         return currentArr;
       } else {
         return [];
@@ -133,6 +132,14 @@ export default {
       this.$emit("closeLineDialog");
     },
     sureBtn() {
+      if(!this.code) {
+        this.$message.error('请选择航线');
+        return;
+      }
+      if(!this.checkedItem.taskId) {
+        this.$message.error('请选择任务');
+        return;
+      }
       const params = {
         airlineId: this.code, //航线id
         taskId: this.checkedItem.taskId, //任务id

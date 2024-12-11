@@ -9,7 +9,9 @@
       <div class="flyDialogBody">
         <div class="tips">
           <div class="delSvg el-icon-warning"></div>
-          <div class="delContent">{{ isDel ? '删除排期' : '确定立即起飞？' }}</div>
+          <div class="delContent">
+            {{ isDel ? "删除排期" : "确定立即起飞？" }}
+          </div>
         </div>
         <div v-if="isDel" class="delDialogBodyText">
           <span
@@ -25,13 +27,16 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>
-        <el-button type="primary" @click="sureBtn">确 定</el-button>
+        <el-button type="primary" @click="sureBtn" :loading="loading"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { takeoffAPI, delSortDataAPI } from "@/api/TaskManager";
 export default {
   name: "TakeOffDialog",
   props: {
@@ -43,9 +48,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    info: {
+      type: Object,
+      default: () => null,
+    },
   },
   data() {
     return {
+      loading: false,
       options: [
         {
           label: "预计耗时",
@@ -67,7 +77,54 @@ export default {
       this.$emit("handleClose");
     },
     sureBtn() {
-      this.handleClose();
+      this.loading = true;
+      if (this.isDel) {
+        const params = {
+          scheduledId: this.info.scheduledId,
+          delFlag: 0,
+        };
+        delSortDataAPI(params)
+          .then((res) => {
+            if (res.code === 200) {
+              this.$emit('updateData');
+              this.$message.success("删除成功");
+              this.loading = false;
+              this.handleClose();
+            }
+          })
+          .catch((err) => {
+            this.loading = false;
+            this.$message.error("删除失败");
+            this.handleClose();
+          });
+      } else {
+        const params = {
+          airlineId: this.info.airlineId,
+          wayLineId: this.info.wayLineId,
+          sign: this.info.sign,
+          objectKey: this.info.objectKey,
+          taskId: this.info.taskId,
+          taskName: this.info.taskName,
+          workspaceId: localStorage.getItem("workspaceId"),
+          taskType: this.info.taskType,
+          scheduledId: this.info.scheduledId
+        };
+        takeoffAPI(params)
+          .then((res) => {
+            this.loading = false;
+            if (res.code == 200) {
+              this.$message.success("起飞成功");
+              this.handleClose();
+              this.$router.push("/videoMap");
+            } else {
+              this.$message.error(res.msg);
+              this.handleClose();
+            }
+          })
+          .catch(() => {
+            this.loading = false;
+          });
+      }
     },
   },
 };

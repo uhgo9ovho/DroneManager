@@ -58,7 +58,7 @@ export default {
           minWidth: "250",
         },
         {
-          prop: "nest_name",
+          prop: "airportName",
           label: "机场",
           showOverflowTooltip: true,
         },
@@ -117,6 +117,20 @@ export default {
     closeAirDialog() {
       this.showDialog = false;
     },
+    searchLogName(val) {
+      const params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+        orgId: localStorage.getItem("org_id"),
+        taskName: val
+      };
+      recordListAPI(params).then((res) => {
+        if (res.code === 200) {
+          this.logList = res.rows;
+          this.total = res.total;
+        }
+      });
+    },
     initList() {
       const params = {
         pageNum: this.pageNum,
@@ -125,7 +139,6 @@ export default {
       };
       recordListAPI(params).then((res) => {
         if (res.code === 200) {
-          
           this.logList = res.rows;
           this.total = res.total;
         }

@@ -30,6 +30,7 @@
                       <AirItemInfo
                         :info="item2"
                         @openDialog="openDialog"
+                        @updateData="updateDataDel"
                       ></AirItemInfo>
                     </div>
                   </div>
@@ -60,6 +61,7 @@
         @closeDialog="closeDialog"
         :detailsShow="true"
         :taskDetails="true"
+        
       ></FlightDialog>
     </div>
     <!-- 添加航线弹窗 -->
@@ -164,7 +166,6 @@ export default {
     isShowAddBtn() {
       let that = this;
       return function (time) {
-
         if (that.currentTime) {
           return that.compareTime(time, that.currentTime);
         }
@@ -180,6 +181,9 @@ export default {
     },
   },
   methods: {
+    updateDataDel() {
+      this.$emit("updateData", this.currentDate);
+    },
     compareTime(time1, time2) {
       const [hour1, minute1] = time1.split(":").map(Number);
       const [hour2, minute2] = time2.split(":").map(Number);
@@ -340,6 +344,9 @@ export default {
         flex: 1;
         border-left: 1px solid rgba(226, 226, 228, 0.7);
         padding-left: 17px;
+        .shikuang {
+          background: #000 !important;
+        }
         .task-past-card {
           -webkit-box-flex: 1;
           -ms-flex: 1;

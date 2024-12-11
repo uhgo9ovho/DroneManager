@@ -31,7 +31,7 @@ export const addAndEditTask = (params) => {
  */
 export const taskListAPI = (params) => {
     return request({
-        url: `/wurenji/task/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${localStorage.getItem('org_id')}`,
+        url: `/wurenji/task/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${localStorage.getItem('org_id')}&taskName=${params.taskName ? params.taskName : ""}`,
         method: 'get'
     })
 };
@@ -49,12 +49,23 @@ export const taskInfoApI = (id) => {
 };
 
 /**
- * 计划飞行列表
+ * 计划飞行列表(日)
  * @returns 
  */
 export const heduledListAPI = (date) => {
     return request({
         url: `/wurenji/scheduling/list?date=${date}&orgId=${localStorage.getItem('org_id')}`,
+        method: 'get'
+    })
+};
+
+/**
+ * 计划飞行列表(月)
+ * @returns 
+ */
+export const heduledMonthListAPI = (params) => {
+    return request({
+        url: `/wurenji/scheduling/list?start=${params.start}&end=${params.end}&orgId=${localStorage.getItem('org_id')}`,
         method: 'get'
     })
 };
@@ -73,7 +84,7 @@ export const searchLineAPI = (taskId) => {
  */
 export const recordListAPI = (params) => {
     return request({
-        url: `/wurenji/record/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${params.orgId}`,
+        url: `/wurenji/record/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${params.orgId}&taskName=${params.taskName ? params.taskName : ""}`,
         method: 'get'
     })
 };
@@ -93,7 +104,7 @@ export const deleteTaskAPI = (taskIds) => {
  */
 export const warningListAPI = (params) => {
     return request({
-        url: `/wurenji/warning/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${params.orgId}`,
+        url: `/wurenji/warning/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${params.orgId}&warnName=${params.warnName ? params.warnName : ""}`,
         method: 'get'
     })
 }
@@ -309,6 +320,17 @@ export const getAirLineAPI = (params) => {
     return request({
         url: '/wayline/drawLine',
         method:'post',
+        data: params
+    })
+}
+
+/**
+ * 删除排期接口
+ */
+export const delSortDataAPI = (params) => {
+    return request({
+        url: '/wurenji/scheduling/editOrDelete',
+        method: 'post',
         data: params
     })
 }

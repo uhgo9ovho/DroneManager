@@ -11,6 +11,8 @@
       :settingInfo="settingInfo"
       :valArr="valArr"
       @openSettingDate="openSettingDate"
+      @changeDownContentShow="changeDownContentShow"
+      ref="createTask"
     ></create-task>
     <!-- 排期设置 -->
     <div v-if="showSetting">
@@ -25,7 +27,7 @@
       ></setting-date>
     </div>
     <!-- 绘制航线按钮 -->
-    <div class="downContent" @click="startDown(isDrawText)">
+    <div class="downContent" @click="startDown(isDrawText)" v-if="isShow">
       <i class="el-icon-edit"></i>
       <span v-if="isDrawText">{{ isDrawText }}</span>
     </div>
@@ -37,7 +39,6 @@ import CreateTask from "../components/CreateTask.vue";
 import MapContainer from "../components/MapContainer.vue";
 import SettingDate from "../components/SettingDate.vue";
 import { mapState, mapMutations } from "vuex";
-import { DronePlottingRoute } from "@/utils/PlottingRoute.js";
 const now = new Date();
 export default {
   name: "OpenMap",
@@ -55,6 +56,7 @@ export default {
       starttime: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
       valArr: [],
       inspectionValue: 0,
+      isShow: false
     };
   },
   computed: {
@@ -62,6 +64,9 @@ export default {
   },
   methods: {
     ...mapMutations( 'changeStatus',['CHANGE_DROC_STATUS']),
+    changeDownContentShow(flag) {
+      this.isShow = flag;
+    },
     dateArrays(valArr) {
       this.valArr = valArr;
     },

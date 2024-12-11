@@ -1,5 +1,6 @@
 import store from '@/store';
 let polygon = null
+let polyline = null;
 let editor = []
 let isDraw = false
 export function DronePlottingRoute(map, mouseTool, AMap) {
@@ -64,11 +65,14 @@ export function DronePlottingRoute(map, mouseTool, AMap) {
     function removeThis() {
         closeEdit()
         map.remove(polygon)
+        map.remove(polyline)
         drawPolygon()
     }
     function removeAll() {
         closeEdit()
         mouseTool.close(true)
+        // map.remove(polygon)
+        // map.remove(polyline)
     }
     function enablePolyEdit(e) {
         setTimeout(() => {
@@ -92,7 +96,7 @@ export function DronePlottingRoute(map, mouseTool, AMap) {
 
     //生成折线
     function drawPolyline(pointsArr) {
-        var polyline = new AMap.Polyline({
+        polyline = new AMap.Polyline({
             path: pointsArr,
             isOutline: true,
             outlineColor: '#ffeeff',

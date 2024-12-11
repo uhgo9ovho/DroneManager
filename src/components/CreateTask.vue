@@ -21,6 +21,24 @@
               placeholder="请输入任务名称"
             ></el-input>
           </el-form-item>
+          <el-form-item label="设置航线">
+            <div class="date-type-switch">
+              <div class="type-switch">
+                <div
+                  :class="[isImport ? 'date-select' : 'date-unselect']"
+                  @click="showImport"
+                >
+                  导入航线
+                </div>
+                <div
+                  :class="[!isImport ? 'date-select' : 'date-unselect']"
+                  @click="showDraw"
+                >
+                  绘制航线
+                </div>
+              </div>
+            </div>
+          </el-form-item>
           <el-form-item label="任务类型" prop="taskType">
             <el-radio-group v-model="ruleForm.taskType" @input="changeType">
               <el-radio-button label="拍照"></el-radio-button>
@@ -30,7 +48,7 @@
               <el-radio-button label="正射"></el-radio-button>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="航线文件" prop="airLine">
+          <el-form-item label="航线文件" prop="airLine" v-if="isImport">
             <el-upload
               class="upload-demo"
               :action="uploadUrl"
@@ -70,6 +88,7 @@
 <script>
 import { getToken } from "@/utils/auth";
 import { addAndEditTask } from "@/api/TaskManager.js";
+import { mapState } from "vuex";
 export default {
   name: "CreateForm",
   props: {
@@ -107,7 +126,9 @@ export default {
       }
     };
     return {
+      uploadMsg: "",
       uploadUrl: process.env.VUE_APP_BASE_API + "/wayline/importKmz",
+      isImport: true, //是否是导入航线
       hasExist: false,
       loading: false,
       fileArr: [],
@@ -132,6 +153,7 @@ export default {
     };
   },
   computed: {
+    ...mapState("changeStatus", ["airlineList"]),
     headers() {
       return {
         Authorization: "Bearer " + getToken(),
@@ -147,10 +169,19 @@ export default {
     },
   },
   methods: {
+    showImport() {
+      this.isImport = true;
+      this.$emit("changeDownContentShow", false);
+    },
+    showDraw() {
+      this.isImport = false;
+      this.$emit("changeDownContentShow", true);
+    },
     validatePass(rule, value, callback) {
+      if (!this.isImport) callback(); //不是导入的方式 不校验
       if (!this.fileArr.length) {
         if (!this.hasExist) callback(new Error("请选择航线文件"));
-        callback(new Error("该文件名称已经存在，请更改名称"));
+        callback(new Error(this.uploadMsg));
       } else {
         callback();
       }
@@ -166,6 +197,7 @@ export default {
         this.hasExist = false;
       } else {
         this.hasExist = true;
+        this.uploadMsg = res.msg;
       }
       this.$refs["ruleForm"].validateField(["airLine"]);
     },
@@ -204,21 +236,27 @@ export default {
         if (valid) {
           this.loading = true;
           const params = {
+            lineTaskType: this.isImport ? 2 : 1, //绘制1  导入2
             taskName: this.ruleForm.taskName,
             taskType: this.taskTypeValue,
             taskAddress: "陕西省咸阳市",
             schedulingType: this.inspectionValue,
             timesType: this.frequencyValue,
-            airlineNumber: this.airlineNumber, //航线数量
+            airlineNumber: this.isImport ? this.airlineNumber : this.airlineList.length, //航线数量
             startTime: this.starttime,
             endTime: this.endtime,
             dateArrays: this.valArr,
-            wrjAirlineFiles: this.fileArr,
+            wrjAirlineFiles: this.fileArr, //导入的时候传这个
+            lineFileCache: this.airlineList, //绘制的时候传这个
             note: this.settingInfo,
             orgId: localStorage.getItem("org_id"),
           };
           if (!params.timesType) delete params["dateArrays"];
-
+          if(params.lineTaskType == 1) {
+            delete params['wrjAirlineFiles']
+          } else {
+            delete params['lineFilecache']
+          }
           addAndEditTask(params)
             .then((res) => {
               if (res.code === 200) {
@@ -288,6 +326,43 @@ export default {
   .form-box {
     margin-top: 20px;
     overflow: auto;
+    .date-type-switch {
+      .type-switch {
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        flex-direction: row;
+        background: #ebebec;
+        padding: 0.2777777778vh;
+        border-radius: 0.7407407407vh;
+        cursor: pointer;
+        .date-select {
+          width: 150px;
+          height: 32px;
+          font-weight: 550;
+          font-size: 14px;
+          color: #1d1d1f;
+          letter-spacing: 0;
+          text-align: center;
+          line-height: 32px;
+          background: #fff;
+          border-radius: 8px;
+        }
+        .date-unselect {
+          width: 150px;
+          height: 32px;
+          font-weight: 400;
+          font-size: 14px;
+          color: #86868c;
+          letter-spacing: 0;
+          text-align: center;
+          line-height: 32px;
+          background: #ebebec;
+          border-radius: 8px;
+          user-select: none;
+        }
+      }
+    }
     .form {
       height: 480px;
       overflow: auto;

@@ -19,11 +19,10 @@
             @change="changeDate"
             ref="datepicke"
             v-model="date"
-            type="datetimerange"
+            type="daterange"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :unlink-panels="true"
             :picker-options="pickerOptions"
           >
           </el-date-picker>
