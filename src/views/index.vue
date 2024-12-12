@@ -118,6 +118,7 @@ import { getstatisticsDataAPI } from "@/api/index.js";
 export default {
   data() {
     return {
+
       activeName: "week",
       tabOptions: [
         {
@@ -152,32 +153,32 @@ export default {
         {
           icon: jiaci,
           tips: "总架次 / 日均架次",
-          total: "68",
-          dailyAverage: "8.5",
+          total: "",
+          dailyAverage: "",
           totalUnit: "次",
           dayUnit: "次",
         },
         {
           icon: jiaci1,
           tips: "飞行里程 / 日均时常",
-          total: "68",
-          dailyAverage: "8.5",
+          total: "",
+          dailyAverage: "",
           totalUnit: "公里",
           dayUnit: "小时",
         },
         {
           icon: tpsp,
           tips: "图片 / 视频",
-          total: "68",
-          dailyAverage: "8.5",
+          total: "",
+          dailyAverage: "",
           totalUnit: "张",
           dayUnit: "个",
         },
         {
           icon: qj,
           tips: "全景 / 三维",
-          total: "68",
-          dailyAverage: "8.5",
+          total: "",
+          dailyAverage: "",
           totalUnit: "张",
           dayUnit: "个",
         },
@@ -185,25 +186,25 @@ export default {
       eventOptions: [
         {
           icon: yjsj,
-          number: 5,
+          number: '',
           unit: "件",
           tips: "预警事件",
         },
         {
           icon: jbsj,
-          number: 5,
+          number: '',
           unit: "件",
           tips: "交办事件",
         },
         {
           icon: tjrws,
-          number: 5,
+          number: '',
           unit: "件",
           tips: "提交任务数",
         },
         {
           icon: rwjc,
-          number: 71,
+          number: '',
           unit: "次",
           tips: "任务架次",
         },
@@ -211,27 +212,27 @@ export default {
       footerOptions: [
         {
           icon: jstx,
-          number: 500,
+          number: '',
           unit: "公里",
           tips: "减少通行",
         },
         {
           icon: jsrc,
-          number: 75,
+          number: '',
           unit: "人次",
           tips: "减少人次",
         },
         {
           icon: jycb,
-          number: 50,
+          number: '',
           unit: "万元",
           tips: "节约成本",
         },
         {
           icon: jspt,
-          number: 0.99,
+          number: " ",
           unit: "吨",
-          tips: "减少排碳",
+          tips: "减少碳排",
         },
       ],
       // pickerOptions: {
@@ -322,8 +323,8 @@ export default {
           case "节约成本":
             option.number = data.saveCost;
             break;
-          case "减少排碳":
-            option.number = data.reducePass;
+          case "减少碳排":
+            option.number = data.reduceCarbon;
             break;
           default:
             break;
