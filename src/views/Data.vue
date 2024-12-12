@@ -25,7 +25,7 @@
     <div>
       <div class="report-selector" v-if="currentTab == 'statisticalReports'">
         <!--        <div class="tab-container">-->
-        <el-tabs v-model="activeTab" @tab-click="handleTabClick" type="card">
+        <el-tabs v-model="activeTab" @tab-click="handleTabClick" >
           <el-tab-pane label="日报" name="daily"></el-tab-pane>
           <el-tab-pane label="周报" name="weekly"></el-tab-pane>
         </el-tabs>
@@ -192,7 +192,6 @@ export default {
 
       const tableType = this.activeTab === 'daily' ? 1 : 2
 
-      // 调用接口，以下仅为示例，实际应根据你的后端接口调整
       const params = {
         beginTime: beginTime,
         endTime: endTime,
@@ -203,12 +202,7 @@ export default {
       this.endTime=endTime
       this.tableType=tableType
       console.log('接口调用参数:', params)
-      // 示例：发送请求
-      // axios.post('/api/reports', params).then(response => {
-      //   console.log('接口响应:', response);
-      // }).catch(error => {
-      //   ElMessage.error('请求失败');
-      // });
+
       },
     inputChange(val) {
       if(this.activeName === 'warningEvent') {
@@ -247,6 +241,35 @@ function formatDateToTimestamp(date) {
     justify-content: space-between;
     margin: 20px;
 
+    .el-tabs__nav-wrap
+    .el-tabs__nav-scroll
+    .el-tabs__nav
+    .el-tabs__active-bar {
+      height: 32px;
+      width: 72px;
+      transform: translateX(72px);
+      background: #0271e3;
+      border-radius: 16px;
+      z-index: 0;
+    }
+
+    .is-active {
+      color: #fff !important;
+    }
+
+    .el-tabs__nav-wrap .el-tabs__nav-scroll .el-tabs__nav .el-tabs__item {
+      width: 72px;
+      line-height: 32px;
+      height: 32px;
+      font-weight: 600;
+      font-size: 14px;
+      color: #6e6e73;
+      -webkit-transition: color 0.5s;
+      transition: color 0.5s;
+      letter-spacing: 0;
+      text-align: center;
+      padding: 0;
+    }
   }
 
   .task-list-grid {

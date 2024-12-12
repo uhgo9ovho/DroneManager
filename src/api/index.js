@@ -22,6 +22,16 @@ export const getDayReportAPI = (params) => {
 };
 
 /**
+ * 获取周报详情
+ */
+export const getWeekReportAPI = (params) => {
+  return request({
+    url: `/wurenji/report/getWeekReport?orgId=${params.orgId}&begin_date=${params.begin_date}&end_date=${params.end_date}`,
+    method: 'get'
+  })
+};
+
+/**
 * 报告列表接口
 */
 export const getFlyRecordTableAPI = (params) => {
