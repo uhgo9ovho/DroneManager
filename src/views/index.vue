@@ -1,5 +1,5 @@
 <template>
-  <div class="index-page">
+  <div class="index-page" v-loading="loading">
     <div class="title-box">
       <div class="title-left">
         <div class="index-title">飞行态势总览</div>
@@ -118,7 +118,7 @@ import { getstatisticsDataAPI } from '@/api/index.js'
 export default {
   data() {
     return {
-
+      loading: false,
       activeName: 'week',
       tabOptions: [
         {
@@ -372,9 +372,10 @@ export default {
         endTime: `${this.timeRange.endTime}`,
         orgId: localStorage.getItem('org_id')
       }
-
+      this.loading=true;
       getstatisticsDataAPI(params).then((res) => {
         if (res.code == 200) {
+          this.loading=false;
           this.updateOverOptionsInPlace(this.overOptions, res.data)
           this.updateEventOptions(this.eventOptions, res.data)
           this.updateFooterOptions(this.footerOptions, res.data)
