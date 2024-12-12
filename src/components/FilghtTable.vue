@@ -25,18 +25,6 @@
           </el-dropdown-menu>
         </el-dropdown>
       </template>
-      <!-- <template #airPort-header>
-        <span>机场</span>
-        <el-dropdown>
-          <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>黄金糕</el-dropdown-item>
-            <el-dropdown-item>狮子头</el-dropdown-item>
-            <el-dropdown-item>螺蛳粉</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </template> -->
       <template #status-header="{ row }">
         <span>本轮状态</span>
         <el-dropdown @command="statusCommand">
@@ -160,7 +148,7 @@ export default {
           minWidth: "220",
         },
         {
-          prop: "airPort",
+          prop: "airportName",
           label: "机场",
           showOverflowTooltip: true,
         },
@@ -275,6 +263,19 @@ export default {
     },
   },
   methods: {
+    searchTableName(val) {
+      const params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+        taskName: val,
+      };
+      taskListAPI(params).then((res) => {
+        if (res.code === 200) {
+          this.filghtList = res.rows;
+          this.total = res.total;
+        }
+      });
+    },
     changeVisible() {
       this.flyDateVisible = false;
       this.initList();

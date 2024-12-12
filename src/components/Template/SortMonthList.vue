@@ -20,12 +20,18 @@
             v-for="(it, idx) in item.airlines"
             :key="idx"
           >
-            <div class="month-task-item" :style="{background: changeBg(it.airline_name, it.state), color: changeColor(it.state, it.airline_name)}">
+            <div
+              class="month-task-item"
+              :style="{
+                background: changeBg(it.taskType),
+                color: changeColor(it.schedulingStatus, it.taskName),
+              }"
+            >
               <i class="el-icon-close"></i>
-              <div class="task-name" :title="it.airline_name">
-                {{ it.airline_name }}
+              <div class="task-name" :title="it.taskName">
+                {{ it.taskName }}
               </div>
-              <div class="task-time">{{ it.time }}</div>
+              <div class="task-time">{{ it.scheduledTime.split(" ")[1] }}</div>
             </div>
           </div>
         </div>
@@ -47,6 +53,12 @@
 import { mockList5 } from "@/utils/mock.js";
 export default {
   name: "MonthList",
+  props: {
+    sortMonthList: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       value: new Date(),
@@ -83,24 +95,34 @@ export default {
   },
   computed: {
     changeBg() {
-        return function(name, state) {
-            if(state) return ''; //已经飞过了
-            if(name.includes('全景')) return 'rgb(160, 98, 202)';
-            if(name.includes('拍照')) return 'rgb(61, 186, 222)';
-            if(name.includes('正射')) return 'rgb(234, 75, 131)';
-            if(name.includes('三维')) return 'rgb(246, 169, 31)';
-            if(name.includes('直播')) return 'rgb(52, 198, 66)';
+      return function (taskType) {
+        switch (taskType) {
+          case 0:
+            //拍照
+            return "rgb(61, 186, 222)";
+          case 1:
+            //直播
+            return "rgb(52, 198, 66)";
+          case 2:
+            //全景
+            return "rgb(160, 98, 202)";
+          case 3:
+            //正射
+            return "rgb(234, 75, 131)";
+          case 4:
+            //三维
+            return "rgb(246, 169, 31)";
+
+          default:
+            break;
         }
+      };
     },
     changeColor() {
-        return function(state, name) {
-            if(!state && (name.includes('全景') || name.includes('拍照') || name.includes('正射') || name.includes('三维') || name.includes('直播'))) {
-                return '#fff'
-            } else {
-                return ''
-            }
-        }
-    }
+      return function () {
+        return "#fff";
+      };
+    },
   },
   methods: {
     sss(data) {
@@ -108,8 +130,30 @@ export default {
     },
   },
   mounted() {
-    console.log(mockList5);
-    this.dayList = mockList5;
+    console.log(this.sortMonthList);
+    console.log(mockList5, "mock");
+    // 按日期分组
+    this.dayList = this.sortMonthList.reduce((acc, item) => {
+      // 提取日期部分（只保留年-月-日）
+      let date = item.scheduledTime.split(" ")[0];
+
+      // 查找是否已存在该日期的分组
+      let group = acc.find((group) => group.date === date);
+
+      if (group) {
+        // 如果已存在该日期分组，添加到 airlines 数组中
+        group.airlines.push(item);
+      } else {
+        // 如果不存在该日期分组，创建一个新分组
+        acc.push({
+          airlines: [item],
+          date: date,
+        });
+      }
+
+      return acc;
+    }, []);
+    console.log(this.dayList);
   },
 };
 </script>

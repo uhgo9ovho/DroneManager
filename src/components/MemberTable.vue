@@ -50,7 +50,7 @@
         <div class="user_info_box">
           <div class="user_headimg">
             <!-- <img :src="row.head_url" alt="" /> -->
-            <img src="../assets/images/w700d1q75cms.jpg" alt="" />
+            <img src="../assets/images/avatar.png" alt="" />
           </div>
           <div class="user_name_phone">
             <div class="user_name">{{ row.userName }}</div>

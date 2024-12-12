@@ -15,6 +15,7 @@
             :placeholder="checkedTip"
             @focus="focus"
             @blur="blur"
+            @input="inputChange"
             v-model="searchText"
             clearable
           ></el-input>
@@ -42,7 +43,7 @@
       </div>
     </div>
     <div class="task-list-grid" v-if="currentTab == 'warningEvent'">
-      <warning-event></warning-event>
+      <warning-event ref="warningRef"></warning-event>
     </div>
     <div class="task-list-grid" v-else :key="forceRerender">
       <StatisticalReports :reportParams="params"></StatisticalReports>
@@ -131,7 +132,7 @@ export default {
     },
     checkedTip() {
       if (this.checked) {
-        return '搜索问题名称'
+        return "搜索名称";
       }
       return '搜索'
     }
@@ -208,6 +209,14 @@ export default {
       // }).catch(error => {
       //   ElMessage.error('请求失败');
       // });
+      },
+    inputChange(val) {
+      if(this.activeName === 'warningEvent') {
+        //搜索预警事件名称
+        this.$refs.warningRef.searchWarningName(val);
+      } else {
+
+      }
     }
 
   }

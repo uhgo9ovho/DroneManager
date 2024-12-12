@@ -57,10 +57,14 @@
           </div>
         </div>
         <div class="sort-day" v-if="isDay">
-          <sort-day-list @updateData="updateData" :currentDate="currentDate" :sortList="sortList"></sort-day-list>
+          <sort-day-list
+            @updateData="updateData"
+            :currentDate="currentDate"
+            :sortList="sortList"
+          ></sort-day-list>
         </div>
         <div class="sort-month" v-else>
-          <sort-month-list></sort-month-list>
+          <sort-month-list :sortMonthList="sortMonthList"></sort-month-list>
         </div>
       </div>
     </div>
@@ -79,7 +83,7 @@ import AIDialog from "./Template/AIDialog.vue";
 import DateTitle from "./Template/DateTitle.vue";
 import SortDayList from "./Template/SortDayList.vue";
 import SortMonthList from "./Template/SortMonthList.vue";
-import { heduledListAPI } from "@/api/TaskManager.js";
+import { heduledListAPI, heduledMonthListAPI } from "@/api/TaskManager.js";
 export default {
   name: "FlightDate",
   components: {
@@ -95,24 +99,37 @@ export default {
       pageNum: 1,
       pageSize: 10,
       sortList: [],
-      currentDate: ""
+      currentDate: "",
+      sortMonthList: [],
     };
   },
   mounted() {},
   methods: {
     updateData(currentDate) {
-      this.initList(currentDate)
+      this.initDayList(currentDate);
     },
-    initList(date) {
+    initDayList(date) {
       heduledListAPI(date).then((res) => {
         if (res.code === 200) {
           this.sortList = res.rows;
         }
       });
     },
+    initMonthList() {
+      const params = {
+        start: "2024-12-01",
+        end: "2024-12-30",
+      };
+      heduledMonthListAPI(params).then((res) => {
+        if (res.code === 200) {
+          this.sortMonthList = res.rows;
+          this.isDay = false;
+        }
+      });
+    },
     formattedDate(date) {
       this.currentDate = date;
-      this.initList(date);
+      this.initDayList(date);
     },
     handleClose() {
       this.showAIDialog = false;
@@ -124,7 +141,7 @@ export default {
       this.isDay = true;
     },
     showMounth() {
-      this.isDay = false;
+      this.initMonthList();
     },
   },
 };

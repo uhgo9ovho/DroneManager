@@ -9,9 +9,20 @@ import settings from './modules/settings'
 import getters from './getters'
 import droneStatus from './modules/droneStatus'
 import changeStatus from './modules/changeStatus'
+import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
+  plugins: [
+    createPersistedState({
+      storage: window.localStorage,
+      reducer (state) {
+        return {
+          deviceSN: droneStatus.state.deviceSN
+        }
+      }
+    })
+  ],
   modules: {
     app,
     dict,

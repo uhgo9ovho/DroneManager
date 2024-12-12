@@ -11,7 +11,7 @@
 <script>
 import { airPostAPI } from "@/api/TaskManager.js";
 import MapContainer from "../components/MapContainer.vue";
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
 export default {
   name: "AirPort",
   data() {
@@ -25,20 +25,20 @@ export default {
     MapContainer,
   },
   methods: {
-    ...mapActions('droneStatus', ['getDeviceSN']),
+    ...mapActions("droneStatus", ["getDeviceSN"]),
     toVideoMap() {
       this.$router.push("/videoMap");
     },
     getDeviceInfo() {
+      this.showMap = false;
       const params = {
         orgId: localStorage.getItem("org_id"),
         deviceType: 1,
       };
       airPostAPI(params)
         .then((res) => {
-          this.showMap = false;
           if (res.code === 200) {
-            this.getDeviceSN(res.rows[0].deviceId)
+            this.getDeviceSN(res.rows[0].deviceId);
             let lonlatArr = res.rows[0].location.split(",");
             this.longitude = +lonlatArr[0];
             this.latitude = +lonlatArr[1];

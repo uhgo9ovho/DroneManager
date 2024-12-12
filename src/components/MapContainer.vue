@@ -4,7 +4,9 @@
   <script>
 import AMapLoader from "@amap/amap-jsapi-loader";
 import { wgs84ToGcj02 } from "@/utils/CoordinateTransformation.js";
-let map;
+import { DronePlottingRoute } from "@/utils/PlottingRoute.js";
+import { mapMutations, mapState } from "vuex";
+let map = null;
 export default {
   name: "map-view",
   props: {
@@ -24,16 +26,37 @@ export default {
   data() {
     return {
       lonlatArr: [],
+      mouseTool: null,
+      AMap: null,
     };
   },
   mounted() {
     this.initAMap();
   },
+  computed: {
+    ...mapState("changeStatus", ["pointsList"]),
+  },
+  watch: {
+    pointsList: {
+      handler(val) {
+        if (val.length) {
+          const { drawPolyline } = DronePlottingRoute(
+            map,
+            this.mouseTool,
+            this.AMap
+          );
+          drawPolyline(val)
+        }
+      },
+    },
+  },
   unmounted() {
     map?.destroy();
   },
   methods: {
+    ...mapMutations("changeStatus", ["CHANGE_DROC_STATUS"]),
     initAMap() {
+      let that = this;
       window._AMapSecurityConfig = {
         securityJsCode: "a849215e9c2d7b24f79e9f0032b1726d",
       };
@@ -43,6 +66,7 @@ export default {
         // plugins: ["AMap.Scale"], //需要使用的的插件列表，如比例尺'AMap.Scale'，支持添加多个如：['...','...']
       })
         .then((AMap) => {
+          this.AMap = AMap;
           let center = [];
           if (this.airLineData.length) {
             this.lonlatArr = this.airLineData.map((item) => {
@@ -69,18 +93,26 @@ export default {
             center: center.length ? center : [108.984924, 34.34199], // 初始化地图中心点位置
             layers: [layer],
             resizeEnable: true,
+            mapStyle: "amap://styles/light",
           });
+
           const traffic = new AMap.TileLayer.Traffic({
             autoRefresh: true, //是否自动刷新
             interval: 180, //刷新间隔时间 默认180s
           });
           map.add(traffic);
-          // AMap.plugin(["AMap.Scale", "AMap.Geolocation"], function () {
-          //   let toolbar = new AMap.Scale();
-          //   let Geolocation = new AMap.Geolocation();
-          //   map.addControl(toolbar);
-          //   map.addControl(Geolocation);
-          // });
+          AMap.plugin(
+            ["AMap.Scale", "AMap.Geolocation", "AMap.MouseTool"],
+            function () {
+              // let toolbar = new AMap.Scale();
+              // let Geolocation = new AMap.Geolocation();
+              that.mouseTool = new AMap.MouseTool(map); //创建鼠标工具对像
+              console.log(that.mouseTool, "asdasdasd");
+
+              // map.addControl(toolbar);
+              // map.addControl(Geolocation);
+            }
+          );
           let position = null;
           if (this.airLineData.length) {
             position = new AMap.LngLat(
@@ -99,6 +131,8 @@ export default {
             const marker = new AMap.Marker({
               position: position,
               content: markerContent,
+              offset: new AMap.Pixel(-10, -34)
+
             });
             marker.on("click", this.markerClick);
             map.add(marker);
@@ -126,6 +160,26 @@ export default {
     },
     markerClick() {
       this.$emit("toVideoMap");
+    },
+    renderPolyline() {
+      if (map) {
+        const { drawPolygon } = DronePlottingRoute(
+          map,
+          this.mouseTool,
+          this.AMap
+        );
+        drawPolygon();
+      }
+    },
+    resetPolyline() {
+      const { removeThis } = DronePlottingRoute(map, this.mouseTool, this.AMap);
+      removeThis();
+      this.CHANGE_DROC_STATUS("取消");
+    },
+    removePolyline() {
+      const { removeAll } = DronePlottingRoute(map, this.mouseTool, this.AMap);
+      removeAll();
+      this.CHANGE_DROC_STATUS("");
     },
   },
 };

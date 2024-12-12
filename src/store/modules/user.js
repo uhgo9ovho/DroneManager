@@ -37,7 +37,6 @@ const user = {
       localStorage.setItem('org_id', id);
     },
     SET_ORG_WORKSPACEID(state, workspaceId) {
-      console.log(workspaceId)
       state.workspaceId = workspaceId;
       localStorage.setItem('workspaceId', workspaceId);
     }
@@ -55,7 +54,7 @@ const user = {
         login(username, password, code, uuid).then(res => {
           setToken(res.token)
           commit('SET_TOKEN', res.token)
-          resolve()
+          resolve(res)
         }).catch(error => {
           reject(error)
         })

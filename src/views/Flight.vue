@@ -18,6 +18,7 @@
             @focus="focus"
             @blur="blur"
             v-model="searchText"
+            @input="inputChange"
             clearable
           ></el-input>
         </div>
@@ -27,11 +28,11 @@
       </div>
     </div>
     <div class="task-list-grid" v-if="currentTab == 'flightTask'">
-      <filght-table></filght-table>
+      <filght-table ref="tableRef"></filght-table>
     </div>
     <!-- 飞行记录 -->
     <div class="flight-log" v-if="currentTab == 'flightLog'">
-      <flight-log></flight-log>
+      <flight-log ref="logRef"></flight-log>
     </div>
     <!-- 飞行排期 -->
     <div v-if="currentTab == 'flightDate'">
@@ -51,33 +52,6 @@ export default {
       activeName: "flightTask",
       checked: false,
       searchText: "",
-      tableList: [
-        {
-          taskName: "【全景】比亚迪一期",
-          airPort: "西安-周至",
-          creater: "侯哥哥",
-          status: "待执行",
-          round_all: 5,
-          round_complete: 2,
-          ticket_create_time: "2024-08-01 11:16:04",
-          airLine: [
-            {
-              lineName: "【全景】比亚迪一期",
-              lineStatus: "待执行",
-            },
-            {
-              lineName: "【全景】比亚迪二期",
-              lineStatus: "已执行",
-            },
-            {
-              lineName: "【全景】比亚迪三期",
-              lineStatus: "执行失败",
-            },
-          ],
-          cycle_detail: "周期循环，每1周四执行,生效日期2024-08-01",
-        },
-      ],
-
       currentTab: "flightTask",
     };
   },
@@ -89,7 +63,7 @@ export default {
   computed: {
     checkedTip() {
       if (this.checked) {
-        return "搜索任务名称、机场、创建人";
+        return "搜索名称";
       }
       return "搜索";
     },
@@ -106,6 +80,15 @@ export default {
     },
     addAndEditTask() {
       this.$router.push('/openMap')
+    },
+    inputChange(val) {
+      if(this.activeName === 'flightTask') {
+        //搜索飞行任务
+        this.$refs.tableRef.searchTableName(val);
+      } else if(this.activeName === 'flightLog') {
+        //搜索飞行记录
+        this.$refs.logRef.searchLogName(val);
+      }
     }
   },
 };

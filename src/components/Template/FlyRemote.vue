@@ -5,42 +5,66 @@
     <div class="cameraMoudle">广角镜头</div>
     <div class="fly_control_plan">
       <div class="to_fly">
-        <div class="keyupBox" @mousedown="onMouseDown(KeyCode.KEY_W)" @mouseup="onMouseUp">
+        <div
+          class="keyupBox"
+          @mousedown="onMouseDown(KeyCode.KEY_W)"
+          @mouseup="onMouseUp"
+        >
           <div>
             <i class="iconfont el-icon-jiantou1"></i>
             <span>W</span>
             <div class="keyBox_hover_background"></div>
           </div>
         </div>
-        <div class="keydownBox" @mousedown="onMouseDown(KeyCode.KEY_S)" @mouseup="onMouseUp">
+        <div
+          class="keydownBox"
+          @mousedown="onMouseDown(KeyCode.KEY_S)"
+          @mouseup="onMouseUp"
+        >
           <div>
             <i class="iconfont el-icon-jiantou1"></i>
             <span>S</span>
             <div class="keyBox_hover_background"></div>
           </div>
         </div>
-        <div class="keyleftBox" @mousedown="onMouseDown(KeyCode.KEY_A)" @mouseup="onMouseUp">
+        <div
+          class="keyleftBox"
+          @mousedown="onMouseDown(KeyCode.KEY_A)"
+          @mouseup="onMouseUp"
+        >
           <div>
             <i class="iconfont el-icon-jiantou1"></i>
             <span>A</span>
             <div class="keyBox_hover_background"></div>
           </div>
         </div>
-        <div class="keyrightBox" @mousedown="onMouseDown(KeyCode.KEY_D)" @mouseup="onMouseUp">
+        <div
+          class="keyrightBox"
+          @mousedown="onMouseDown(KeyCode.KEY_D)"
+          @mouseup="onMouseUp"
+        >
           <div>
             <i class="iconfont el-icon-jiantou1"></i>
             <span>D</span>
             <div class="keyBox_hover_background"></div>
           </div>
         </div>
-        <div class="keylevorotaBox" @mousedown="onMouseDown(KeyCode.KEY_Q)" @mouseup="onMouseUp">
+        <div
+          class="keylevorotaBox"
+          @mousedown="onMouseDown(KeyCode.KEY_Q)"
+          @mouseup="onMouseUp"
+        >
           <div>
             <i class="iconfont el-icon-chexiao"></i>
             <span>Q</span>
             <div class="keylevorotaBox_hover_background"></div>
           </div>
         </div>
-        <div class="keydextroBox" @mousedown="onMouseDown(KeyCode.KEY_E)" @mouseup="onMouseUp">
+        <div
+          class="keydextroBox"
+          @mousedown="onMouseDown(KeyCode.KEY_E)"
+          @mouseup="onMouseUp"
+        >
           <div>
             <i class="iconfont el-icon-fanhui"></i>
             <span>E</span>
@@ -48,11 +72,19 @@
           </div>
         </div>
       </div>
-      <div class="setting_fly_btn" @click="openPlan">
-        <div class="fly_center_point setting_fly_center_point">
-          <span>一键<br />起飞</span>
+      <div class="setting_fly_btn" @click="changeStatus">
+        <div v-show="isFly">
+          <div class="fly_center_point setting_fly_center_point">
+            <span>急停</span>
+          </div>
+          <div class="setting_fly_center_point2"></div>
         </div>
-        <div class="setting_fly_center_point2"></div>
+        <div v-show="!isFly" @click="clearStop">
+          <div class="fly_center_point setting_fly_center_point">
+            <span>取消<br />急停</span>
+          </div>
+          <div class="setting_fly_center_point2"></div>
+        </div>
       </div>
     </div>
     <div class="ris_and_fall">
@@ -62,7 +94,7 @@
     <div class="return_home_plan">
       <div class="return_homeBox">
         <i class="iconfont el-icon-yijianfanhang"></i>
-        <div class="return_text">
+        <div class="return_text" @click="returnHome">
           <span>一键返航</span>
         </div>
       </div>
@@ -106,42 +138,65 @@
 
 <script>
 // import mqtt from 'mqtt';
-import { useManualControl, KeyCode } from '@/utils/mqtt/use-manual-control';
-import {mapState } from 'vuex';
+import { useManualControl, KeyCode } from "@/utils/mqtt/use-manual-control";
+import { mapState } from "vuex";
+import { returnHomeAPI } from "@/api/droneControl.js";
 export default {
   data() {
     return {
       lenses: "广角镜头",
       showPlan: false,
-      KeyCode: null
+      KeyCode: null,
+      isFly: true
     };
   },
   computed: {
-    ...mapState('droneStatus', ['topic'])
+    ...mapState("droneStatus", ["topic", "deviceSN"]),
   },
   methods: {
+    returnHome() {
+      const params = {
+        sn: this.deviceSN,
+        service_identifier: "return_home",
+      };
+      returnHomeAPI(params).then((res) => {
+        console.log(res, "返航");
+        if (res.code === 0) {
+          this.$message.success("一健返航成功");
+          this.$emit("returnHomeShow");
+        } else {
+          this.$message.error(res.message);
+        }
+      });
+    },
     clearPlan() {
-        this.showPlan = false;
+      this.showPlan = false;
     },
     openPlan() {
-        this.showPlan = true;
+      this.showPlan = true;
     },
     surePlan() {
-        this.showPlan = false;
+      this.showPlan = false;
     },
     onMouseDown(type) {
       console.log(type);
-      this.$emit('onMouseDown',type);
+      this.$emit("onMouseDown", type);
     },
     onMouseUp() {
-      this.$emit('onMouseUp')
+      this.$emit("onMouseUp");
+    },
+    changeStatus() {
+      this.$emit('droneEmergencyStop');
+      this.isFly = !this.isFly;
+    },
+    clearStop() {
+      this.$emit('clearStop')
     }
   },
   mounted() {
     console.log(KeyCode);
     this.KeyCode = KeyCode;
-    
-  }
+  },
 };
 </script>
 

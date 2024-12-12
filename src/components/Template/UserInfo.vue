@@ -2,7 +2,7 @@
   <div class="details">
     <div class="photo-user">
       <div class="photo">
-        <img src="../../assets/images/w700d1q75cms.jpg" alt="" />
+        <img src="../../assets/images/avatar.png" alt="" />
       </div>
       <div class="user">
         <div class="username">{{ userInfo.userName }}</div>
@@ -33,7 +33,7 @@
 import InviteDialog from "@/components/InviteDialog.vue";
 import { mapMutations } from "vuex";
 import { logout } from "@/api/login.js";
-import { removeToken } from '@/utils/auth.js'
+import { removeToken } from "@/utils/auth.js";
 import Cookies from "js-cookie";
 export default {
   name: "Details",
@@ -41,15 +41,15 @@ export default {
     return {
       dialogVisible: false,
       userInfo: {},
-      orgName: ""
+      orgName: "",
     };
   },
   components: {
     InviteDialog,
   },
   mounted() {
-    this.userInfo = JSON.parse(Cookies.get('user'))
-    this.orgName = Cookies.get('orgName')
+    this.userInfo = JSON.parse(Cookies.get("user"));
+    this.orgName = Cookies.get("orgName");
   },
   methods: {
     ...mapMutations("app", ["SET_FILTER_BULR"]),
@@ -71,14 +71,14 @@ export default {
         .then(() => {
           logout().then((res) => {
             if (res.code === 200) {
-              removeToken('Admin-Token');
-              localStorage.removeItem('org_id');
-              localStorage.removeItem('workspaceId');
-              sessionStorage.removeItem('password');
-              Cookies.remove('user');
-              Cookies.remove('orgName');
-              Cookies.remove('orgList');
-              this.$router.push('/login')
+              removeToken("Admin-Token");
+              localStorage.removeItem("org_id");
+              localStorage.removeItem("workspaceId");
+              sessionStorage.removeItem("password");
+              Cookies.remove("user");
+              Cookies.remove("orgName");
+              Cookies.remove("orgList");
+              this.$router.push("/login");
               this.$message({
                 type: "success",
                 message: "退出成功!",
@@ -114,6 +114,10 @@ export default {
         width: 100%;
         height: 100%;
         border-radius: 50%;
+      }
+      i {
+        font-size: 60px;
+        color: blue;
       }
     }
     .user {

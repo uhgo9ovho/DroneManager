@@ -23,7 +23,7 @@ const DroneControlProtocol = {
     w: 'number', // 机头角速度，正值为顺时针，负值为逆时针 单位：degree/s   （web端暂无此设计）
     seq: 'number', // 从0计时
 } //handlePublish函数的参数（params）传的就是这个对象（DRC-飞行控制）
-const DRC_METHOD = {
+export const DRC_METHOD = {
     HEART_BEAT: 'heart_beat',
     DRONE_CONTROL: 'drone_control', // 飞行控制-虚拟摇杆
     DRONE_EMERGENCY_STOP: 'drone_emergency_stop', // 急停
@@ -35,11 +35,9 @@ let myInterval;
 export function useManualControl(deviceTopicInfo, isCurrentFlightController) {
     let activeCodeKey = null;
     vm.isCurrentFlightController = isCurrentFlightController;
-    console.log(vm.isCurrentFlightController,'vm.isCurrentFlightController');
-    
+
     const mqttHooks = userMqtt(deviceTopicInfo);
-    console.log(userMqtt,'mqtthooks');
-    
+
     let seq = 0;
     function handlePublish(params) {
         const body = {
@@ -50,8 +48,8 @@ export function useManualControl(deviceTopicInfo, isCurrentFlightController) {
         myInterval = setInterval(() => {
             body.data.seq = seq++
             seq++
-            console.log(seq, 'seq');
-            mqttHooks?.publishMqtt(deviceTopicInfo.pubTopic, body, { qos: 0 })
+            mqttHooks?.publishMqtt(deviceTopicInfo.pubTopic, body, { qos: 1 })
+            console.log(seq, deviceTopicInfo);
         }, 50)
     };
     function handleKeyup(keyCode) {
@@ -153,11 +151,18 @@ export function useManualControl(deviceTopicInfo, isCurrentFlightController) {
         resetControlState()
         window.console.log('handleEmergencyStop>>>>', deviceTopicInfo.pubTopic, body)
         mqttHooks?.publishMqtt(deviceTopicInfo.pubTopic, body, { qos: 1 })
+
     };
+    function unsubscribe() {
+        console.log('销毁已订阅事件');
+        closeKeyboardManualControl();
+        mqttHooks?.unsubscribeDrc()
+    }
     return {
         activeCodeKey,
         handleKeyup,
         handleEmergencyStop,
         resetControlState,
+        unsubscribe
     }
 }

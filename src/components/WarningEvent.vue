@@ -254,6 +254,20 @@ export default {
     this.getWarningList();
   },
   methods: {
+    searchWarningName(val) {
+      const params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+        orgId: localStorage.getItem('org_id'),
+        warnName: val
+      };
+      warningListAPI(params).then((res) => {
+        if (res.code === 200) {
+          this.warningList = res.rows;
+          this.total = res.total;
+        }
+      });
+    },
     updateList() {
       this.getWarningList();
     },

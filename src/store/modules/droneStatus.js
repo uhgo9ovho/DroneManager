@@ -1,6 +1,6 @@
 const state = {
     statusInfo: {},
-    deviceSN: "",
+    deviceSN: localStorage.getItem('devicesSN') ? localStorage.getItem('devicesSN') : "",
     topic: {},
     mqttState: null
 }
@@ -11,7 +11,11 @@ const mutations = {
         }
     },
     GET_DEVICE_SN(state, info) {
-        state.deviceSN = info;
+        if (localStorage.getItem('devicesSN')) {
+            state.deviceSN = localStorage.getItem('devicesSN');
+        } else {
+            state.deviceSN = info;
+        }
     },
     GET_SUB_PUB(state, data) {
         state.topic = data;
@@ -26,13 +30,13 @@ const actions = {
         commit('GET_DRONE_INFO', info);
     },
     getDeviceSN({ commit }, data) {
-        
+        localStorage.setItem('devicesSN', data);
         commit('GET_DEVICE_SN', data)
     },
-    getToicpSubPub({commit}, data) {
+    getToicpSubPub({ commit }, data) {
         commit('GET_SUB_PUB', data);
     },
-    getMqttState({commit}, obj) {
+    getMqttState({ commit }, obj) {
         commit('GET_MQTT_STATE', obj);
     }
 }

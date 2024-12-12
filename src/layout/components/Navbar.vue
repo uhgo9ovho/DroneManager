@@ -18,7 +18,7 @@
           <user-info></user-info>
           <div class="avatar" slot="reference">
             <img
-              src="../../assets/images/w700d1q75cms.jpg"
+              src="../../assets/images/avatar.png"
               alt=""
               style="width: 32px; height: 32px; border-radius: 32px"
             />

@@ -32,7 +32,12 @@
               </el-select>
             </div>
             <div class="tools-container debug_control">
-              <el-tooltip class="item" effect="dark" content="远程调试">
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="远程调试"
+                v-if="false"
+              >
                 <i class="el-icon-setting" @click="showTools"></i>
               </el-tooltip>
               <div class="tools-box" v-if="toolsVisible">
@@ -120,6 +125,10 @@
                 <p>湿度</p>
                 <p>{{ tempHumidity }}% RH</p>
               </div>
+              <div>
+                <p>相机模式</p>
+                <p>拍照</p>
+              </div>
             </div>
           </div>
           <div class="top_right">
@@ -181,7 +190,13 @@
     <!-- 控制无人机操作界面 -->
     <!-- <div> -->
     <div v-if="showRemote">
-      <FlyRemote @onMouseUp="onMouseUp" @onMouseDown="onMouseDown"></FlyRemote>
+      <FlyRemote
+        @onMouseUp="onMouseUp"
+        @onMouseDown="onMouseDown"
+        @returnHomeShow="returnHomeShow"
+        @droneEmergencyStop="droneEmergencyStop"
+        @clearStop="clearStop"
+      ></FlyRemote>
     </div>
   </div>
 </template>
@@ -269,6 +284,7 @@ export default {
       handleKeyup: null,
       handleEmergencyStop: null,
       resetControlState: null,
+      unsubscribe: null
     };
   },
   components: {
@@ -284,6 +300,11 @@ export default {
     },
   },
   watch: {
+    showRemote(val) {
+      if(!val) {
+        this.unsubscribe()
+      }
+    },
     mqttState: {
       handler(val) {
         if (val) {
@@ -295,23 +316,23 @@ export default {
     showMap: {
       handler(val) {
         if (val) {
-          connectDRCAPI({}).then((res) => {
-            console.log(res, "aaa");
-            if (res.code === 0) {
-              const { address, client_id, username, password, expire_time } =
-                res.data;
-              const userInfo = JSON.parse(Cookies.get("user"));
-              this.client_id = client_id;
-              this.mqttState = new UranusMqtt(address, {
-                clientId: client_id,
-                username: `${userInfo.userName}_test`,
-                password: getToken(),
-              });
-              this.getMqttState(this.mqttState);
-              this.mqttState.initMqtt();
-            }
-            return;
-          });
+          // connectDRCAPI({}).then((res) => {
+          //   console.log(res, "aaa");
+          //   if (res.code === 0) {
+          //     const { address, client_id, username, password, expire_time } =
+          //       res.data;
+          //     const userInfo = JSON.parse(Cookies.get("user"));
+          //     this.client_id = client_id;
+          //     this.mqttState = new UranusMqtt(address, {
+          //       clientId: client_id,
+          //       username: `${userInfo.userName}_test`,
+          //       password: getToken(),
+          //     });
+          //     this.getMqttState(this.mqttState);
+          //     this.mqttState.initMqtt();
+          //   }
+          //   return;
+          // });
         }
       },
       immediate: true,
@@ -371,7 +392,6 @@ export default {
   },
   mounted() {
     this.getEQToken();
-    console.log(process.env.VUE_APP_WS_URL, "asdas");
     // this.ws = new WebSocketClient(
     //
     //         `${process.env.VUE_APP_WS_URL}?ws-token=ksjdgbkadbfgadbfg` //本地
@@ -379,6 +399,12 @@ export default {
   },
   methods: {
     ...mapActions("droneStatus", ["getToicpSubPub", "getMqttState"]),
+    droneEmergencyStop() {
+      this.handleEmergencyStop();
+    },
+    returnHomeShow() {
+      this.showRemote = false;
+    },
     handleClick(index) {
       [this.fullScreenComponent, this.smallComponent[index]] = [
         this.smallComponent[index],
@@ -387,7 +413,6 @@ export default {
       this.updateOutdoorContentVisibility(index);
     },
     updateOutdoorContentVisibility(index) {
-      console.log(index, this.fullScreenComponent);
       // 检查条件：当 index 是 1 并且大屏显示的不是地图
       if (
         (index === 0 && this.fullScreenComponent !== "MapContainer") ||
@@ -418,35 +443,52 @@ export default {
       });
     },
     confirm(e) {
-      const params = {
-        clientId: this.client_id,
-        dockSn: this.deviceSN,
-      };
-      enterDRCAPI(params).then((res) => {
-        console.log(res, "res");
+      connectDRCAPI({}).then((res) => {
         if (res.code === 0) {
-          //打开控制页面
-          this.showRemote = true;
-          this.flightController = true; //已控制无人机
-          const topic = {
-            pubTopic: res.data.pub[0],
-            subTopic: res.data.sub[0],
-          };
-          const { handleKeyup, handleEmergencyStop, resetControlState } =
-            useManualControl(topic, this.flightController);
-          console.log(handleKeyup, "handleKeyup");
-          this.handleKeyup = handleKeyup;
-          this.resetControlState = resetControlState;
-          this.handleEmergencyStop = handleEmergencyStop;
-          this.getToicpSubPub(topic);
+          const { address, client_id, username, password, expire_time } =
+            res.data;
+          const userInfo = JSON.parse(Cookies.get("user"));
+          this.client_id = client_id;
+          this.mqttState = new UranusMqtt(address, {
+            clientId: client_id,
+            username: `${userInfo.userName}_test`,
+            password: getToken(),
+          });
+          this.getMqttState(this.mqttState);
+          this.mqttState.initMqtt();
 
-          //抢夺控制权
-          // authorityAPI({}, this.deviceSN).then(res => {
-          //   console.log(res,'ddfgrdherth');
-          // })
-        } else {
-          this.$message.error(res.message || res.msg);
+          const params = {
+            clientId: this.client_id,
+            dockSn: this.deviceSN,
+          };
+          enterDRCAPI(params).then((res) => {
+            if (res.code === 0) {
+              //打开控制页面
+              this.showRemote = true;
+              this.flightController = true; //已控制无人机
+              const topic = {
+                pubTopic: res.data.pub[0],
+                subTopic: res.data.sub[0],
+                sn: this.deviceSN
+              };
+              const { handleKeyup, handleEmergencyStop, resetControlState, unsubscribe } =
+                useManualControl(topic, this.flightController);
+              this.handleKeyup = handleKeyup;
+              this.resetControlState = resetControlState;
+              this.handleEmergencyStop = handleEmergencyStop;
+              this.unsubscribe = unsubscribe;
+              this.getToicpSubPub(topic);
+
+              //抢夺控制权
+              authorityAPI({}, this.deviceSN).then(res => {
+                console.log(res,'ddfgrdherth');
+              })
+            } else {
+              this.$message.error(res.message || res.msg);
+            }
+          });
         }
+        return;
       });
     },
     onMouseDown(type) {
@@ -472,6 +514,23 @@ export default {
         });
       }
       this.$router.go(-1);
+    },
+    clearStop() {
+      const params = {
+        clientId: this.client_id,
+        dockSn: this.deviceSN,
+      };
+      if (this.flightController) {
+        exitDRCAPI(params).then((res) => {
+          if (res.code === 0) {
+            this.flightController = false; //退出控制
+            this.getToicpSubPub({});
+            this.$message.success("Exit flight control");
+            this.mqttState?.destroyed();
+            this.showRemote = false;
+          }
+        });
+      }
     },
     Callback(data) {
       console.log(data);
@@ -815,7 +874,7 @@ export default {
         .weather_Box {
           background-image: none;
           .weather_info {
-            width: 210px;
+            width: 250px;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
             background-image: none;
             display: flex;
