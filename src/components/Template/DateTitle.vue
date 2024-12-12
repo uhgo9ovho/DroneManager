@@ -18,7 +18,7 @@
       </el-date-picker>
       <i class="el-icon-arrow-right" @click="nextTime"></i>
     </div>
-    <div class="task-count">共 10 架次</div>
+    <div class="task-count">共 {{ total }} 架次</div>
   </div>
 </template>
 
@@ -30,6 +30,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    total: {
+      type: Number,
+      default: 0
+    }
   },
   data() {
     return {
@@ -80,9 +84,8 @@ export default {
         // 获取对应的星期几名称
         this.dayOfWeekName = daysOfWeek[dayOfWeekNumber];
         this.date = this.isDay ? formattedDate : formattedMonth;
-        console.log(this.date, "asdqwerwfg");
 
-        this.$emit("formattedDate", formattedDate);
+        this.$emit("formattedDate", this.date);
       }
     },
     dateChange(val) {
