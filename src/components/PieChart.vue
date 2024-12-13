@@ -16,7 +16,7 @@ export default {
   },
   mounted() {
     this.initChart();
-    this.chart = echarts.init(this.$refs.chart);
+    // this.chart = echarts.init(this.$refs.chart);
   },
   // watch: {
   //   // 监听option的变化，以便在数据更新时重新渲染图表
