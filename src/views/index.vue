@@ -248,7 +248,7 @@ export default {
     this.timeRange = this.getTimeRangeTimestamps('week')
     console.log(this.timeRange)
     this.getstatisticsData();
-    this.connectWS()
+    // this.connectWS()
   },
   methods: {
     connectWS() {
