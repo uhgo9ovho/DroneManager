@@ -18,7 +18,7 @@
       </el-date-picker>
       <i class="el-icon-arrow-right" @click="nextTime"></i>
     </div>
-    <div class="task-count">共 10 架次</div>
+    <div class="task-count">共 {{ total }} 架次</div>
   </div>
 </template>
 
@@ -30,6 +30,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    total: {
+      type: Number,
+      default: 0
+    }
   },
   data() {
     return {
@@ -45,9 +49,7 @@ export default {
   },
   watch: {
     isDay(val) {
-      if (val) {
-        this.formatDate(this.getCurrentDate());
-      }
+      this.formatDate(this.getCurrentDate());
     },
   },
   methods: {
@@ -60,30 +62,31 @@ export default {
     },
     formatDate(DateObj) {
       // 提取年份、月份和日期
-      const year = DateObj.getFullYear();
-      const month = (DateObj.getMonth() + 1).toString().padStart(2, "0");
-      const day = DateObj.getDate().toString().padStart(2, "0");
+      if (DateObj) {
+        const year = DateObj.getFullYear();
+        const month = (DateObj.getMonth() + 1).toString().padStart(2, "0");
+        const day = DateObj.getDate().toString().padStart(2, "0");
 
-      // 格式化为 YYYY/MM/DD 格式
-      const formattedDate = `${year}/${month}/${day}`;
-      const formattedMonth = `${year}/${month}`;
-      // 获取星期几的数字表示
-      const dayOfWeekNumber = DateObj.getDay();
-      const daysOfWeek = [
-        "周日",
-        "周一",
-        "周二",
-        "周三",
-        "周四",
-        "周五",
-        "周六",
-      ];
-      // 获取对应的星期几名称
-      this.dayOfWeekName = daysOfWeek[dayOfWeekNumber];
-      this.date = this.isDay ? formattedDate : formattedMonth;
-      console.log(this.date, "asdqwerwfg");
+        // 格式化为 YYYY/MM/DD 格式
+        const formattedDate = `${year}/${month}/${day}`;
+        const formattedMonth = `${year}/${month}`;
+        // 获取星期几的数字表示
+        const dayOfWeekNumber = DateObj.getDay();
+        const daysOfWeek = [
+          "周日",
+          "周一",
+          "周二",
+          "周三",
+          "周四",
+          "周五",
+          "周六",
+        ];
+        // 获取对应的星期几名称
+        this.dayOfWeekName = daysOfWeek[dayOfWeekNumber];
+        this.date = this.isDay ? formattedDate : formattedMonth;
 
-      this.$emit("formattedDate", formattedDate);
+        this.$emit("formattedDate", this.date);
+      }
     },
     dateChange(val) {
       const date = new Date(val);

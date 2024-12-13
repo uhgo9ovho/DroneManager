@@ -61,7 +61,7 @@
         @closeDialog="closeDialog"
         :detailsShow="true"
         :taskDetails="true"
-        
+        :row="row"
       ></FlightDialog>
     </div>
     <!-- 添加航线弹窗 -->
@@ -140,12 +140,6 @@ export default {
         {
           time: "21:00",
         },
-        {
-          time: "22:00",
-        },
-        {
-          time: "23:00",
-        },
       ],
       airInfos: [],
       currentTime: "",
@@ -155,6 +149,7 @@ export default {
       visible: false,
       addAirShow: false,
       startTime: "",
+      row: null
     };
   },
   computed: {
@@ -207,7 +202,8 @@ export default {
     closeLineDialog() {
       this.addAirShow = false;
     },
-    openDialog() {
+    openDialog(row) {
+      this.row = row;
       this.visible = true;
     },
     closeDialog() {

@@ -2,7 +2,7 @@
   <div class="task-grid">
     <div class="task-container">
       <div class="task_map">
-        <MapContainer></MapContainer>
+        <MapContainer :lineInfoObj="lineInfoObj"></MapContainer>
         <div v-if="detailsShow">
           <div class="task_name">{{ taskName }}</div>
           <div class="task_airline-list">
@@ -17,10 +17,12 @@
       <div v-if="detailsShow">
         <FilghtTaskInfo
           @closeDialog="closeDialog"
+          @lineInfo="lineInfo"
           :taskDetails="taskDetails"
           :taskName="taskName"
           :totalLine="totalLine"
           :note="note"
+          :row="row"
         ></FilghtTaskInfo>
       </div>
       <!-- 飞行info -->
@@ -67,10 +69,13 @@ export default {
       totalLine: 0,
       taskName: "",
       note: "",
+      lineInfoObj: null,
     };
   },
   created() {
     if (this.detailsShow) {
+      console.log(this.row);
+      
       taskInfoApI(this.row.taskId).then((res) => {
         if (res.code === 200) {
           this.totalLine = res.data.airlineNumber;
@@ -86,6 +91,9 @@ export default {
     closeDialog() {
       this.$emit("closeDialog");
     },
+    lineInfo(info) {
+      this.lineInfoObj = info
+    }
   },
 };
 </script>

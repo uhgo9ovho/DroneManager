@@ -53,7 +53,7 @@
           row.taskStatus | filterStatus
         }}</el-tag>
         <span style="margin-left: 10px"
-          >当前轮次/总轮次({{ row.currentRound }}/{{ row.totalRound }})</span
+          >当前轮次/总轮次({{ row.currentRound ? row.currentRound : 0 }}/{{ row.totalRound ? row.totalRound : 0 }})</span
         >
       </template>
       <template #operate="{ row }">

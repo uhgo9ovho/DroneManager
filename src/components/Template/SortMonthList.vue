@@ -7,7 +7,7 @@
     </table>
     <el-calendar v-model="value" :first-day-of-week="7">
       <template slot="dateCell" slot-scope="{ data }">
-        <p :class="data.isSelected ? 'is-selected' : ''" @click="sss(data)">
+        <p :class="data.isSelected ? 'is-selected' : ''">
           {{ data.day.split("-").slice(1).join("-") }}
         </p>
         <div
@@ -50,7 +50,6 @@
 </template>
 
 <script>
-import { mockList5 } from "@/utils/mock.js";
 export default {
   name: "MonthList",
   props: {
@@ -58,6 +57,20 @@ export default {
       type: Array,
       default: () => [],
     },
+    currentMonthDate: {
+      type: String,
+      default: ""
+    }
+  },
+  watch: {
+    currentMonthDate: {
+      handler(val) {
+        console.log(new Date(val),'val');
+        console.log(this.value);
+        this.value = val;
+        this.formatData()
+      }
+    }
   },
   data() {
     return {
@@ -128,32 +141,34 @@ export default {
     sss(data) {
       console.log(data);
     },
+    formatData() {
+      // 按日期分组
+      this.dayList = []
+      this.dayList = this.sortMonthList.reduce((acc, item) => {
+        // 提取日期部分（只保留年-月-日）
+        let date = item.scheduledTime.split(" ")[0];
+
+        // 查找是否已存在该日期的分组
+        let group = acc.find((group) => group.date === date);
+
+        if (group) {
+          // 如果已存在该日期分组，添加到 airlines 数组中
+          group.airlines.push(item);
+        } else {
+          // 如果不存在该日期分组，创建一个新分组
+          acc.push({
+            airlines: [item],
+            date: date,
+          });
+        }
+
+        return acc;
+      }, []);
+      
+    },
   },
   mounted() {
-    console.log(this.sortMonthList);
-    console.log(mockList5, "mock");
-    // 按日期分组
-    this.dayList = this.sortMonthList.reduce((acc, item) => {
-      // 提取日期部分（只保留年-月-日）
-      let date = item.scheduledTime.split(" ")[0];
-
-      // 查找是否已存在该日期的分组
-      let group = acc.find((group) => group.date === date);
-
-      if (group) {
-        // 如果已存在该日期分组，添加到 airlines 数组中
-        group.airlines.push(item);
-      } else {
-        // 如果不存在该日期分组，创建一个新分组
-        acc.push({
-          airlines: [item],
-          date: date,
-        });
-      }
-
-      return acc;
-    }, []);
-    console.log(this.dayList);
+    this.formatData()
   },
 };
 </script>

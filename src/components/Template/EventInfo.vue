@@ -1,7 +1,7 @@
 <template>
   <div class="table-name-info">
     <div class="info-left">
-      <img src="../../assets/images/fly_img.3924673b.png" alt="" />
+      <img :src="'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + row.identifyPhoto" alt="" />
     </div>
     <div class="info-right">
       <div class="task-name">{{ row.warnName }}</div>

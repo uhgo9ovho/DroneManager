@@ -8,37 +8,61 @@
         <span>{{ row.taskName }}</span>
       </div>
       <div class="nest">
-        <span>执行机场：西安-周至</span>
-        <span>起飞时间：{{ row.completeTime }}</span>
+        <span>执行机场：{{ row.airportName }}</span>
+        <span>起飞时间：{{ row.executionTime }}</span>
       </div>
       <el-divider></el-divider>
       <div class="main">
         <div class="img_list">
           <div class="header">
-            <div class="number">
-              拍摄照片 <span>({{ row.resultList.length }})</span>
+            <div
+              class="number"
+              :class="{ isActive: item.checked }"
+              v-for="(item, index) in typeOptions"
+              :key="index"
+              @click="changeType(item)"
+            >
+              {{ item.name }} <span>({{ item.num }})</span>
             </div>
+
             <div class="filter">
               <el-checkbox>问题照片</el-checkbox>
-              <div class="problem">
-                <el-switch></el-switch>
-              </div>
             </div>
           </div>
           <div class="container">
+            <div v-show="isShowVideo">
+              <!-- 视频列表 -->
+              <div
+                class="img_item"
+                v-for="(item, index) in videoOptions"
+                :key="index"
+                @click="previewVideoBtn(item)"
+                v-show="!isShowVideo"
+              >
+                <img :src="item.url" alt="" />
+                <div class="download">
+                  <i class="el-icon-download"></i>
+                </div>
+                <div class="introduce">{{ item.createTime | formatTime }}</div>
+                <div class="alarm">
+                  <img :src="alarm" alt="" class="alarm-img" />1
+                </div>
+              </div>
+            </div>
             <div
               class="img_item"
               v-for="(item, index) in imgOptions"
               :key="index"
               @click="previewBtn(item)"
+              v-show="!isShowVideo"
             >
-              <img :src="item.url" alt=""/>
+              <img :src="item.url" alt="" />
               <div class="download">
                 <i class="el-icon-download"></i>
               </div>
               <div class="introduce">{{ item.createTime | formatTime }}</div>
               <div class="alarm">
-                <img :src="alarm" alt="" class="alarm-img"/>1
+                <img :src="alarm" alt="" class="alarm-img" />1
               </div>
             </div>
           </div>
@@ -48,12 +72,15 @@
             <div class="info">
               <div class="line" style="margin-bottom: 13px">
                 <div>
-                  <span> 21.0 <span class="unit">&nbsp;分钟</span></span>
+                  <span>
+                    {{ getMinutesDifference() }}
+                    <span class="unit">&nbsp;分钟</span></span
+                  >
                   <div>飞行时长</div>
                 </div>
                 <div>
                   <span>
-                    9583.38
+                    {{ row.totalMileage.toFixed(1) }}
                     <span class="unit">&nbsp;米</span></span
                   >
                   <div>飞行距离</div>
@@ -72,9 +99,11 @@
                       effect="dark"
                       content="下载原图照片"
                       placement="top"
-
                     >
-                      <em style="cursor: pointer; color: #4678ff" @click="downloadBtn">
+                      <em
+                        style="cursor: pointer; color: #4678ff"
+                        @click="downloadBtn"
+                      >
                         <i :class="downloadICON"></i>
                         <em>下载</em>
                       </em>
@@ -83,7 +112,7 @@
                 </div>
                 <div>
                   <span>
-                    <span style="color: red">1</span>
+                    <span style="color: red">0</span>
                     <span class="unit">&nbsp;个</span>
                   </span>
                   <div>问题照片数</div>
@@ -113,6 +142,10 @@
                   controls
                   crossOrigin="anonymous"
                   autoplay
+                  :src="
+                    'https://wurenji02.oss-cn-beijing.aliyuncs.com/' +
+                    row.recordVideo
+                  "
                   muted
                   style="
                     height: 100%;
@@ -146,210 +179,265 @@
 </template>
 
 <script>
-import alarm from '@/assets/images/alarm.png'
+import alarm from "@/assets/images/alarm.png";
 
-import MapContainer from '../MapContainer.vue'
-import PhotoPreview from './PhotoPreview.vue'
-import { airLineAPI } from '@/api/TaskManager.js'
-import { downloadImagesAsZip } from '@/utils/ruoyi'
-import { mapState, mapMutations } from 'vuex'
-import flvjs from 'flv.js'
+import MapContainer from "../MapContainer.vue";
+import PhotoPreview from "./PhotoPreview.vue";
+import { airLineAPI } from "@/api/TaskManager.js";
+import { downloadImagesAsZip } from "@/utils/ruoyi";
+import { mapState, mapMutations } from "vuex";
+import flvjs from "flv.js";
 
 export default {
-  name: 'AirLogDialog',
+  name: "AirLogDialog",
   props: {
     row: {
       type: Object,
-      default: () => {
-      }
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
       imgOptions: [],
       vedioVisible: true,
       preview: false,
-      currentUrl: '',
+      currentUrl: "",
       airLineData: [],
       isPlay: false,
       player: null,
       timerId: null,
-      lon: '',
-      lat: '',
-      alarm: alarm
-    }
+      lon: "",
+      lat: "",
+      alarm: alarm,
+      typeOptions: [
+        {
+          name: "照片",
+          num: 0,
+          checked: true,
+        },
+        {
+          name: "视频",
+          num: 0,
+          checked: false,
+        },
+      ],
+      videoOptions: [],
+      isShowVideo: false,
+    };
   },
   filters: {
     formatTime(time) {
-      const dateString = time
+      const dateString = time;
 
       // 将字符串解析为 Date 对象
-      const date = new Date(dateString)
+      const date = new Date(dateString);
 
       // 获取小时、分钟、秒
-      const hours = date.getHours().toString().padStart(2, '0')
-      const minutes = date.getMinutes().toString().padStart(2, '0')
-      const seconds = date.getSeconds().toString().padStart(2, '0')
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+      const seconds = date.getSeconds().toString().padStart(2, "0");
 
       // 格式化输出
-      return `${hours}:${minutes}:${seconds}`
-    }
+      return `${hours}:${minutes}:${seconds}`;
+    },
   },
   components: {
     MapContainer,
-    PhotoPreview
+    PhotoPreview,
   },
   computed: {
-    ...mapState('changeStatus', ['downloadStatus']),
+    ...mapState("changeStatus", ["downloadStatus"]),
     downloadICON() {
       if (this.downloadStatus) {
         //开始下载
-        return 'el-icon-loading'
+        return "el-icon-loading";
       }
-      return 'el-icon-download'
-    }
+      return "el-icon-download";
+    },
   },
   mounted() {
-    this.getImageUrl()
-    this.getAirLine()
+    this.getImageUrl();
+    this.getAirLine();
     this.$nextTick(() => {
-      this.createVideo()
-    })
+      // this.createVideo();
+    });
   },
   beforeDestroy() {
-    this.destoryVideo()
+    this.destoryVideo();
   },
   methods: {
-    ...mapMutations('changeStatus', ['CHANGE_DOWNLOAD_STATUS']),
+    ...mapMutations("changeStatus", ["CHANGE_DOWNLOAD_STATUS"]),
     destoryVideo() {
       if (this.player) {
-        this.player.pause() // 暂停播放数据流
-        this.player.unload() // 取消数据流加载
-        this.player.detachMediaElement() // 将播放实例从节点中取出
-        this.player.destroy() // 销毁播放实例
-        this.player = null
+        this.player.pause(); // 暂停播放数据流
+        this.player.unload(); // 取消数据流加载
+        this.player.detachMediaElement(); // 将播放实例从节点中取出
+        this.player.destroy(); // 销毁播放实例
+        this.player = null;
       }
     },
+    changeType(item) {
+      this.typeOptions.forEach((item) => (item.checked = false));
+      item.checked = true;
+      if (item.name == "视频") {
+        this.isShowVideo = true;
+      } else {
+        this.isShowVideo = false;
+      }
+    },
+    getMinutesDifference() {
+      let that = this;
+      // 将时间字符串转换为 Date 对象
+      if (!that.row.completeTime) return 0;
+      const date1 = new Date(that.row.completeTime);
+      const date2 = new Date(that.row.executionTime);
+
+      // 计算时间差（以毫秒为单位）
+      const differenceInMilliseconds = date1 - date2;
+
+      // 将毫秒转换为分钟
+      const differenceInMinutes =
+        Math.abs(differenceInMilliseconds) / (1000 * 60);
+
+      return differenceInMinutes.toFixed(1);
+    },
     downloadBtn() {
-      if (this.downloadStatus) return this.$message.warning('正在下载，请勿重复点击')
-      this.$message.success('开始打包下载，请稍等片刻')
-      this.CHANGE_DOWNLOAD_STATUS(true)
-      const imgUrlArr = this.imgOptions.map(item => item.url)
-      downloadImagesAsZip(imgUrlArr)
+      if (this.downloadStatus)
+        return this.$message.warning("正在下载，请勿重复点击");
+      this.$message.success("开始打包下载，请稍等片刻");
+      this.CHANGE_DOWNLOAD_STATUS(true);
+      const imgUrlArr = this.imgOptions.map((item) => item.url);
+      downloadImagesAsZip(imgUrlArr);
     },
     createVideo() {
-      if (!this.row.recordVideo) return
+      if (!this.row.recordVideo) return;
       if (flvjs.isSupported()) {
-        var videoElement = document.getElementById('videoElement')
+        var videoElement = document.getElementById("videoElement");
         this.player = flvjs.createPlayer(
           {
-            type: 'flv',
+            type: "flv",
             isLive: true,
             hasAudio: false,
-            url: 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + this.row.recordVideo, // 自己的flv视频流
+            url:
+              "https://wurenji02.oss-cn-beijing.aliyuncs.com/" +
+              this.row.recordVideo, // 自己的flv视频流
             enableWorker: false, //启用 Web Worker 进程来加速视频的解码和处理过程
             stashInitialSize: 32 * 1024, // 初始缓存大小。单位：字节。建议针对直播：调整为1024kb
             stashInitialTime: 0.2, // 缓存初始时间。单位：秒。建议针对直播：调整为200毫秒
-            seekType: 'range', // 建议将其设置为“range”模式，以便更快地加载视频数据，提高视频的实时性。
+            seekType: "range", // 建议将其设置为“range”模式，以便更快地加载视频数据，提高视频的实时性。
             lazyLoad: false, //关闭懒加载模式，从而提高视频的实时性。建议针对直播：调整为false
             lazyLoadMaxDuration: 0.2, // 懒加载的最大时长。单位：秒。建议针对直播：调整为200毫秒
-            deferLoadAfterSourceOpen: false
+            deferLoadAfterSourceOpen: false,
           },
           {
             cors: true, // 是否跨域
             // enableWorker: true, // 是否多线程工作
             enableStashBuffer: false, // 是否启用缓存
             // stashInitialSize: 128, // 缓存大小(kb)  默认384kb
-            autoCleanupSourceBuffer: true // 是否自动清理缓存
+            autoCleanupSourceBuffer: true, // 是否自动清理缓存
           }
-        )
-        this.player.attachMediaElement(videoElement) //挂载元素
-        this.player.load() //加载流
-        this.player.play() //播放流
+        );
+        this.player.attachMediaElement(videoElement); //挂载元素
+        this.player.load(); //加载流
+        this.player.play(); //播放流
         // 追帧
         if (this.timerId !== null) {
-          clearInterval(this.timerId)
+          clearInterval(this.timerId);
         }
       }
       // 报错重连
       this.player.on(flvjs.Events.ERROR, (err, errdet) => {
         // 参数 err 是一级异常，errdet 是二级异常
         if (err == flvjs.ErrorTypes.MEDIA_ERROR) {
-          console.log('媒体错误')
+          console.log("媒体错误");
           if (errdet == flvjs.ErrorDetails.MEDIA_FORMAT_UNSUPPORTED) {
-            console.log('媒体格式不支持')
+            console.log("媒体格式不支持");
           }
         }
         if (err == flvjs.ErrorTypes.NETWORK_ERROR) {
-          console.log('网络错误')
+          console.log("网络错误");
           if (errdet == flvjs.ErrorDetails.NETWORK_STATUS_CODE_INVALID) {
-            console.log('http状态码异常')
+            console.log("http状态码异常");
           }
         }
         if (err == flvjs.ErrorTypes.OTHER_ERROR) {
-          console.log('其他异常：', errdet)
+          console.log("其他异常：", errdet);
         }
         if (this.player) {
-          this.destoryVideo()
-          this.createVideo()
+          this.destoryVideo();
+          this.createVideo();
         }
-      })
+      });
     },
 
     timestamp(time) {
       // 定义日期时间字符串
-      const dateStr = time
+      const dateStr = time;
       // 创建日期对象
-      const date = new Date(dateStr)
+      const date = new Date(dateStr);
       // 转换为时间戳（秒数）
-      const timestamp = date.getTime()
+      const timestamp = date.getTime();
 
-      return timestamp
+      return timestamp;
     },
     getAirLine() {
       const params = {
         startTime: `${this.timestamp(this.row.executionTime)}`,
         endTime: `${this.timestamp(this.row.completeTime)}`,
-        orgId: localStorage.getItem('org_id')
-      }
+        orgId: localStorage.getItem("org_id"),
+      };
 
       airLineAPI(params).then((res) => {
         if (res.code == 200) {
-          this.airLineData = res.data
+          this.airLineData = res.data;
         }
-      })
+      });
     },
     getImageUrl() {
-      this.imgOptions = this.row.resultList.map((item) => {
+      const filterImgArr = this.row.resultList.filter(
+        (item) => item.subFileType != 2
+      );
+      const videoFilterArr = this.row.resultList.filter(item => item.subFileType == 2);
+      this.typeOptions[0].num = filterImgArr.length;
+      this.imgOptions = filterImgArr.map((item) => {
         return {
           url:
-            'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + item.objectKey,
+            "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
           createTime: item.createTime,
           lat: item.lat,
-          lon: item.lon
+          lon: item.lon,
+        };
+      });
+      this.videoOptions = videoFilterArr.map(item => {
+        return {
+          url: "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
+          createTime: item.createTime,
         }
       })
     },
     showVideo() {
-      this.vedioVisible = true
+      this.vedioVisible = true;
     },
     showMap() {
-      this.vedioVisible = false
+      this.vedioVisible = false;
     },
     previewBtn(item) {
-      this.currentUrl = item.url
-      this.lon = item.lon
-      this.lat = item.lat
-      this.preview = true
+      this.currentUrl = item.url;
+      this.lon = item.lon;
+      this.lat = item.lat;
+      this.preview = true;
+    },
+    previewVideoBtn(item) {
+      
     },
     closePreview() {
-      this.preview = false
+      this.preview = false;
     },
     closeAirDialog() {
-      this.$emit('closeAirDialog')
-    }
-  }
-}
+      this.$emit("closeAirDialog");
+    },
+  },
+};
 </script>
 
 <style lang="scss">
@@ -377,7 +465,11 @@ export default {
     border-radius: 12px;
     padding: 32px;
     position: relative;
-
+    .nest {
+      span {
+        margin-right: 20px;
+      }
+    }
     .task-back {
       overflow: hidden;
       width: 36px;
@@ -440,7 +532,6 @@ export default {
           font-size: 16px;
           color: #1d1d1f;
           line-height: 20px;
-
           .number {
             display: flex;
             justify-content: space-between;
@@ -448,11 +539,14 @@ export default {
             font-size: 16px;
             color: #1d1d1f;
             line-height: 20px;
+            cursor: pointer;
+          }
+          .isActive {
+            color: #46a6ff;
           }
 
           .filter {
             display: flex;
-            width: 176px;
             justify-content: space-between;
 
             .problem {
@@ -505,7 +599,7 @@ export default {
               justify-content: center;
               align-items: center;
 
-              .alarm-img{
+              .alarm-img {
                 width: 12px;
                 height: 12px;
                 border-radius: 0;

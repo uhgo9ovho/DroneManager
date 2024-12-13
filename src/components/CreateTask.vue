@@ -88,7 +88,7 @@
 <script>
 import { getToken } from "@/utils/auth";
 import { addAndEditTask } from "@/api/TaskManager.js";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   name: "CreateForm",
   props: {
@@ -169,6 +169,7 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('changeStatus', ['CHANGE_TASKTYPE_STATUS']),
     showImport() {
       this.isImport = true;
       this.$emit("changeDownContentShow", false);
@@ -214,18 +215,23 @@ export default {
       switch (type) {
         case "拍照":
           this.taskTypeValue = 0;
+          this.CHANGE_TASKTYPE_STATUS(this.taskTypeValue);
           break;
         case "直播":
           this.taskTypeValue = 1;
+          this.CHANGE_TASKTYPE_STATUS(this.taskTypeValue);
           break;
         case "全景":
           this.taskTypeValue = 2;
+          this.CHANGE_TASKTYPE_STATUS(this.taskTypeValue);
           break;
         case "三维":
           this.taskTypeValue = 4;
+          this.CHANGE_TASKTYPE_STATUS(this.taskTypeValue);
           break;
         case "正射":
           this.taskTypeValue = 3;
+          this.CHANGE_TASKTYPE_STATUS(this.taskTypeValue);
           break;
         default:
           break;

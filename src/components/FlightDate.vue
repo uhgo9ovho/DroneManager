@@ -36,6 +36,7 @@
           <div>
             <date-title
               :isDay="isDay"
+              :total="total"
               @formattedDate="formattedDate"
             ></date-title>
           </div>
@@ -64,7 +65,11 @@
           ></sort-day-list>
         </div>
         <div class="sort-month" v-else>
-          <sort-month-list :sortMonthList="sortMonthList"></sort-month-list>
+          <sort-month-list
+            :sortMonthList="sortMonthList"
+            :currentMonthDate="currentMonthDate"
+            ref="MonthList"
+          ></sort-month-list>
         </div>
       </div>
     </div>
@@ -101,6 +106,8 @@ export default {
       sortList: [],
       currentDate: "",
       sortMonthList: [],
+      total: 0,
+      currentMonthDate: ""
     };
   },
   mounted() {},
@@ -112,6 +119,7 @@ export default {
       heduledListAPI(date).then((res) => {
         if (res.code === 200) {
           this.sortList = res.rows;
+          this.total = res.total;
         }
       });
     },
@@ -123,13 +131,51 @@ export default {
       heduledMonthListAPI(params).then((res) => {
         if (res.code === 200) {
           this.sortMonthList = res.rows;
-          this.isDay = false;
+          this.total = res.total;
         }
       });
     },
     formattedDate(date) {
-      this.currentDate = date;
-      this.initDayList(date);
+      if (this.isDay) {
+        this.currentDate = date;
+        this.initDayList(date);
+      } else {
+        console.log(date, "monthDate");
+        const params = {
+          start: this.getMonthStartAndEnd(date).firstDay,
+          end: this.getMonthStartAndEnd(date).lastDay,
+        };
+        heduledMonthListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.sortMonthList = res.rows;
+            this.$refs.MonthList.formatData();
+            this.total = res.total;
+            this.currentMonthDate = date;
+          }
+        });
+      }
+    },
+    getMonthStartAndEnd(dateString) {
+      // 将传入的日期字符串转换为 Date 对象
+      const date = new Date(dateString);
+
+      // 获取该月的第一天
+      const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+
+      // 获取该月的最后一天
+      const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+      // 格式化为 YYYY-MM-DD
+      const formatDate = (date) =>
+        `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+          2,
+          "0"
+        )}-${String(date.getDate()).padStart(2, "0")}`;
+
+      return {
+        firstDay: formatDate(firstDay),
+        lastDay: formatDate(lastDay),
+      };
     },
     handleClose() {
       this.showAIDialog = false;
@@ -141,7 +187,8 @@ export default {
       this.isDay = true;
     },
     showMounth() {
-      this.initMonthList();
+      // this.initMonthList();
+      this.isDay = false;
     },
   },
 };

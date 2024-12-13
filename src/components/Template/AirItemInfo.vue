@@ -26,12 +26,12 @@
         style="font-size: 12px; margin-left: 5px"
       ></div>
     </div>
-    <div class="task-btn2" v-if="info.schedulingStatus === 1">
+    <div class="task-btn2" v-if="info.schedulingStatus === 1" @click="toVideoMap">
       <!-- 正在飞行 -->
       <div>实况</div>
       <div
-        class="iconfont el-icon-guijifeihang"
-        style="font-size: 12px; margin-left: 5px"
+        class="iconfont el-icon-jiankong"
+        style="font-size: 16px; margin-left: 5px"
       ></div>
     </div>
     <div class="task-menu">
@@ -60,6 +60,7 @@
 
 <script>
 import TakeOffDialog from "./TakeOffDialog.vue";
+import { airLineInfoAPI } from '@/api/TaskManager';
 export default {
   name: "AirItemInfo",
   components: {
@@ -92,12 +93,19 @@ export default {
     },
   },
   methods: {
+    toVideoMap() {
+      this.$router.push('/videoMap')
+    },
     updateData() {
       this.$emit("updateData");
     },
     handleCommand(command) {
       if (command == "details") {
-        this.$emit("openDialog");
+        airLineInfoAPI(this.info.airlineId).then(res => {
+          console.log(res,'rres');
+          
+        })
+        this.$emit("openDialog", this.info);
       } else {
         //删除
         this.dialogVisible = true;

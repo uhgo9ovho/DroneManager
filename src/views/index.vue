@@ -160,7 +160,7 @@ export default {
         },
         {
           icon: jiaci1,
-          tips: '飞行里程 / 日均时常',
+          tips: '飞行里程 / 日均时长',
           total: '',
           dailyAverage: '',
           totalUnit: '公里',
