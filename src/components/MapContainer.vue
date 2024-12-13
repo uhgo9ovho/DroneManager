@@ -22,6 +22,10 @@ export default {
       type: Number,
       default: 0,
     },
+    lineInfoObj: {
+      type: Object,
+      default: () => null
+    }
   },
   data() {
     return {
@@ -68,7 +72,16 @@ export default {
         .then((AMap) => {
           this.AMap = AMap;
           let center = [];
+          if(this.lineInfoObj) {
+            //详情中的航线信息
+            console.log(this.lineInfoObj,'asdasdasdsa');
+            center = wgs84ToGcj02(this.lineInfoObj.centerInfo.lon, this.lineInfoObj.centerInfo.lat);
+            this.lonlatArr = this.lineInfoObj.pointsList.map(item => {
+              return wgs84ToGcj02(item.lon, item.lat)
+            })
+          }
           if (this.airLineData.length) {
+            //任务记录中的航线信息
             this.lonlatArr = this.airLineData.map((item) => {
               let originArr = [item.longitude, item.latitude];
               return wgs84ToGcj02(originArr[0], originArr[1]);
@@ -78,7 +91,7 @@ export default {
             center = [this.lonlatArr[0][0], this.lonlatArr[0][1]];
           }
           if (this.latitude && this.longitude) {
-            center = [this.longitude, this.latitude];
+          center = wgs84ToGcj02(this.longitude, this.latitude)
           }
           const layer = new AMap.createDefaultLayer({
             zooms: [3, 20], //可见级别
@@ -119,8 +132,8 @@ export default {
               this.lonlatArr[0][0],
               this.lonlatArr[0][1]
             ); //经纬度
-          } else if (this.latitude && this.longitude) {
-            position = new AMap.LngLat(this.longitude, this.latitude); //经纬度
+          } else if ((this.latitude && this.longitude) || this.lineInfoObj) {
+            position = new AMap.LngLat(center[0], center[1]); //经纬度
           }
           if (position) {
             var markerContent =

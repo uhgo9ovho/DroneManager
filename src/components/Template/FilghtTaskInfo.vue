@@ -53,7 +53,7 @@
       </div>
       <div class="single">
         <div class="top">执行机场</div>
-        <div class="data">西安-周至</div>
+        <div class="data">{{ row.airportName }}</div>
       </div>
       <div class="item">
         <i
@@ -72,7 +72,7 @@
       <div class="single">
         <div class="top">位置详情</div>
         <div class="data">
-          陕西省西安市周至县九峰镇,108省道北151米,集财路东北188米附近
+          {{ row.taskAddress }}
         </div>
       </div>
       <div class="item">
@@ -83,11 +83,11 @@
       <div class="create">
         <div class="item">
           <div class="top">创建者</div>
-          <div class="data">侯锦航</div>
+          <div class="data">{{ row.nickName }}</div>
         </div>
         <div class="item_org">
           <div class="top">创建组织</div>
-          <div class="data">西安集贤工业园区</div>
+          <div class="data">{{ row.orgName }}</div>
         </div>
       </div>
       <div class="single">
@@ -107,16 +107,24 @@ export default {
     },
     taskName: {
       type: String,
-      default: ""
+      default: "",
     },
     totalLine: {
       type: Number,
-      default: 0
+      default: 0,
     },
     note: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
+    row: {
+      type: Object,
+      default: () => null,
+    },
+  },
+  mounted() {
+    console.log(this.row);
+    this.getCollectInformation();
   },
   computed: {
     plotOptions() {
@@ -125,7 +133,9 @@ export default {
         return [
           {
             label: "所属任务",
-            value: "【拍照】集贤初中东边污水巡查01",
+            value: `【${this.changeType(this.row.taskType)}】 ${
+              this.row.taskName
+            }`,
           },
         ];
       } else {
@@ -148,22 +158,58 @@ export default {
       detailOptions: [
         {
           label: "预计耗时",
-          value: "17分钟",
+          value: "0分钟",
         },
         {
           label: "预计历程",
-          value: "6810米",
+          value: "0米",
         },
         {
           label: "照片数量",
-          value: "19张",
+          value: "0张",
         },
       ],
+      info: null,
+      lineInfo: null,
     };
   },
   methods: {
+    //获取采集信息
+    getCollectInformation() {
+      const arr = this.row.wrjAirlineFiles;
+      if (arr && arr.length) {
+        this.info = JSON.parse(arr[0].drawLineData);
+        console.log(this.info);
+        this.detailOptions[0].value =
+          (this.info.lineInfo.predictTime / 60).toFixed(1) + "分钟";
+        (this.detailOptions[1].value =
+          this.info.lineInfo.goAndBackDis.toFixed(2) + "km"),
+          (this.detailOptions[2].value = this.info.lineInfo.pointCount + "张");
+        this.lineInfo = {
+          centerInfo: this.info.center,
+          pointsList: this.info.pointsList,
+        };
+        this.$emit("lineInfo", this.lineInfo);
+      }
+    },
     closeDialog() {
       this.$emit("closeDialog");
+    },
+    changeType(type) {
+      switch (type) {
+        case 0:
+          return "拍照";
+        case 1:
+          return "直播";
+        case 2:
+          return "全景";
+        case 4:
+          return "三维";
+        case 3:
+          return "正射";
+        default:
+          break;
+      }
     },
   },
 };

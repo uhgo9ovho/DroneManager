@@ -103,14 +103,13 @@ export default {
   },
   methods: {
     lookBtn(row) {
-      console.log(row);
-
       getLogPhotosAPI(row.recordId).then((res) => {
         if (res.code === 200) {
           row.photoNum = res.rows.length;
           row.resultList = res.rows;
           this.showDialog = true;
           this.row = row;
+          
         }
       });
     },
@@ -122,7 +121,7 @@ export default {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
         orgId: localStorage.getItem("org_id"),
-        taskName: val
+        taskName: val,
       };
       recordListAPI(params).then((res) => {
         if (res.code === 200) {
