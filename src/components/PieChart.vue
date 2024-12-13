@@ -18,16 +18,16 @@ export default {
     this.initChart();
     this.chart = echarts.init(this.$refs.chart);
   },
-  watch: {
-    // 监听option的变化，以便在数据更新时重新渲染图表
-    option: {
-      handler(newVal) {
-        this.updateChartData(newVal.quest);
-      },
-      deep: true, // 深度监听对象内部属性的变化
-      immediate: true // 在组件创建时立即执行一次监听器
-    }
-  },
+  // watch: {
+  //   // 监听option的变化，以便在数据更新时重新渲染图表
+  //   option: {
+  //     handler(newVal) {
+  //       this.updateChartData(newVal.quest);
+  //     },
+  //     deep: true, // 深度监听对象内部属性的变化
+  //     immediate: true // 在组件创建时立即执行一次监听器
+  //   }
+  // },
   methods: {
     initChart() {
       this.chart = echarts.init(this.$refs.chart);

@@ -13,9 +13,9 @@
       <template #dateTime="{ row }">
         <data-time :row="row"></data-time>
       </template>
-      <template #operate>
+      <template #operate="{row}">
         <div class="operate-box">
-          <el-button type="text" @click="detailsBtn">查看</el-button>
+          <el-button type="text" @click="detailsBtn(row)">查看</el-button>
         </div>
       </template>
     </common-table>
@@ -96,13 +96,20 @@ export default {
     }
   },
   mounted() {
-    console.log('para',this.reportParams)
+    console.log('para', this.reportParams)
     this.getFlyRecordTable()
 
   },
   methods: {
-    detailsBtn() {
-      this.$router.push('/wordPreview')
+    detailsBtn(row) {
+      console.log(row)
+      this.$router.push({
+        path: '/WordPreview',
+        query: {
+          dateTime: row.dateTime,
+          tableType: this.reportParams.tableType
+        }
+      })
     },
 
     //获取报告列表

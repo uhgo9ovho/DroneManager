@@ -1,5 +1,5 @@
 <template>
-  <div class="word-preview">
+  <div class="word-preview" v-if="isShow">
     <div id="content">
       <!-- 标题部分 -->
       <div class="title-section">
@@ -42,17 +42,12 @@
         <div class="sub-section">
           <h3>(三) 提交任务</h3>
 
-          <div id="app" v-if="isShow">
+          <div id="app" v-if="isShow && report.quest !== null">
             <PieChart :questData="questData"/>
           </div>
         </div>
         <div class="sub-section">
           <h3>(四) 问题汇总</h3>
-          <!--          <ReportTable-->
-          <!--            :columns="problemTable.columns"-->
-          <!--            :rows="problemTable.rows"-->
-          <!--          />-->
-          <!--          <ReportTable2 :quest="report.quest"/>-->
           <ReportTable2
             :headers="['问题类型', '数量']"
             :data="problemData"
@@ -76,9 +71,9 @@
         <h2>附件部分</h2>
         <div class="attachment">
           <div class="problemList" v-if="report.problemList !== null">
-            <h3>问题详情</h3>
-            <h3>详情列表({{ report.problemList.length }})</h3>
-            <div v-for="(item, index) in report.problemList" :key="index" class="problem-container">
+            <h3 style="font-size: 30px;font-weight: 600">问题详情</h3>
+            <h3>详情列表({{ problemListLength }})</h3>
+            <div v-for="(item, index) in report.problemList" :key="item.foundTime" class="problem-container">
               <div class="problem-title">{{ index + 1 }}. {{ item.problemName }}</div>
               <table>
                 <tr>
@@ -103,10 +98,11 @@
 
             </div>
           </div>
-          <div class="modelDetails">
-            <h3>模型详情</h3>
-            <h3>全景模型({{ modelListLength }})</h3>
-            <div v-for="(item, index) in report.modelList" :key="index" class="problem-container">
+          <div class="modelDetails" v-if="report.modelList !== null">
+            <h3 style="font-size: 30px;font-weight: 600">模型详情</h3>
+
+            <h3>全景模型({{ modelListLength }}个)</h3>
+            <div v-for="(item, index) in report.modelList" :key="item.foundTime" class="problem-container">
               <div class="problem-title">{{ index + 1 }}. {{ item.problemName }}</div>
               <table>
                 <tr>
@@ -130,8 +126,8 @@
               </div>
 
             </div>
-            <h3>正射影像({{ report.orthoList.length }})</h3>
-            <div v-for="(item, index) in report.orthoList" :key="index" class="problem-container">
+            <h3>正射影像({{ orhtoListLength }})</h3>
+            <div v-for="(item, index) in report.orthoList" :key="item.foundTime" class="problem-container">
               <div class="problem-title">{{ index + 1 }}. {{ item.problemName }}</div>
               <table>
                 <tr>
@@ -207,7 +203,7 @@ import htmlDocx from 'html-docx-js/dist/html-docx'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 import photo from '../assets/images/login-background0.jpg'
-import { getDayReportAPI } from '@/api/index.js'
+import { getDayReportAPI, getWeekReportAPI } from '@/api/index.js'
 import PieChart from '@/components/PieChart.vue'
 
 export default {
@@ -221,7 +217,6 @@ export default {
         '本报告根据日常无人机巡检工作包括使用人员提交任务、无人机执行任务、数据生产情况等进行统计汇总。',
       report: {
         reportTime: '2024.09.06',
-
         deviceNum: 1,
         sortieNum: 16,
         totalTime: 203,
@@ -362,45 +357,13 @@ export default {
           }
         ]
       },
-      isShow: false
-      // questData: {
-      //   '正射': null,
-      //   '全景': null,
-      // },
-      // valueTable: {
-      //   columns: ['替代人工', '节约成本', '减少碳排'],
-      //   rows: [['16人次/102.891公里', '2.68万元', '0.03吨']]
-      // },
-
-      // flightTable: {
-      //   columns: ['无人机场', '飞行架次(次)', '飞行时长(分钟)', '飞行里程(米)'],
-      //   rows: [
-      //     ['西安-周至', 16, 203, 102891],
-      //     ['总计', 16, 203, 102891]
-      //   ]
-      // },
-      // problemTable: {
-      //   columns: ['问题类型', '数量'],
-      //   rows: [
-      //     ['积存建筑垃圾', 1],
-      //     ['疑似烟火', 6]
-      //   ]
-      // },
-      // resultTable: {
-      //   columns: ['成果机场/类型', '照片', '全景', '三维', '正射'],
-      //   rows: [
-      //     ['西安-周至', 292, 7, 0, 0],
-      //     ['总计', 292, 7, 0, 0]
-      //   ]
-      // }
+      isShow: false,
+      dateTime: null,
+      tableType: null
     }
-    // overall: [
-    //   '2024年9月6日，共有1台无人机正常工作，共计飞行架次16次、飞行总时长203分钟、飞行里程102891米。',
-    //   '当日提交任务总数8个，分别为拍照巡检任务8个；当日共执行任务16次，分别执行了拍照巡检任务5个、全景巡检任务11个；共拍摄照片292张，发现问题2个。',
-    //   '由此，等效价值共计替代人工16次，102.891公里，节约成本2.68万元，减少碳排0.03吨。'
-    // ],
   },
   methods: {
+
     buildTianDiTuImageUrl(latitude, longitude) {
       const baseUrl = 'http://api.tianditu.gov.cn/staticimage'
       const params = {
@@ -421,19 +384,40 @@ export default {
     getDayReport() {
       const params = {
         orgId: localStorage.getItem('org_id'),
-        begin_date: 1733626557000
+        begin_date: this.begin_date
       }
       getDayReportAPI(params)
         .then((res) => {
           if (res.code === 200) {
             this.report = res.data
             this.isShow = true
+          } else if (res.code === 500) {
+            this.isShow = true
           }
         })
         .catch((err) => {
-          // this.showMap = false;
         })
     },
+
+    getWeekReport() {
+      const params = {
+        orgId: localStorage.getItem('org_id'),
+        begin_date: this.begin_date,
+        end_date: this.end_date
+      }
+      getWeekReportAPI(params)
+        .then((res) => {
+          if (res.code === 200) {
+            this.report = res.data
+            this.isShow = true
+          } else if (res.code === 500) {
+            this.isShow = true
+          }
+        })
+        .catch((err) => {
+        })
+    },
+
     async exportFullScreenPdf() {
       try {
         // 目标 HTML 元素
@@ -554,16 +538,50 @@ export default {
       window.print() // 调用window打印方法
       window.location.reload() // 打印完成后重新加载页面
     }
-  }
-  ,
+  },
+
   computed: {
+    problemListLength() {
+      if (this.report.problemList) {
+        return this.report.problemList.length
+      }
+    },
+
+    modelListLength() {
+      if (this.report.modelList) {
+        return this.report.modelList.length
+      }
+    },
+
+    orhtoListLength() {
+      if (this.report.orthoList) {
+        return this.report.orthoList.length
+      }
+    },
+
+    begin_date() {
+      const date = new Date(this.dateTime)
+      if (isNaN(date.getTime())) {
+        console.error('Invalid date string:', this.dateTime)
+        return null
+      }
+      return date.getTime()
+    },
+    end_date() {
+      const date = new Date(this.dateTime)
+      if (isNaN(date.getTime())) {
+        console.error('Invalid date string:', this.dateTime)
+        return null
+      }
+      const endDate = new Date(date)
+      endDate.setDate(endDate.getDate() + 7)
+      return endDate.getTime()
+    },
+
     questData() {
       return this.report.quest
     },
-    modelListLength() {
-      return this.report.modelList.length
-    }
-    ,
+
     problemData() {
       return this.report.problem.map(item => [item.flyName, item.flyTypeCount])
     }
@@ -576,12 +594,13 @@ export default {
         item.threeDCoun,
         item.orthophotoCount
       ])
-    }
-    ,
+    },
+
     overall() {
+      const totalTime = this.report.totalTime || 0
       return [
         this.report.reportTime + '，共有' + this.report.deviceNum + '台无人机正常工作，共计飞行架次'
-        + this.report.sortieNum + '次' + '、飞行总时长' + this.report.totalTime + '分钟' + '、飞行里程' + this.report.totalMileage.toFixed(0) + '米。',
+        + this.report.sortieNum + '次' + '、飞行总时长' + totalTime + '分钟' + '、飞行里程' + this.report.totalMileage.toFixed(0) + '米。',
         '当日提交任务总数' + this.report.questNum + '个，分别为照片任务' + this.report.photoQuestNum + '个、全景任务' + this.report.panoramaQuestNum +
         '个、正射任务' + this.report.orthoQuestNum + '个、三维任务' + this.report.threeDQuestNum + '个；当日共执行任务' + this.report.executeQuestNum +
         '次，分别执行了照片任务' + this.report.executePhotoNum + '个、全景任务' + this.report.executePanoramaQuestNum + '个、正射任务' + this.report.executeOrthoQuestNum +
@@ -589,45 +608,41 @@ export default {
         '由此，等效价值共计替代人工' + this.report.replaceManualNum + '次' + '、' + this.report.flightMileage.toFixed(3) + '公里' + '、节约成本' + this.report.saveCost.toFixed(2) + '万元' + '、减少碳排'
         + this.report.reduceCarbon.toFixed(2) + '吨。'
       ]
-    }
-    ,
+    },
+
     valueTable() {
       return {
         columns: ['替代人工', '节约成本', '减少碳排'],
         rows: [
           [
             this.report.replaceManualNum + '人次/' + this.report.flightMileage.toFixed(3) + '公里',
-            this.report.saveCost.toFixed(2) + '万元',
+            this.report.saveCost.toFixed(2) + '元',
             this.report.reduceCarbon.toFixed(2) + '吨'
           ]
         ]
       }
     }
-    // flightTable(){
-    //   return {
-    //     columns: ['无人机场', '飞行架次(次)', '飞行时长(分钟)', '飞行里程(米)'],
-    //     rows: [
-    //       [
-    //         this.report.replaceManualNum + '人次/' + this.report.flightMileage + '公里',
-    //         this.report.saveCost + '万元',
-    //         this.report.reduceCarbon + '吨'
-    //       ]
-    //       rows: [
-    //         ['西安-周至', 16, 203, 102891],
-    //         ['总计', 16, 203, 102891]
-    //       ]
-    //     ]
-    //   };
-    // }
+  },
 
-  }
-  ,
   mounted() {
-    this.getDayReport()
     // const url = 'http://api.tianditu.gov.cn/staticimage?center=116.40,39.93&width=500&height=500&zoom=12&layers=vec_c,cva_c%20&markers=116.34867,39.94593&tk=3b33593a6ce1ae84375ec06b89a8aace'
     // fetch(url).then(res => {
     //
     // })
+    this.dateTime = this.$route.query.dateTime
+    this.tableType = this.$route.query.tableType
+    console.log(this.tableType)
+    if (this.tableType == 1) {
+      console.log('eeeeeee')
+
+      this.getDayReport()
+    } else if (this.tableType == 2) {
+      this.getWeekReport()
+    }
+  },
+
+  created() {
+
   }
 }
 </script>
