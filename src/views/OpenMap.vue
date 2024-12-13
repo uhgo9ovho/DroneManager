@@ -1,7 +1,11 @@
 <template>
   <div class="open-map">
     <!-- 地图组件 -->
-    <map-container ref="AMAP"></map-container>
+    <map-container
+      ref="AMAP"
+      :latitude="34.341995"
+      :longitude="108.9849"
+    ></map-container>
     <!-- 编辑框 -->
     <create-task
       :starttime="starttime"
@@ -39,6 +43,7 @@ import CreateTask from "../components/CreateTask.vue";
 import MapContainer from "../components/MapContainer.vue";
 import SettingDate from "../components/SettingDate.vue";
 import { mapState, mapMutations } from "vuex";
+import { airPostAPI } from "@/api/TaskManager.js";
 const now = new Date();
 export default {
   name: "OpenMap",
@@ -56,16 +61,41 @@ export default {
       starttime: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
       valArr: [],
       inspectionValue: 0,
-      isShow: false
+      isShow: false,
+      showMap: false,
+      longitude: 0,
+      latitude: 0,
     };
   },
   computed: {
     ...mapState("changeStatus", ["isDrawText"]),
   },
+  mounted() {
+    this.getDeviceInfo();
+  },
   methods: {
-    ...mapMutations( 'changeStatus',['CHANGE_DROC_STATUS']),
+    ...mapMutations("changeStatus", ["CHANGE_DROC_STATUS"]),
     changeDownContentShow(flag) {
       this.isShow = flag;
+    },
+    getDeviceInfo() {
+      this.showMap = false;
+      const params = {
+        orgId: localStorage.getItem("org_id"),
+        deviceType: 1,
+      };
+      airPostAPI(params)
+        .then((res) => {
+          this.showMap = true;
+          if (res.code === 200) {
+            let lonlatArr = res.rows[0].location.split(",");
+            this.longitude = +lonlatArr[0];
+            this.latitude = +lonlatArr[1];
+          }
+        })
+        .catch((err) => {
+          this.showMap = false;
+        });
     },
     dateArrays(valArr) {
       this.valArr = valArr;
