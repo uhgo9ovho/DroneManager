@@ -272,7 +272,7 @@ export default {
             option.total = data.total
             option.dailyAverage = data.dailyAverage
             break
-          case '飞行里程 / 日均时常':
+          case '飞行里程 / 日均时长':
             option.total = data.flyDistance
             option.dailyAverage = data.avgFlyTime
             break

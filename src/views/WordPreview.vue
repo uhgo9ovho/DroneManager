@@ -672,16 +672,17 @@ export default {
   position: relative;
 
   width: 40%; /* 宽度占屏幕的40% */
+  min-width: 760px; /* 最小宽度为760px */
   max-width: 1200px; /* 限制最大宽度，防止超大屏幕下内容过宽 */
   background-color: #fff;
-  padding: 20px;
+  padding: 60px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   //border-radius: 8px;
 
 
   .btn {
     position: absolute;
-    right: 20px;
+    right: 40px;
     top: 20px;
   }
 }
