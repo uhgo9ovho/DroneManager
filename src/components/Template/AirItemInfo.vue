@@ -60,6 +60,7 @@
 
 <script>
 import TakeOffDialog from "./TakeOffDialog.vue";
+import { airLineInfoAPI } from '@/api/TaskManager';
 export default {
   name: "AirItemInfo",
   components: {
@@ -100,6 +101,10 @@ export default {
     },
     handleCommand(command) {
       if (command == "details") {
+        airLineInfoAPI(this.info.airlineId).then(res => {
+          console.log(res,'rres');
+          
+        })
         this.$emit("openDialog", this.info);
       } else {
         //删除

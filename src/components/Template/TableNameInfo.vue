@@ -15,31 +15,34 @@
             popper-class="airLine"
             @show="showPopover"
           >
-            <div
-              v-for="(item, index) in airLineList"
-              :key="index"
-              style="margin: 8px 0"
-            >
-              <span
-                style="
-                  text-overflow: ellipsis;
-                  word-break: break-word;
-                  white-space: nowrap;
-                  overflow: hidden;
-                  font-family: PingFangSC-Medium;
-                  font-weight: 500;
-                  font-size: 14px;
-                  color: #1d1d1f;
-                  line-height: 22px;
-                  margin-bottom: 4px;
-                  margin-right: 10px;
-                "
-                >{{ item }}</span
+            <div v-if="airLineList.length">
+              <div
+                v-for="(item, index) in airLineList"
+                :key="index"
+                style="margin: 8px 0"
               >
-              <el-tag size="mini" :type="statusType(item.lineStatus)">{{
-                "待执行"
-              }}</el-tag>
+                <span
+                  style="
+                    text-overflow: ellipsis;
+                    word-break: break-word;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    font-family: PingFangSC-Medium;
+                    font-weight: 500;
+                    font-size: 14px;
+                    color: #1d1d1f;
+                    line-height: 22px;
+                    margin-bottom: 4px;
+                    margin-right: 10px;
+                  "
+                  >{{ item }}</span
+                >
+                <el-tag size="mini" :type="statusType(item.lineStatus)">{{
+                  "待执行"
+                }}</el-tag>
+              </div>
             </div>
+            <div v-else>暂无航线</div>
             <span slot="reference" style="cursor: pointer"
               >{{ row.airlineNumber }}条航线<i class="el-icon-arrow-down"
                 >，</i

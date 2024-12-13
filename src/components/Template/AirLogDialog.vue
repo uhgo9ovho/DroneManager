@@ -30,11 +30,31 @@
             </div>
           </div>
           <div class="container">
+            <div v-show="isShowVideo">
+              <!-- 视频列表 -->
+              <div
+                class="img_item"
+                v-for="(item, index) in videoOptions"
+                :key="index"
+                @click="previewVideoBtn(item)"
+                v-show="!isShowVideo"
+              >
+                <img :src="item.url" alt="" />
+                <div class="download">
+                  <i class="el-icon-download"></i>
+                </div>
+                <div class="introduce">{{ item.createTime | formatTime }}</div>
+                <div class="alarm">
+                  <img :src="alarm" alt="" class="alarm-img" />1
+                </div>
+              </div>
+            </div>
             <div
               class="img_item"
               v-for="(item, index) in imgOptions"
               :key="index"
               @click="previewBtn(item)"
+              v-show="!isShowVideo"
             >
               <img :src="item.url" alt="" />
               <div class="download">
@@ -192,15 +212,17 @@ export default {
       typeOptions: [
         {
           name: "照片",
-          num: 2,
+          num: 0,
           checked: true,
         },
         {
           name: "视频",
-          num: 2,
+          num: 0,
           checked: false,
         },
       ],
+      videoOptions: [],
+      isShowVideo: false,
     };
   },
   filters: {
@@ -257,6 +279,11 @@ export default {
     changeType(item) {
       this.typeOptions.forEach((item) => (item.checked = false));
       item.checked = true;
+      if (item.name == "视频") {
+        this.isShowVideo = true;
+      } else {
+        this.isShowVideo = false;
+      }
     },
     getMinutesDifference() {
       let that = this;
@@ -370,6 +397,8 @@ export default {
       const filterImgArr = this.row.resultList.filter(
         (item) => item.subFileType != 2
       );
+      const videoFilterArr = this.row.resultList.filter(item => item.subFileType == 2);
+      this.typeOptions[0].num = filterImgArr.length;
       this.imgOptions = filterImgArr.map((item) => {
         return {
           url:
@@ -379,6 +408,12 @@ export default {
           lon: item.lon,
         };
       });
+      this.videoOptions = videoFilterArr.map(item => {
+        return {
+          url: "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
+          createTime: item.createTime,
+        }
+      })
     },
     showVideo() {
       this.vedioVisible = true;
@@ -391,6 +426,9 @@ export default {
       this.lon = item.lon;
       this.lat = item.lat;
       this.preview = true;
+    },
+    previewVideoBtn(item) {
+      
     },
     closePreview() {
       this.preview = false;

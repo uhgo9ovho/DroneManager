@@ -74,17 +74,17 @@ export const constantRoutes = [
         active: true,
       },
       {
-        path: 'airport',
-        component: () => import('@/views/Airport.vue'),
-        name: 'Airport',
-        meta: { title: '机场', icon: 'el-icon-hangpai' },
-        active: false,
-      },
-      {
         path: 'flight',
         component: () => import('@/views/Flight.vue'),
         name: 'Flight',
         meta: { title: '飞行', icon: 'el-icon-guijifeihang' },
+        active: false,
+      },
+      {
+        path: 'airport',
+        component: () => import('@/views/Airport.vue'),
+        name: 'Airport',
+        meta: { title: '机场', icon: 'el-icon-hangpai' },
         active: false,
       },
       {

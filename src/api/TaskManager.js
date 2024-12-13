@@ -334,3 +334,13 @@ export const delSortDataAPI = (params) => {
         data: params
     })
 }
+
+/**
+ * 飞行排期的详情接口
+ */
+export const airLineInfoAPI = (airlineId) => {
+    return request({
+        url: `/wurenji/airline/${airlineId}`,
+        method: 'get'
+    })
+}
