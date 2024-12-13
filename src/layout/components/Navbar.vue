@@ -1,11 +1,9 @@
 <template>
   <div class="navbar">
-    <div class="logoTitle" @click="toHome">
       <div class="logo" @click="toHome">
-        <img :src="logoUrl" alt="" style="width: 32px; height: 32px"/>
+        <img :src="logoUrl" alt="" style="width: 32px; height: 32px;margin-right: 50px"/>
+        城市空天智慧管理平台
       </div>
-      <div class="title">城市空天智慧管理平台</div>
-    </div>
     <div class="user-info">
       <el-popover placement="top-start" width="370" trigger="click" popper-class="popper-notification">
         <notification></notification>
@@ -79,39 +77,16 @@ export default {
   justify-content: space-between;
   align-items: center;
 
-  .logoTitle {
+  .logo {
     display: flex;
     justify-content: center;
-    //justify-content: space-between;
+    align-items: center;
+    margin-left: 50px;
 
-    //align-items: center;
-    cursor: pointer;
-    //height: 52px;
-
-    .logo {
-      //width: 128px;
-      //width: auto;
-      //height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-left: 50px;
-
-    }
-
-    .title {
-      //height: 32px;
-      //width: auto;
-      margin-left: 50px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 18px;
-      color: #fff;
-      font-weight: 500;
-    }
+    font-size: 18px;
+    color: #fff;
+    font-weight: 500;
   }
-
 
   .user-info {
     display: flex;

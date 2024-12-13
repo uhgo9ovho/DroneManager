@@ -1,5 +1,6 @@
 <template>
-  <div class="word-preview" v-if="isShow">
+  <div class="word-preview-container" v-loading="loading">
+  <div class="word-preview" v-loading="loading">
     <div id="content">
       <!-- 标题部分 -->
       <div class="title-section">
@@ -33,16 +34,13 @@
         </div>
         <div class="sub-section">
           <h3>(二) 飞行汇总</h3>
-          <!--          <ReportTable-->
-          <!--            :columns="flightTable.columns"-->
-          <!--            :rows="flightTable.rows"-->
-          <!--          />-->
+
           <ReportTable1 :report="report"/>
         </div>
-        <div class="sub-section">
+        <div class="sub-section"  v-if="isShow && report.quest !== null">
           <h3>(三) 提交任务</h3>
 
-          <div id="app" v-if="isShow && report.quest !== null">
+          <div id="app" style="width: 100%; height: 400px;">
             <PieChart :questData="questData"/>
           </div>
         </div>
@@ -67,7 +65,7 @@
       </div>
 
       <!-- 附件部分 -->
-      <div class="section">
+      <div class="section" v-if="shouldShowDiv">
         <h2>附件部分</h2>
         <div class="attachment">
           <div class="problemList" v-if="report.problemList !== null">
@@ -193,6 +191,7 @@
       >
     </div>
   </div>
+  </div>
 </template>
 
 <script>
@@ -211,6 +210,7 @@ export default {
   components: { ReportTable, ReportTable1, ReportTable2, PieChart },
   data() {
     return {
+      loading: false,
       title: '城市空天智慧管理平台',
       subtitle: '无人机巡检日报',
       description:
@@ -386,13 +386,15 @@ export default {
         orgId: localStorage.getItem('org_id'),
         begin_date: this.begin_date
       }
+      this.loading = true
       getDayReportAPI(params)
         .then((res) => {
           if (res.code === 200) {
             this.report = res.data
             this.isShow = true
+            this.loading = false
           } else if (res.code === 500) {
-            this.isShow = true
+            // this.isShow = true
           }
         })
         .catch((err) => {
@@ -541,6 +543,14 @@ export default {
   },
 
   computed: {
+    shouldShowDiv() {
+      // 检查三个列表是否都为空
+      if(this.problemList == null &&
+        this.modelList == null &&
+        this.orthoList == null)
+        return false;
+      return true;
+    },
     problemListLength() {
       if (this.report.problemList) {
         return this.report.problemList.length
@@ -605,7 +615,7 @@ export default {
         '个、正射任务' + this.report.orthoQuestNum + '个、三维任务' + this.report.threeDQuestNum + '个；当日共执行任务' + this.report.executeQuestNum +
         '次，分别执行了照片任务' + this.report.executePhotoNum + '个、全景任务' + this.report.executePanoramaQuestNum + '个、正射任务' + this.report.executeOrthoQuestNum +
         '个、三维任务' + this.report.executeThreeDQuestNum + '个；共拍摄照片' + this.report.executePanoramaPhotoNum + '张，发现问题' + this.report.findProblemNum + '个。',
-        '由此，等效价值共计替代人工' + this.report.replaceManualNum + '次' + '、' + this.report.flightMileage.toFixed(3) + '公里' + '、节约成本' + this.report.saveCost.toFixed(2) + '万元' + '、减少碳排'
+        '由此，等效价值共计替代人工' + this.report.replaceManualNum + '次' + '、' + this.report.flightMileage.toFixed(3) + '公里' + '、节约成本' + this.report.saveCost.toFixed(2) + '元' + '、减少碳排'
         + this.report.reduceCarbon.toFixed(2) + '吨。'
       ]
     },
@@ -649,13 +659,31 @@ export default {
 
 <style scoped lang="scss">
 /* 标题部分样式 */
+.word-preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* 确保容器高度覆盖整个视口 */
+  background-color: #f2f2f2; /* 淡灰色背景 */
+  //padding: 20px;
+}
 .word-preview {
   position: relative;
 
+  width: 40%; /* 宽度占屏幕的40% */
+  min-width: 760px; /* 最小宽度为760px */
+  max-width: 1200px; /* 限制最大宽度，防止超大屏幕下内容过宽 */
+  background-color: #fff;
+  padding: 60px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  //border-radius: 8px;
+
+
   .btn {
     position: absolute;
-    right: 20px;
-    top: 0px;
+    right: 40px;
+    top: 20px;
   }
 }
 

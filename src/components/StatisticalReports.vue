@@ -115,8 +115,8 @@ export default {
     //获取报告列表
     getFlyRecordTable() {
       const params = {
-        beginTime: this.reportParams.beginTime,
-        endTime: this.reportParams.endTime,
+        // beginTime: this.reportParams.beginTime,
+        // endTime: this.reportParams.endTime,
         orgId: localStorage.getItem('org_id') || 0,
         tableType: this.reportParams.tableType,
         pageNum: this.pageNum,
