@@ -29,7 +29,12 @@
     </common-table>
     <!-- 查看弹窗 -->
     <div v-if="showDialog">
-      <AirLogDialog @closeAirDialog="closeAirDialog" :row="row"></AirLogDialog>
+      <AirLogDialog
+        @closeAirDialog="closeAirDialog"
+        :row="row"
+        @updatePhotos="updatePhotos"
+        ref="AirLogDialog"
+      ></AirLogDialog>
     </div>
   </div>
 </template>
@@ -102,6 +107,17 @@ export default {
     };
   },
   methods: {
+    updatePhotos(row) {
+      getLogPhotosAPI(row.recordId).then((res) => {
+        if (res.code === 200) {
+          row.photoNum = res.rows.length;
+          row.resultList = res.rows;
+          this.showDialog = true;
+          this.row = row;
+          this.$refs.AirLogDialog.getImageUrl();
+        }
+      });
+    },
     lookBtn(row) {
       getLogPhotosAPI(row.recordId).then((res) => {
         if (res.code === 200) {
@@ -109,7 +125,6 @@ export default {
           row.resultList = res.rows;
           this.showDialog = true;
           this.row = row;
-          
         }
       });
     },

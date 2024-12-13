@@ -26,7 +26,7 @@
             </div>
 
             <div class="filter">
-              <el-checkbox>问题照片</el-checkbox>
+              <el-checkbox @change="filterProblemPhoto">问题照片</el-checkbox>
             </div>
           </div>
           <div class="container">
@@ -61,7 +61,7 @@
                 <i class="el-icon-download"></i>
               </div>
               <div class="introduce">{{ item.createTime | formatTime }}</div>
-              <div class="alarm">
+              <div class="alarm" v-if="item.warnId != null">
                 <img :src="alarm" alt="" class="alarm-img" />1
               </div>
             </div>
@@ -173,6 +173,7 @@
         :lon="lon"
         :lat="lat"
         :row="row"
+        :resultId="resultId"
       ></PhotoPreview>
     </div>
   </div>
@@ -198,6 +199,7 @@ export default {
   },
   data() {
     return {
+      resultId: 0,
       imgOptions: [],
       vedioVisible: true,
       preview: false,
@@ -393,6 +395,15 @@ export default {
         }
       });
     },
+    filterProblemPhoto(val) {
+      if(val) {
+        //过滤照片
+        const filterArr = this.imgOptions.filter(item => item.warnId);
+        this.imgOptions = filterArr;
+      } else {
+        this.getImageUrl()
+      }
+    },
     getImageUrl() {
       const filterImgArr = this.row.resultList.filter(
         (item) => item.subFileType != 2
@@ -406,6 +417,8 @@ export default {
           createTime: item.createTime,
           lat: item.lat,
           lon: item.lon,
+          resultId: item.resultId,
+          warnId: item.warnId
         };
       });
       this.videoOptions = videoFilterArr.map(item => {
@@ -422,6 +435,8 @@ export default {
       this.vedioVisible = false;
     },
     previewBtn(item) {
+      console.log(item,'aaa');
+      this.resultId = item.resultId
       this.currentUrl = item.url;
       this.lon = item.lon;
       this.lat = item.lat;
@@ -430,8 +445,9 @@ export default {
     previewVideoBtn(item) {
       
     },
-    closePreview() {
+    closePreview(row) {
       this.preview = false;
+      this.$emit('updatePhotos', row)
     },
     closeAirDialog() {
       this.$emit("closeAirDialog");

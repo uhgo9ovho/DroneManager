@@ -115,6 +115,10 @@ export default {
       type: Number,
       default: "",
     },
+    resultId: {
+      type: Number,
+      default: 0
+    }
   },
   data() {
     return {
@@ -182,7 +186,7 @@ export default {
     },
     handleClick() {},
     closePreview() {
-      this.$emit("closePreview");
+      this.$emit("closePreview", this.row);
     },
     editBtn() {
       this.isEdit = !this.isEdit;
@@ -271,13 +275,14 @@ export default {
                   rectangles: `${this.locationArr}`,
                   orgId: localStorage.getItem('org_id'),
                   orgName: Cookies.get('orgName'),
-                  recordId:this.row.recordId
+                  recordId:this.row.recordId,
+                  resultId: this.resultId
                 };
-                console.log(params, 'params');
-
-                console.log(params);
-
-                addWarningAPI(params);
+                addWarningAPI(params).then(res => {
+                  if(res.code === 200) {
+                    this.$message.success('问题上报成功');
+                  }
+                });
               }
             });
           }
