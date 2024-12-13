@@ -159,7 +159,7 @@
       <el-progress :percentage="percentage"></el-progress>
     </div>
     <!-- 控制按钮 -->
-    <el-popconfirm :title="title" v-if="showMap" @confirm="confirmPhoto()">
+    <!-- <el-popconfirm :title="titleCream" v-if="showMap" @confirm="confirmPhoto()">
       <div class="bottomControlBox" slot="reference">
         <div class="innerbottomBox">
           <el-tooltip
@@ -172,7 +172,7 @@
           </el-tooltip>
         </div>
       </div>
-    </el-popconfirm>
+    </el-popconfirm> -->
     <el-popconfirm :title="title" v-if="showMap" @confirm="confirm()">
       <div class="bottomControlBox1" slot="reference">
         <div class="innerbottomBox">
@@ -183,6 +183,24 @@
             placement="top"
           >
             <i class="iconfont el-icon-kongzhi"></i>
+          </el-tooltip>
+        </div>
+      </div>
+    </el-popconfirm>
+    <el-popconfirm
+      :title="titleReturnHome"
+      v-if="showMap"
+      @confirm="returnHome()"
+    >
+      <div class="bottomControlBox2" slot="reference">
+        <div class="innerbottomBox">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="一键返航"
+            placement="top"
+          >
+            <i class="iconfont el-icon-tingjiping"></i>
           </el-tooltip>
         </div>
       </div>
@@ -216,6 +234,7 @@ import {
   authorityAPI,
   exitDRCAPI,
 } from "@/api/user.js";
+import { returnHomeAPI } from "@/api/droneControl.js";
 import { UranusMqtt } from "@/utils/mqtt";
 import Cookies from "js-cookie";
 import { getToken } from "@/utils/auth";
@@ -284,7 +303,7 @@ export default {
       handleKeyup: null,
       handleEmergencyStop: null,
       resetControlState: null,
-      unsubscribe: null
+      unsubscribe: null,
     };
   },
   components: {
@@ -298,11 +317,17 @@ export default {
     title() {
       return "当前无人控制该设备，是否确认继续申请控制权？";
     },
+    titleCream() {
+      return "是否抓拍截图";
+    },
+    titleReturnHome() {
+      return "是否一键返航";
+    },
   },
   watch: {
     showRemote(val) {
-      if(!val) {
-        this.unsubscribe()
+      if (!val) {
+        this.unsubscribe();
       }
     },
     mqttState: {
@@ -442,6 +467,20 @@ export default {
         }
       });
     },
+    returnHome() {
+      const params = {
+        sn: this.deviceSN,
+        service_identifier: "return_home",
+      };
+      returnHomeAPI(params).then((res) => {
+        console.log(res, "返航");
+        if (res.code === 0) {
+          this.$message.success("一健返航成功");
+        } else {
+          this.$message.error(res.message);
+        }
+      });
+    },
     confirm(e) {
       connectDRCAPI({}).then((res) => {
         if (res.code === 0) {
@@ -469,10 +508,14 @@ export default {
               const topic = {
                 pubTopic: res.data.pub[0],
                 subTopic: res.data.sub[0],
-                sn: this.deviceSN
+                sn: this.deviceSN,
               };
-              const { handleKeyup, handleEmergencyStop, resetControlState, unsubscribe } =
-                useManualControl(topic, this.flightController);
+              const {
+                handleKeyup,
+                handleEmergencyStop,
+                resetControlState,
+                unsubscribe,
+              } = useManualControl(topic, this.flightController);
               this.handleKeyup = handleKeyup;
               this.resetControlState = resetControlState;
               this.handleEmergencyStop = handleEmergencyStop;
@@ -480,9 +523,9 @@ export default {
               this.getToicpSubPub(topic);
 
               //抢夺控制权
-              authorityAPI({}, this.deviceSN).then(res => {
-                console.log(res,'ddfgrdherth');
-              })
+              authorityAPI({}, this.deviceSN).then((res) => {
+                console.log(res, "ddfgrdherth");
+              });
             } else {
               this.$message.error(res.message || res.msg);
             }
@@ -1021,6 +1064,21 @@ export default {
     z-index: 1000;
     bottom: 20px;
     left: 55%;
+    transform: translateX(-50%);
+    .innerbottomBox {
+      display: flex;
+      color: #fff;
+      i {
+        font-size: 32px;
+        cursor: pointer;
+      }
+    }
+  }
+  .bottomControlBox2 {
+    position: absolute;
+    z-index: 1000;
+    bottom: 20px;
+    left: 60%;
     transform: translateX(-50%);
     .innerbottomBox {
       display: flex;

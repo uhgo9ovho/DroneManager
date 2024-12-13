@@ -207,8 +207,8 @@ export default {
   }
   .custom-content-marker {
     position: relative;
-    width: 25px;
-    height: 34px;
+    width: 40px;
+    height: 49px;
   }
 
   .custom-content-marker img {

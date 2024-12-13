@@ -28,15 +28,15 @@
         <div class="infos">
           <div class="info">
             <span>预计耗时</span>
-            <div>10.8分钟</div>
+            <div>{{ estimatedTime }}</div>
           </div>
           <div class="info">
             <span>预计里程</span>
-            <div>6810米</div>
+            <div>{{ estimatedMileage }}</div>
           </div>
           <div class="info">
             <span>照片数量</span>
-            <div>19张</div>
+            <div>{{ photosNum }}</div>
           </div>
         </div>
         <div class="fly blueBtnColor">
@@ -66,6 +66,10 @@ export default {
       options: [],
       radio: "",
       loading: false,
+      info: null,
+      estimatedTime: 0,
+      estimatedMileage: 0,
+      photosNum: 0,
     };
   },
   mounted() {
@@ -77,6 +81,17 @@ export default {
     },
     getAirLineList() {
       this.options = this.row.wrjAirlineFiles;
+      this.radio = this.options[0].lineName;
+      const arr = this.row.wrjAirlineFiles;
+      if (arr && arr.length) {
+        this.info = JSON.parse(arr[0].drawLineData);
+        console.log(this.info);
+        this.estimatedTime =
+          (this.info.lineInfo.predictTime / 60).toFixed(1) + "分钟";
+        (this.estimatedMileage =
+          this.info.lineInfo.goAndBackDis.toFixed(2) + "km"),
+          (this.photosNum = this.info.lineInfo.pointCount + "张");
+      }
     },
     takeOff() {
       if (!this.radio) {
@@ -96,16 +111,16 @@ export default {
         taskId: this.row.taskId,
         taskName: this.row.taskName,
         workspaceId: localStorage.getItem("workspaceId"),
-        taskType: this.row.taskType
+        taskType: this.row.taskType,
       };
       takeoffAPI(params)
         .then((res) => {
           if (res.code == 200) {
-            this.$message.success("起飞成功");
+            this.$message.success("指令下发成功");
             this.loading = false;
-            this.$router.push('/videoMap')
+            this.$router.push("/videoMap");
           } else {
-            this.$message.error("起飞失败");
+            this.$message.error("指令下发失败");
             this.loading = false;
           }
         })

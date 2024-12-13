@@ -112,9 +112,9 @@ import jstx from '@/assets/icons/减少通行.png'
 import jsrc from '@/assets/icons/减少人次.png'
 import jycb from '@/assets/icons/节约成本.png'
 import jspt from '@/assets/icons/减少碳排.png'
-
+import WebSocketClient from "@/utils/websocket.js";
 import { getstatisticsDataAPI } from '@/api/index.js'
-
+import Cookies from 'js-cookie'
 export default {
   data() {
     return {
@@ -247,9 +247,14 @@ export default {
     this.getDateRange('week')
     this.timeRange = this.getTimeRangeTimestamps('week')
     console.log(this.timeRange)
-    this.getstatisticsData()
+    this.getstatisticsData();
+    this.connectWS()
   },
   methods: {
+    connectWS() {
+      let userId = JSON.parse(Cookies.get('user')).userId
+      new WebSocketClient(`ws://172.16.40.21:9002/websocket/${localStorage.getItem('workspaceId')}/${userId}`);
+    },
     convertToTimestamp(dateString) {
       // 创建日期对象
       const date = new Date(dateString)
