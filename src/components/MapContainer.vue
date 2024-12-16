@@ -44,6 +44,8 @@ export default {
     pointsList: {
       handler(val) {
         if (val.length) {
+          console.log(val,'val1111');
+          
           const { drawPolyline } = DronePlottingRoute(
             map,
             this.mouseTool,

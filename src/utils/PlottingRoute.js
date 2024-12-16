@@ -23,7 +23,6 @@ export function DronePlottingRoute(map, mouseTool, AMap) {
             // 点击开启编辑
             polygon = e.target
             enablePolyEdit(e)
-            console.log(e, '兼听则明');
         });
     });
     function drawPolygon() {
@@ -44,6 +43,7 @@ export function DronePlottingRoute(map, mouseTool, AMap) {
         store.commit('changeStatus/CHANGE_DROC_STATUS', "取消");
     };
     function getPoints(e) {
+        map.remove(polyline)
         let points = e.target.getPath()
         let arr = []
         points.map(v => {
@@ -71,8 +71,6 @@ export function DronePlottingRoute(map, mouseTool, AMap) {
     function removeAll() {
         closeEdit()
         mouseTool.close(true)
-        // map.remove(polygon)
-        // map.remove(polyline)
     }
     function enablePolyEdit(e) {
         setTimeout(() => {
@@ -114,6 +112,7 @@ export function DronePlottingRoute(map, mouseTool, AMap) {
         })
         map.add(polyline);
         map.setFitView();
+        store.commit('changeStatus/CLEAR_POINTSLIST'); // 清除上次的数组
     }
 
     mouseTool.on('draw', function (e) {
