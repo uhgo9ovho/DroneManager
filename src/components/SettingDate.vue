@@ -340,6 +340,7 @@ export default {
       this.formatInfo();
     },
     endTimeChange(val) {
+      
       this.$emit("endTime", val);
       this.formatInfo();
     },

@@ -77,7 +77,7 @@ export default {
             console.log(this.lineInfoObj,'asdasdasdsa');
             center = wgs84ToGcj02(this.lineInfoObj.centerInfo.lon, this.lineInfoObj.centerInfo.lat);
             this.lonlatArr = this.lineInfoObj.pointsList.map(item => {
-              return wgs84ToGcj02(item.lon, item.lat)
+              return [item.lon, item.lat]
             })
           }
           if (this.airLineData.length) {

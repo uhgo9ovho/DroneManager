@@ -27,7 +27,7 @@
       </div>
       <!-- 飞行info -->
       <div v-if="filghtShow">
-        <FilghtInfo @closeDialog="closeDialog" :row="row"></FilghtInfo>
+        <FilghtInfo @closeDialog="closeDialog" :row="row" @lineInfo="lineInfo"></FilghtInfo>
       </div>
     </div>
   </div>
