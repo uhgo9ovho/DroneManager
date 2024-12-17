@@ -1,8 +1,12 @@
 <template>
   <div class="video-map-wrap">
     <!-- 全屏 div，显示地图或视频 -->
-    <div class="full-screen">
-      <component :is="fullScreenComponent" />
+    <div class="full-screen" v-if="showMap">
+      <component
+        :is="fullScreenComponent"
+        :longitude="longitude"
+        :latitude="latitude"
+      />
     </div>
 
     <!-- 小 div 1，点击后与全屏 div 交换 -->
@@ -234,6 +238,7 @@ import {
   authorityAPI,
   exitDRCAPI,
 } from "@/api/user.js";
+import { airPostAPI } from "@/api/TaskManager.js";
 import { returnHomeAPI } from "@/api/droneControl.js";
 import { UranusMqtt } from "@/utils/mqtt";
 import Cookies from "js-cookie";
@@ -304,6 +309,9 @@ export default {
       handleEmergencyStop: null,
       resetControlState: null,
       unsubscribe: null,
+      longitude: 0,
+      latitude: 0,
+      showMap: false,
     };
   },
   components: {
@@ -421,11 +429,36 @@ export default {
     //
     //         `${process.env.VUE_APP_WS_URL}?ws-token=ksjdgbkadbfgadbfg` //本地
     //       );
+    this.getDeviceInfo()
   },
   methods: {
-    ...mapActions("droneStatus", ["getToicpSubPub", "getMqttState"]),
+    ...mapActions("droneStatus", [
+      "getToicpSubPub",
+      "getMqttState",
+      "getDeviceSN",
+    ]),
     droneEmergencyStop() {
       this.handleEmergencyStop();
+    },
+    getDeviceInfo() {
+      this.showMap = false;
+      const params = {
+        orgId: localStorage.getItem("org_id"),
+        deviceType: 1,
+      };
+      airPostAPI(params)
+        .then((res) => {
+          if (res.code === 200) {
+            this.getDeviceSN(res.rows[0].deviceId);
+            let lonlatArr = res.rows[0].location.split(",");
+            this.longitude = +lonlatArr[0];
+            this.latitude = +lonlatArr[1];
+            this.showMap = true;
+          }
+        })
+        .catch((err) => {
+          this.showMap = false;
+        });
     },
     returnHomeShow() {
       this.showRemote = false;
