@@ -29,16 +29,23 @@ const mutations = {
         getAirLineAPI(params).then(res=> {
             if(res.code == 200) {
                 state.airlineList = res.airlineList;
-                state.pointsList = res.airlineList[0].drawLineInfo.pointsList.map(item => [item.lon, item.lat]);
+                res.airlineList.forEach(item => {
+                    const pointsArr = item.drawLineInfo.pointsList.map(it => [it.lon, it.lat])
+                    state.pointsList.push(pointsArr)
+                })
+                
+                // state.pointsList = res.airlineList[0].drawLineInfo.pointsList.map(item => [item.lon, item.lat]);
 
                 console.log(state.pointsList);
             }
         })
-        console.log(arr, 'changeARR');
 
     },
     CHANGE_TASKTYPE_STATUS(state, type) {
         state.taskType = type;
+    },
+    CLEAR_POINTSLIST(state) {
+        state.pointsList = [];
     }
 }
 const actions = {}

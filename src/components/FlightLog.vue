@@ -14,7 +14,7 @@
           <div class="airimg">
             <img src="../assets/images/fly_img.3924673b.png" alt="" />
           </div>
-          <div>{{ row.taskName }}</div>
+          <div>{{ row.taskName ? row.taskName : '一键起飞' }}</div>
         </div>
       </template>
       <template #createBy="{ row }">
@@ -83,11 +83,11 @@ export default {
           label: "照片数",
           showOverflowTooltip: true,
         },
-        {
-          prop: "remark",
-          label: "标注照片数",
-          showOverflowTooltip: true,
-        },
+        // {
+        //   prop: "remark",
+        //   label: "标注照片数",
+        //   showOverflowTooltip: true,
+        // },
         // {
         //   prop: "record_status",
         //   label: "照片状态",

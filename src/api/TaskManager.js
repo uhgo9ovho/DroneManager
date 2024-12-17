@@ -344,3 +344,14 @@ export const airLineInfoAPI = (airlineId) => {
     method: 'get'
   })
 }
+
+
+/**
+ * AI托管接口
+ */
+export const AIHostingAPI = (status) => {
+    return request({
+        url: `aiAutomaticHostingController/findAutomaticHosting?org_id=${localStorage.getItem('org_id')}&status=${status}`,
+        method: 'get'
+    })
+}

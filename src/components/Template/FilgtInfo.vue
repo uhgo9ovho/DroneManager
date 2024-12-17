@@ -91,6 +91,11 @@ export default {
         (this.estimatedMileage =
           this.info.lineInfo.goAndBackDis.toFixed(2) + "km"),
           (this.photosNum = this.info.lineInfo.pointCount + "张");
+        let lineInfo = {
+          centerInfo: this.info.center,
+          pointsList: this.info.pointsList,
+        };
+        this.$emit("lineInfo", lineInfo);
       }
     },
     takeOff() {

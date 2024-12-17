@@ -7,7 +7,7 @@
       :size="628"
     >
       <div class="ai-setting-search">
-        <el-input placeholder="搜索机场"></el-input>
+        <el-input placeholder="搜索机场" v-model="value"></el-input>
       </div>
       <div class="ai-setting-content">
         <div class="ai-area-list">
@@ -28,9 +28,9 @@
           <div class="ai-nest-list">
             <div class="ai-nest-item">
               <div class="curr-nest">当前</div>
-              <div style="flex: 1 1 0%">西安-周至</div>
+              <div style="flex: 1 1 0%">陕西-西安</div>
               <div>
-                <el-switch></el-switch>
+                <el-switch v-model="openAI" @change="changeAI"></el-switch>
               </div>
             </div>
           </div>
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { AIHostingAPI } from '@/api/TaskManager.js';
 export default {
   name: "AIDialog",
   props: {
@@ -51,6 +52,8 @@ export default {
   },
   data() {
     return {
+      openAI: false,
+      value: "",
       aiAreaOptions: [
         {
           label: "全部机场",
@@ -58,7 +61,7 @@ export default {
           select: false,
         },
         {
-          label: "周至县",
+          label: "西安市",
           quantity: 1,
           select: true,
         },
@@ -69,7 +72,27 @@ export default {
     handleClose() {
       this.$emit("handleClose");
     },
+    changeAI(val) {
+      AIHostingAPI(val ? 1 : 2).then(res => {
+        if(res.code === 200) {
+          if(res.msg == '开启') {
+            localStorage.setItem('AIStatus', true);
+          } else {
+            localStorage.setItem('AIStatus', false);
+          }
+        }
+      })
+    }
   },
+  mounted() {
+    const AIStatus = JSON.parse(localStorage.getItem('AIStatus'));
+    
+    if(AIStatus) {
+      this.openAI = AIStatus;
+    } else {
+      this.openAI = false;
+    }
+  }
 };
 </script>
 

@@ -335,6 +335,7 @@ export default {
       const endDate = new Date(this.ruleForm.endDate);
       if (startDate.getTime() > endDate.getTime()) {
         this.ruleForm.endDate = val;
+        this.$emit("endTime", val);
       }
       this.$emit("startTime", val);
       this.formatInfo();

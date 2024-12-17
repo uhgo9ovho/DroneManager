@@ -255,7 +255,27 @@ export function downloadPhoto(link, picName) {
   }
   img.src = link + '?v=' + Date.now()
 }
-
+//下载视频
+export function downVideo (url, name){
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.responseType = 'arraybuffer';    // 返回类型blob
+  xhr.onload = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      let blob = this.response;
+	  // 转换一个blob链接
+      let u = window.URL.createObjectURL(new Blob([blob],{ type: 'video/mp4' })) // 视频的type是video/mp4，图片是image/jpeg
+	  let a = document.createElement('a');
+	  a.download = name; // 设置下载的文件名
+	  a.href = u;
+	  a.style.display = 'none'
+	  document.body.appendChild(a)
+	  a.click();
+	  a.remove();
+	}
+  };
+  xhr.send()
+};
 /**
 多张图片以压缩包的形式下载
 imgsList： 存放多张图片路径的数组 base64

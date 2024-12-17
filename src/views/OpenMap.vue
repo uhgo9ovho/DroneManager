@@ -1,11 +1,14 @@
 <template>
   <div class="open-map">
     <!-- 地图组件 -->
-    <map-container
-      ref="AMAP"
-      :latitude="34.341995"
-      :longitude="108.9849"
-    ></map-container>
+    <div v-if="showMap" class="map-box">
+      <map-container
+        ref="AMAP"
+        :latitude="latitude"
+        :longitude="longitude"
+      ></map-container>
+    </div>
+
     <!-- 编辑框 -->
     <create-task
       :starttime="starttime"
@@ -86,11 +89,11 @@ export default {
       };
       airPostAPI(params)
         .then((res) => {
-          this.showMap = true;
           if (res.code === 200) {
             let lonlatArr = res.rows[0].location.split(",");
             this.longitude = +lonlatArr[0];
             this.latitude = +lonlatArr[1];
+            this.showMap = true;
           }
         })
         .catch((err) => {
@@ -140,6 +143,10 @@ export default {
 .open-map {
   position: relative;
   height: calc(100vh - 52px);
+  .map-box {
+    width: 100%;
+    height: 100%;
+  }
   .downContent {
     position: absolute;
     left: calc(50% - 65px);
