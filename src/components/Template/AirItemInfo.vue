@@ -1,5 +1,8 @@
 <template>
-  <div class="task-wait-card" :class="{'shikuang': info.schedulingStatus == 1}">
+  <div class="task-wait-card" :class="{ shikuang: info.schedulingStatus == 1 }">
+    <div class="ai-box">
+      <img :src="AIImage" alt="">
+    </div>
     <div style="flex: 1.7 1 0%">
       <div class="task-time">{{ info.formatTime }} 计划起飞</div>
       <div class="task-name2">{{ info.taskName }}</div>
@@ -26,7 +29,11 @@
         style="font-size: 12px; margin-left: 5px"
       ></div>
     </div>
-    <div class="task-btn2" v-if="info.schedulingStatus === 1" @click="toVideoMap">
+    <div
+      class="task-btn2"
+      v-if="info.schedulingStatus === 1"
+      @click="toVideoMap"
+    >
       <!-- 正在飞行 -->
       <div>实况</div>
       <div
@@ -59,8 +66,9 @@
 </template>
 
 <script>
+import AIImage from '@/assets/images/AI.png'
 import TakeOffDialog from "./TakeOffDialog.vue";
-import { airLineInfoAPI } from '@/api/TaskManager';
+import { airLineInfoAPI } from "@/api/TaskManager";
 export default {
   name: "AirItemInfo",
   components: {
@@ -76,6 +84,7 @@ export default {
     return {
       dialogVisible: false,
       isDel: false,
+      AIImage: AIImage
     };
   },
   filters: {
@@ -94,17 +103,16 @@ export default {
   },
   methods: {
     toVideoMap() {
-      this.$router.push('/videoMap')
+      this.$router.push("/videoMap");
     },
     updateData() {
       this.$emit("updateData");
     },
     handleCommand(command) {
       if (command == "details") {
-        airLineInfoAPI(this.info.airlineId).then(res => {
-          console.log(res,'rres');
-          
-        })
+        airLineInfoAPI(this.info.airlineId).then((res) => {
+          console.log(res, "rres");
+        });
         this.$emit("openDialog", this.info);
       } else {
         //删除
@@ -144,6 +152,15 @@ export default {
   padding-left: 30px;
   padding-right: 48px;
   color: #6e6e73;
+  .ai-box {
+    width: 30px;
+    height: 30px;
+    margin-right: 30px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
   .task-time {
     font-size: 12px;
     font-weight: 500;
