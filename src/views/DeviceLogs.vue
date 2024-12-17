@@ -4,12 +4,15 @@
       <div class="operate-box">
         <div class="time-picker-box">
           <el-date-picker
-            v-model="startDate"
+            v-model="dateRange"
             type="daterange"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            @change="handleDateChange"
-            :picker-options="pickerOptions">
+            @change="handleDateRangeChange"
+
+            value-format="yyyy-MM-dd HH:mm:ss"
+          >
+            <!--            format="yyyy-MM-dd HH:mm:ss"-->
           </el-date-picker>
         </div>
         <div
@@ -18,7 +21,7 @@
         >
           <el-input
             prefix-icon="el-icon-search"
-            :placeholder="checkedTip"
+            placeholder=""
             @focus="focus"
             @blur="blur"
             v-model="searchText"
@@ -27,9 +30,9 @@
           ></el-input>
         </div>
         <div class="create-task-btn">
-<!--          icon="el-icon-plus"-->
+          <!--          icon="el-icon-plus"-->
 
-          <el-button round @click="addDepartment"
+          <el-button round @click="getDeviceList"
           >搜索
           </el-button
           >
@@ -68,6 +71,10 @@ export default {
   data() {
     return {
       checked: false,
+      dateRange: [],
+      searchText: '',
+      startTime: '',
+      endTime: '',
 
       deviceList: [],
       columns: [
@@ -144,23 +151,54 @@ export default {
   },
   methods: {
     focus() {
-      this.checked = true;
+      this.checked = true
     },
     blur() {
-      this.checked = false;
+      this.checked = false
     },
-    getDeviceList() {
+
+    handleDateRangeChange(value) {
+      if (value) {
+        const [startTime, endTime] = value
+        this.startTime = startTime
+        this.endTime = endTime
+        console.log(`开始时间: ${startTime}`)
+        console.log(`结束时间: ${endTime}`)
+      } else {
+        console.log('时间范围已清除')
+        this.startTime = ''
+        this.endTime = ''
+      }
+    },
+
+    handleSearch(value) {
+      this.searchText = value
+      // console.log(`输入的消息: ${value}`)
+    },
+
+    async getDeviceList() {
       const params = {
+        startTime: this.startTime,
+        endTime: this.endTime,
+        messageZh: this.searchText,
         pageNum: this.pageNum,
         pageSize: this.pageSize
       }
-      deviceInfoAPI(params).then((res) => {
+
+      try {
+        const res = await deviceInfoAPI(params)
         if (res.code === 200) {
           this.deviceList = res.rows
           this.total = res.total
+          // console.log(res)
+        } else {
+          console.error('获取设备日志失败', res)
         }
-      })
+      } catch (error) {
+        console.error('请求接口出错', error)
+      }
     },
+
     pageChange(params) {
       this.pageNum = params.pageNum
       this.pageSize = params.pageSize
@@ -206,9 +244,11 @@ export default {
         margin-right: 20px;
         width: 100px;
         transition: width 0.5s;
+
         .el-input {
           border-radius: 20px;
           width: 100%;
+
           .el-input__inner {
             border-radius: 20px;
             width: 100%;
@@ -216,9 +256,11 @@ export default {
           }
         }
       }
+
       .lang-search-box {
         width: 360px;
       }
+
       .create-task-btn {
         .el-button {
           background-color: #000;

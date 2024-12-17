@@ -1,5 +1,4 @@
-import request from '@/utils/request';
-
+import request from '@/utils/request'
 
 /**
  * 获取首页统计数据接口
@@ -19,7 +18,7 @@ export const getDayReportAPI = (params) => {
     url: `/wurenji/report/getDayReport?orgId=${params.orgId}&begin_date=${params.begin_date}`,
     method: 'get'
   })
-};
+}
 
 /**
  * 获取周报详情
@@ -29,11 +28,11 @@ export const getWeekReportAPI = (params) => {
     url: `/wurenji/report/getWeekReport?orgId=${params.orgId}&begin_date=${params.begin_date}&end_date=${params.end_date}`,
     method: 'get'
   })
-};
+}
 
 /**
-* 报告列表接口
-*/
+ * 报告列表接口
+ */
 export const getFlyRecordTableAPI = (params) => {
   return request({
     url: '/wurenji/report/getFlyRecordTable',
@@ -41,3 +40,4 @@ export const getFlyRecordTableAPI = (params) => {
     data: params
   })
 }
+
