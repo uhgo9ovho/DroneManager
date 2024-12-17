@@ -36,17 +36,10 @@
                 class="img_item"
                 v-for="(item, index) in videoOptions"
                 :key="index"
-                @click="previewVideoBtn(item)"
-                v-show="!isShowVideo"
+                @click.stop="previewVideoBtn(item)"
               >
-                <img :src="item.url" alt="" />
-                <div class="download">
-                  <i class="el-icon-download"></i>
-                </div>
+                <img :src="VideoPage" alt="" />
                 <div class="introduce">{{ item.createTime | formatTime }}</div>
-                <div class="alarm">
-                  <img :src="alarm" alt="" class="alarm-img" />1
-                </div>
               </div>
             </div>
             <div
@@ -57,7 +50,7 @@
               v-show="!isShowVideo"
             >
               <img :src="item.url" alt="" />
-              <div class="download">
+              <div class="download" @click.stop="downloadImage(item)">
                 <i class="el-icon-download"></i>
               </div>
               <div class="introduce">{{ item.createTime | formatTime }}</div>
@@ -89,7 +82,7 @@
               <div class="line">
                 <div>
                   <span>
-                    {{ row.resultList.length }}
+                    {{ typeOptions[0].num }}
                     <span class="unit">&nbsp;张</span></span
                   >
                   <div class="photo">
@@ -176,19 +169,24 @@
         :resultId="resultId"
       ></PhotoPreview>
     </div>
+    <!-- 视频预览组件 -->
+    <div v-if="videoPreview">
+      <VideoPreview :videoUrl="videoUrl" @closeVideoPreview="closeVideoPreview"></VideoPreview>
+    </div>
   </div>
 </template>
 
 <script>
 import alarm from "@/assets/images/alarm.png";
-
+import VideoPage from "@/assets/images/videoPage.jpg";
 import MapContainer from "../MapContainer.vue";
 import PhotoPreview from "./PhotoPreview.vue";
+import VideoPreview from "./VideoPreview.vue";
 import { airLineAPI } from "@/api/TaskManager.js";
 import { downloadImagesAsZip } from "@/utils/ruoyi";
 import { mapState, mapMutations } from "vuex";
 import flvjs from "flv.js";
-
+import { downloadPhoto, downVideo } from "@/utils/ruoyi";
 export default {
   name: "AirLogDialog",
   props: {
@@ -199,6 +197,8 @@ export default {
   },
   data() {
     return {
+      videoPreview: false,
+      VideoPage: VideoPage,
       resultId: 0,
       imgOptions: [],
       vedioVisible: true,
@@ -225,6 +225,7 @@ export default {
       ],
       videoOptions: [],
       isShowVideo: false,
+      videoUrl: ""
     };
   },
   filters: {
@@ -246,6 +247,7 @@ export default {
   components: {
     MapContainer,
     PhotoPreview,
+    VideoPreview,
   },
   computed: {
     ...mapState("changeStatus", ["downloadStatus"]),
@@ -396,20 +398,23 @@ export default {
       });
     },
     filterProblemPhoto(val) {
-      if(val) {
+      if (val) {
         //过滤照片
-        const filterArr = this.imgOptions.filter(item => item.warnId);
+        const filterArr = this.imgOptions.filter((item) => item.warnId);
         this.imgOptions = filterArr;
       } else {
-        this.getImageUrl()
+        this.getImageUrl();
       }
     },
     getImageUrl() {
       const filterImgArr = this.row.resultList.filter(
         (item) => item.subFileType != 2
       );
-      const videoFilterArr = this.row.resultList.filter(item => item.subFileType == 2);
+      const videoFilterArr = this.row.resultList.filter(
+        (item) => item.subFileType == 2
+      );
       this.typeOptions[0].num = filterImgArr.length;
+      this.typeOptions[1].num = videoFilterArr.length;
       this.imgOptions = filterImgArr.map((item) => {
         return {
           url:
@@ -418,15 +423,18 @@ export default {
           lat: item.lat,
           lon: item.lon,
           resultId: item.resultId,
-          warnId: item.warnId
+          warnId: item.warnId,
+          name: item.fileName,
         };
       });
-      this.videoOptions = videoFilterArr.map(item => {
+      this.videoOptions = videoFilterArr.map((item) => {
         return {
-          url: "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
+          url:
+            "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
           createTime: item.createTime,
-        }
-      })
+          name: item.fileName,
+        };
+      });
     },
     showVideo() {
       this.vedioVisible = true;
@@ -435,23 +443,30 @@ export default {
       this.vedioVisible = false;
     },
     previewBtn(item) {
-      console.log(item,'aaa');
-      this.resultId = item.resultId
+      console.log(item, "aaa");
+      this.resultId = item.resultId;
       this.currentUrl = item.url;
       this.lon = item.lon;
       this.lat = item.lat;
       this.preview = true;
     },
     previewVideoBtn(item) {
-      
+      this.videoPreview = true;
+      this.videoUrl = item.url;
     },
     closePreview(row) {
       this.preview = false;
-      this.$emit('updatePhotos', row)
+      this.$emit("updatePhotos", row);
     },
     closeAirDialog() {
       this.$emit("closeAirDialog");
     },
+    downloadImage(item) {
+      downloadPhoto(item.url, item.name);
+    },
+    closeVideoPreview() {
+      this.videoPreview = false;
+    }
   },
 };
 </script>

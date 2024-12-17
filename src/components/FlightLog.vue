@@ -83,11 +83,11 @@ export default {
           label: "照片数",
           showOverflowTooltip: true,
         },
-        {
-          prop: "remark",
-          label: "标注照片数",
-          showOverflowTooltip: true,
-        },
+        // {
+        //   prop: "remark",
+        //   label: "标注照片数",
+        //   showOverflowTooltip: true,
+        // },
         // {
         //   prop: "record_status",
         //   label: "照片状态",
