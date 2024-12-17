@@ -185,15 +185,6 @@ export default {
         this.detailOptions[0].value = this.info.reduce((total, obj) => total + (obj.lineInfo.predictTime || 0) / 60, 0) + '分钟';
         this.detailOptions[1].value = this.info.reduce((total, obj) => total + (obj.lineInfo.goAndBackDis || 0), 0).toFixed(2) + 'km';
         this.detailOptions[2].value = this.info.reduce((total, obj) => total + (obj.lineInfo.pointCount || 0), 0) + '张';
-
-        
-        // this.info = JSON.parse(arr[0].drawLineData);
-        console.log(this.info);
-        // this.detailOptions[0].value =
-        //   (this.info.lineInfo.predictTime / 60).toFixed(1) + "分钟";
-        // (this.detailOptions[1].value =
-        //   this.info.lineInfo.goAndBackDis.toFixed(2) + "km"),
-        //   (this.detailOptions[2].value = this.info.lineInfo.pointCount + "张");
         this.lineInfo = {
           centerInfo: this.info[0].center,
           pointsList,

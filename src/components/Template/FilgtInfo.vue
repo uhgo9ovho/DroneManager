@@ -66,7 +66,7 @@ export default {
       options: [],
       radio: "",
       loading: false,
-      info: null,
+      info: [],
       estimatedTime: 0,
       estimatedMileage: 0,
       photosNum: 0,
@@ -82,20 +82,22 @@ export default {
     getAirLineList() {
       this.options = this.row.wrjAirlineFiles;
       this.radio = this.options[0].lineName;
+
+
       const arr = this.row.wrjAirlineFiles;
       if (arr && arr.length) {
-        this.info = JSON.parse(arr[0].drawLineData);
-        console.log(this.info);
-        this.estimatedTime =
-          (this.info.lineInfo.predictTime / 60).toFixed(1) + "分钟";
-        (this.estimatedMileage =
-          this.info.lineInfo.goAndBackDis.toFixed(2) + "km"),
-          (this.photosNum = this.info.lineInfo.pointCount + "张");
-        let lineInfo = {
-          centerInfo: this.info.center,
-          pointsList: this.info.pointsList,
+        arr.forEach(item => {
+          this.info.push(JSON.parse(item.drawLineData));
+        })
+        const pointsList = this.info.map(item => item.pointsList);
+        this.estimatedTime = this.info.reduce((total, obj) => total + (obj.lineInfo.predictTime || 0) / 60, 0) + '分钟';
+        this.estimatedMileage = this.info.reduce((total, obj) => total + (obj.lineInfo.goAndBackDis || 0), 0).toFixed(2) + 'km';
+        this.photosNum = this.info.reduce((total, obj) => total + (obj.lineInfo.pointCount || 0), 0) + '张';
+        this.lineInfo = {
+          centerInfo: this.info[0].center,
+          pointsList,
         };
-        this.$emit("lineInfo", lineInfo);
+        this.$emit("lineInfo", this.lineInfo);
       }
     },
     takeOff() {
