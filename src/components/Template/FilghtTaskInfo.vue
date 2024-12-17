@@ -169,7 +169,7 @@ export default {
           value: "0张",
         },
       ],
-      info: null,
+      info: [],
       lineInfo: null,
     };
   },
@@ -178,16 +178,25 @@ export default {
     getCollectInformation() {
       const arr = this.row.wrjAirlineFiles;
       if (arr && arr.length) {
-        this.info = JSON.parse(arr[0].drawLineData);
+        arr.forEach(item => {
+          this.info.push(JSON.parse(item.drawLineData));
+        })
+        const pointsList = this.info.map(item => item.pointsList);
+        this.detailOptions[0].value = this.info.reduce((total, obj) => total + (obj.lineInfo.predictTime || 0) / 60, 0) + '分钟';
+        this.detailOptions[1].value = this.info.reduce((total, obj) => total + (obj.lineInfo.goAndBackDis || 0), 0).toFixed(2) + 'km';
+        this.detailOptions[2].value = this.info.reduce((total, obj) => total + (obj.lineInfo.pointCount || 0), 0) + '张';
+
+        
+        // this.info = JSON.parse(arr[0].drawLineData);
         console.log(this.info);
-        this.detailOptions[0].value =
-          (this.info.lineInfo.predictTime / 60).toFixed(1) + "分钟";
-        (this.detailOptions[1].value =
-          this.info.lineInfo.goAndBackDis.toFixed(2) + "km"),
-          (this.detailOptions[2].value = this.info.lineInfo.pointCount + "张");
+        // this.detailOptions[0].value =
+        //   (this.info.lineInfo.predictTime / 60).toFixed(1) + "分钟";
+        // (this.detailOptions[1].value =
+        //   this.info.lineInfo.goAndBackDis.toFixed(2) + "km"),
+        //   (this.detailOptions[2].value = this.info.lineInfo.pointCount + "张");
         this.lineInfo = {
-          centerInfo: this.info.center,
-          pointsList: this.info.pointsList,
+          centerInfo: this.info[0].center,
+          pointsList,
         };
         this.$emit("lineInfo", this.lineInfo);
       }

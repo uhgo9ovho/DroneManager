@@ -76,11 +76,14 @@ export default {
           let center = [];
           if(this.lineInfoObj) {
             //详情中的航线信息
-            console.log(this.lineInfoObj,'asdasdasdsa');
             center = wgs84ToGcj02(this.lineInfoObj.centerInfo.lon, this.lineInfoObj.centerInfo.lat);
-            this.lonlatArr = this.lineInfoObj.pointsList.map(item => {
-              return [item.lon, item.lat]
+            
+            this.lineInfoObj.pointsList.forEach(item => {
+              const formatArr = [...item];
+              const formarItemArr = formatArr.map(it => [it.lon, it.lat])
+              this.lonlatArr.push(...formarItemArr)
             })
+            
           }
           if (this.airLineData.length) {
             //任务记录中的航线信息
@@ -110,19 +113,12 @@ export default {
             resizeEnable: true,
             mapStyle: "amap://styles/light",
           });
-
-          const traffic = new AMap.TileLayer.Traffic({
-            autoRefresh: true, //是否自动刷新
-            interval: 180, //刷新间隔时间 默认180s
-          });
-          map.add(traffic);
           AMap.plugin(
             ["AMap.Scale", "AMap.Geolocation", "AMap.MouseTool"],
             function () {
               // let toolbar = new AMap.Scale();
               // let Geolocation = new AMap.Geolocation();
               that.mouseTool = new AMap.MouseTool(map); //创建鼠标工具对像
-              console.log(that.mouseTool, "asdasdasd");
 
               // map.addControl(toolbar);
               // map.addControl(Geolocation);
