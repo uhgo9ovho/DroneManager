@@ -165,8 +165,6 @@ export default {
       this.fetchReportData();
     },
     handleDateRangeChange(value) {
-      // 无需转换时间范围，el-date-picker 会处理日期对象和显示之间的转换
-
       this.fetchReportData()
       this.forceRerender = Date.now(); // 使用当前时间戳作为唯一的 key 值
 
