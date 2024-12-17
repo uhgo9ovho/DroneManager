@@ -127,10 +127,13 @@
     <el-dialog
       title="确定要挂起该任务？"
       :visible.sync="hangupVisible"
-      width="50%"
-      :before-close="handleClose"
       center
+      top="60vh"
     >
+<!--      width="50%"-->
+
+      <!--      :before-close="handleClose"-->
+
       <span>挂起任务后该任务下所有航线将取消排期，不会被执行。恢复任务后，可能需要重新设置排期！</span>
       <span slot="footer" class="dialog-footer">
     <el-button @click="hangupVisible = false">取 消</el-button>
@@ -147,7 +150,7 @@ import TableNameInfo from './Template/TableNameInfo.vue'
 import FlightDialog from './Template/FlightDialog.vue'
 import PanoramicDialog from './Template/PanoramicDialog.vue'
 import FlightDataDialog from './Template/FlightDataDialog.vue'
-import { taskListAPI, deleteTaskAPI,upDataTaskStatusAPI } from '@/api/TaskManager.js'
+import { taskListAPI, deleteTaskAPI, upDataTaskStatusAPI } from '@/api/TaskManager.js'
 
 export default {
   name: 'FlightTable',
@@ -264,6 +267,9 @@ export default {
         case 3:
           value = '已完成'
           break
+        case 4:
+          value = '已挂起'
+          break
         default:
           break
       }
@@ -289,10 +295,10 @@ export default {
     }
   },
   methods: {
-    upDataTaskStatus(){
+    upDataTaskStatus() {
       upDataTaskStatusAPI(this.taskId).then((res) => {
         if (res.code === 200) {
-          this.taskId=''
+          this.taskId = ''
           this.initList()
           this.$message({
             type: 'success',
@@ -303,19 +309,21 @@ export default {
         }
       })
     },
-    handleClose(done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done()
-        })
-        .catch(_ => {
-        })
-    },
-    // 挂起任务的处理逻辑
+
+    // handleClose(done) {
+    //   this.$confirm('确认关闭？')
+    //     .then(_ => {
+    //       done()
+    //     })
+    //     .catch(_ => {
+    //     })
+    // },
+
     handleSuspend() {
-      this.dialogVisible = false // 先关闭弹窗
+      this.hangupVisible = false
       this.upDataTaskStatus()
     },
+
     searchTableName(val) {
       const params = {
         pageNum: this.pageNum,
@@ -329,6 +337,7 @@ export default {
         }
       })
     },
+
     changeVisible() {
       this.flyDateVisible = false
       this.initList()
@@ -388,8 +397,8 @@ export default {
           break
         case '挂起':
           this.hangupVisible = true
-          this.taskId=itemCommand.row.taskId
-          console.log('taskId:',this.taskId)
+          this.taskId = itemCommand.row.taskId
+          console.log('taskId:', this.taskId)
           console.log('挂起被点击')
           break
         case '删除':
@@ -465,5 +474,9 @@ export default {
   border-radius: 12px;
   padding: 24px 24px 16px 32px;
   overflow: hidden; /* 防止内容溢出 */
+  top: 40% !important;
+  transform: translateY(-50%) !important;
+  width: 470px;
+  //height: 230px;
 }
 </style>
