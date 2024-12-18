@@ -90,6 +90,16 @@ export const recordListAPI = (params) => {
 }
 
 /**
+ * 挂起任务
+ */
+export const upDataTaskStatusAPI = (taskId) => {
+  return request({
+    url: `/wurenji/task/upDataTaskStatus/${taskId}`,
+    method: 'get'
+  })
+}
+
+/**
  * 删除任务
  */
 export const deleteTaskAPI = (taskIds) => {
