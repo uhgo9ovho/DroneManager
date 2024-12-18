@@ -10,7 +10,7 @@
     >
       <div class="title">扫二维码即可加入你的组织</div>
       <!-- <div class="box-code" ref="qrCodeUrl"></div> -->
-      <el-image :src="url" class="box-code" v-loading="loading"> </el-image>
+      <el-image :src="url" class="box-code" v-loading="loading" fit="fill"> </el-image>
       <div class="refresh" @click="refresh">刷新二维码</div>
     </el-dialog>
   </div>
@@ -58,7 +58,7 @@ export default {
       const page = "pages/scanLogin/invite/invite";
       const userInfo = JSON.parse(Cookies.get("user"));
       const orgName = Cookies.get("orgName");
-      const scene = `${userInfo.orgId}_${userInfo.userName}`;
+      const scene = `${localStorage.getItem("org_id")}_${userInfo.userName}`;
       InvitationCodeAPI(scene, page)
         .then((res) => {
           if (res.code == 200) {

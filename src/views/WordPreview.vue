@@ -1,197 +1,202 @@
 <template>
   <div class="word-preview-container" v-loading="loading">
-  <div class="word-preview" v-loading="loading">
-    <div id="content">
-      <!-- 标题部分 -->
-      <div class="title-section">
-        <h1>{{ title }}</h1>
-        <h2>{{ subtitle }}</h2>
-        <p class="date">日期：{{ report.reportTime }}</p>
-      </div>
-
-      <!-- 描述部分 -->
-      <div class="description-section">
-        <p>{{ description }}</p>
-      </div>
-
-      <!-- 总体情况 -->
-      <div class="section">
-        <h2>一、总体情况</h2>
-        <p
-          v-for="(paragraph, index) in overall"
-          :key="'overall-' + index"
-        >
-          {{ paragraph }}
-        </p>
-      </div>
-
-      <!-- 具体数据情况 -->
-      <div class="section">
-        <h2>二、具体数据情况</h2>
-        <div class="sub-section">
-          <h3>(一) 等效价值</h3>
-          <ReportTable :columns="valueTable.columns" :rows="valueTable.rows"/>
+    <div class="word-preview" v-loading="loading">
+      <div id="content">
+        <!-- 标题部分 -->
+        <div class="title-section">
+          <h1>{{ title }}</h1>
+          <h2>{{ subtitle }}</h2>
+          <p class="date">日期：{{ report.reportTime }}</p>
         </div>
-        <div class="sub-section">
-          <h3>(二) 飞行汇总</h3>
 
-          <ReportTable1 :report="report"/>
+        <!-- 描述部分 -->
+        <div class="description-section">
+          <p>{{ description }}</p>
         </div>
-        <div class="sub-section"  v-if="isShow && report.quest !== null">
-          <h3>(三) 提交任务</h3>
 
-          <div id="app" style="width: 100%; height: 400px;">
-            <PieChart :questData="questData"/>
+        <!-- 总体情况 -->
+        <div class="section">
+          <h2>一、总体情况</h2>
+          <p
+            v-for="(paragraph, index) in overall"
+            :key="'overall-' + index"
+          >
+            {{ paragraph }}
+          </p>
+        </div>
+
+        <!-- 具体数据情况 -->
+        <div class="section">
+          <h2>二、具体数据情况</h2>
+          <div class="sub-section">
+            <h3>(一) 等效价值</h3>
+            <ReportTable :columns="valueTable.columns" :rows="valueTable.rows"/>
+          </div>
+          <div class="sub-section">
+            <h3>(二) 飞行汇总</h3>
+
+            <ReportTable1 :report="report"/>
+          </div>
+          <div class="sub-section" v-if="isShow && report.quest !== null">
+            <h3>(三) 提交任务</h3>
+            <div>
+              <PieChart :questData="questData" @chart-exported="handleChartExported" v-if="isPieChartShow"/>
+              <img v-if="chartImage" :src="chartImage" alt="Chart Image" style="width: 100%; height: auto;"/>
+            </div>
+          </div>
+          <div class="sub-section">
+            <h3>(四) 问题汇总</h3>
+            <ReportTable2
+              :headers="['问题类型', '数量']"
+              :data="problemData"
+              :showTotal="true"
+              :totalColumns="[1]"
+            />
+          </div>
+          <div class="sub-section">
+            <h3>(五) 成果汇总</h3>
+            <ReportTable2
+              :headers="['成果机场 / 类型', '照片数量', '全景数量', '三维数量', '正射影像数量']"
+              :data="productListData"
+              :showTotal="true"
+              :totalColumns="[1, 2, 3, 4]"
+            />
           </div>
         </div>
-        <div class="sub-section">
-          <h3>(四) 问题汇总</h3>
-          <ReportTable2
-            :headers="['问题类型', '数量']"
-            :data="problemData"
-            :showTotal="true"
-            :totalColumns="[1]"
-          />
-        </div>
-        <div class="sub-section">
-          <h3>(五) 成果汇总</h3>
-          <ReportTable2
-            :headers="['成果机场 / 类型', '照片数量', '全景数量', '三维数量', '正射影像数量']"
-            :data="productListData"
-            :showTotal="true"
-            :totalColumns="[1, 2, 3, 4]"
-          />
-        </div>
-      </div>
 
-      <!-- 附件部分 -->
-      <div class="section" v-if="shouldShowDiv">
-        <h2>附件部分</h2>
-        <div class="attachment">
-          <div class="problemList" v-if="report.problemList !== null">
-            <h3 style="font-size: 30px;font-weight: 600">问题详情</h3>
-            <h3>详情列表({{ problemListLength }})</h3>
-            <div v-for="(item, index) in report.problemList" :key="item.foundTime" class="problem-container">
-              <div class="problem-title">{{ index + 1 }}. {{ item.problemName }}</div>
-              <table>
-                <tr>
-                  <th>拍摄时间</th>
-                  <td>{{ item.foundTime }}</td>
-                </tr>
-                <tr>
-                  <th>拍摄位置</th>
-                  <td>{{ item.foundLocation }}</td>
-                </tr>
-              </table>
-              <div class="image-container">
-                <img :src="'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + item.photoDetail" alt="Problem Photo"
-                     class="problem-image"
-                >
-                <img
-                  :src="buildTianDiTuImageUrl(item.latitude, item.longitude)"
-                  alt="Problem Location Map"
-                  class="problem-image"
-                >
+        <!-- 附件部分 -->
+        <div class="section" v-if="shouldShowDiv">
+          <h2>附件部分</h2>
+          <div class="attachment">
+            <div class="problemList" v-if="report.problemList !== null">
+              <h3 style="font-size: 30px;font-weight: 600">问题详情</h3>
+              <h3>详情列表({{ problemListLength }})</h3>
+              <div v-for="(item, index) in report.problemList" :key="item.foundTime" class="problem-container">
+                <div class="problem-title">{{ index + 1 }}. {{ item.problemName }}</div>
+                <table>
+                  <tr>
+                    <th>拍摄时间</th>
+                    <td>{{ item.foundTime }}</td>
+                  </tr>
+                  <tr>
+                    <th>拍摄位置</th>
+                    <td>{{ item.foundLocation }}</td>
+                  </tr>
+                </table>
+                <div class="image-container">
+                  <img :src="'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + item.photoDetail" alt="Problem Photo"
+                       class="problem-image"
+                  >
+                  <img
+                    :src="buildTianDiTuImageUrl(item.latitude, item.longitude)"
+                    alt="Problem Location Map"
+                    class="problem-image"
+                  >
+                </div>
+
+              </div>
+            </div>
+            <div class="modelDetails" v-if="report.modelList !== null">
+              <h3 style="font-size: 30px;font-weight: 600">模型详情</h3>
+
+              <h3>全景模型({{ modelListLength }}个)</h3>
+              <div v-for="(item, index) in report.modelList" :key="item.foundTime" class="problem-container">
+                <div class="problem-title">{{ index + 1 }}. {{ item.problemName }}</div>
+                <table>
+                  <tr>
+                    <th>拍摄时间</th>
+                    <td>{{ item.foundTime }}</td>
+                  </tr>
+                  <tr>
+                    <th>拍摄位置</th>
+                    <td>{{ item.foundLocation }}</td>
+                  </tr>
+                </table>
+                <div class="image-container">
+                  <img :src="'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + item.photoDetail" alt="Problem Photo"
+                       class="problem-image"
+                  >
+                  <img
+                    :src="buildTianDiTuImageUrl(item.latitude, item.longitude)"
+                    alt="Problem Location Map"
+                    class="problem-image"
+                  >
+                </div>
+
+              </div>
+              <h3>正射影像({{ orhtoListLength }})</h3>
+              <div v-for="(item, index) in report.orthoList" :key="item.foundTime" class="problem-container">
+                <div class="problem-title">{{ index + 1 }}. {{ item.problemName }}</div>
+                <table>
+                  <tr>
+                    <th>拍摄时间</th>
+                    <td>{{ item.foundTime }}</td>
+                  </tr>
+                  <tr>
+                    <th>拍摄位置</th>
+                    <td>{{ item.foundLocation }}</td>
+                  </tr>
+                </table>
+                <div class="image-container">
+                  <img :src="'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + item.photoDetail" alt="Problem Photo"
+                       class="problem-image"
+                  >
+                  <img
+                    :src="buildTianDiTuImageUrl(item.latitude, item.longitude)"
+                    alt="Problem Location Map"
+                    class="problem-image"
+                  >
+                </div>
+
               </div>
 
             </div>
+            <!--          <div class="orthoList">-->
+            <!--            <h3>模型详情</h3>-->
+            <!--          </div>-->
           </div>
-          <div class="modelDetails" v-if="report.modelList !== null">
-            <h3 style="font-size: 30px;font-weight: 600">模型详情</h3>
-
-            <h3>全景模型({{ modelListLength }}个)</h3>
-            <div v-for="(item, index) in report.modelList" :key="item.foundTime" class="problem-container">
-              <div class="problem-title">{{ index + 1 }}. {{ item.problemName }}</div>
-              <table>
-                <tr>
-                  <th>拍摄时间</th>
-                  <td>{{ item.foundTime }}</td>
-                </tr>
-                <tr>
-                  <th>拍摄位置</th>
-                  <td>{{ item.foundLocation }}</td>
-                </tr>
-              </table>
-              <div class="image-container">
-                <img :src="'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + item.photoDetail" alt="Problem Photo"
-                     class="problem-image"
-                >
-                <img
-                  :src="buildTianDiTuImageUrl(item.latitude, item.longitude)"
-                  alt="Problem Location Map"
-                  class="problem-image"
-                >
-              </div>
-
-            </div>
-            <h3>正射影像({{ orhtoListLength }})</h3>
-            <div v-for="(item, index) in report.orthoList" :key="item.foundTime" class="problem-container">
-              <div class="problem-title">{{ index + 1 }}. {{ item.problemName }}</div>
-              <table>
-                <tr>
-                  <th>拍摄时间</th>
-                  <td>{{ item.foundTime }}</td>
-                </tr>
-                <tr>
-                  <th>拍摄位置</th>
-                  <td>{{ item.foundLocation }}</td>
-                </tr>
-              </table>
-              <div class="image-container">
-                <img :src="'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + item.photoDetail" alt="Problem Photo"
-                     class="problem-image"
-                >
-                <img
-                  :src="buildTianDiTuImageUrl(item.latitude, item.longitude)"
-                  alt="Problem Location Map"
-                  class="problem-image"
-                >
-              </div>
-
-            </div>
-
-          </div>
-          <!--          <div class="orthoList">-->
-          <!--            <h3>模型详情</h3>-->
+          <!--        <div-->
+          <!--          class="attachment"-->
+          <!--          v-for="(attachment, index) in report.attachments"-->
+          <!--          :key="'attachment-' + index"-->
+          <!--        >-->
+          <!--          <h3>{{ attachment.title }}</h3>-->
+          <!--          <ReportTable-->
+          <!--            :columns="attachment.table.columns"-->
+          <!--            :rows="attachment.table.rows"-->
+          <!--          />-->
+          <!--          <div class="image-section">-->
+          <!--            <img-->
+          <!--              :src="attachment.image"-->
+          <!--              width="400"-->
+          <!--            />-->
+          <!--            <img-->
+          <!--              :src="attachment.imageMap"-->
+          <!--              width="400"-->
+          <!--            />-->
           <!--          </div>-->
+          <!--        </div>-->
         </div>
-        <!--        <div-->
-        <!--          class="attachment"-->
-        <!--          v-for="(attachment, index) in report.attachments"-->
-        <!--          :key="'attachment-' + index"-->
-        <!--        >-->
-        <!--          <h3>{{ attachment.title }}</h3>-->
-        <!--          <ReportTable-->
-        <!--            :columns="attachment.table.columns"-->
-        <!--            :rows="attachment.table.rows"-->
-        <!--          />-->
-        <!--          <div class="image-section">-->
-        <!--            <img-->
-        <!--              :src="attachment.image"-->
-        <!--              width="400"-->
-        <!--            />-->
-        <!--            <img-->
-        <!--              :src="attachment.imageMap"-->
-        <!--              width="400"-->
-        <!--            />-->
-        <!--          </div>-->
-        <!--        </div>-->
+
+
+
+      </div>
+
+      <!-- 下载按钮 -->
+      <div class="btn">
+        <el-button
+          icon="el-icon-download"
+          type="primary"
+          round
+          @click="ratingReport"
+        >下载
+        </el-button
+        >
       </div>
     </div>
 
-    <!-- 下载按钮 -->
-    <div class="btn">
-      <el-button
-        icon="el-icon-download"
-        type="primary"
-        round
-        @click="ratingReport"
-      >下载
-      </el-button
-      >
-    </div>
   </div>
-  </div>
+
 </template>
 
 <script>
@@ -210,6 +215,8 @@ export default {
   components: { ReportTable, ReportTable1, ReportTable2, PieChart },
   data() {
     return {
+      isPieChartShow: true,
+      chartImage: null,
       loading: false,
       title: '城市空天智慧管理平台',
       subtitle: '无人机巡检日报',
@@ -363,6 +370,10 @@ export default {
     }
   },
   methods: {
+    handleChartExported(base64) {
+      this.chartImage = base64
+      this.isPieChartShow = false
+    },
 
     buildTianDiTuImageUrl(latitude, longitude) {
       const baseUrl = 'http://api.tianditu.gov.cn/staticimage'
@@ -545,11 +556,12 @@ export default {
   computed: {
     shouldShowDiv() {
       // 检查三个列表是否都为空
-      if(this.problemList == null &&
+      if (this.problemList == null &&
         this.modelList == null &&
-        this.orthoList == null)
-        return false;
-      return true;
+        this.orthoList == null) {
+        return false
+      }
+      return true
     },
     problemListLength() {
       if (this.report.problemList) {
@@ -658,6 +670,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+@media print {
+  @page {
+    /* 隐藏页眉和页脚 */
+    @top-center { content: "" }
+    @bottom-center { content: "" }
+  }
+
+  /* 如果有其他不需要打印的元素，可以在这里隐藏它们 */
+  .no-print, .no-print * {
+    display: none !important;
+  }
+}
 /* 标题部分样式 */
 .word-preview-container {
   display: flex;
@@ -668,6 +693,7 @@ export default {
   background-color: #f2f2f2; /* 淡灰色背景 */
   //padding: 20px;
 }
+
 .word-preview {
   position: relative;
 

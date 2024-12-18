@@ -171,7 +171,7 @@ export default {
     },
     fetchReportData() {
       let beginTime, endTime
-      if (this.dateRange.length === 2) {
+      if (this.dateRange && this.dateRange.length === 2) {
         beginTime = this.dateRange[0].getTime()
         endTime = this.dateRange[1].getTime()
 
