@@ -238,7 +238,7 @@ import {
   authorityAPI,
   exitDRCAPI,
 } from "@/api/user.js";
-import { airPostAPI } from "@/api/TaskManager.js";
+import { airPostAPI, getPlotAPI } from "@/api/TaskManager.js";
 import { returnHomeAPI } from "@/api/droneControl.js";
 import { UranusMqtt } from "@/utils/mqtt";
 import Cookies from "js-cookie";
@@ -346,30 +346,6 @@ export default {
       deep: true,
       immediate: true,
     },
-    showMap: {
-      handler(val) {
-        if (val) {
-          // connectDRCAPI({}).then((res) => {
-          //   console.log(res, "aaa");
-          //   if (res.code === 0) {
-          //     const { address, client_id, username, password, expire_time } =
-          //       res.data;
-          //     const userInfo = JSON.parse(Cookies.get("user"));
-          //     this.client_id = client_id;
-          //     this.mqttState = new UranusMqtt(address, {
-          //       clientId: client_id,
-          //       username: `${userInfo.userName}_test`,
-          //       password: getToken(),
-          //     });
-          //     this.getMqttState(this.mqttState);
-          //     this.mqttState.initMqtt();
-          //   }
-          //   return;
-          // });
-        }
-      },
-      immediate: true,
-    },
     statusInfo(val) {
       if (val.biz_code === "device_osd") {
         //无人机数据（正在飞行中）
@@ -429,7 +405,8 @@ export default {
     //
     //         `${process.env.VUE_APP_WS_URL}?ws-token=ksjdgbkadbfgadbfg` //本地
     //       );
-    this.getDeviceInfo()
+    this.getDeviceInfo();
+    this.getPlotInfo();
   },
   methods: {
     ...mapActions("droneStatus", [
@@ -459,6 +436,12 @@ export default {
         .catch((err) => {
           this.showMap = false;
         });
+    },
+    getPlotInfo() {
+      getPlotAPI().then(res => {
+        console.log(res);
+        
+      })
     },
     returnHomeShow() {
       this.showRemote = false;

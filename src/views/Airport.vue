@@ -4,12 +4,13 @@
       :longitude="longitude"
       :latitude="latitude"
       @toVideoMap="toVideoMap"
+      :coordinates="coordinates"
     ></map-container>
   </div>
 </template>
 
 <script>
-import { airPostAPI } from "@/api/TaskManager.js";
+import { airPostAPI, getPlotAPI } from "@/api/TaskManager.js";
 import MapContainer from "../components/MapContainer.vue";
 import { mapActions } from "vuex";
 export default {
@@ -19,6 +20,7 @@ export default {
       longitude: 0,
       latitude: 0,
       showMap: false,
+      coordinates: null
     };
   },
   components: {
@@ -43,11 +45,19 @@ export default {
             this.longitude = +lonlatArr[0];
             this.latitude = +lonlatArr[1];
             this.showMap = true;
+            this.getPlotInfo();
           }
         })
         .catch((err) => {
           this.showMap = false;
         });
+    },
+    getPlotInfo() {
+      getPlotAPI().then((res) => {
+        if(res.code === 200) {
+          this.coordinates = JSON.parse(res.rows[0].coordinates);
+        }
+      });
     },
   },
   mounted() {
