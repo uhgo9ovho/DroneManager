@@ -90,7 +90,7 @@ export default {
           this.info.push(JSON.parse(item.drawLineData));
         })
         const pointsList = this.info.map(item => item.pointsList);
-        this.estimatedTime = this.info.reduce((total, obj) => total + (obj.lineInfo.predictTime || 0) / 60, 0) + '分钟';
+        this.estimatedTime = this.info.reduce((total, obj) => total + (obj.lineInfo.predictTime || 0) / 60, 0).toFixed(2) + '分钟';
         this.estimatedMileage = this.info.reduce((total, obj) => total + (obj.lineInfo.goAndBackDis || 0), 0).toFixed(2) + 'km';
         this.photosNum = this.info.reduce((total, obj) => total + (obj.lineInfo.pointCount || 0), 0) + '张';
         this.lineInfo = {

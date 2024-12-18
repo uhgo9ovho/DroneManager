@@ -1,13 +1,11 @@
 <template>
   <div class="video-map-wrap">
     <!-- 全屏 div，显示地图或视频 -->
-    <div class="full-screen" v-if="showMap">
-      <component
-        :is="fullScreenComponent"
-        :longitude="longitude"
-        :latitude="latitude"
-      />
-    </div>
+    <component
+      :is="fullScreenComponent"
+      :longitude="longitude"
+      :latitude="latitude"
+    />
 
     <!-- 小 div 1，点击后与全屏 div 交换 -->
     <div class="small-div small-div-1" @click="handleClick(0)">
@@ -140,7 +138,7 @@
               <div class="battery_signal">
                 <div class="wifi">
                   <i class="iconfont el-icon-wifi"></i>
-                  <span> 5339KB/s </span>
+                  <span> {{ tempNetworkState }} kb/s </span>
                 </div>
                 <div class="electric-panel warning">
                   <div class="panel">
@@ -312,6 +310,7 @@ export default {
       longitude: 0,
       latitude: 0,
       showMap: false,
+      tempNetworkState: "-",
     };
   },
   components: {
@@ -387,6 +386,9 @@ export default {
         //飞行进度
         this.percentage = val.data.output.progress.percent;
       } else if (val.biz_code === "dock_osd") {
+        if (val.data.host.network_state && val.data.host.network_state.rate) {
+          this.tempNetworkState = val.data.host.network_state.rate;
+        }
         if (
           val.data.host.drone_charge_state &&
           val.data.host.drone_charge_state.capacity_percent
@@ -418,7 +420,6 @@ export default {
       this.handleEmergencyStop();
     },
     getDeviceInfo() {
-      this.showMap = false;
       const params = {
         orgId: localStorage.getItem("org_id"),
         deviceType: 1,
@@ -430,18 +431,15 @@ export default {
             let lonlatArr = res.rows[0].location.split(",");
             this.longitude = +lonlatArr[0];
             this.latitude = +lonlatArr[1];
-            this.showMap = true;
           }
         })
         .catch((err) => {
-          this.showMap = false;
         });
     },
     getPlotInfo() {
-      getPlotAPI().then(res => {
+      getPlotAPI().then((res) => {
         console.log(res);
-        
-      })
+      });
     },
     returnHomeShow() {
       this.showRemote = false;
@@ -971,6 +969,7 @@ export default {
               height: 18px;
               width: 80px;
               .wifi {
+                width: 70px;
                 position: absolute;
                 display: flex;
                 right: 98px;

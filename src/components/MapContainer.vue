@@ -1,7 +1,7 @@
 <template>
   <div class="map-box">
     <div id="container"></div>
-    <div class="action-warp">
+    <div class="action-warp" v-if="coordinates && coordinates.length">
       <el-switch v-model="value" active-text="禁飞区" @change="changeArea">
       </el-switch>
     </div>
@@ -66,6 +66,13 @@ export default {
         }
       },
     },
+    latitude: {
+      handler(val) {
+        if(val) {
+          this.initAMap()
+        }
+      }
+    }
   },
   unmounted() {
     map?.destroy();
