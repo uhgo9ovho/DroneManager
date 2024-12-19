@@ -19,6 +19,7 @@
             @blur="blur"
             v-model="searchText"
             @input="inputChange"
+            maxlength="10"
             clearable
           ></el-input>
         </div>

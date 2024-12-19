@@ -35,7 +35,7 @@
             <el-dropdown-item
               v-for="(item, index) in statusOptions"
               :key="index"
-              :command="beforeHandleCommand(row)"
+              :command="beforeHandleCommand1(row)"
             >{{ item }}
             </el-dropdown-item
             >
@@ -122,17 +122,14 @@
       ></FlightDataDialog>
     </div>
 
-    <!-- 挂起弹窗 -->
-    <!--    <div v-if="hangupVisible">-->
+
     <el-dialog
       title="确定要挂起该任务？"
       :visible.sync="hangupVisible"
       center
       top="60vh"
     >
-<!--      width="50%"-->
 
-      <!--      :before-close="handleClose"-->
 
       <span>挂起任务后该任务下所有航线将取消排期，不会被执行。恢复任务后，可能需要重新设置排期！</span>
       <span slot="footer" class="dialog-footer">
@@ -373,7 +370,8 @@ export default {
     nameCommand(itemCommand) {
       console.log(itemCommand)
     },
-    beforeHandleCommand(row) {
+    beforeHandleCommand1(row) {
+      console.log('row:', row)
       return row
     },
     statusCommand(itemCommand) {

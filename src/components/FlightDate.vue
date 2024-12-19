@@ -26,7 +26,7 @@
             </el-popover>
             <el-button type="text" @click="openAI">AI托管设置</el-button>
             <el-tooltip class="item" effect="dark" placement="bottom">
-              <div slot="content">
+              <div slot="content" style="width: 400px;">
                 AI托管：<br />无人机按预设时间自动起飞，自主返回，失败续飞，高效执行任务。系统依托智能调度算法动态计算起飞时间。且在无人机起飞前会进行全面的安全校验，包括机体状态、气象条件、电量预测等多因素，确保每次飞行任务的安全可靠。在飞行过程中，系统时刻监测飞行状态，确保无人机在遇到恶劣天气、设备故障等情况下自动报警或返航，必要时触发机场停飞，降低炸机风险。
                 然而，尽管AI托管赋予了飞行自动化，我们仍建议您保持警惕的关注，以防任何事故的发生。
               </div>

@@ -11,6 +11,7 @@
           :class="{ 'lang-search-box': checked }"
         >
           <el-input
+            v-if="currentTab == 'warningEvent'"
             prefix-icon="el-icon-search"
             :placeholder="checkedTip"
             @focus="focus"

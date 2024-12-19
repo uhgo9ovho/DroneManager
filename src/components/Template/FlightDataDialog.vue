@@ -29,7 +29,7 @@
               >
               </el-option>
             </el-select>
-            <span
+            <span style="padding-right: 20px"
               >执行<i>{{ frequencyLength }}</i
               >次</span
             >
@@ -219,7 +219,7 @@ export default {
     };
   },
   computed: {
-    endPicker: (vm) => {      
+    endPicker: (vm) => {
       return {
         disabledDate: (time) => {
           let beginDateVal = `${vm.ruleForm.startDate}`;

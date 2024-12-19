@@ -45,7 +45,7 @@ export default {
       handler(val) {
         if (val.length) {
           console.log(val,'val1111');
-          
+
           const { drawPolyline } = DronePlottingRoute(
             map,
             this.mouseTool,
@@ -77,13 +77,13 @@ export default {
           if(this.lineInfoObj) {
             //详情中的航线信息
             center = wgs84ToGcj02(this.lineInfoObj.centerInfo.lon, this.lineInfoObj.centerInfo.lat);
-            
+
             this.lineInfoObj.pointsList.forEach(item => {
               const formatArr = [...item];
               const formarItemArr = formatArr.map(it => [it.lon, it.lat])
               this.lonlatArr.push(...formarItemArr)
             })
-            
+
           }
           if (this.airLineData.length) {
             //任务记录中的航线信息
@@ -199,6 +199,8 @@ export default {
 #container {
   width: 100%;
   height: 100%;
+  border-radius: 12px 0 0 12px;
+
   .amap-logo,
   .amap-copyright {
     display: none !important;
@@ -234,4 +236,3 @@ export default {
   }
 }
 </style>
-  
