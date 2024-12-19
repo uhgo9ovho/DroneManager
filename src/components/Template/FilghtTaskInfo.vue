@@ -109,7 +109,7 @@ export default {
     },
     taskName: {
       type: String,
-      default: ''
+      default: "",
     },
     totalLine: {
       type: Number,
@@ -117,16 +117,16 @@ export default {
     },
     note: {
       type: String,
-      default: ''
+      default: "",
     },
     row: {
       type: Object,
-      default: () => null
-    }
+      default: () => null,
+    },
   },
   mounted() {
-    console.log(this.row)
-    this.getCollectInformation()
+    console.log(this.row);
+    this.getCollectInformation();
   },
   computed: {
     plotOptions() {
@@ -159,62 +159,62 @@ export default {
     return {
       detailOptions: [
         {
-          label: '预计耗时',
-          value: '0分钟'
+          label: "预计耗时",
+          value: "0分钟",
         },
         {
-          label: '预计历程',
-          value: '0米'
+          label: "预计历程",
+          value: "0米",
         },
         {
-          label: '照片数量',
-          value: '0张'
-        }
+          label: "照片数量",
+          value: "0张",
+        },
       ],
       info: [],
-      lineInfo: null
-    }
+      lineInfo: null,
+    };
   },
   methods: {
     //获取采集信息
     getCollectInformation() {
-      const arr = this.row.wrjAirlineFiles
+      const arr = this.row.wrjAirlineFiles;
       if (arr && arr.length) {
         arr.forEach(item => {
-          this.info.push(JSON.parse(item.drawLineData))
+          this.info.push(JSON.parse(item.drawLineData));
         })
-        const pointsList = this.info.map(item => item.pointsList)
-        this.detailOptions[0].value = this.info.reduce((total, obj) => total + (obj.lineInfo.predictTime || 0) / 60, 0).toFixed(2) + '分钟'
-        this.detailOptions[1].value = this.info.reduce((total, obj) => total + (obj.lineInfo.goAndBackDis || 0), 0).toFixed(2) + 'km'
-        this.detailOptions[2].value = this.info.reduce((total, obj) => total + (obj.lineInfo.pointCount || 0), 0) + '张'
+        const pointsList = this.info.map(item => item.pointsList);
+        this.detailOptions[0].value = this.info.reduce((total, obj) => total + (obj.lineInfo.predictTime || 0) / 60, 0).toFixed(2) + '分钟';
+        this.detailOptions[1].value = this.info.reduce((total, obj) => total + (obj.lineInfo.goAndBackDis || 0), 0).toFixed(2) + 'km';
+        this.detailOptions[2].value = this.info.reduce((total, obj) => total + (obj.lineInfo.pointCount || 0), 0) + '张';
         this.lineInfo = {
           centerInfo: this.info[0].center,
-          pointsList
-        }
-        this.$emit('lineInfo', this.lineInfo)
+          pointsList,
+        };
+        this.$emit("lineInfo", this.lineInfo);
       }
     },
     closeDialog() {
-      this.$emit('closeDialog')
+      this.$emit("closeDialog");
     },
     changeType(type) {
       switch (type) {
         case 0:
-          return '拍照'
+          return "拍照";
         case 1:
-          return '直播'
+          return "直播";
         case 2:
-          return '全景'
+          return "全景";
         case 4:
-          return '三维'
+          return "三维";
         case 3:
-          return '正射'
+          return "正射";
         default:
-          break
+          break;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss">

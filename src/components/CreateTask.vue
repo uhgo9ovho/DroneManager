@@ -70,7 +70,7 @@
             >
             <div class="date-box">
               <div class="date">{{ settingInfo }}</div>
-              <el-button type="text" @click="openSettingDate">修改</el-button>
+              <!-- <el-button type="text" @click="openSettingDate">修改</el-button> -->
             </div>
           </el-form-item>
         </el-form>

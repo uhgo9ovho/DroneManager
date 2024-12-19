@@ -1,6 +1,7 @@
 import store from '@/store';
 let polygon = null
 let polyline = null;
+let polygonCoord = null;
 let editor = []
 let isDraw = false
 export function DronePlottingRoute(map, mouseTool, AMap) {
@@ -114,7 +115,24 @@ export function DronePlottingRoute(map, mouseTool, AMap) {
         map.setFitView();
         store.commit('changeStatus/CLEAR_POINTSLIST'); // 清除上次的数组
     }
-
+    //生成禁飞区
+    function addPolygon(polygonArr) {
+        polygonCoord = new AMap.Polygon({
+            path: polygonArr,
+            fillColor: 'red',
+            strokeOpacity: 1,
+            fillOpacity: 0.5,
+            strokeColor: 'red',
+            strokeWeight: 1,
+            strokeStyle: 'dashed',
+            strokeDasharray: [5, 5],
+        });
+        map.add(polygonCoord);
+    }
+    //移除禁飞区
+    function removePolygon() {
+        map.remove(polygonCoord);
+    }
     mouseTool.on('draw', function (e) {
         // event.obj 为绘制出来的覆盖物对象
         var polygon = e.obj;
@@ -134,6 +152,8 @@ export function DronePlottingRoute(map, mouseTool, AMap) {
         drawPolygon,
         removeAll,
         removeThis,
-        drawPolyline
+        drawPolyline,
+        addPolygon,
+        removePolygon
     }
 }

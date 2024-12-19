@@ -6,6 +6,7 @@
         ref="AMAP"
         :latitude="latitude"
         :longitude="longitude"
+        :coordinates="coordinates"
       ></map-container>
     </div>
 
@@ -46,7 +47,7 @@ import CreateTask from "../components/CreateTask.vue";
 import MapContainer from "../components/MapContainer.vue";
 import SettingDate from "../components/SettingDate.vue";
 import { mapState, mapMutations } from "vuex";
-import { airPostAPI } from "@/api/TaskManager.js";
+import { airPostAPI, getPlotAPI } from "@/api/TaskManager.js";
 const now = new Date();
 export default {
   name: "OpenMap",
@@ -68,6 +69,7 @@ export default {
       showMap: false,
       longitude: 0,
       latitude: 0,
+      coordinates: null
     };
   },
   computed: {
@@ -94,11 +96,19 @@ export default {
             this.longitude = +lonlatArr[0];
             this.latitude = +lonlatArr[1];
             this.showMap = true;
+            this.getPlotInfo()
           }
         })
         .catch((err) => {
           this.showMap = false;
         });
+    },
+    getPlotInfo() {
+      getPlotAPI().then((res) => {
+        if (res.code === 200) {
+          this.coordinates = JSON.parse(res.rows[0].coordinates);
+        }
+      });
     },
     dateArrays(valArr) {
       this.valArr = valArr;

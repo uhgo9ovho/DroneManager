@@ -138,7 +138,7 @@
 
 <script>
 // import mqtt from 'mqtt';
-import { useManualControl, KeyCode } from "@/utils/mqtt/use-manual-control";
+import { KeyCode } from "@/utils/mqtt/use-manual-control";
 import { mapState } from "vuex";
 import { returnHomeAPI } from "@/api/droneControl.js";
 export default {

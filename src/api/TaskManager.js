@@ -361,7 +361,17 @@ export const airLineInfoAPI = (airlineId) => {
  */
 export const AIHostingAPI = (status) => {
     return request({
-        url: `aiAutomaticHostingController/findAutomaticHosting?org_id=${localStorage.getItem('org_id')}&status=${status}`,
+        url: `/aiAutomaticHostingController/findAutomaticHosting?org_id=${localStorage.getItem('org_id')}&status=${status}`,
         method: 'get'
     })
+}
+
+/**
+ * 获取禁飞区接口
+ */
+export const getPlotAPI = () => {
+  return request({
+    url: `/crm/plot/getPlot?orgId=${localStorage.getItem('org_id')}`,
+    method: 'get'
+  })
 }

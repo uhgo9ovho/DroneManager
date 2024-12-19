@@ -1,5 +1,11 @@
 <template>
-  <div id="container"></div>
+  <div class="map-box">
+    <div id="container"></div>
+    <div class="action-warp" v-if="coordinates && coordinates.length">
+      <el-switch v-model="value" active-text="禁飞区" @change="changeArea">
+      </el-switch>
+    </div>
+  </div>
 </template>
   <script>
 import AMapLoader from "@amap/amap-jsapi-loader";
@@ -24,14 +30,19 @@ export default {
     },
     lineInfoObj: {
       type: Object,
-      default: () => null
-    }
+      default: () => null,
+    },
+    coordinates: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
       lonlatArr: [],
       mouseTool: null,
       AMap: null,
+      value: false,
     };
   },
   mounted() {
@@ -44,17 +55,24 @@ export default {
     pointsList: {
       handler(val) {
         if (val.length) {
-          console.log(val,'val1111');
+          console.log(val, "val1111");
 
           const { drawPolyline } = DronePlottingRoute(
             map,
             this.mouseTool,
             this.AMap
           );
-          drawPolyline(val)
+          drawPolyline(val);
         }
       },
     },
+    latitude: {
+      handler(val) {
+        if(val) {
+          this.initAMap()
+        }
+      }
+    }
   },
   unmounted() {
     map?.destroy();
@@ -74,16 +92,18 @@ export default {
         .then((AMap) => {
           this.AMap = AMap;
           let center = [];
-          if(this.lineInfoObj) {
+          if (this.lineInfoObj) {
             //详情中的航线信息
-            center = wgs84ToGcj02(this.lineInfoObj.centerInfo.lon, this.lineInfoObj.centerInfo.lat);
+            center = wgs84ToGcj02(
+              this.lineInfoObj.centerInfo.lon,
+              this.lineInfoObj.centerInfo.lat
+            );
 
-            this.lineInfoObj.pointsList.forEach(item => {
+            this.lineInfoObj.pointsList.forEach((item) => {
               const formatArr = [...item];
-              const formarItemArr = formatArr.map(it => [it.lon, it.lat])
-              this.lonlatArr.push(...formarItemArr)
-            })
-
+              const formarItemArr = formatArr.map((it) => [it.lon, it.lat]);
+              this.lonlatArr.push(...formarItemArr);
+            });
           }
           if (this.airLineData.length) {
             //任务记录中的航线信息
@@ -91,12 +111,11 @@ export default {
               let originArr = [item.longitude, item.latitude];
               return wgs84ToGcj02(originArr[0], originArr[1]);
             });
-            console.log(this.lonlatArr);
 
             center = [this.lonlatArr[0][0], this.lonlatArr[0][1]];
           }
           if (this.latitude && this.longitude) {
-          center = wgs84ToGcj02(this.longitude, this.latitude)
+            center = wgs84ToGcj02(this.longitude, this.latitude);
           }
           const layer = new AMap.createDefaultLayer({
             zooms: [3, 20], //可见级别
@@ -107,12 +126,29 @@ export default {
           map = new AMap.Map("container", {
             // 设置地图容器id
             viewMode: "2D", // 是否为3D地图模式
-            zoom: 18, // 初始化地图级别
+            zoom: 13, // 初始化地图级别
             center: center.length ? center : [108.984924, 34.34199], // 初始化地图中心点位置
             layers: [layer],
             resizeEnable: true,
             mapStyle: "amap://styles/light",
           });
+          if (center.length) {
+            //绘制飞行区圆圈
+            const circle = new AMap.Circle({
+              center,
+              radius: 5000, //半径
+              borderWeight: 3,
+              strokeOpacity: 1,
+              strokeWeight: 6,
+              strokeOpacity: 0.2,
+              fillOpacity: 0.4,
+              strokeDasharray: [10, 10],
+              // 线样式还支持 'dashed'
+              fillColor: "yellow",
+              zIndex: 50,
+            });
+            map.add(circle);
+          }
           AMap.plugin(
             ["AMap.Scale", "AMap.Geolocation", "AMap.MouseTool"],
             function () {
@@ -142,8 +178,7 @@ export default {
             const marker = new AMap.Marker({
               position: position,
               content: markerContent,
-              offset: new AMap.Pixel(-10, -34)
-
+              offset: new AMap.Pixel(-10, -34),
             });
             marker.on("click", this.markerClick);
             map.add(marker);
@@ -162,6 +197,22 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+    },
+    changeArea(val) {
+      const { addPolygon, removePolygon } = DronePlottingRoute(map, this.mouseTool, this.AMap);
+      if (val) {
+        //显示禁飞区
+        if (this.coordinates.length) {
+          const polygonArr = this.coordinates.map((item) => [
+            item.lon,
+            item.lat,
+          ]);
+          addPolygon(polygonArr);
+        }
+      } else {
+        //隐藏禁飞区
+        removePolygon()
+      }
     },
     formatAirLine(AMap) {
       let path = this.lonlatArr.map(
@@ -196,43 +247,60 @@ export default {
 };
 </script>
   <style lang="scss">
-#container {
+.map-box {
   width: 100%;
   height: 100%;
+  position: relative;
   border-radius: 12px 0 0 12px;
 
-  .amap-logo,
-  .amap-copyright {
-    display: none !important;
+  .action-warp {
+    position: absolute;
+    top: 32px;
+    left: 24px;
+    z-index: 99;
+    caret-color: transparent;
+    border-radius: 10px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px -2px rgba(0, 0, 0, 0.2);
+    padding: 10px;
   }
-  .custom-content-marker {
-    position: relative;
-    width: 40px;
-    height: 49px;
-  }
-
-  .custom-content-marker img {
+  #container {
     width: 100%;
     height: 100%;
-  }
+    .amap-logo,
+    .amap-copyright {
+      display: none !important;
+    }
+    .custom-content-marker {
+      position: relative;
+      width: 40px;
+      height: 49px;
+    }
 
-  .custom-content-marker .close-btn {
-    position: absolute;
-    top: -6px;
-    right: -8px;
-    width: 15px;
-    height: 15px;
-    font-size: 12px;
-    background: #ccc;
-    border-radius: 50%;
-    color: #fff;
-    text-align: center;
-    line-height: 15px;
-    box-shadow: -1px 1px 1px rgba(10, 10, 10, 0.2);
-  }
+    .custom-content-marker img {
+      width: 100%;
+      height: 100%;
+    }
 
-  .custom-content-marker .close-btn:hover {
-    background: #666;
+    .custom-content-marker .close-btn {
+      position: absolute;
+      top: -6px;
+      right: -8px;
+      width: 15px;
+      height: 15px;
+      font-size: 12px;
+      background: #ccc;
+      border-radius: 50%;
+      color: #fff;
+      text-align: center;
+      line-height: 15px;
+      box-shadow: -1px 1px 1px rgba(10, 10, 10, 0.2);
+    }
+
+    .custom-content-marker .close-btn:hover {
+      background: #666;
+    }
   }
 }
-</style>
+  </style>
