@@ -12,6 +12,7 @@
       </div>
       <div class="report-title">事件描述</div>
       <el-input
+        maxlength="200"
         type="textarea"
         placeholder="请输入内容"
         v-model="textarea"
@@ -92,6 +93,8 @@ export default {
           this.$message.success("事件状态更新成功！");
           this.$emit("updateList");
           this.closeDialog();
+        }else {
+          this.$message.error(res.msg);
         }
       });
     },

@@ -75,7 +75,7 @@ export default {
   created() {
     if (this.detailsShow) {
       console.log(this.row);
-      
+
       taskInfoApI(this.row.taskId).then((res) => {
         if (res.code === 200) {
           this.totalLine = res.data.airlineNumber;
@@ -84,7 +84,7 @@ export default {
         }
       });
     } else {
-      
+
     }
   },
   methods: {

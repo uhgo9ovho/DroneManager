@@ -11,6 +11,7 @@
           :class="{ 'lang-search-box': checked }"
         >
           <el-input
+            v-if="currentTab == 'warningEvent'"
             prefix-icon="el-icon-search"
             :placeholder="checkedTip"
             @focus="focus"
@@ -171,7 +172,7 @@ export default {
     },
     fetchReportData() {
       let beginTime, endTime
-      if (this.dateRange.length === 2) {
+      if (this.dateRange && this.dateRange.length === 2) {
         beginTime = this.dateRange[0].getTime()
         endTime = this.dateRange[1].getTime()
 

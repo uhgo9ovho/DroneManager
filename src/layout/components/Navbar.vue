@@ -1,6 +1,7 @@
 <template>
   <div class="navbar">
-      <div class="logo" @click="toHome">
+      <div class="logo" >
+<!--        @click="toHome"-->
         <img :src="logoUrl" alt="" style="width: 32px; height: 32px;margin-right: 50px"/>
         城市空天智慧管理平台
       </div>

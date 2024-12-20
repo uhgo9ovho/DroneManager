@@ -98,7 +98,7 @@ export default {
               label: item.orgDeptName
             }
           })
-          
+
         }
       })
     },
@@ -139,7 +139,7 @@ export default {
                 this.$message.success(res.msg);
                 this.$emit('updateList');
               } else {
-                this.$message.error(res.msg);
+                this.$message.error('编辑失败');
               }
             })
           }

@@ -147,8 +147,12 @@ export default {
         taskType: [
           { required: true, message: "请选择任务类型", trigger: "change" },
         ],
-        airLine: [{ validator: this.validatePass, trigger: "change" }],
-        date: [{ validator: validatePass2, trigger: "change" }],
+        airLine: [
+          { required: true,validator: this.validatePass, trigger: "change" }
+        ],
+        date: [
+          { required: true,validator: validatePass2, trigger: "change" }
+        ],
       },
     };
   },
@@ -307,7 +311,9 @@ export default {
     align-items: center;
     .title {
       font-family: Alibaba PuHuiTi 3, Alibaba PuHuiTi 30;
-      margin: 0px 60px 30px auto;
+      //margin: 30px 60px 30px auto;
+      margin-top: 30px;
+      margin-right: 60px;
       font-weight: 600;
       font-size: 18px;
       color: #000000;

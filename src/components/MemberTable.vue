@@ -120,7 +120,7 @@
         <el-button type="text" style="margin-right: 10px">调岗</el-button>
 
         <el-popconfirm title="你确定要删除吗？" @confirm="confirm(row)">
-          <el-button type="text" style="color: red" slot="reference"
+          <el-button type="text" style="color: red" slot="reference" v-if="row.roleName!=='超级管理员'"
             >删除</el-button
           >
         </el-popconfirm>
@@ -211,7 +211,7 @@ export default {
 
       // 组合成所需格式
       const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-      
+
       return formattedDate
     },
   },

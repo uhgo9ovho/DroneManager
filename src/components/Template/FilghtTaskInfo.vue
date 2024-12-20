@@ -17,7 +17,7 @@
             popper-class="fly-task-info"
           >
             <span slot="reference"
-              >{{ totalLine }} 条航线 <i class="el-icon-arrow-down"></i>，
+            >{{ totalLine }} 条航线 <i class="el-icon-arrow-down"></i>，
               {{ note }}
             </span>
             <span
@@ -34,7 +34,7 @@
                 margin-bottom: 4px;
                 margin-right: 10px;
               "
-              >{{ taskName }}</span
+            >{{ taskName }}</span
             >
             <el-tag size="mini">待执行</el-tag>
           </el-popover>
@@ -48,7 +48,9 @@
       <div class="detail">
         <div class="item" v-for="(item, index) in detailOptions" :key="index">
           <div class="top">{{ item.label }}</div>
-          <div class="data">{{ item.value }}</div>
+          <div class="data-wrapper">
+            <div class="data">{{ item.value }}</div>
+          </div>
         </div>
       </div>
       <div class="single">
@@ -60,7 +62,7 @@
           class="iconfont"
           :class="[taskDetails ? 'el-icon-xiazai20' : 'el-icon-dikuai']"
         ></i>
-        <div class="msg">{{ taskDetails ? "任务信息" : "地块信息" }}</div>
+        <div class="msg">{{ taskDetails ? '任务信息' : '地块信息' }}</div>
         <el-divider></el-divider>
       </div>
       <div class="plot">
@@ -92,7 +94,7 @@
       </div>
       <div class="single">
         <div class="top">备注</div>
-        <div class="data">-</div>
+        <div class="data"></div>
       </div>
     </div>
   </div>
@@ -103,7 +105,7 @@ export default {
   props: {
     taskDetails: {
       type: Boolean,
-      default: false,
+      default: false
     },
     taskName: {
       type: String,
@@ -111,7 +113,7 @@ export default {
     },
     totalLine: {
       type: Number,
-      default: 0,
+      default: 0
     },
     note: {
       type: String,
@@ -132,26 +134,26 @@ export default {
         //任务信息
         return [
           {
-            label: "所属任务",
+            label: '所属任务',
             value: `【${this.changeType(this.row.taskType)}】 ${
               this.row.taskName
-            }`,
-          },
-        ];
+            }`
+          }
+        ]
       } else {
         //地块信息
         return [
           {
-            label: "地块形状",
-            value: "面状地块",
+            label: '地块形状',
+            value: '面状地块'
           },
           {
-            label: "地块半径",
-            value: "-米",
-          },
-        ];
+            label: '地块半径',
+            value: '-米'
+          }
+        ]
       }
-    },
+    }
   },
   data() {
     return {
@@ -227,6 +229,7 @@ export default {
   background: rgb(255, 255, 255);
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 20px 10px;
   border-radius: 0px 12px 12px 0px;
+
   .task_back {
     overflow: hidden;
     width: 36px;
@@ -245,6 +248,7 @@ export default {
     cursor: pointer;
     color: #fff;
   }
+
   .task-info-wrap {
     width: 100%;
     height: 100%;
@@ -256,6 +260,7 @@ export default {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     flex-direction: column;
+
     .state {
       width: 74px;
       height: 28px;
@@ -270,12 +275,14 @@ export default {
       font-size: 14px;
       color: rgb(255, 255, 255);
     }
+
     .title_wrap {
       display: flex;
       margin-top: 46px;
       height: 24px;
       -webkit-box-pack: center;
       justify-content: center;
+
       .tag {
         width: 36px;
         height: 22px;
@@ -288,6 +295,7 @@ export default {
         line-height: 22px;
         margin-right: 4px;
       }
+
       .titles {
         max-width: 296px;
         font-weight: 500;
@@ -300,6 +308,7 @@ export default {
         overflow: hidden;
       }
     }
+
     .nest {
       margin-top: 6px;
       height: 18px;
@@ -309,6 +318,7 @@ export default {
       text-align: center;
       line-height: 18px;
     }
+
     .item {
       height: 24px;
       font-weight: 500;
@@ -319,19 +329,23 @@ export default {
       -webkit-box-align: center;
       align-items: center;
       margin-top: 40px;
+
       i {
         font-size: 24px;
       }
+
       .msg {
         width: 125px;
         margin-left: 3px;
       }
     }
+
     .detail {
       display: flex;
       -webkit-box-pack: justify;
       justify-content: space-between;
       height: 60px;
+
       .item {
         width: 61px;
         display: flex;
@@ -341,6 +355,7 @@ export default {
         -webkit-box-align: start;
         align-items: flex-start;
         margin-top: 0px;
+
         .top {
           font-weight: 400;
           font-size: 12px;
@@ -348,15 +363,29 @@ export default {
           line-height: 16px;
           margin-top: 16px;
         }
-        .data {
-          font-weight: 400;
-          font-size: 14px;
-          color: rgb(29, 29, 31);
-          line-height: 20px;
-          margin-top: 4px;
+
+        .data-wrapper {
+          display: flex;
+          //justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 6px;
+          margin-left: -30px;
+
+          .data {
+            font-weight: 400;
+            font-size: 14px;
+            color: rgb(29, 29, 31);
+            white-space: nowrap;
+            text-align: left;
+            line-height: 20px;
+
+          }
         }
+
       }
     }
+
     .single {
       .top {
         font-weight: 400;
@@ -365,27 +394,35 @@ export default {
         line-height: 16px;
         margin-top: 16px;
       }
+
       .data {
         font-weight: 400;
         font-size: 14px;
         color: rgb(29, 29, 31);
         line-height: 20px;
         margin-top: 4px;
+
+        white-space: nowrap;
+        text-align: left;
+        margin-left: -30px;
       }
     }
+
     .plot {
       display: flex;
       height: 60px;
+
       .item {
-        // width: 60px;
+         //width: 61px;
         display: flex;
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
         flex-direction: column;
-        margin-right: 56px;
+        margin-right: 86px;
         margin-top: 0px;
         -webkit-box-align: start;
         align-items: flex-start;
+
         .top {
           font-weight: 400;
           font-size: 12px;
@@ -393,18 +430,26 @@ export default {
           line-height: 16px;
           margin-top: 16px;
         }
+
         .data {
           font-weight: 400;
           font-size: 14px;
           color: rgb(29, 29, 31);
           line-height: 20px;
           margin-top: 4px;
+
+          white-space: nowrap;
+          text-align: left;
+          margin-left: -30px;
+
         }
       }
     }
+
     .create {
       display: flex;
       height: 60px;
+
       .item {
         display: flex;
         width: 40%;
@@ -415,6 +460,7 @@ export default {
         -webkit-box-align: start;
         align-items: flex-start;
         margin-right: 35px;
+
         .top {
           font-weight: 400;
           font-size: 12px;
@@ -422,14 +468,20 @@ export default {
           line-height: 16px;
           margin-top: 16px;
         }
+
         .data {
           font-weight: 400;
           font-size: 14px;
           color: rgb(29, 29, 31);
           line-height: 20px;
           margin-top: 4px;
+
+          white-space: nowrap;
+          text-align: left;
+          margin-left: -30px;
         }
       }
+
       .item_org {
         display: flex;
         width: calc(60% - 35px);
@@ -439,6 +491,7 @@ export default {
         margin-top: 0px;
         -webkit-box-align: start;
         align-items: flex-start;
+
         .top {
           font-weight: 400;
           font-size: 12px;
@@ -446,12 +499,17 @@ export default {
           line-height: 16px;
           margin-top: 16px;
         }
+
         .data {
           font-weight: 400;
           font-size: 14px;
           color: rgb(29, 29, 31);
           line-height: 20px;
           margin-top: 4px;
+
+          white-space: nowrap;
+          text-align: left;
+          margin-left: -30px;
         }
       }
     }

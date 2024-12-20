@@ -14,8 +14,10 @@
     >
       <el-form-item label="部门名称" prop="name">
         <el-input
-          placeholder="请输入活动名称"
+          placeholder="请输入部门名称"
           v-model="ruleForm.name"
+          maxlength="20"
+          show-word-limit
         ></el-input>
       </el-form-item>
       <el-form-item label="备注" prop="desc">
@@ -35,56 +37,61 @@
 </template>
 
 <script>
-import { addDept, editDeptInfo } from "@/api/user.js";
+import { addDept, editDeptInfo } from '@/api/user.js'
+
 export default {
-  name: "AddAndEditDepartment",
+  name: 'AddAndEditDepartment',
   props: {
     drawer: {
       type: Boolean,
-      default: false,
+      default: false
     },
     title: {
       type: String,
-      default: "新建部门",
+      default: '新建部门'
     },
     itemRow: {
       type: Object,
-      default: () => null,
-    },
+      default: () => null
+    }
   },
   data() {
     return {
       ruleForm: {
-        name: "",
-        desc: "",
+        name: '',
+        desc: ''
       },
       rules: {
-        name: [{ required: true, message: "请输入部门名称", trigger: "blur" }],
-      },
-    };
+        name: [{ required: true, message: '请输入部门名称', trigger: 'blur' }]
+      }
+    }
   },
   methods: {
     handleClose() {
-      this.$emit("handleClose");
+      this.$emit('handleClose')
     },
     saveBtn() {
-      if (this.title == "新建部门") {
+      if (this.title == '新建部门') {
         const params = {
           orgDeptName: this.ruleForm.name,
           isOrg: 0,
           orgId: +localStorage.getItem('org_id')
         }
         addDept(params).then((res) => {
-          console.log(res);
-          if(res.code == 200) {
-            this.$message.success(res.msg);
+          console.log(res)
+          if (res.code == 200) {
+            this.$message.success(res.msg)
             this.$emit('updateList')
-            this.handleClose();
+            this.handleClose()
           }
-          
-        });
+
+        })
       } else {
         //编辑保存
+        if (!this.ruleForm.name) {
+          console.log('vvvvv')
+          return
+        }
         const params = {
           id: this.itemRow.id,
           createId: this.itemRow.createId,
@@ -92,39 +99,51 @@ export default {
           marker: this.ruleForm.desc
         }
         editDeptInfo(params).then(res => {
-          if(res.code == 200) {
-            this.$message.success(res.msg);
-            this.$emit('editSuccess');
+          if (res.code == 200) {
+            this.$message.success(res.msg)
+            this.$emit('editSuccess')
+            this.$emit('updateList')
+            this.handleClose()
+
+
+            // setTimeout(() => {
+            // }, 1000)
+          } else {
+            this.$message.error(res.msg)
           }
         })
       }
-    },
-  },
-  mounted() {
-    if (this.title == "编辑部门") {
-      this.ruleForm.name = this.itemRow.orgDeptName;
-      this.ruleForm.desc = this.itemRow.marker;
     }
   },
-};
+  mounted() {
+    if (this.title == '编辑部门') {
+      this.ruleForm.name = this.itemRow.orgDeptName
+      this.ruleForm.desc = this.itemRow.marker
+    }
+  }
+}
 </script>
 
 <style lang="scss">
 .department-dialog {
   width: 420px;
+
   .el-drawer__header {
     color: #000;
     font-weight: bold;
   }
+
   .el-drawer__body {
     padding: 10px 20px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
   }
+
   .el-form {
     flex: 1;
   }
+
   .el-input {
     .el-input__inner {
       border: 1px solid transparent !important;
@@ -134,6 +153,7 @@ export default {
       line-height: 36px;
     }
   }
+
   .el-textarea {
     .el-textarea__inner {
       border: 1px solid transparent !important;
@@ -142,8 +162,10 @@ export default {
       height: 120px;
     }
   }
+
   .btn {
     display: flex;
+
     .clear-btn {
       width: 136px;
       height: 40px;
@@ -154,6 +176,7 @@ export default {
       text-align: center;
       padding: 0;
     }
+
     .save-btn {
       flex: 1;
       margin-left: 16px;

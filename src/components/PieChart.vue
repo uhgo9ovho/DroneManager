@@ -1,5 +1,9 @@
+<template>
+  <div ref="chart" style="width: 100%; height: 400px;"></div>
+</template>
+
 <script>
-import * as echarts from 'echarts';
+import * as echarts from 'echarts'
 
 export default {
   name: 'PieChart',
@@ -11,26 +15,16 @@ export default {
   },
   data() {
     return {
-      chart: null,
-    };
+      chart: null
+    }
   },
   mounted() {
-    this.initChart();
-    // this.chart = echarts.init(this.$refs.chart);
+    this.initChart()
   },
-  // watch: {
-  //   // 监听option的变化，以便在数据更新时重新渲染图表
-  //   option: {
-  //     handler(newVal) {
-  //       this.updateChartData(newVal.quest);
-  //     },
-  //     deep: true, // 深度监听对象内部属性的变化
-  //     immediate: true // 在组件创建时立即执行一次监听器
-  //   }
-  // },
+
   methods: {
     initChart() {
-      this.chart = echarts.init(this.$refs.chart);
+      this.chart = echarts.init(this.$refs.chart)
 
       const option = {
         title: {
@@ -45,7 +39,7 @@ export default {
           orient: 'vertical',
           left: 'left',
           data: Object.keys(this.questData).map(key => ({
-            name: key, // 图例名称
+            name: key // 图例名称
           }))
         },
         series: [
@@ -70,27 +64,33 @@ export default {
             }
           }
         ]
-      };
+      }
 
-      this.chart.setOption(option);
+      this.chart.setOption(option)
+      this.chart.on('finished', this.onChartFinished) // 监听图表渲染完成事件
+    },
+    onChartFinished() {
+      // 图表渲染完成后，转换为 base64 并触发事件
+      const base64 = this.chart.getDataURL({
+        type: 'png',
+        pixelRatio: 2,
+        backgroundColor: '#fff'
+      })
+      this.$emit('chart-exported', base64)
     },
     resizeChart() {
       if (this.chart) {
-        this.chart.resize();
+        this.chart.resize()
       }
     }
   },
   beforeDestroy() {
     if (this.chart) {
-      this.chart.dispose();
+      this.chart.dispose()
     }
   }
-};
+}
 </script>
-
-<template>
-  <div ref="chart" style="width: 100%; height: 400px;"></div>
-</template>
 
 <style scoped>
 

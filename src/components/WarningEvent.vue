@@ -68,6 +68,7 @@
             <span class="el-dropdown-link el-icon-more"></span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
+                v-if="row.status === '0' && item.label === '忽略'"
                 v-for="(item, index) in operateOptions"
                 :key="index"
                 :command="item.label"
@@ -77,7 +78,9 @@
               >
             </el-dropdown-menu>
           </el-dropdown>
+
           <el-button
+            :disabled="row.status != '0'"
             type="primary"
             round
             size="mini"
@@ -91,6 +94,7 @@
             @click="flightBtn(row)"
             >处理</el-button
           >
+
         </div>
       </template>
     </common-table>
@@ -135,6 +139,7 @@ export default {
   props: {},
   data() {
     return {
+      isDisabled: false,
       warningVisible: false,
       neglectVisible: false,
       handleVisible: false,

@@ -46,7 +46,7 @@
             ></el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="manually">手动添加</el-dropdown-item>
-              <el-dropdown-item command="invite">邀请添加</el-dropdown-item>
+              <el-dropdown-item command="invitePerson" >邀请添加</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -74,6 +74,12 @@
         @updateList="updateList"
       ></ManuallyAddEditDialog>
     </div>
+    <div v-if="dialogVisible">
+      <invite-dialog
+        :dialogVisible="dialogVisible"
+        @closeDialog="closeDialog"
+      ></invite-dialog>
+    </div>
   </div>
 </template>
 
@@ -82,10 +88,12 @@ import ContactsTable from "../components/ContactsTable.vue";
 import MemberTable from "../components/MemberTable.vue";
 import { deleteAllUser } from "@/api/user.js";
 import ManuallyAddEditDialog from "../components/Template/ManuallyAddEditDialog.vue";
+import InviteDialog from '@/components/InviteDialog.vue'
 export default {
   name: "Contacts",
   data() {
     return {
+      dialogVisible: false,
       activeName: "department",
       checked: false,
       searchText: "",
@@ -98,6 +106,7 @@ export default {
     };
   },
   components: {
+    InviteDialog,
     ContactsTable,
     MemberTable,
     ManuallyAddEditDialog,
@@ -112,6 +121,9 @@ export default {
     },
   },
   methods: {
+    closeDialog() {
+      this.dialogVisible = false;
+    },
     handleSearch(e) {
       if (this.timer) {
         clearTimeout(this.timer);
@@ -183,6 +195,10 @@ export default {
       if (commond == "manually") {
         this.manuallyVisible = true;
         this.title = "添加成员";
+      }
+      if (commond == "invitePerson") {
+        this.dialogVisible = true;
+
       }
     },
     editMember(row) {
