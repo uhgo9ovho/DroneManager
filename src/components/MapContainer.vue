@@ -12,7 +12,10 @@ import AMapLoader from "@amap/amap-jsapi-loader";
 import { wgs84ToGcj02 } from "@/utils/CoordinateTransformation.js";
 import { DronePlottingRoute } from "@/utils/PlottingRoute.js";
 import { mapMutations, mapState } from "vuex";
+import planeMarkerIcon from '@/assets/images/planeMarkerIcon.png'
 let map = null;
+let planeMarker = null;
+let lastPosition = null;
 export default {
   name: "map-view",
   props: {
@@ -36,6 +39,18 @@ export default {
       type: Array,
       default: () => [],
     },
+    mode_code: {
+      type: Number,
+      default: 0
+    },
+    latitudeLine: {
+      type: Number,
+      default: 0
+    },
+    longitudeLine: {
+      type: Number,
+      default: 0
+    }
   },
   data() {
     return {
@@ -72,7 +87,21 @@ export default {
           this.initAMap()
         }
       }
-    }
+    },
+    latitudeLine: {
+      handler(val) {
+        if (val && this.longitudeLine) {
+          this.updatePlaneMarker();
+        }
+      },
+    },
+    longitudeLine: {
+      handler(val) {
+        if (val && this.latitudeLine) {
+          this.updatePlaneMarker();
+        }
+      },
+    },
   },
   unmounted() {
     map?.destroy();
@@ -100,8 +129,8 @@ export default {
             );
 
             this.lineInfoObj.pointsList.forEach((item) => {
-              const formatArr = [...item];
-              const formarItemArr = formatArr.map((it) => [it.lon, it.lat]);
+              const formattedArr = [...item];
+              const formarItemArr = formattedArr.map((it) => [it.lon, it.lat]);
               this.lonlatArr.push(...formarItemArr);
             });
           }
@@ -243,6 +272,34 @@ export default {
       removeAll();
       this.CHANGE_DROC_STATUS("");
     },
+    updatePlaneMarker() {
+      const [lng, lat] = wgs84ToGcj02(this.longitudeLine, this.latitudeLine);
+      const position = new this.AMap.LngLat(lng, lat);
+      if (!planeMarker) {
+        planeMarker = new this.AMap.Marker({
+          position,
+          content: `<div class="custom-content-marker"><img class="planeImg" src=${planeMarkerIcon} style="transform: rotate(0deg);"></div>`,
+          offset: new this.AMap.Pixel(-20, -20),
+        });
+        map.add(planeMarker);
+      } else {
+        planeMarker.setPosition(position);
+        if (lastPosition) {
+          console.log(planeMarker.getContent(), 'planeMarker');
+          const angle = this.calculateAngle(lastPosition, position);
+          const img = document.querySelector('.planeImg');
+          img.style.transform = `rotate(${angle}deg)`;
+        }
+      }
+      lastPosition = position;
+      map.setZoomAndCenter(17, position); // 设置地图缩放级别和中心点
+    },
+    calculateAngle(start, end) {
+      const dx = end.lng - start.lng;
+      const dy = end.lat - start.lat;
+      const angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90; // 调整角度
+      return angle;
+    },
   },
 };
 </script>
@@ -302,4 +359,3 @@ export default {
   }
 }
 </style>
-  

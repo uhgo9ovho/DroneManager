@@ -39,13 +39,10 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.initPlayer();
-      player.on("rtsFallback", function (event) {
-        console.log(event, "降级");
-      });
-      player.on("rtsTraceId", function (event) {
-        console.log("EVENT rtsTraceId", event.paramData);
-      });
     });
+  },
+  destroyed() {
+    player.dispose();
   },
   methods: {
     changeVideo() {

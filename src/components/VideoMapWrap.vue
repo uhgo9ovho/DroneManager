@@ -5,16 +5,19 @@
       :is="fullScreenComponent"
       :longitude="longitude"
       :latitude="latitude"
+      :mode_code="mode_code"
+      :latitudeLine="latitudeLine"
+      :longitudeLine="longitudeLine"
     />
 
     <!-- 小 div 1，点击后与全屏 div 交换 -->
     <div class="small-div small-div-1" @click="handleClick(0)">
-      <component :is="smallComponent[0]" />
+      <component :is="smallComponent[0]"  :mode_code="mode_code" />
     </div>
 
     <!-- 小 div 2，点击后与全屏 div 交换 -->
     <div class="small-div small-div-2" @click="handleClick(1)">
-      <component :is="smallComponent[1]" />
+      <component :mode_code="mode_code" :is="smallComponent[1]" />
     </div>
 
     <!-- 顶部信息 -->
@@ -311,6 +314,9 @@ export default {
       latitude: 0,
       showMap: false,
       tempNetworkState: "-",
+      mode_code: 0,
+      latitudeLine: 0, //无人机经纬度
+      longitudeLine: 0, //无人机经纬度
     };
   },
   components: {
@@ -346,34 +352,37 @@ export default {
       immediate: true,
     },
     statusInfo(val) {
+      const host = val.data.host;
       if (val.biz_code === "device_osd") {
         //无人机数据（正在飞行中）
-        if (val.data.host) {
+        console.log(host.latitude, host.longitude, "lonlat");
+        if (host) {
+          this.latitudeLine = host.latitude;
+          this.longitudeLine = host.longitude;
           this.tempRainfall =
-            val.data.host.rainfall == "1"
+            host.rainfall == "1"
               ? "小雨"
-              : val.data.host.rainfall == "2"
+              : host.rainfall == "2"
               ? "中雨"
-              : val.data.host.rainfall == "3"
+              : host.rainfall == "3"
               ? "大雨"
               : "无雨";
-          this.tempHeight = val.data.host.height.toFixed(2);
-
-          this.tempHorizontal_speed = val.data.host.horizontal_speed.toFixed(2);
-
-          this.tempVertical_speed = val.data.host.vertical_speed.toFixed(2);
-
-          this.tempElevation = val.data.host.elevation.toFixed(2);
-
-          this.tempWind_speed = val.data.host.wind_speed.toFixed(2);
-          if (val.data.host.humidity) {
-            this.tempHumidity = val.data.host.humidity.toFixed(2);
+          this.tempHeight = parseFloat(host.height.toFixed(2));
+          this.tempHorizontal_speed = parseFloat(
+            host.horizontal_speed.toFixed(2)
+          );
+          this.tempVertical_speed = parseFloat(host.vertical_speed.toFixed(2));
+          this.tempElevation = parseFloat(host.elevation.toFixed(2));
+          this.tempWind_speed = parseFloat(host.wind_speed.toFixed(2));
+          if (host.humidity) {
+            this.tempHumidity = parseFloat(host.humidity.toFixed(2));
           }
 
-          this.capacity_percent = val.data.host.capacity_percent;
+          this.capacity_percent = host.capacity_percent;
 
-          if (val.data.host.mode_code == "0") {
-            //待机状态
+          this.mode_code = host.mode_code; //{"0":"待机","1":"起飞准备","2":"起飞准备完毕","3":"手动飞行","4":"自动起飞","5":"航线飞行","6":"全景拍照","7":"智能跟随","8":"ADS-B 躲避","9":"自动返航","10":"自动降落","11":"强制降落","12":"三桨叶降落","13":"升级中","14":"未连接","15":"APAS","16":"虚拟摇杆状态","17":"指令飞行","18":"空中 RTK 收敛模式","19":"机场选址中","20":"自定义模式"}
+          if (host.mode_code == "0") {
+            this.tempCapacityPercent = host.capacity_percent;
             this.tempElevation = "-";
             this.tempHeight = "-";
             this.tempHorizontal_speed = "-";
@@ -386,18 +395,19 @@ export default {
         //飞行进度
         this.percentage = val.data.output.progress.percent;
       } else if (val.biz_code === "dock_osd") {
-        if (val.data.host.network_state && val.data.host.network_state.rate) {
-          this.tempNetworkState = val.data.host.network_state.rate;
+        if (host.network_state && host.network_state.rate) {
+          this.tempNetworkState = host.network_state.rate;
         }
         if (
-          val.data.host.drone_charge_state &&
-          val.data.host.drone_charge_state.capacity_percent
+          host.drone_charge_state &&
+          host.drone_charge_state.capacity_percent
         ) {
           this.tempCapacityPercent =
-            val.data.host.drone_charge_state.capacity_percent;
+            host.drone_charge_state.capacity_percent;
         }
       } else if (val.biz_code === "control_source_change") {
-        console.log("抢夺控制权");
+        // Handle the event when control source changes
+        console.log("Control source changed");
       }
     },
   },
@@ -433,8 +443,7 @@ export default {
             this.latitude = +lonlatArr[1];
           }
         })
-        .catch((err) => {
-        });
+        .catch((err) => {});
     },
     getPlotInfo() {
       getPlotAPI().then((res) => {

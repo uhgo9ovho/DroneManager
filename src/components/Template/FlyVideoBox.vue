@@ -19,6 +19,10 @@ import "aliyun-aliplayer/build/skins/default/aliplayer-min.css";
 let player = null;
 export default {
   props: {
+    mode_code: {
+      type: Number,
+      default: 0,
+    },
     mainView: {
       type: String,
       default: "map",
@@ -53,17 +57,23 @@ export default {
       showVideo: true,
     };
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.initPlayer();
-      player.on("rtsFallback", function (event) {
-        console.log(event, "降级");
-      });
-      player.on("rtsTraceId", function (event) {
-        console.log("EVENT rtsTraceId", event.paramData);
-      });
-    });
+  watch: {
+    mode_code: {
+      handler(val) {
+        if (val === 0) {
+          if (player) {
+            player.dispose();
+          }
+        } else {
+          this.$nextTick(() => {
+            this.initPlayer();
+          });
+        }
+      },
+      immediate: true,
+    },
   },
+  mounted() {},
   methods: {
     changeVideo() {
       this.$emit("changeVideo", "video2");
@@ -121,6 +131,7 @@ export default {
     right: 0;
     border-radius: 6px;
     overflow: hidden;
+    background-color: #000;
     video {
       width: 100%;
       height: 100%;
