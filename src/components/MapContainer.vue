@@ -251,7 +251,6 @@ export default {
   width: 100%;
   height: 100%;
   position: relative;
-  border-radius: 12px 0 0 12px;
 
   .action-warp {
     position: absolute;

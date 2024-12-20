@@ -205,7 +205,7 @@ export default {
         '全景',
         '三维',
         '正射',
-        '全覆盖'
+        // '全覆盖'
       ],
       statusOptions: [
         '全部状态',

@@ -66,6 +66,10 @@ export default {
           isLive: true,
           playsinline: true,
           preload: true,
+          license: {
+            domain: "jky.szyfu.com", // 申请 License 时填写的域名
+            key: "dPzLKTbJSeu1aRyexef24a6e5308f43fc9d495acef1a08f0f" // 申请成功后，在控制台可以看到 License Key
+          }
         },
         function (player) {
           console.log("success");

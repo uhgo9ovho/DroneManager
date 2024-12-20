@@ -94,7 +94,7 @@
       </div>
       <div class="single">
         <div class="top">备注</div>
-        <div class="data">-</div>
+        <div class="data"></div>
       </div>
     </div>
   </div>
