@@ -9,7 +9,7 @@ import { constantRoutes } from "@/router";
 import Cookies from 'js-cookie';
 NProgress.configure({ showSpinner: false })
 
-const whiteList = ['/login', '/register', '/videoMap', '/wordPreview']
+const whiteList = ['/login', '/register', '/videoMap', '/WordPreview']
 let routeList = constantRoutes.filter((item, index) => {
   return !item.hidden;
 })[0].children;
