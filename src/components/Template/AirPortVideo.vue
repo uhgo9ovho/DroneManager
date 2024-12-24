@@ -6,7 +6,7 @@
   >
     <div class="wrap wrap_window">
       <div :style="{ width: '100%', height: '100%' }">
-        <div id="J_prismPlayer3"></div>
+        <video id="flv-player" controls autoplay style="width: 100%; height: 100%;"></video>
       </div>
     </div>
   </div>
@@ -15,8 +15,10 @@
 <script>
 import MapContainer from "../MapContainer.vue";
 import Aliplayer from "aliyun-aliplayer";
+import FlvJs from "flv.js";
 import "aliyun-aliplayer/build/skins/default/aliplayer-min.css";
 let player = null;
+let flvPlayer = null;
 export default {
   props: {
     mainView: {
@@ -33,16 +35,18 @@ export default {
       videoHeight: "80px",
     };
   },
-  watch: {
-
-  },
+  watch: {},
   mounted() {
     this.$nextTick(() => {
-      this.initPlayer();
+      // this.initPlayer();
+      this.flvPlayerFn()
     });
   },
   destroyed() {
-    player.dispose();
+    // player.dispose();
+    if (flvPlayer) {
+      flvPlayer.destroy();
+    }
   },
   methods: {
     changeVideo() {
@@ -56,7 +60,8 @@ export default {
           id: "J_prismPlayer3",
           width: "100%",
           height: "100%",
-          source: "artc://drone.szyfu.com/wrjFlyDock/7CTDLCE00A6Y68",
+          source:
+            "http://8.136.97.59:8080/wrjFlyDock/7CTDLCE00A6Y68&videoId=7CTDLCE00A6Y68-165-0-7.flv",
           // rtsFallbackSource: "https://drone.szyfu.com/wrjFly/7CTDLCE00A6Y68.flv",
           autoplay: true,
           mute: true,
@@ -65,14 +70,32 @@ export default {
           preload: true,
           license: {
             domain: "jky.szyfu.com", // 申请 License 时填写的域名
-            key: "dPzLKTbJSeu1aRyexef24a6e5308f43fc9d495acef1a08f0f" // 申请成功后，在控制台可以看到 License Key
-          }
+            key: "dPzLKTbJSeu1aRyexef24a6e5308f43fc9d495acef1a08f0f", // 申请成功后，在控制台可以看到 License Key
+          },
         },
         function (player) {
           console.log("success");
           player.play();
         }
       );
+    },
+    flvPlayerFn() {
+      if (FlvJs.isSupported()) {
+        const videoElement = document.getElementById("flv-player");
+        flvPlayer = FlvJs.createPlayer({
+          type: "flv",
+          isLive: true,
+          cors: true,
+          enableWorker: true,
+          lazyLoad: true,
+          url: "http://8.136.97.59:8080/wrjFlyDock/7CTDL9K00A0153&videoId=7CTDL9K00A0153-165-0-7.flv", // 替换为你的 FLV 流地址
+        });
+        flvPlayer.attachMediaElement(videoElement);
+        flvPlayer.load();
+        flvPlayer.play();
+      } else {
+        console.error("FLV format is not supported in this browser.");
+      }
     },
   },
   components: {

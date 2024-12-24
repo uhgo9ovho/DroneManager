@@ -4,10 +4,10 @@
       <i class="el-icon-close"></i>
     </div>
     <div class="task-info-wrap">
-      <div class="title">【全景】比亚迪一期</div>
+      <div class="title">{{row.taskName}}</div>
       <div class="nest">
         <div class="task-name-type">
-          执行机场：西安-周至
+          执行机场：{{ row.airportName }}
           <div class="battery">
             <div class="iconfont el-icon-dianliang icon"></div>
           </div>

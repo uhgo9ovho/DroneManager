@@ -12,7 +12,7 @@ import AMapLoader from "@amap/amap-jsapi-loader";
 import { wgs84ToGcj02 } from "@/utils/CoordinateTransformation.js";
 import { DronePlottingRoute } from "@/utils/PlottingRoute.js";
 import { mapMutations, mapState } from "vuex";
-import planeMarkerIcon from '@/assets/images/planeMarkerIcon.png'
+import planeMarkerIcon from "@/assets/images/planeMarkerIcon.png";
 let map = null;
 let planeMarker = null;
 let lastPosition = null;
@@ -41,16 +41,16 @@ export default {
     },
     mode_code: {
       type: Number,
-      default: 0
+      default: 0,
     },
     latitudeLine: {
       type: Number,
-      default: 0
+      default: 0,
     },
     longitudeLine: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data() {
     return {
@@ -70,8 +70,6 @@ export default {
     pointsList: {
       handler(val) {
         if (val.length) {
-          console.log(val, "val1111");
-
           const { drawPolyline } = DronePlottingRoute(
             map,
             this.mouseTool,
@@ -83,10 +81,10 @@ export default {
     },
     latitude: {
       handler(val) {
-        if(val) {
-          this.initAMap()
+        if (val) {
+          this.initAMap();
         }
-      }
+      },
     },
     latitudeLine: {
       handler(val) {
@@ -221,6 +219,7 @@ export default {
               lineJoin: "round", //折线拐点连接处样式
             });
             map.add(polyline);
+            console.log(this.lonlatArr);
           }
         })
         .catch((e) => {
@@ -228,7 +227,11 @@ export default {
         });
     },
     changeArea(val) {
-      const { addPolygon, removePolygon } = DronePlottingRoute(map, this.mouseTool, this.AMap);
+      const { addPolygon, removePolygon } = DronePlottingRoute(
+        map,
+        this.mouseTool,
+        this.AMap
+      );
       if (val) {
         //显示禁飞区
         if (this.coordinates.length) {
@@ -240,13 +243,21 @@ export default {
         }
       } else {
         //隐藏禁飞区
-        removePolygon()
+        removePolygon();
       }
     },
     formatAirLine(AMap) {
+      // AMap.convertFrom(this.lonlatArr, "gps", function (status, result) {
+      //   if (result.info === "ok") {
+      //   console.log(result.locations.map(item => [item.lng, item.lat]));
+      //     return result.locations; // Array.<LngLat>
+      //   }
+      // });
       let path = this.lonlatArr.map(
         (item) => new AMap.LngLat(item[0], item[1])
       );
+      
+      console.log(path.map(item => [item.lng, item.lat]));
       return path;
     },
     markerClick() {
@@ -285,10 +296,11 @@ export default {
       } else {
         planeMarker.setPosition(position);
         if (lastPosition) {
-          console.log(planeMarker.getContent(), 'planeMarker');
           const angle = this.calculateAngle(lastPosition, position);
-          const img = document.querySelector('.planeImg');
-          img.style.transform = `rotate(${angle}deg)`;
+          const img = document.querySelector(".planeImg");
+          if (img) {
+            img.style.transform = `rotate(${angle}deg)`;
+          }
         }
       }
       lastPosition = position;

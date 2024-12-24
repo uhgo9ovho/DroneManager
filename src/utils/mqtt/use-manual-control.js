@@ -35,7 +35,6 @@ let myInterval;
 export function useManualControl(deviceTopicInfo, isCurrentFlightController) {
     let activeCodeKey = null;
     vm.isCurrentFlightController = isCurrentFlightController;
-
     const mqttHooks = userMqtt(deviceTopicInfo);
 
     let seq = 0;

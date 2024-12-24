@@ -15,7 +15,6 @@ export const userMqtt = (deviceTopicInfo) => {
             topic,
             callback: handler,
         })
-        console.log(cacheSubscribeArr,'cacheSubscribeArr');
         
     };
     function publishMqtt(topic, body, ots) {
@@ -34,7 +33,6 @@ export const userMqtt = (deviceTopicInfo) => {
                 case DRC_METHOD.DRONE_CONTROL:
                 case DRC_METHOD.DRONE_EMERGENCY_STOP:
                     //   EventBus.emit('droneControlMqttInfo', payloadObj)
-                    console.log(payloadObj, 'onMessageMqtt');
 
                     break
                 default:

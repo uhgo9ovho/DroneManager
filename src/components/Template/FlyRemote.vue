@@ -1,8 +1,28 @@
 <template>
   <div class="FlyRemoteBox">
     <div class="flyRemote"></div>
-    <div class="toflypoint">指点飞行</div>
-    <div class="cameraMoudle">广角镜头</div>
+    <div class="toflypoint" @click="getAuthority">获取负载控制权</div>
+    <div class="cameraMoudle">
+      <el-dropdown trigger="click" @command="handleCommand">
+        <span class="el-dropdown-link">
+          相机模式<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="0">拍照</el-dropdown-item>
+          <el-dropdown-item command="1">录像</el-dropdown-item>
+          <el-dropdown-item command="2">智能低光</el-dropdown-item>
+          <el-dropdown-item command="3">全景拍照</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
+    <div class="cameraMoudle2" @click="photographBtn" v-if="showPhoto">拍照</div>
+    <div
+      class="video-box"
+      v-if="showVideoBtn"
+      @click="stopAndStart(stopAndStartVideo)"
+    >
+      {{ stopAndStartVideo }}
+    </div>
     <div class="fly_control_plan">
       <div class="to_fly">
         <div
@@ -140,20 +160,159 @@
 // import mqtt from 'mqtt';
 import { KeyCode } from "@/utils/mqtt/use-manual-control";
 import { mapState } from "vuex";
-import { returnHomeAPI } from "@/api/droneControl.js";
+import {
+  returnHomeAPI,
+  getAuthorityAPI,
+  cameraModeSwitchAPI,
+  startRecordAPI,
+  stopRecordAPI,
+  startTakePhotoAPI
+} from "@/api/droneControl.js";
 export default {
+  props: {
+    payloadIndex: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {
-      lenses: "广角镜头",
+      stopAndStartVideo: "开始录制",
+      showVideoBtn: false,
       showPlan: false,
       KeyCode: null,
-      isFly: true
+      isFly: true,
+      ban: true,
+      showCameraModel: false,
+      lenses: "-",
+      showPhoto: false,
     };
   },
   computed: {
     ...mapState("droneStatus", ["topic", "deviceSN"]),
   },
   methods: {
+    getAuthority() {
+      //获取负载控制权
+      const authParams = {
+        payloadIndex: this.payloadIndex,
+      };
+      if (this.payloadIndex) {
+        //获取负载控制权
+        getAuthorityAPI(authParams, this.deviceSN)
+          .then((res) => {
+            console.log(res);
+            if (res.code === 0) {
+              this.$message.success("获取负载控制权成功");
+              this.ban = false;
+            } else {
+              this.$message.error(res.message);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        this.$message.error("无人机未连接");
+      }
+    },
+    handleCommand(command) {
+      //相机控制权切换
+      if (this.ban) {
+        this.$message.error("请先获取负载控制权");
+        return;
+      }
+      const params = {
+        cmd: "camera_mode_switch",
+        data: {
+          cameraMode: command, //"0":"拍照","1":"录像","2":"智能低光","3":"全景拍照"
+          payloadIndex: this.payloadIndex,
+        },
+      };
+      cameraModeSwitchAPI(params, this.deviceSN).then((res) => {
+        console.log(res, "相机模式切换");
+        if (res.code === 0) {
+          this.$message.success("相机模式切换成功");
+          switch (command) {
+            case "0":
+              this.lenses = "拍照";
+              this.showVideoBtn = false;
+              this.showPhoto = true;
+              break;
+            case "1":
+              this.lenses = "录像";
+              this.showVideoBtn = true;
+              this.showPhoto = false;
+              break;
+            case "2":
+              this.lenses = "智能低光";
+              this.showVideoBtn = false;
+              this.showPhoto = false;
+              break;
+            case "3":
+              this.lenses = "全景拍照";
+              this.showVideoBtn = false;
+              this.showPhoto = false;
+              break;
+          }
+          this.$emit("cameraModelSwitch", this.lenses);
+        } else {
+          this.$message.error("相机模式切换失败");
+        }
+      });
+    },
+    stopAndStart(val) {
+      if (val === "开始录制") {
+        const params = {
+          cmd: "camera_mode_switch",
+          data: {
+            cameraMode: 3, //"0":"拍照","1":"录像","2":"智能低光","3":"全景拍照"
+            payloadIndex: this.payloadIndex,
+          },
+        };
+        startRecordAPI(params, this.deviceSN).then((res) => {
+          console.log(res, "开始录制");
+          if (res.code === 0) {
+            this.$message.success("开始录制");
+            this.stopAndStartVideo = "停止录制";
+          } else {
+            this.$message.error(res.message);
+          }
+        });
+      } else {
+        const params = {
+          cmd: "camera_mode_switch",
+          data: {
+            payloadIndex: this.payloadIndex,
+          },
+        };
+        stopRecordAPI(params, this.deviceSN).then((res) => {
+          console.log(res, "停止录制");
+          if (res.code === 0) {
+            this.$message.success("停止录制");
+            this.stopAndStartVideo = "开始录制";
+          } else {
+            this.$message.error(res.message);
+          }
+        });
+      }
+    },
+    photographBtn() {
+      const params = {
+        cmd: "camera_photo_take",
+        data: {
+          payloadIndex: this.payloadIndex,
+        },
+      };
+      startTakePhotoAPI(params ,this.deviceSN).then((res) => {
+        console.log(res, "拍照");
+        if (res.code === 0) {
+          this.$message.success("拍照成功");
+        } else {
+          this.$message.error(res.message);
+        }
+      });
+    },
     returnHome() {
       const params = {
         sn: this.deviceSN,
@@ -186,12 +345,12 @@ export default {
       this.$emit("onMouseUp");
     },
     changeStatus() {
-      this.$emit('droneEmergencyStop');
+      this.$emit("droneEmergencyStop");
       this.isFly = !this.isFly;
     },
     clearStop() {
-      this.$emit('clearStop')
-    }
+      this.$emit("clearStop");
+    },
   },
   mounted() {
     console.log(KeyCode);
@@ -206,6 +365,15 @@ export default {
   right: 24px;
   bottom: 210px;
   z-index: 1000;
+  .el-dropdown {
+    .el-dropdown-link {
+      color: #fff;
+      font-size: 12px;
+      i {
+        font-size: 12px;
+      }
+    }
+  }
   .flyRemote {
     width: 136px;
     height: 436px;
@@ -250,6 +418,46 @@ export default {
     line-height: 25px;
     position: absolute;
     bottom: 332px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+    color: #fff;
+  }
+  .cameraMoudle2 {
+    display: block;
+    border: 1px solid hsla(0, 0%, 100%, 0.25);
+    width: 112px;
+    height: 28px;
+    font-size: 12px;
+    line-height: 26px;
+    margin: 0 auto;
+    border-radius: 15px;
+    text-indent: 8px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 25px;
+    position: absolute;
+    bottom: 295px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+    color: #fff;
+  }
+  .video-box {
+    display: block;
+    border: 1px solid hsla(0, 0%, 100%, 0.25);
+    width: 112px;
+    height: 28px;
+    font-size: 12px;
+    line-height: 26px;
+    margin: 0 auto;
+    border-radius: 15px;
+    text-indent: 8px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 25px;
+    position: absolute;
+    bottom: 258px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 15;

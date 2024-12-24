@@ -321,7 +321,7 @@ export default {
         case "17:00-21:00":
           value = 2;
           break;
-        case "12.00-17:00":
+        case "12:00-17:00":
           value = 1;
           break;
         default:

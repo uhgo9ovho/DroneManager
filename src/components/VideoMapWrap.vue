@@ -132,7 +132,7 @@
               </div>
               <div>
                 <p>相机模式</p>
-                <p>拍照</p>
+                <p>{{ cameraModel }}</p>
               </div>
             </div>
           </div>
@@ -212,13 +212,16 @@
     </el-popconfirm>
     <!-- 控制无人机操作界面 -->
     <!-- <div> -->
-    <div v-if="showRemote">
+    <div>
+    <!-- <div v-if="showRemote"> -->
       <FlyRemote
         @onMouseUp="onMouseUp"
         @onMouseDown="onMouseDown"
         @returnHomeShow="returnHomeShow"
         @droneEmergencyStop="droneEmergencyStop"
         @clearStop="clearStop"
+        :payloadIndex="payloadIndex"
+        @cameraModelSwitch="cameraModelSwitch"
       ></FlyRemote>
     </div>
   </div>
@@ -238,6 +241,7 @@ import {
   enterDRCAPI,
   authorityAPI,
   exitDRCAPI,
+  
 } from "@/api/user.js";
 import { airPostAPI, getPlotAPI } from "@/api/TaskManager.js";
 import { returnHomeAPI } from "@/api/droneControl.js";
@@ -317,6 +321,8 @@ export default {
       mode_code: 0,
       latitudeLine: 0, //无人机经纬度
       longitudeLine: 0, //无人机经纬度
+      payloadIndex: "",
+      cameraModel: "-"
     };
   },
   components: {
@@ -355,8 +361,10 @@ export default {
       const host = val.data.host;
       if (val.biz_code === "device_osd") {
         //无人机数据（正在飞行中）
-        console.log(host.latitude, host.longitude, "lonlat");
         if (host) {
+          this.payloadIndex = host.payload[0]?.payload_index;
+          console.log(this.payloadIndex);
+          
           this.latitudeLine = host.latitude;
           this.longitudeLine = host.longitude;
           this.tempRainfall =
@@ -428,6 +436,9 @@ export default {
     ]),
     droneEmergencyStop() {
       this.handleEmergencyStop();
+    },
+    cameraModelSwitch(val) {
+      this.cameraModel = val;
     },
     getDeviceInfo() {
       const params = {
@@ -544,10 +555,9 @@ export default {
               this.handleEmergencyStop = handleEmergencyStop;
               this.unsubscribe = unsubscribe;
               this.getToicpSubPub(topic);
-
               //抢夺控制权
               authorityAPI({}, this.deviceSN).then((res) => {
-                console.log(res, "ddfgrdherth");
+
               });
             } else {
               this.$message.error(res.message || res.msg);

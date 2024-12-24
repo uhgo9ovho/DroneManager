@@ -78,11 +78,12 @@ export default {
           orgId: +localStorage.getItem('org_id')
         }
         addDept(params).then((res) => {
-          console.log(res)
           if (res.code == 200) {
             this.$message.success(res.msg)
             this.$emit('updateList')
             this.handleClose()
+          } else {
+            this.$message.error(res.msg)
           }
 
         })

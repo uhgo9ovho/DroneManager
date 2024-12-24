@@ -33,7 +33,7 @@ export class UranusMqtt extends EventEmitter {
         if (this._client) {
             this._client.on('connect', () => {
                 console.log('connect success');
-                
+
             })
 
             this._client.on('reconnect', this._onReconnect)
@@ -51,8 +51,8 @@ export class UranusMqtt extends EventEmitter {
 
     // 发布
     publishMqtt = (topic, body, opts) => {
-        console.log(topic,'发布');
-        
+        console.log(topic, '发布');
+
         if (!this._client?.connected) {
             this.initMqtt()
         }
@@ -87,21 +87,18 @@ export class UranusMqtt extends EventEmitter {
     }
 
     _onReconnect = () => {
+        debugger
         if (this._client) { window.console.error('mqtt reconnect,') }
     }
 
     _onMessage = (topic, payload, packet) => {
-        console.log(topic,'message');
-        
+
         this.emit('onMessageMqtt', { topic, payload, packet })
     }
 
     _onClose = () => {
         // 连接异常关闭会自动重连
         window.console.error('mqtt close,')
-        this.emit('onStatus', {
-            status: 'close',
-        })
     }
 
     _onError = (error) => {
