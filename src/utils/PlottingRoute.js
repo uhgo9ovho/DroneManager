@@ -70,6 +70,8 @@ export function DronePlottingRoute(map, mouseTool, AMap) {
         drawPolygon()
     }
     function removeAll() {
+        map.remove(polygon)
+        map.remove(polyline)
         closeEdit()
         mouseTool.close(true)
     }

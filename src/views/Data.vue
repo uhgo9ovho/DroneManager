@@ -146,6 +146,7 @@ export default {
       this.checked = false
     },
     handleClick(tab) {
+      this.searchText = '';
       this.currentTab = tab.name
     },
     addAndEditTask() {

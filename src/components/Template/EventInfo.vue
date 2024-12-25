@@ -1,7 +1,12 @@
 <template>
   <div class="table-name-info">
     <div class="info-left">
-      <img :src="'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + row.identifyPhoto" alt="" />
+      <img
+        :src="
+          'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + row.identifyPhoto
+        "
+        alt=""
+      />
     </div>
     <div class="info-right">
       <div class="task-name">{{ row.warnName }}</div>
@@ -81,8 +86,8 @@ export default {
     border-radius: 8px;
     margin-right: 18px;
     img {
-      width: 100%;
-      height: 100%;
+      width: 48px;
+      height: 48px;
       border-radius: 8px;
     }
   }

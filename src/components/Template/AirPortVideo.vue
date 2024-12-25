@@ -6,7 +6,8 @@
   >
     <div class="wrap wrap_window">
       <div :style="{ width: '100%', height: '100%' }">
-        <video id="flv-player" controls autoplay style="width: 100%; height: 100%;"></video>
+        <!-- <video id="flv-player" controls autoplay style="width: 100%; height: 100%;"></video> -->
+        <div id="J_prismPlayer3"></div>
       </div>
     </div>
   </div>
@@ -38,15 +39,15 @@ export default {
   watch: {},
   mounted() {
     this.$nextTick(() => {
-      // this.initPlayer();
-      this.flvPlayerFn()
+      this.initPlayer();
+      // this.flvPlayerFn()
     });
   },
   destroyed() {
-    // player.dispose();
-    if (flvPlayer) {
-      flvPlayer.destroy();
-    }
+    player.dispose();
+    // if (flvPlayer) {
+    //   flvPlayer.destroy();
+    // }
   },
   methods: {
     changeVideo() {
@@ -61,7 +62,7 @@ export default {
           width: "100%",
           height: "100%",
           source:
-            "http://8.136.97.59:8080/wrjFlyDock/7CTDLCE00A6Y68&videoId=7CTDLCE00A6Y68-165-0-7.flv",
+            "artc://drone.szyfu.com/wrjFlyDock/7CTDL9K00A0153",
           // rtsFallbackSource: "https://drone.szyfu.com/wrjFly/7CTDLCE00A6Y68.flv",
           autoplay: true,
           mute: true,

@@ -21,6 +21,15 @@
               placeholder="请输入任务名称"
             ></el-input>
           </el-form-item>
+          <el-form-item label="任务类型" prop="taskType">
+            <el-radio-group v-model="ruleForm.taskType" @input="changeType">
+              <el-radio-button label="拍照"></el-radio-button>
+              <el-radio-button label="直播"></el-radio-button>
+              <el-radio-button label="全景"></el-radio-button>
+              <el-radio-button label="三维"></el-radio-button>
+              <el-radio-button label="正射"></el-radio-button>
+            </el-radio-group>
+          </el-form-item>
           <el-form-item label="设置航线">
             <div class="date-type-switch">
               <div class="type-switch">
@@ -39,17 +48,9 @@
               </div>
             </div>
           </el-form-item>
-          <el-form-item label="任务类型" prop="taskType">
-            <el-radio-group v-model="ruleForm.taskType" @input="changeType">
-              <el-radio-button label="拍照"></el-radio-button>
-              <el-radio-button label="直播"></el-radio-button>
-              <el-radio-button label="全景"></el-radio-button>
-              <el-radio-button label="三维"></el-radio-button>
-              <el-radio-button label="正射"></el-radio-button>
-            </el-radio-group>
-          </el-form-item>
           <el-form-item label="航线文件" prop="airLine" v-if="isImport">
             <el-upload
+              ref="upload"
               class="upload-demo"
               :action="uploadUrl"
               :headers="headers"
@@ -148,11 +149,9 @@ export default {
           { required: true, message: "请选择任务类型", trigger: "change" },
         ],
         airLine: [
-          { required: true,validator: this.validatePass, trigger: "change" }
+          { required: true, validator: this.validatePass, trigger: "change" },
         ],
-        date: [
-          { required: true,validator: validatePass2, trigger: "change" }
-        ],
+        date: [{ required: true, validator: validatePass2, trigger: "change" }],
       },
     };
   },
@@ -173,7 +172,10 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('changeStatus', ['CHANGE_TASKTYPE_STATUS']),
+    ...mapMutations("changeStatus", ["CHANGE_TASKTYPE_STATUS"]),
+    clearFilesFn() {
+      this.$refs.upload.clearFiles();
+    },
     showImport() {
       this.isImport = true;
       this.$emit("changeDownContentShow", false);
@@ -252,7 +254,9 @@ export default {
             taskAddress: "陕西省咸阳市",
             schedulingType: this.inspectionValue,
             timesType: this.frequencyValue,
-            airlineNumber: this.isImport ? this.airlineNumber : this.airlineList.length, //航线数量
+            airlineNumber: this.isImport
+              ? this.airlineNumber
+              : this.airlineList.length, //航线数量
             startTime: this.starttime,
             endTime: this.endtime,
             dateArrays: this.valArr,
@@ -262,10 +266,10 @@ export default {
             orgId: localStorage.getItem("org_id"),
           };
           if (!params.timesType) delete params["dateArrays"];
-          if(params.lineTaskType == 1) {
-            delete params['wrjAirlineFiles']
+          if (params.lineTaskType == 1) {
+            delete params["wrjAirlineFiles"];
           } else {
-            delete params['lineFilecache']
+            delete params["lineFilecache"];
           }
           addAndEditTask(params)
             .then((res) => {

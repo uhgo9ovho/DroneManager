@@ -78,6 +78,17 @@ export default {
   mounted() {
     this.getDeviceInfo();
   },
+  watch: {
+    isShow(val) {
+      if (val) {
+        //true是绘制航线
+        this.$refs.createTask.clearFilesFn();
+      } else {
+        //false是上传航线
+        this.$refs.AMAP.removePolyline();
+      }
+    },
+  },
   methods: {
     ...mapMutations("changeStatus", ["CHANGE_DROC_STATUS"]),
     changeDownContentShow(flag) {

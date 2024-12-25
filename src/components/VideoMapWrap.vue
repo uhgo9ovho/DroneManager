@@ -12,7 +12,7 @@
 
     <!-- 小 div 1，点击后与全屏 div 交换 -->
     <div class="small-div small-div-1" @click="handleClick(0)">
-      <component :is="smallComponent[0]"  :mode_code="mode_code" />
+      <component :is="smallComponent[0]" :mode_code="mode_code" />
     </div>
 
     <!-- 小 div 2，点击后与全屏 div 交换 -->
@@ -212,8 +212,7 @@
     </el-popconfirm>
     <!-- 控制无人机操作界面 -->
     <!-- <div> -->
-    <div>
-    <!-- <div v-if="showRemote"> -->
+    <div v-if="showRemote">
       <FlyRemote
         @onMouseUp="onMouseUp"
         @onMouseDown="onMouseDown"
@@ -241,8 +240,8 @@ import {
   enterDRCAPI,
   authorityAPI,
   exitDRCAPI,
-  
 } from "@/api/user.js";
+import { getStreamAPI } from "@/api/droneControl.js";
 import { airPostAPI, getPlotAPI } from "@/api/TaskManager.js";
 import { returnHomeAPI } from "@/api/droneControl.js";
 import { UranusMqtt } from "@/utils/mqtt";
@@ -322,7 +321,7 @@ export default {
       latitudeLine: 0, //无人机经纬度
       longitudeLine: 0, //无人机经纬度
       payloadIndex: "",
-      cameraModel: "-"
+      cameraModel: "-",
     };
   },
   components: {
@@ -364,7 +363,7 @@ export default {
         if (host) {
           this.payloadIndex = host.payload[0]?.payload_index;
           console.log(this.payloadIndex);
-          
+
           this.latitudeLine = host.latitude;
           this.longitudeLine = host.longitude;
           this.tempRainfall =
@@ -410,14 +409,16 @@ export default {
           host.drone_charge_state &&
           host.drone_charge_state.capacity_percent
         ) {
-          this.tempCapacityPercent =
-            host.drone_charge_state.capacity_percent;
+          this.tempCapacityPercent = host.drone_charge_state.capacity_percent;
         }
       } else if (val.biz_code === "control_source_change") {
         // Handle the event when control source changes
         console.log("Control source changed");
       }
     },
+  },
+  created() {
+    this.getStreamURL()
   },
   mounted() {
     this.getEQToken();
@@ -434,6 +435,11 @@ export default {
       "getMqttState",
       "getDeviceSN",
     ]),
+    getStreamURL() {
+      getStreamAPI().then((res) => {
+        console.log(res);
+      });
+    },
     droneEmergencyStop() {
       this.handleEmergencyStop();
     },
@@ -556,9 +562,7 @@ export default {
               this.unsubscribe = unsubscribe;
               this.getToicpSubPub(topic);
               //抢夺控制权
-              authorityAPI({}, this.deviceSN).then((res) => {
-
-              });
+              authorityAPI({}, this.deviceSN).then((res) => {});
             } else {
               this.$message.error(res.message || res.msg);
             }

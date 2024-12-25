@@ -142,3 +142,13 @@ export const switchStreamAPI = (params) => {
         data: params,
     })
 }
+
+/**
+ * 获取无人机视频流地址
+ */
+export const getStreamAPI = () => {
+    return request({
+        url: `/wurenji/liveStream/getLiveStreamInfo?orgId=${localStorage.getItem('org_id')}`,
+        method: 'get',
+    })
+}

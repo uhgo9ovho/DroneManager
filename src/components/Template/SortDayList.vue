@@ -38,7 +38,7 @@
                     <div
                       class="task-card3"
                       @click="addAirBtn(item)"
-                      v-if="isShowAddBtn(item.time)"
+                      v-if="dateSHowBtn && isShowAddBtn(item.time)"
                     >
                       <div class="icon-add">+</div>
                     </div>
@@ -166,6 +166,12 @@ export default {
         }
       };
     },
+    dateSHowBtn() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // 设置时间为当天的0点
+      const currentDateObj = new Date(this.currentDate.replace(/\//g, '-')); // 将 YYYY/MM/DD 转换为日期对象
+      return currentDateObj >= today; // 比较日期对象
+    }
   },
   watch: {
     sortList(arr) {
