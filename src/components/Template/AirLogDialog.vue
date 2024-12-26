@@ -105,7 +105,7 @@
                 </div>
                 <div>
                   <span>
-                    <span style="color: red">0</span>
+                    <span style="color: red">{{ warnNumber }}</span>
                     <span class="unit">&nbsp;个</span>
                   </span>
                   <div>问题照片数</div>
@@ -225,7 +225,8 @@ export default {
       ],
       videoOptions: [],
       isShowVideo: false,
-      videoUrl: ""
+      videoUrl: "",
+      warnNumber: 0
     };
   },
   filters: {
@@ -418,6 +419,8 @@ export default {
       this.imgOptions = filterImgArr.map((item) => {
         return {
           url:
+            "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey + '?x-oss-process=style/200w',
+          originUrl:
             "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
           createTime: item.createTime,
           lat: item.lat,
@@ -427,6 +430,7 @@ export default {
           name: item.fileName,
         };
       });
+      this.warnNumber = this.imgOptions.filter((item) => item.warnId).length;
       this.videoOptions = videoFilterArr.map((item) => {
         return {
           url:
@@ -443,9 +447,8 @@ export default {
       this.vedioVisible = false;
     },
     previewBtn(item) {
-      console.log(item, "aaa");
       this.resultId = item.resultId;
-      this.currentUrl = item.url;
+      this.currentUrl = item.originUrl;
       this.lon = item.lon;
       this.lat = item.lat;
       this.preview = true;

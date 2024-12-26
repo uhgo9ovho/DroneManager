@@ -349,10 +349,7 @@ export default {
       .item {
         width: 61px;
         display: flex;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
         flex-direction: column;
-        -webkit-box-align: start;
         align-items: flex-start;
         margin-top: 0px;
 
@@ -365,12 +362,8 @@ export default {
         }
 
         .data-wrapper {
-          display: flex;
-          //justify-content: center;
-          align-items: center;
           width: 100%;
           height: 6px;
-          margin-left: -30px;
 
           .data {
             font-weight: 400;
@@ -404,7 +397,6 @@ export default {
 
         white-space: nowrap;
         text-align: left;
-        margin-left: -30px;
       }
     }
 
@@ -440,7 +432,6 @@ export default {
 
           white-space: nowrap;
           text-align: left;
-          margin-left: -30px;
 
         }
       }
@@ -478,7 +469,6 @@ export default {
 
           white-space: nowrap;
           text-align: left;
-          margin-left: -30px;
         }
       }
 
@@ -509,7 +499,6 @@ export default {
 
           white-space: nowrap;
           text-align: left;
-          margin-left: -30px;
         }
       }
     }

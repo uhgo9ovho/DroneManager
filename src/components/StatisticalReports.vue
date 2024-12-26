@@ -102,14 +102,14 @@ export default {
   },
   methods: {
     detailsBtn(row) {
-      console.log(row)
-      this.$router.push({
-        path: '/WordPreview',
-        query: {
-          dateTime: row.dateTime,
-          tableType: this.reportParams.tableType
-        }
-      })
+      // this.$router.push({
+      //   path: '/WordPreview',
+      //   query: {
+      //     dateTime: row.dateTime,
+      //     tableType: this.reportParams.tableType
+      //   }
+      // })
+      this.$emit('changeLookUp',row.dateTime, this.reportParams.tableType)
     },
 
     //获取报告列表

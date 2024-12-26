@@ -1,11 +1,15 @@
 <template>
-  <div class="word-preview-container" v-loading="loading">
+  <div
+    class="word-preview-container"
+    id="word-preview-container"
+    v-loading="loading"
+  >
     <div class="word-preview" v-loading="loading">
       <div id="content">
         <!-- 标题部分 -->
         <div class="title-section">
-          <h1>{{ title }}</h1>
-          <h2>{{ subtitle }}</h2>
+          <div class="title">{{ title }}</div>
+          <div class="subtitle">{{ subtitle }}</div>
           <p class="date">日期：{{ report.reportTime }}</p>
         </div>
 
@@ -17,9 +21,9 @@
         <!-- 总体情况 -->
         <div class="section">
           <h2>一、总体情况</h2>
-          <p v-for="(paragraph, index) in overall" :key="'overall-' + index">
+          <div v-for="(paragraph, index) in overall" :key="'overall-' + index">
             {{ paragraph }}
-          </p>
+          </div>
         </div>
 
         <!-- 具体数据情况 -->
@@ -48,6 +52,7 @@
               <img
                 v-if="chartImage"
                 :src="chartImage"
+                id="img"
                 alt="Chart Image"
                 style="width: 100%; height: auto"
               />
@@ -195,31 +200,7 @@
                 </div>
               </div>
             </div>
-            <!--          <div class="orthoList">-->
-            <!--            <h3>模型详情</h3>-->
-            <!--          </div>-->
           </div>
-          <!--        <div-->
-          <!--          class="attachment"-->
-          <!--          v-for="(attachment, index) in report.attachments"-->
-          <!--          :key="'attachment-' + index"-->
-          <!--        >-->
-          <!--          <h3>{{ attachment.title }}</h3>-->
-          <!--          <ReportTable-->
-          <!--            :columns="attachment.table.columns"-->
-          <!--            :rows="attachment.table.rows"-->
-          <!--          />-->
-          <!--          <div class="image-section">-->
-          <!--            <img-->
-          <!--              :src="attachment.image"-->
-          <!--              width="400"-->
-          <!--            />-->
-          <!--            <img-->
-          <!--              :src="attachment.imageMap"-->
-          <!--              width="400"-->
-          <!--            />-->
-          <!--          </div>-->
-          <!--        </div>-->
         </div>
       </div>
 
@@ -241,6 +222,14 @@
           v-if="showBtn"
           >分享
         </el-button>
+        <el-button
+          type="primary"
+          round
+          @click="closeReport"
+          v-if="showBtn"
+          style="background-color: #000; color: #fff; border-color: #000"
+          >关闭
+        </el-button>
       </div>
     </div>
   </div>
@@ -251,14 +240,19 @@ import ReportTable from "@/components/ReportTable.vue";
 import ReportTable1 from "@/components/ReportTable1.vue";
 import ReportTable2 from "@/components/ReportTable2.vue";
 import htmlDocx from "html-docx-js/dist/html-docx";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import html2pdf from "html2pdf.js";
 import photo from "../assets/images/login-background0.jpg";
 import { getDayReportAPI, getWeekReportAPI } from "@/api/index.js";
 import PieChart from "@/components/PieChart.vue";
 import axios from "axios";
 export default {
   name: "App",
+  props: {
+    itemRow: {
+      type: Object,
+      default: null,
+    },
+  },
   components: { ReportTable, ReportTable1, ReportTable2, PieChart },
   data() {
     return {
@@ -267,7 +261,6 @@ export default {
       chartImage: null,
       loading: false,
       title: "城市空天智慧管理平台",
-      subtitle: "无人机巡检日报",
       description:
         "本报告根据日常无人机巡检工作包括使用人员提交任务、无人机执行任务、数据生产情况等进行统计汇总。",
       report: {
@@ -335,7 +328,7 @@ export default {
             longitude: 108.98489432310971,
           },
           {
-            problemName: "1206-0002-裸土未覆盖",
+            problemName: "1206-0002-裸土未覆���",
             foundTime: "2024-12-06 11:17:46",
             foundLocation: "陕西省西安市未央区谭家街道仁惠路",
             photoDetail: "system/1733455066051.png",
@@ -420,7 +413,9 @@ export default {
       this.chartImage = base64;
       this.isPieChartShow = false;
     },
-
+    closeReport() {
+      this.$emit("closeLookUp");
+    },
     buildTianDiTuImageUrl(latitude, longitude) {
       const baseUrl = "http://api.tianditu.gov.cn/staticimage";
       const params = {
@@ -478,55 +473,6 @@ export default {
         .catch((err) => {});
     },
 
-    async exportFullScreenPdf() {
-      try {
-        // 目标 HTML 元素
-        const element = document.getElementById("content");
-        if (!element) {
-          console.error("未找到目标 HTML 元素！");
-          return;
-        }
-
-        // 使用 html2canvas 截图整个元素
-        const canvas = await html2canvas(element, {
-          scale: 3, // 提高分辨率
-          useCORS: true, // 支持跨域图片
-          imageTimeout: 5000, // 延长图片加载超时时间
-        });
-
-        // 获取图片数据
-        const imgData = canvas.toDataURL("image/png");
-
-        // 创建 PDF
-        const pdf = new jsPDF("p", "mm", "a4");
-
-        // 计算 PDF 尺寸
-        const pdfWidth = pdf.internal.pageSize.getWidth(); // A4宽度
-        const pdfHeight = pdf.internal.pageSize.getHeight(); // A4高度
-
-        // 图片实际显示高度
-        const imgWidth = pdfWidth;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-        // 分页渲染
-        let position = 0;
-        let heightLeft = imgHeight;
-
-        while (heightLeft > 0) {
-          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-          heightLeft -= pdfHeight;
-          if (heightLeft > 0) {
-            pdf.addPage();
-            position = -heightLeft; // 移动到下一页顶部
-          }
-        }
-
-        // 下载 PDF
-        pdf.save("无人机巡检日报.pdf");
-      } catch (error) {
-        console.error("导出 PDF 出错：", error);
-      }
-    },
     downloadAsWord() {
       // 选择要导出的 HTML 部分
       const content = document.getElementById("content").innerHTML;
@@ -587,25 +533,46 @@ export default {
       // 创建文件下载链接
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = this.report.subtitle + "无人机巡检日报.docx";
+      link.download = this.subtitle + ".docx";
       link.click();
       URL.revokeObjectURL(link.href);
     },
 
     ratingReport() {
-      const printHTML = document.querySelector("#content").innerHTML;
-      // 将打印的区域赋值，进行打印
-      window.document.body.innerHTML = printHTML;
-      window.print(); // 调用window打印方法
-      window.location.reload(); // 打印完成后重新加载页面
+      // const printHTML = document.querySelector("#content").innerHTML;
+      // // 将打印的区域赋值，进行打印
+      // window.document.body.innerHTML = printHTML;
+      // window.print(); // 调用window打印方法
+      // window.location.reload(); // 打印完成后重新加载页面
+
+      // 获取你要转换为 PDF 的 HTML 元素
+      const element = document.getElementById("content");
+      // 自定义样式，改变PDF样式
+      const opt = {
+        margin: 1, // 页面边距
+        filename: `${this.dateTime}${
+          this.tableType == 1 ? "无人机巡检日报" : "无人机巡检周报"
+        }.pdf`, // PDF 文件名
+        image: { type: "jpeg", quality: 0.98 }, // 图像格式
+        pagebreak: {
+          mode: ["css", "legacy"],
+        },
+        html2canvas: {
+          scale: 4, // 图像的分辨率，可以提升质量
+        },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }, // PDF 页面尺寸和方向
+      };
+      console.log(opt);
+      // 创建 PDF
+      html2pdf().from(element).set(opt).save();
     },
     shareReport() {
       // 获取 localStorage 中的参数
       const localParam = localStorage.getItem("org_id");
 
       // 构造分享链接
-      const currentUrl = window.location.href;
-      const shareUrl = `${currentUrl}&org_id=${encodeURIComponent(
+      const currentUrl = this.getBaseUrl(window.location.href) + "/WordPreview";
+      const shareUrl = `${currentUrl}?org_id=${encodeURIComponent(
         localParam
       )}&begin_date=${this.begin_date}&tableType=${this.tableType}&end_date=${
         this.end_date
@@ -632,9 +599,17 @@ export default {
         end_date: urlParams.get("end_date"),
       };
     },
+    getBaseUrl(url) {
+      return url.match(/^(https?:\/\/[^\/]+)/)[0];
+      // 或者使用 substring
+      // return url.substring(0, url.indexOf('/', 8));
+    },
   },
 
   computed: {
+    subtitle() {
+      return this.tableType == 1 ? "无人机巡检日报" : "无人机巡检周报";
+    },
     shouldShowDiv() {
       // 检查三个列表是否都为空
       if (
@@ -784,7 +759,9 @@ export default {
       if (this.getHrefInfo().tableType == 1) {
         axios({
           method: "get",
-          url: `${process.env.VUE_APP_BASE_API}/wurenji/report/getDayReport?orgId=${
+          url: `${
+            process.env.VUE_APP_BASE_API
+          }/wurenji/report/getDayReport?orgId=${
             that.getHrefInfo().org_id
           }&begin_date=${that.getHrefInfo().begin_date}`,
           headers: {
@@ -800,7 +777,9 @@ export default {
       } else {
         axios({
           method: "get",
-          url: `${process.env.VUE_APP_BASE_API}/wurenji/report/getWeekReport?orgId=${
+          url: `${
+            process.env.VUE_APP_BASE_API
+          }/wurenji/report/getWeekReport?orgId=${
             that.getHrefInfo().org_id
           }&begin_date=${that.getHrefInfo().begin_date}&end_date=${
             that.getHrefInfo().end_date
@@ -818,12 +797,14 @@ export default {
       }
     } else {
       // 正常进入页面的逻辑
-      this.dateTime = this.$route.query.dateTime;
-      this.tableType = this.$route.query.tableType;
-      if (this.tableType == 1) {
-        this.getDayReport();
-      } else if (this.tableType == 2) {
-        this.getWeekReport();
+      if (this.itemRow) {
+        this.dateTime = this.itemRow.dateTime;
+        this.tableType = this.itemRow.tableType;
+        if (this.tableType == 1) {
+          this.getDayReport();
+        } else if (this.tableType == 2) {
+          this.getWeekReport();
+        }
       }
     }
   },
@@ -857,13 +838,14 @@ export default {
   align-items: center;
   justify-content: center;
   min-height: 100vh; /* 确保容器高度覆盖整个视口 */
-  background-color: #f2f2f2; /* 淡灰色背景 */
+  // background-color: #f2f2f2; /* 淡灰色背景 */
   //padding: 20px;
 }
 
 .word-preview {
   position: relative;
-
+  height: 100vh;
+  overflow: auto;
   width: 40%; /* 宽度占屏幕的40% */
   min-width: 760px; /* 最小宽度为760px */
   max-width: 1200px; /* 限制最大宽度，防止超大屏幕下内容过宽 */
@@ -879,14 +861,14 @@ export default {
   }
 }
 
-.title-section h1 {
+.title-section .title {
   text-align: center;
   color: red;
   font-size: 32px;
   font-weight: bold;
 }
 
-.title-section h2 {
+.title-section .subtitle {
   text-align: center;
   color: red;
   font-size: 32px;

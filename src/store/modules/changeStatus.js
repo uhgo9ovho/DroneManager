@@ -1,5 +1,6 @@
 
 import { getAirLineAPI } from '@/api/TaskManager';
+import { Message } from 'element-ui';
 const state = {
     downloadStatus: false,
     isDrawText: "",
@@ -33,10 +34,9 @@ const mutations = {
                     const pointsArr = item.drawLineInfo.pointsList.map(it => [it.lon, it.lat])
                     state.pointsList.push(pointsArr)
                 })
-                
-                // state.pointsList = res.airlineList[0].drawLineInfo.pointsList.map(item => [item.lon, item.lat]);
-
-                console.log(state.pointsList);
+            } else {
+                Message.error(res.msg);
+                state.isDrawText = "取消";
             }
         })
 

@@ -257,6 +257,7 @@ export default {
               console.log(res);
               const resUrl = res.url;
               if (res.code == 200) {
+                this.$message.success('上传成功,请稍后');
                 //上传成功
                 const params = {
                   warnName: this.currentName,
@@ -281,6 +282,8 @@ export default {
                 addWarningAPI(params).then(res => {
                   if(res.code === 200) {
                     this.$message.success('问题上报成功');
+                  } else {
+                    this.$message.error(res.msg);
                   }
                 });
               }
@@ -299,11 +302,11 @@ export default {
     initMap() {
       let that = this;
       window._AMapSecurityConfig = {
-        securityJsCode: "f145984ab52478cebc55714607c75fe2",
+        securityJsCode: "a849215e9c2d7b24f79e9f0032b1726d",
       };
       AMapLoader.load({
         // 高德开发者密钥 ：平台申请
-        key: "49ff50358471485520abb2c43a08faaa",
+        key: "60a7b380499a4ebc6f8c004ec6f303e1",
         // 高德API版本: 2.0
         version: "2.0",
         // 加载高德内置插件

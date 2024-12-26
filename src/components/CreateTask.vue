@@ -172,7 +172,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations("changeStatus", ["CHANGE_TASKTYPE_STATUS"]),
+    ...mapMutations("changeStatus", ["CHANGE_TASKTYPE_STATUS", "CHANGE_DROC_STATUS"]),
     clearFilesFn() {
       this.$refs.upload.clearFiles();
     },
@@ -276,14 +276,17 @@ export default {
               if (res.code === 200) {
                 this.$message.success(res.msg);
                 this.loading = false;
+                this.CHANGE_DROC_STATUS("取消");
                 this.outBtn();
               } else {
                 this.loading = false;
                 this.$message.error(res.msg);
+                this.CHANGE_DROC_STATUS("取消");
               }
             })
             .catch((err) => {
               this.loading = false;
+              this.CHANGE_DROC_STATUS("取消");
             });
         } else {
           console.log("error submit!!");

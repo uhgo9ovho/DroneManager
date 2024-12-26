@@ -5,28 +5,9 @@
         <el-tab-pane label="预警事件" name="warningEvent"></el-tab-pane>
         <el-tab-pane label="统计报告" name="statisticalReports"></el-tab-pane>
       </el-tabs>
-      <div class="operate-box">
-        <div
-          class="serach-box"
-          :class="{ 'lang-search-box': checked }"
-        >
-          <el-input
-            v-if="currentTab == 'warningEvent'"
-            prefix-icon="el-icon-search"
-            :placeholder="checkedTip"
-            @focus="focus"
-            @blur="blur"
-            @input="inputChange"
-            v-model="searchText"
-            clearable
-          ></el-input>
-        </div>
-      </div>
-    </div>
-    <div>
       <div class="report-selector" v-if="currentTab == 'statisticalReports'">
         <!--        <div class="tab-container">-->
-        <el-tabs v-model="activeTab" @tab-click="handleTabClick" >
+        <el-tabs v-model="activeTab" @tab-click="handleTabClick">
           <el-tab-pane label="日报" name="daily"></el-tab-pane>
           <el-tab-pane label="周报" name="weekly"></el-tab-pane>
         </el-tabs>
@@ -42,124 +23,150 @@
           @change="handleDateRangeChange"
         ></el-date-picker>
       </div>
+      <div class="operate-box" v-if="currentTab == 'warningEvent'">
+        <div class="serach-box" :class="{ 'lang-search-box': checked }">
+          <el-input
+            prefix-icon="el-icon-search"
+            :placeholder="checkedTip"
+            @focus="focus"
+            @blur="blur"
+            @input="inputChange"
+            v-model="searchText"
+            clearable
+          ></el-input>
+        </div>
+      </div>
     </div>
+    <div></div>
     <div class="task-list-grid" v-if="currentTab == 'warningEvent'">
       <warning-event ref="warningRef"></warning-event>
     </div>
     <div class="task-list-grid" v-else :key="forceRerender">
-      <StatisticalReports :reportParams="params"></StatisticalReports>
+      <StatisticalReports @changeLookUp="changeLookUp" :reportParams="params"></StatisticalReports>
+    </div>
+    <div class="page-wrap" v-if="showLookUp">
+      <WordPreviewVue @closeLookUp="closeLookUp" :itemRow="itemRow"></WordPreviewVue>
     </div>
   </div>
 </template>
 
 <script>
-import WarningEvent from '../components/WarningEvent.vue'
-import StatisticalReports from '../components/StatisticalReports.vue'
-
+import WarningEvent from "../components/WarningEvent.vue";
+import StatisticalReports from "../components/StatisticalReports.vue";
+import WordPreviewVue from "./WordPreview.vue";
 export default {
-  name: 'Flight',
+  name: "Flight",
   data() {
     return {
-      activeName: 'warningEvent',
+      itemRow: null,
+      showLookUp: false,
+      activeName: "warningEvent",
       checked: false,
-      searchText: '',
+      searchText: "",
       tableList: [
         {
-          taskName: '【全景】比亚迪一期',
-          airPort: '西安-周至',
-          creater: '侯哥哥',
-          status: '待执行',
+          taskName: "【全景】比亚迪一期",
+          airPort: "西安-周至",
+          creater: "侯哥哥",
+          status: "待执行",
           round_all: 5,
           round_complete: 2,
-          ticket_create_time: '2024-08-01 11:16:04',
+          ticket_create_time: "2024-08-01 11:16:04",
           airLine: [
             {
-              lineName: '【全景】比亚迪一期',
-              lineStatus: '待执行'
+              lineName: "【全景】比亚迪一期",
+              lineStatus: "待执行",
             },
             {
-              lineName: '【全景】比亚迪二期',
-              lineStatus: '已执行'
+              lineName: "【全景】比亚迪二期",
+              lineStatus: "已执行",
             },
             {
-              lineName: '【全景】比亚迪三期',
-              lineStatus: '执行失败'
-            }
+              lineName: "【全景】比亚迪三期",
+              lineStatus: "执行失败",
+            },
           ],
-          cycle_detail: '周期循环，每1周四执行,生效日期2024-08-01'
-        }
+          cycle_detail: "周期循环，每1周四执行,生效日期2024-08-01",
+        },
       ],
-      currentTab: 'warningEvent',
-      activeTab: 'daily', // 默认显示日报
+      currentTab: "warningEvent",
+      activeTab: "daily", // 默认显示日报
       dateRange: [], // 时间范围，初始为空数组，由 el-date-picker 自动填充日期对象
       pickerOptions: {
         shortcuts: [
           {
-            text: '最近28天',
+            text: "最近28天",
             onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(end.getTime() - 3600 * 1000 * 24 * 28)
-              picker.$emit('pick', [start, end])
-            }
-          }
+              const end = new Date();
+              const start = new Date();
+              start.setTime(end.getTime() - 3600 * 1000 * 24 * 28);
+              picker.$emit("pick", [start, end]);
+            },
+          },
         ],
         disabledDate(time) {
-          return time.getTime() > Date.now() // 只禁用未来日期
-        }
+          return time.getTime() > Date.now(); // 只禁用未来日期
+        },
       },
-      forceRerender:null,
-
+      forceRerender: null,
 
       beginTime: null,
       endTime: null,
-      tableType: 1
-    }
+      tableType: 1,
+    };
   },
   created() {
-    this.setDefaultDateRange()
+    this.setDefaultDateRange();
   },
   components: {
     WarningEvent,
-    StatisticalReports
+    StatisticalReports,
+    WordPreviewVue,
   },
   computed: {
     params() {
       return {
         beginTime: this.beginTime,
         endTime: this.endTime,
-        tableType: this.tableType
+        tableType: this.tableType,
       };
     },
     checkedTip() {
       if (this.checked) {
         return "搜索名称";
       }
-      return '搜索'
-    }
+      return "搜索";
+    },
   },
   methods: {
+    closeLookUp() {
+      this.showLookUp = false;
+    },
+    changeLookUp(dateTime, tableType) {
+      this.showLookUp = true;
+      this.itemRow = {dateTime, tableType};
+    },
     focus() {
-      this.checked = true
+      this.checked = true;
     },
     blur() {
-      this.checked = false
+      this.checked = false;
     },
     handleClick(tab) {
-      this.searchText = '';
-      this.currentTab = tab.name
+      this.searchText = "";
+      this.currentTab = tab.name;
     },
     addAndEditTask() {
-      this.$router.push('/openMap')
+      this.$router.push("/openMap");
     },
 
     setDefaultDateRange() {
-      const now = new Date()
-      const start = new Date()
-      start.setTime(now.getTime() - 3600 * 1000 * 24 * 28)
-      this.beginTime = start.getTime()
-      this.endTime = now.getTime()
-      this.dateRange = [start, now] // 直接设置日期对象数组
+      const now = new Date();
+      const start = new Date();
+      start.setTime(now.getTime() - 3600 * 1000 * 24 * 28);
+      this.beginTime = start.getTime();
+      this.endTime = now.getTime();
+      this.dateRange = [start, now]; // 直接设置日期对象数组
     },
     handleTabClick(tab) {
       this.activeTab = tab.name;
@@ -167,57 +174,55 @@ export default {
       this.fetchReportData();
     },
     handleDateRangeChange(value) {
-      this.fetchReportData()
+      this.fetchReportData();
       this.forceRerender = Date.now(); // 使用当前时间戳作为唯一的 key 值
-
     },
     fetchReportData() {
-      let beginTime, endTime
+      let beginTime, endTime;
       if (this.dateRange && this.dateRange.length === 2) {
-        beginTime = this.dateRange[0].getTime()
-        endTime = this.dateRange[1].getTime()
+        beginTime = this.dateRange[0].getTime();
+        endTime = this.dateRange[1].getTime();
 
         // 检查时间跨度是否超过28天
         if ((endTime - beginTime) / (1000 * 60 * 60 * 24) > 28) {
-          return this.$message.error('时间跨度不能超过28天,请选择有效的时间范围')
+          return this.$message.error(
+            "时间跨度不能超过28天,请选择有效的时间范围"
+          );
         }
       } else {
         // 使用默认时间范围
-        const now = new Date()
-        const start = new Date()
-        start.setTime(now.getTime() - 3600 * 1000 * 24 * 28)
-        beginTime = start.getTime()
-        endTime = now.getTime()
+        const now = new Date();
+        const start = new Date();
+        start.setTime(now.getTime() - 3600 * 1000 * 24 * 28);
+        beginTime = start.getTime();
+        endTime = now.getTime();
       }
 
-      const tableType = this.activeTab === 'daily' ? 1 : 2
+      const tableType = this.activeTab === "daily" ? 1 : 2;
 
       const params = {
         beginTime: beginTime,
         endTime: endTime,
-        tableType: tableType
-      }
+        tableType: tableType,
+      };
 
-      this.beginTime=beginTime
-      this.endTime=endTime
-      this.tableType=tableType
-      console.log('接口调用参数:', params)
-
-      },
+      this.beginTime = beginTime;
+      this.endTime = endTime;
+      this.tableType = tableType;
+      console.log("接口调用参数:", params);
+    },
     inputChange(val) {
-      if(this.activeName === 'warningEvent') {
+      if (this.activeName === "warningEvent") {
         //搜索预警事件名称
         this.$refs.warningRef.searchWarningName(val);
       } else {
-
       }
-    }
-
-  }
-}
+    },
+  },
+};
 
 function formatDateToTimestamp(date) {
-  return [date.getTime()]
+  return [date.getTime()];
 }
 </script>
 
@@ -239,18 +244,19 @@ function formatDateToTimestamp(date) {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 20px;
-
-    .el-tabs__nav-wrap
-    .el-tabs__nav-scroll
-    .el-tabs__nav
-    .el-tabs__active-bar {
+    align-items: center;
+    .el-tabs__header {
+      margin-bottom: 0;
+      margin-right: 20px;
+    }
+    .el-tabs__nav-wrap .el-tabs__nav-scroll .el-tabs__nav .el-tabs__active-bar {
       height: 32px;
       width: 72px;
       transform: translateX(72px);
       background: #0271e3;
       border-radius: 16px;
       z-index: 0;
+      line-height: 32px;
     }
 
     .is-active {
@@ -345,6 +351,20 @@ function formatDateToTimestamp(date) {
     .is-active {
       color: #000;
     }
+  }
+  .page-wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: fixed;
+    overflow: auto;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(29, 29, 31, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 1001;
   }
 }
 </style>
