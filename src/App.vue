@@ -11,6 +11,9 @@ export default {
   computed: {
     ...mapState('app', ['addFilter'])
   },
+  mounted() {
+    document.title = localStorage.getItem("platformName") ? localStorage.getItem("platformName") : "城市空天智慧管理平台";
+  },
   metaInfo() {
     return {
       title: this.$store.state.settings.dynamicTitle && this.$store.state.settings.title,

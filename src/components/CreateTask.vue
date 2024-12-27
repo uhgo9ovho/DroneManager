@@ -18,17 +18,55 @@
           <el-form-item label="任务名称" prop="taskName">
             <el-input
               v-model="ruleForm.taskName"
+              class="task-name"
               placeholder="请输入任务名称"
             ></el-input>
           </el-form-item>
           <el-form-item label="任务类型" prop="taskType">
-            <el-radio-group v-model="ruleForm.taskType" @input="changeType">
+            <el-radio-group
+              v-model="ruleForm.taskType"
+              @input="changeType"
+              size="small"
+            >
               <el-radio-button label="拍照"></el-radio-button>
               <el-radio-button label="直播"></el-radio-button>
               <el-radio-button label="全景"></el-radio-button>
               <el-radio-button label="三维"></el-radio-button>
               <el-radio-button label="正射"></el-radio-button>
+              <el-radio-button label="红外"></el-radio-button>
             </el-radio-group>
+          </el-form-item>
+          <el-form-item label="设置参数">
+            <div class="setting-item">
+              <span>飞行高度：</span>
+              <InputNumber
+                :value="ruleForm.height"
+                :min="100"
+                :max="1000"
+                unit="m"
+                @inputChange="handleChangeHeight"
+              ></InputNumber>
+            </div>
+            <div class="setting-item">
+              <span>飞行速度：</span>
+              <InputNumber
+                :value="ruleForm.speed"
+                :min="1"
+                :max="10"
+                unit="m/s"
+                @inputChange="handleChangeHeight"
+              ></InputNumber>
+            </div>
+            <div class="setting-item">
+              <span>飞行角度：</span>
+              <InputNumber
+                :value="ruleForm.angle"
+                :min="0"
+                :max="90"
+                unit="°"
+                @inputChange="handleChangeHeight"
+              ></InputNumber>
+            </div>
           </el-form-item>
           <el-form-item label="设置航线">
             <div class="date-type-switch">
@@ -90,8 +128,12 @@
 import { getToken } from "@/utils/auth";
 import { addAndEditTask } from "@/api/TaskManager.js";
 import { mapState, mapMutations } from "vuex";
+import InputNumber from "@/components/Template/InputNumber.vue";
 export default {
   name: "CreateForm",
+  components: {
+    InputNumber,
+  },
   props: {
     settingInfo: {
       type: String,
@@ -140,6 +182,9 @@ export default {
         taskType: "",
         airLine: "",
         date: this.settingInfo,
+        height: 100,
+        speed: 1,
+        angle: 90,
       },
       rules: {
         taskName: [
@@ -172,9 +217,16 @@ export default {
     },
   },
   methods: {
-    ...mapMutations("changeStatus", ["CHANGE_TASKTYPE_STATUS", "CHANGE_DROC_STATUS"]),
+    ...mapMutations("changeStatus", [
+      "CHANGE_TASKTYPE_STATUS",
+      "CHANGE_DROC_STATUS",
+    ]),
     clearFilesFn() {
       this.$refs.upload.clearFiles();
+    },
+    handleChangeHeight(value) {
+      console.log(value);
+      this.ruleForm.height = value;
     },
     showImport() {
       this.isImport = true;
@@ -345,6 +397,9 @@ export default {
   .form-box {
     margin-top: 20px;
     overflow: auto;
+    .setting-item {
+      margin-bottom: 10px;
+    }
     .date-type-switch {
       .type-switch {
         display: flex;
@@ -389,7 +444,7 @@ export default {
     .el-form-item__label {
       color: #000;
     }
-    .el-input {
+    .task-name {
       width: 304px;
       height: 40px;
       background: #f5f5f5;
@@ -404,9 +459,9 @@ export default {
     }
     .el-radio-group {
       .el-radio-button {
-        width: 60px;
+        width: 50px;
         .el-radio-button__inner {
-          padding: 12px 16px;
+          // padding: 12px 16px;
         }
       }
     }

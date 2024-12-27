@@ -1,23 +1,29 @@
 <template>
   <div class="video-map-wrap">
     <!-- 全屏 div，显示地图或视频 -->
-    <component
-      :is="fullScreenComponent"
-      :longitude="longitude"
-      :latitude="latitude"
-      :mode_code="mode_code"
-      :latitudeLine="latitudeLine"
-      :longitudeLine="longitudeLine"
-    />
+    <KeepAlive>
+      <component
+        :is="fullScreenComponent"
+        :longitude="longitude"
+        :latitude="latitude"
+        :mode_code="mode_code"
+        :latitudeLine="latitudeLine"
+        :longitudeLine="longitudeLine"
+      />
+    </KeepAlive>
 
     <!-- 小 div 1，点击后与全屏 div 交换 -->
     <div class="small-div small-div-1" @click="handleClick(0)">
-      <component :is="smallComponent[0]" :mode_code="mode_code" />
+      <KeepAlive>
+        <component :is="smallComponent[0]" :mode_code="mode_code" />
+      </KeepAlive>
     </div>
 
     <!-- 小 div 2，点击后与全屏 div 交换 -->
     <div class="small-div small-div-2" @click="handleClick(1)">
-      <component :mode_code="mode_code" :is="smallComponent[1]" />
+      <KeepAlive>
+        <component :mode_code="mode_code" :is="smallComponent[1]" />
+      </KeepAlive>
     </div>
 
     <!-- 顶部信息 -->
@@ -241,7 +247,6 @@ import {
   authorityAPI,
   exitDRCAPI,
 } from "@/api/user.js";
-import { getStreamAPI } from "@/api/droneControl.js";
 import { airPostAPI, getPlotAPI } from "@/api/TaskManager.js";
 import { returnHomeAPI } from "@/api/droneControl.js";
 import { UranusMqtt } from "@/utils/mqtt";
@@ -322,6 +327,10 @@ export default {
       longitudeLine: 0, //无人机经纬度
       payloadIndex: "",
       cameraModel: "-",
+      devId: 0,
+      insideStreamUrl: "",
+      outsideStreamUrl: "",
+      droneStreamUrl: "",
     };
   },
   components: {
@@ -417,15 +426,8 @@ export default {
       }
     },
   },
-  created() {
-    this.getStreamURL()
-  },
   mounted() {
     this.getEQToken();
-    // this.ws = new WebSocketClient(
-    //
-    //         `${process.env.VUE_APP_WS_URL}?ws-token=ksjdgbkadbfgadbfg` //本地
-    //       );
     this.getDeviceInfo();
     this.getPlotInfo();
   },
@@ -434,12 +436,8 @@ export default {
       "getToicpSubPub",
       "getMqttState",
       "getDeviceSN",
+      "getOutsideStreamUrl",
     ]),
-    getStreamURL() {
-      getStreamAPI().then((res) => {
-        console.log(res);
-      });
-    },
     droneEmergencyStop() {
       this.handleEmergencyStop();
     },

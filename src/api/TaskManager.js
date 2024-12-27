@@ -245,7 +245,7 @@ export const airLineAPI = (params) => {
  */
 export const dictListAPI = (warn_type) => {
   return request({
-    url: '/system/dict/data/list?dictType=' + warn_type,
+    url: '/system/dict/data/list?dictType=' + warn_type + '&orgId=' + localStorage.getItem('org_id'),
     method: 'get'
   })
 }

@@ -118,9 +118,9 @@ export default {
           top: this.startY,
           width: 0,
           height: 0,
-          fill: "rgba(0, 0, 255, 0.3)",
-          stroke: "blue",
-          strokeWidth: 2,
+          fill: "transparent",
+          stroke: "red",
+          strokeWidth: 1,
           selectable: true, // 允许拖动
           hasControls: true,
         });

@@ -145,10 +145,11 @@ export const switchStreamAPI = (params) => {
 
 /**
  * 获取无人机视频流地址
+ * 设备id
  */
-export const getStreamAPI = () => {
+export const getStreamAPI = (id) => {
     return request({
-        url: `/wurenji/liveStream/getLiveStreamInfo?orgId=${localStorage.getItem('org_id')}`,
+        url: `/crm/device/getDockInfo/${id}`,
         method: 'get',
     })
 }

@@ -2,7 +2,8 @@ const state = {
     statusInfo: {},
     deviceSN: localStorage.getItem('devicesSN') ? localStorage.getItem('devicesSN') : "",
     topic: {},
-    mqttState: null
+    mqttState: null,
+    outsideStreamUrl: ""
 }
 const mutations = {
     GET_DRONE_INFO(state, info) {
@@ -22,6 +23,9 @@ const mutations = {
     },
     GET_MQTT_STATE(state, obj) {
         state.mqttState = obj;
+    },
+    GET_OUTSIDE_STREAM_URL(state, obj) {
+        state.outsideStreamUrl = obj;
     }
 }
 
@@ -38,6 +42,10 @@ const actions = {
     },
     getMqttState({ commit }, obj) {
         commit('GET_MQTT_STATE', obj);
+    },
+    getOutsideStreamUrl({ commit }, obj) {
+        console.log(obj, "obj");
+        commit('GET_OUTSIDE_STREAM_URL', obj);
     }
 }
 

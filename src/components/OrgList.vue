@@ -83,7 +83,9 @@ export default {
     selectOrg(row) {
       this.$store.commit("SET_ORG_ID", row.orgId);
       this.$store.commit("SET_ORG_WORKSPACEID", row.workspaceId);
+      localStorage.setItem("platformName", row.platformName);
       Cookies.set("orgName", row.orgName);
+      document.title = row.platformName;
       this.$router.push({ path: this.redirect || "/" }).catch(() => {});
     },
     getUserInfo() {
