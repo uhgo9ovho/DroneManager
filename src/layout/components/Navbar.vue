@@ -3,7 +3,7 @@
       <div class="logo" >
 <!--        @click="toHome"-->
         <img :src="logoUrl" alt="" style="width: 32px; height: 32px;margin-right: 50px"/>
-        城市空天智慧管理平台
+        {{ platformName }}
       </div>
     <div class="user-info">
       <el-popover placement="top-start" width="370" trigger="click" popper-class="popper-notification">
@@ -41,7 +41,11 @@ export default {
     }
   },
   components: { UserInfo, Notification },
-  computed: {},
+  computed: {
+    platformName() {
+      return localStorage.getItem("platformName");
+    },
+  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
