@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import { airPostAPI, getPlotAPI } from "@/api/TaskManager.js";
+import { getPlotAPI } from "@/api/TaskManager.js";
 import MapContainer from "../components/MapContainer.vue";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
   name: "AirPort",
   data() {
@@ -20,41 +20,36 @@ export default {
       longitude: 0,
       latitude: 0,
       showMap: false,
-      coordinates: null
+      coordinates: null,
     };
   },
   components: {
     MapContainer,
   },
+  computed: {
+    ...mapState("droneStatus", ["airPostInfo"]),
+  },
   methods: {
-    ...mapActions("droneStatus", ["getDeviceSN"]),
+    ...mapActions("droneStatus", ["getDeviceSN", "fetchAirPostInfo"]),
     toVideoMap() {
       this.$router.push("/videoMap");
     },
-    getDeviceInfo() {
+    async getDeviceInfo() {
       this.showMap = false;
-      const params = {
-        orgId: localStorage.getItem("org_id"),
-        deviceType: 1,
-      };
-      airPostAPI(params)
-        .then((res) => {
-          if (res.code === 200) {
-            this.getDeviceSN(res.rows[0].deviceId);
-            let lonlatArr = res.rows[0].location.split(",");
-            this.longitude = +lonlatArr[0];
-            this.latitude = +lonlatArr[1];
-            this.showMap = true;
-            this.getPlotInfo();
-          }
-        })
-        .catch((err) => {
-          this.showMap = false;
-        });
+      if (!this.airPostInfo) {
+        await this.fetchAirPostInfo();
+      }
+      this.getDeviceSN(this.airPostInfo.deviceId);
+      let lonlatArr = this.airPostInfo.location.split(",");
+      this.longitude = +lonlatArr[0];
+      this.latitude = +lonlatArr[1];
+      this.showMap = true;
+      this.getPlotInfo();
+      
     },
     getPlotInfo() {
       getPlotAPI().then((res) => {
-        if(res.code === 200) {
+        if (res.code === 200) {
           this.coordinates = JSON.parse(res.rows[0].coordinates);
         }
       });

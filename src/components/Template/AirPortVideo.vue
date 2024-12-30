@@ -20,7 +20,7 @@ import Aliplayer from "aliyun-aliplayer";
 import FlvJs from "flv.js";
 import "aliyun-aliplayer/build/skins/default/aliplayer-min.css";
 import { getStreamAPI } from "@/api/droneControl.js";
-import { airPostAPI } from "@/api/TaskManager.js";
+import { mapState, mapActions } from "vuex";
 let player = null;
 let flvPlayer = null;
 export default {
@@ -44,6 +44,9 @@ export default {
       videoHeight: "80px",
     };
   },
+  computed: {
+    ...mapState("droneStatus", ["airPostInfo"]),
+  },
   watch: {},
   mounted() {
     this.getOutsideStreamUrl();
@@ -55,25 +58,23 @@ export default {
     // if (flvPlayer) {
     //   flvPlayer.destroy();
     // }
+    if (player) {
+      player.destroy();
+    }
   },
   methods: {
-    getOutsideStreamUrl() {
-      const params = {
-        orgId: localStorage.getItem("org_id"),
-        deviceType: 1,
-      };
-      airPostAPI(params).then((res) => {
-        if (res.code === 200) {
-          let id = res.rows[0].id;
-          getStreamAPI(id).then((result) => {
-            console.log(result, "result");
-            if (result.code === 200) {
-              this.url =
-                "https://jky.szyfu.com:9003" +
-                result.data.dockStream.outsideStream.flv;
-              this.initEasyPlayer();
-            }
-          });
+    ...mapActions("droneStatus", ["fetchAirPostInfo"]),
+    async getOutsideStreamUrl() {
+      if (!this.airPostInfo) {
+        await this.fetchAirPostInfo();
+      }
+      getStreamAPI(this.airPostInfo.id).then((result) => {
+        console.log(result, "result");
+        if (result.code === 200) {
+          this.url =
+            "https://jky.szyfu.com:9003" +
+            result.data.dockStream.outsideStream.flv;
+          this.initEasyPlayer();
         }
       });
     },
@@ -127,12 +128,12 @@ export default {
     },
     initEasyPlayer() {
       // 实例化播放器
-      this.player = new WasmPlayer(null, "Player", this.callbackfun, {
+      player = new WasmPlayer(null, "Player", this.callbackfun, {
         autoplay: true,
       });
+      console.log(player, "this.player");
       // 调用播放
-        this.player.play(this.url, 1);
-      
+      player.play(this.url, 1);
     },
     callbackfun(e) {
       console.log("callbackfun", e);

@@ -1,9 +1,12 @@
+import { airPostAPI } from "@/api/TaskManager.js";
+
 const state = {
     statusInfo: {},
     deviceSN: localStorage.getItem('devicesSN') ? localStorage.getItem('devicesSN') : "",
     topic: {},
     mqttState: null,
-    outsideStreamUrl: ""
+    outsideStreamUrl: "",
+    airPostInfo: null
 }
 const mutations = {
     GET_DRONE_INFO(state, info) {
@@ -26,7 +29,12 @@ const mutations = {
     },
     GET_OUTSIDE_STREAM_URL(state, obj) {
         state.outsideStreamUrl = obj;
-    }
+    },
+    SET_AIR_POST_INFO(state, info) {
+        console.log(info, "info");
+        
+        state.airPostInfo = info;
+    },
 }
 
 const actions = {
@@ -44,8 +52,31 @@ const actions = {
         commit('GET_MQTT_STATE', obj);
     },
     getOutsideStreamUrl({ commit }, obj) {
-        console.log(obj, "obj");
         commit('GET_OUTSIDE_STREAM_URL', obj);
+    },
+    async fetchAirPostInfo({ commit }) {
+        // 添加参数校验
+        const orgId = localStorage.getItem("org_id");
+        if (!orgId) {
+            console.warn('未获取到 orgId，请先登录');
+            return;
+        }
+
+        try {
+            const params = {
+                orgId,
+                deviceType: 1,
+            };
+            const res = await airPostAPI(params);
+            if (res.code === 200) {
+                commit('SET_AIR_POST_INFO', res.rows[0]);
+                console.log(res.rows[0], "res.rows[0]");
+            }
+        } catch (error) {
+            console.error('获取机场信息失败:', error);
+        } finally {
+
+        }
     }
 }
 

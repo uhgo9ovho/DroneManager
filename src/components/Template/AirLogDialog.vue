@@ -73,7 +73,7 @@
                 </div>
                 <div>
                   <span>
-                    {{ row.totalMileage && row.totalMileage.toFixed(1) }}
+                    {{ row.totalMileage && row.totalMileage.toFixed(1) || 0 }}
                     <span class="unit">&nbsp;米</span></span
                   >
                   <div>飞行距离</div>

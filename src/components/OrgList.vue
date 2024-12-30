@@ -36,6 +36,7 @@ import { getDepartmentList } from "@/api/user.js";
 import { getInfo } from "@/api/login.js";
 import Cookies from "js-cookie";
 import { removeToken } from "@/utils/auth";
+import { mapActions } from "vuex";
 export default {
   name: "OrgList",
   data() {
@@ -60,6 +61,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions("droneStatus", ["fetchAirPostInfo"]),
     backLogin() {
       removeToken("Admin-Token");
       localStorage.removeItem("org_id");
@@ -80,12 +82,13 @@ export default {
         }
       });
     },
-    selectOrg(row) {
+    async selectOrg(row) {
       this.$store.commit("SET_ORG_ID", row.orgId);
       this.$store.commit("SET_ORG_WORKSPACEID", row.workspaceId);
       localStorage.setItem("platformName", row.platformName);
       Cookies.set("orgName", row.orgName);
       document.title = row.platformName;
+      await this.fetchAirPostInfo();
       this.$router.push({ path: this.redirect || "/" }).catch(() => {});
     },
     getUserInfo() {

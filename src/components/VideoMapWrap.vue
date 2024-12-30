@@ -247,7 +247,7 @@ import {
   authorityAPI,
   exitDRCAPI,
 } from "@/api/user.js";
-import { airPostAPI, getPlotAPI } from "@/api/TaskManager.js";
+import { getPlotAPI } from "@/api/TaskManager.js";
 import { returnHomeAPI } from "@/api/droneControl.js";
 import { UranusMqtt } from "@/utils/mqtt";
 import Cookies from "js-cookie";
@@ -340,7 +340,7 @@ export default {
     FlyRemote,
   },
   computed: {
-    ...mapState("droneStatus", ["statusInfo", "deviceSN"]),
+    ...mapState("droneStatus", ["statusInfo", "deviceSN", "airPostInfo"]),
     title() {
       return "当前无人控制该设备，是否确认继续申请控制权？";
     },
@@ -430,6 +430,7 @@ export default {
     this.getEQToken();
     this.getDeviceInfo();
     this.getPlotInfo();
+    console.log(this.airPostInfo, "this.airPostInfo");
   },
   methods: {
     ...mapActions("droneStatus", [
@@ -437,6 +438,7 @@ export default {
       "getMqttState",
       "getDeviceSN",
       "getOutsideStreamUrl",
+      "fetchAirPostInfo",
     ]),
     droneEmergencyStop() {
       this.handleEmergencyStop();
@@ -444,21 +446,14 @@ export default {
     cameraModelSwitch(val) {
       this.cameraModel = val;
     },
-    getDeviceInfo() {
-      const params = {
-        orgId: localStorage.getItem("org_id"),
-        deviceType: 1,
-      };
-      airPostAPI(params)
-        .then((res) => {
-          if (res.code === 200) {
-            this.getDeviceSN(res.rows[0].deviceId);
-            let lonlatArr = res.rows[0].location.split(",");
-            this.longitude = +lonlatArr[0];
-            this.latitude = +lonlatArr[1];
-          }
-        })
-        .catch((err) => {});
+    async getDeviceInfo() {
+      if (!this.airPostInfo) {
+        await this.fetchAirPostInfo();
+      }
+      this.getDeviceSN(this.airPostInfo.deviceId);
+      let lonlatArr = this.airPostInfo.location.split(",");
+      this.longitude = +lonlatArr[0];
+      this.latitude = +lonlatArr[1];
     },
     getPlotInfo() {
       getPlotAPI().then((res) => {

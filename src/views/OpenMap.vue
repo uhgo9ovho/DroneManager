@@ -46,8 +46,8 @@
 import CreateTask from "../components/CreateTask.vue";
 import MapContainer from "../components/MapContainer.vue";
 import SettingDate from "../components/SettingDate.vue";
-import { mapState, mapMutations } from "vuex";
-import { airPostAPI, getPlotAPI } from "@/api/TaskManager.js";
+import { mapState, mapMutations, mapActions } from "vuex";
+import { getPlotAPI } from "@/api/TaskManager.js";
 const now = new Date();
 export default {
   name: "OpenMap",
@@ -69,11 +69,12 @@ export default {
       showMap: false,
       longitude: 0,
       latitude: 0,
-      coordinates: null
+      coordinates: null,
     };
   },
   computed: {
     ...mapState("changeStatus", ["isDrawText"]),
+    ...mapState("droneStatus", ["airPostInfo"]),
   },
   mounted() {
     this.getDeviceInfo();
@@ -91,28 +92,21 @@ export default {
   },
   methods: {
     ...mapMutations("changeStatus", ["CHANGE_DROC_STATUS"]),
+    ...mapActions("droneStatus", ["fetchAirPostInfo"]),
     changeDownContentShow(flag) {
       this.isShow = flag;
     },
-    getDeviceInfo() {
+    async getDeviceInfo() {
       this.showMap = false;
-      const params = {
-        orgId: localStorage.getItem("org_id"),
-        deviceType: 1,
-      };
-      airPostAPI(params)
-        .then((res) => {
-          if (res.code === 200) {
-            let lonlatArr = res.rows[0].location.split(",");
-            this.longitude = +lonlatArr[0];
-            this.latitude = +lonlatArr[1];
-            this.showMap = true;
-            this.getPlotInfo()
-          }
-        })
-        .catch((err) => {
-          this.showMap = false;
-        });
+
+      if (!this.airPostInfo) {
+        await this.fetchAirPostInfo();
+      }
+      let lonlatArr = this.airPostInfo.location.split(",");
+      this.longitude = +lonlatArr[0];
+      this.latitude = +lonlatArr[1];
+      this.showMap = true;
+      this.getPlotInfo();
     },
     getPlotInfo() {
       getPlotAPI().then((res) => {

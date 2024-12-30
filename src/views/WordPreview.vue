@@ -2,9 +2,8 @@
   <div
     class="word-preview-container"
     id="word-preview-container"
-    v-loading="loading"
   >
-    <div class="word-preview" v-loading="loading">
+    <div class="word-preview">
       <div id="content">
         <!-- 标题部分 -->
         <div class="title-section">
@@ -264,57 +263,57 @@ export default {
       description:
         "本报告根据日常无人机巡检工作包括使用人员提交任务、无人机执行任务、数据生产情况等进行统计汇总。",
       report: {
-        reportTime: "2024.09.06",
-        deviceNum: 1,
-        sortieNum: 16,
-        totalTime: 203,
-        totalMileage: 102891,
-        questNum: 2,
+        reportTime: "-",
+        deviceNum: 0,
+        sortieNum: 0,
+        totalTime: 0,
+        totalMileage: 0,
+        questNum: 0,
         photoQuestNum: 0, //，照片任务数量为0。
-        panoramaQuestNum: 1, //，全景任务数量为1。
-        orthoQuestNum: 1, //，正射任务数量为1。
+        panoramaQuestNum: 0, //，全景任务数量为1。
+        orthoQuestNum: 0, //，正射任务数量为1。
         threeDQuestNum: 0, //，三维任务数量为0。
-        executeQuestNum: 15, //，执行的任务总数为15。
+        executeQuestNum: 0, //，执行的任务总数为15。
         executePhotoNum: 0, //，执行的照片任务数量为0。
-        executePanoramaQuestNum: 9, //，执行的全景任务数量为9。
-        executeOrthoQuestNum: 6, //，执行的正射任务数量为6。
+        executePanoramaQuestNum: 0, //，执行的全景任务数量为9。
+        executeOrthoQuestNum: 0, //，执行的正射任务数量为6。
         executeThreeDQuestNum: 0, //，执行的三维任务数量为0。
-        executePanoramaPhotoNum: 1052, //，执行的全景照片数量为1052张。
-        findProblemNum: 1611, //，发现的问题总数为1611个。
-        replaceManualNum: 15, //，需要人工替换的数量为15。
-        flightMileage: 18.468104066766603, //，飞行里程（另一种计算方式）为18.468104066766603公里。
-        saveCost: 21179.738875374664, //，节省的成本为21179.738875374664元。
-        reduceCarbon: 4986.388098026983, //，减少的碳排放量为4986.388098026983千克。
+        executePanoramaPhotoNum: 0, //，执行的全景照片数量为1052张。
+        findProblemNum: 0, //，发现的问题总数为1611个。
+        replaceManualNum: 0, //，需要人工替换的数量为15。
+        flightMileage: 0, //，飞行里程（另一种计算方式）为18.468104066766603公里。
+        saveCost: 0, //，节省的成本为21179.738875374664元。
+        reduceCarbon: 0, //，减少的碳排放量为4986.388098026983千克。
         // tasks: ['拍照：8'],
         flyTask: [
           {
             flyLine: "陕西-西安",
             photoNum: 0,
-            panoramaNum: 9,
-            orthoNum: 6,
+            panoramaNum: 0,
+            orthoNum: 0,
             threeDNum: 0,
-            totalNum: 1052,
-            flyTime: 111.55,
-            flyMileage: 18468.104066766602,
+            totalNum: 0,
+            flyTime: 0,
+            flyMileage: 0,
           },
         ],
         quest: {
-          正射: 5,
-          全景: 6,
+          正射: 0,
+          全景: 0,
         },
         problem: [
           {
             flyName: "裸土未覆盖",
-            flyTypeCount: 182,
+            flyTypeCount: 0,
           },
         ],
         productList: [
           {
             productName: "陕西-西安",
             photoCount: 0,
-            panoramaCount: 9,
+            panoramaCount: 0,
             threeDCoun: 0,
-            orthophotoCount: 6,
+            orthophotoCount: 0,
           },
         ],
         problemList: null,
@@ -605,7 +604,6 @@ export default {
       // return url.substring(0, url.indexOf('/', 8));
     },
   },
-
   computed: {
     subtitle() {
       return this.tableType == 1 ? "无人机巡检日报" : "无人机巡检周报";
@@ -755,6 +753,7 @@ export default {
     if (this.getHrefInfo().org_id) {
       let that = this;
       that.showBtn = false;
+      this.tableType = this.getHrefInfo().tableType;
       // 通过分享进入页面的逻辑
       if (this.getHrefInfo().tableType == 1) {
         axios({
