@@ -27,7 +27,7 @@
                 color: changeColor(it.schedulingStatus, it.taskName),
               }"
             >
-              <i class="el-icon-close"></i>
+              <!-- <i class="el-icon-close"></i> -->
               <div class="task-name" :title="it.taskName">
                 {{ it.taskName }}
               </div>

@@ -8,7 +8,7 @@ import { isRelogin } from '@/utils/request'
 import { constantRoutes } from "@/router";
 import Cookies from 'js-cookie';
 NProgress.configure({ showSpinner: false })
-
+console.log(store, "store");
 const whiteList = ['/login', '/register', '/videoMap', '/WordPreview']
 let routeList = constantRoutes.filter((item, index) => {
   return !item.hidden;
@@ -27,8 +27,9 @@ router.beforeEach((to, from, next) => {
   const orgArr = Cookies.get('orgList');
   activePath(path)
   NProgress.start()
+  const orgId = localStorage.getItem("org_id");
   // next()
-  if (getToken()) {
+  if (getToken() && orgId) {
     /* has token*/
     if (to.path === '/login' && !orgArr) {
       next({ path: '/' })

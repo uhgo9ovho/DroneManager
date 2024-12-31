@@ -91,6 +91,9 @@ service.interceptors.response.use(res => {
         store.dispatch('LogOut').then(() => {
           localStorage.removeItem('org_id');
           localStorage.removeItem('workspaceId');
+          localStorage.removeItem("vuex");
+          localStorage.removeItem("platformName");
+          localStorage.removeItem("devicesSN");
           sessionStorage.removeItem('password');
           Cookies.remove('user');
           Cookies.remove('orgName');
@@ -111,7 +114,7 @@ service.interceptors.response.use(res => {
 },
   error => {
     console.log('err' + error)
-    if(error) {
+    if (error) {
       let { message } = error.response.data;
       if (message == "Network Error") {
         message = "后端接口连接异常";

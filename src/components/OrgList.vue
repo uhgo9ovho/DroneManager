@@ -1,6 +1,9 @@
 <template>
   <div class="org">
-    <div class="back-icon el-icon-back" @click="backLogin"></div>
+    <div class="org-box">
+      <div class="back-icon el-icon-back" @click="backLogin"></div>
+      <div class="org-box-title">组织管理</div>
+    </div>
     <div class="title">{{ title }}</div>
     <div class="tip">{{ tip }}</div>
     <div class="un-org" v-if="!hasOrg">
@@ -67,6 +70,9 @@ export default {
       localStorage.removeItem("org_id");
       localStorage.removeItem("workspaceId");
       sessionStorage.removeItem("password");
+      localStorage.removeItem("vuex");
+      localStorage.removeItem("platformName");
+      localStorage.removeItem("devicesSN");
       Cookies.remove("user");
       Cookies.remove("orgList");
       Cookies.remove("orgName");
@@ -115,17 +121,31 @@ export default {
   width: 400px;
   height: 360px;
   padding: 25px 25px 5px 25px;
-  .back-icon {
-    width: 40px;
-    height: 40px;
-    background-color: #fff;
-    border-radius: 50%;
+  .org-box {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    font-size: 24px;
-    cursor: pointer;
+    .org-box-title {
+      font-size: 16px;
+      color: #fff;
+      background-color: #4678ff;
+      border-radius: 10px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .back-icon {
+      width: 40px;
+      height: 40px;
+      background-color: #fff;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      cursor: pointer;
+    }
   }
+
   .title {
     font-weight: bold;
     font-size: 22px;

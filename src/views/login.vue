@@ -249,6 +249,7 @@ export default {
                 this.showOrg = true;
               } else {
                 this.$message.error(res.msg);
+                this.getCode();
               }
               this.loading = false;
             })

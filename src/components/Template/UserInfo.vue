@@ -74,6 +74,9 @@ export default {
               removeToken("Admin-Token");
               localStorage.removeItem("org_id");
               localStorage.removeItem("workspaceId");
+              localStorage.removeItem("vuex");
+              localStorage.removeItem("platformName");
+              localStorage.removeItem("devicesSN");
               sessionStorage.removeItem("password");
               Cookies.remove("user");
               Cookies.remove("orgName");

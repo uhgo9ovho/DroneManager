@@ -71,9 +71,10 @@ export default {
       getStreamAPI(this.airPostInfo.id).then((result) => {
         console.log(result, "result");
         if (result.code === 200) {
-          this.url =
-            "https://jky.szyfu.com:9003" +
-            result.data.dockStream.outsideStream.flv;
+          // this.url =
+          //   "https://jky.szyfu.com:9003" +
+          //   result.data.dockStream.outsideStream.flv;
+          this.url = 'http://114.55.1.221:8088/wrjFlyDock/7CTDLCE00A6Y68.flv'
           this.initEasyPlayer();
         }
       });
