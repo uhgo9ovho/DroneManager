@@ -19,14 +19,40 @@
         <template #deviceType="scope">
           <span>{{ scope.row.deviceType | filtersType }}</span>
         </template>
+        <template #operate="scope">
+          <div class="device-list-box">
+            <el-button type="text" size="small" @click="handleEdit(scope.row)"
+              >编辑</el-button
+            >
+            <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row)">
+              <el-button
+                style="margin-left: 10px; color: #ff4d4f"
+                type="text"
+                size="small"
+                slot="reference"
+                >删除</el-button
+              >
+            </el-popconfirm>
+          </div>
+        </template>
       </CommonTable>
     </el-dialog>
+    <!-- 编辑设备弹窗 -->
+    <div v-if="DeviceDialogVisible">
+      <EditDeviceDialog
+        :DeviceDialogVisible="DeviceDialogVisible"
+        @updateDeviceDialogVisible="updateDeviceDialogVisible"
+        :itemRow="itemRow"
+        @updateDeviceList="updateDeviceList"
+      ></EditDeviceDialog>
+    </div>
   </div>
 </template>
   
   <script>
-import { getDeviceListAPI } from "@/api/orgModel";
+import { getDeviceListAPI, deleteDeviceAPI } from "@/api/orgModel";
 import CommonTable from "@/components/CommonTable.vue";
+import EditDeviceDialog from "@/components/Template/AddAndEditDeviceDialog.vue";
 export default {
   name: "AddDeviceDialog",
   props: {
@@ -41,9 +67,12 @@ export default {
   },
   components: {
     CommonTable,
+    EditDeviceDialog,
   },
   data() {
     return {
+      itemRow: null,
+      DeviceDialogVisible: false,
       height: "484px",
       tableList: [],
       columns: [
@@ -69,14 +98,11 @@ export default {
           showOverflowTooltip: true,
         },
         {
-          prop: "headPhone",
-          label: "联系电话",
-          showOverflowTooltip: true,
-        },
-        {
-          prop: "orgName",
-          label: "平台名称",
-          showOverflowTooltip: true,
+          prop: "operate",
+          label: "操作",
+          showOverflowTooltip: false,
+          width: "300px",
+          slot: true,
         },
       ],
       total: 0,
@@ -117,6 +143,9 @@ export default {
         this.total = res.total;
       });
     },
+    updateDeviceList() {
+      this.initTable();
+    },
     handleClose() {
       this.$emit("updateDeviceListVisible", false);
     },
@@ -128,12 +157,32 @@ export default {
       this.pageSize = val.pageSize;
       this.initTable();
     },
+    handleEdit(row) {
+      this.DeviceDialogVisible = true;
+      this.itemRow = row;
+    },
+    handleDelete(row) {
+      deleteDeviceAPI(row.id)
+        .then((res) => {
+          if (res.code === 200) {
+            this.$message.success("删除成功");
+            this.initTable();
+          } else {
+            this.$message.error("删除失败");
+          }
+        })
+        .catch((err) => {
+          this.$message.error("删除失败");
+        });
+    },
+    updateDeviceDialogVisible(val) {
+      this.DeviceDialogVisible = val;
+    },
   },
 };
 </script>
   
   <style lang="scss">
 .device-list-box {
-    
 }
 </style>

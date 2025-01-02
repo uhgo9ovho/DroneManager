@@ -58,23 +58,15 @@ export default {
       searchListName: [
         {
           id: 1,
-          name: "组织id",
+          name: "组织或项目名称",
         },
         {
           id: 2,
-          name: "设备id",
+          name: "负责人",
         },
         {
           id: 3,
-          name: "设备名称",
-        },
-        {
-          id: 4,
-          name: "设备描述",
-        },
-        {
-          id: 5,
-          name: "设备类型",
+          name: "绑定码",
         },
       ],
     };
@@ -83,15 +75,11 @@ export default {
     placeholderTitle() {
       switch (this.searchName) {
         case 1:
-          return "请输入组织id";
+          return "请输入组织或项目名称";
         case 2:
-          return "请输入设备id";
+          return "请输入负责人";
         case 3:
-          return "请输入设备名称";
-        case 4:
-          return "请输入设备描述";
-        case 5:
-          return "请输入设备类型";
+          return "请输入绑定码";
       }
     },
     checkedTip() {

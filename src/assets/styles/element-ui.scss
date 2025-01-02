@@ -157,3 +157,8 @@
   background-color: #fff;
   border-color: #fff;
 }
+.popper__arrow {
+  &::after {
+    border-bottom-color: #000 !important;
+  }
+}

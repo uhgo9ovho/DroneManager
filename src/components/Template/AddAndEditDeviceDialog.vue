@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { addDeviceAPI } from "@/api/orgModel";
+import { addDeviceAPI, editDeviceAPI } from "@/api/orgModel";
 export default {
   name: "AddDeviceDialog",
   props: {
@@ -50,6 +50,10 @@ export default {
     itemOrgId: {
       type: Number,
       default: 0,
+    },
+    itemRow: {
+      type: Object,
+      default: null,
     },
   },
   data() {
@@ -84,25 +88,53 @@ export default {
       ],
     };
   },
+  mounted() {
+    if (this.itemRow) {
+      console.log(this.itemRow);
+      this.deviceForm = this.itemRow;
+    }
+  },
   methods: {
     handleClose() {
       this.$emit("updateDeviceDialogVisible", false);
     },
     handleSubmit() {
-      const params = {
-        ...this.deviceForm,
-        orgId: this.itemOrgId,
-      };
-      addDeviceAPI(params).then((res) => {
-        if (res.code === 200) {
-          this.$message.success("新增设备成功");
-          this.handleClose();
-        } else {
+      if (this.itemRow) {
+        // 编辑设备
+        const params = {
+          ...this.deviceForm,
+        };
+        editDeviceAPI(params)
+          .then((res) => {
+            if (res.code === 200) {
+              this.$message.success("编辑设备成功");
+              this.$emit("updateDeviceList");
+              this.handleClose();
+            } else {
+              this.$message.error("编辑设备失败");
+            }
+          })
+          .catch((err) => {
+            this.$message.error("编辑设备失败");
+          });
+      } else {
+        const params = {
+          ...this.deviceForm,
+          orgId: this.itemOrgId,
+        };
+        addDeviceAPI(params)
+          .then((res) => {
+            if (res.code === 200) {
+              this.$message.success("新增设备成功");
+              this.handleClose();
+            } else {
+              this.$message.error("新增设备失败");
+            }
+          })
+          .catch((err) => {
             this.$message.error("新增设备失败");
-        }
-      }).catch(err => {
-        this.$message.error("新增设备失败");
-      });
+          });
+      }
     },
   },
 };

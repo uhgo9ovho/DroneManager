@@ -45,3 +45,40 @@ export const getDeviceListAPI = (params) => {
         method: 'get',
     })
 }
+
+/**
+ * 删除组织
+ * @param {orgId} params 
+ * @returns 
+ */
+export const deleteOrgAPI = (orgId) => {
+    return request({
+        url: `/wrj/org/delete/${orgId}`,
+        method: 'delete',
+    })
+}
+
+/**
+ * 删除设备
+ * @param {deviceId} params 
+ * @returns 
+ */
+export const deleteDeviceAPI = (deviceId) => {
+    return request({
+        url: `/crm/device/${deviceId}`,
+        method: 'delete',
+    })
+}
+
+/**
+ * 编辑设备
+ * @param {params} params 
+ * @returns 
+ */
+export const editDeviceAPI = (params) => {
+    return request({
+        url: `/crm/device`,
+        method: 'put',
+        data: params
+    })
+}

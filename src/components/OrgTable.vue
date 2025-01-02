@@ -10,31 +10,54 @@
       @sizeChange="sizeChange"
     >
       <template #operate="scope">
-        <el-button type="text" @click="handleAddDevice(scope.row)">新增设备</el-button>
-        <el-button type="text" @click="handleDeviceList(scope.row)">设备列表</el-button>
+        <el-button type="text" @click="handleAddDevice(scope.row)"
+          >新增设备</el-button
+        >
+        <el-button type="text" @click="handleDeviceList(scope.row)"
+          >设备列表</el-button
+        >
         <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
-        <el-button type="text" style="color: #f56c6c" @click="handleDelete(scope.row)">删除</el-button>
-    </template>
+        <el-button
+          type="text"
+          style="color: #f56c6c"
+          @click="handleDelete(scope.row)"
+          >删除</el-button
+        >
+      </template>
     </CommonTable>
     <!-- 新增和编辑弹窗 -->
     <div class="dialog-box" v-if="dialogVisible">
-      <OrgAddAndEditDialog :title="title" :editRow="editRow" @updateList="updateList" :dialogVisible="dialogVisible" @updateDialogVisible="updateDialogVisible" />
+      <OrgAddAndEditDialog
+        :title="title"
+        :editRow="editRow"
+        @updateList="updateList"
+        :dialogVisible="dialogVisible"
+        @updateDialogVisible="updateDialogVisible"
+      />
     </div>
     <!-- 新增设备弹窗 -->
-     <div class="add-device-box" v-if="DeviceDialogVisible">
-        <AddDeviceDialog :itemOrgId="itemOrgId" :DeviceDialogVisible="DeviceDialogVisible" @updateDeviceDialogVisible="updateDeviceDialogVisible"></AddDeviceDialog>
-     </div>
-     <!-- 设备列表弹窗 -->
-      <div class="device-list-box" v-if="deviceListVisible">
-        <DeviceListDialog :itemOrgId="itemOrgId" :deviceListVisible="deviceListVisible" @updateDeviceListVisible="updateDeviceListVisible"></DeviceListDialog>
-      </div>
+    <div class="add-device-box" v-if="DeviceDialogVisible">
+      <AddDeviceDialog
+        :itemOrgId="itemOrgId"
+        :DeviceDialogVisible="DeviceDialogVisible"
+        @updateDeviceDialogVisible="updateDeviceDialogVisible"
+      ></AddDeviceDialog>
+    </div>
+    <!-- 设备列表弹窗 -->
+    <div class="device-list-box" v-if="deviceListVisible">
+      <DeviceListDialog
+        :itemOrgId="itemOrgId"
+        :deviceListVisible="deviceListVisible"
+        @updateDeviceListVisible="updateDeviceListVisible"
+      ></DeviceListDialog>
+    </div>
   </div>
 </template>
 
 <script>
 import CommonTable from "./CommonTable.vue";
-import AddDeviceDialog from "./Template/AddDeviceDialog.vue";
-import { getOrgListAPI } from "@/api/orgModel";
+import AddDeviceDialog from "./Template/AddAndEditDeviceDialog.vue";
+import { getOrgListAPI, deleteOrgAPI } from "@/api/orgModel";
 import OrgAddAndEditDialog from "./Template/OrgAddAndEditDialog.vue";
 import DeviceListDialog from "./Template/DeviceListDialog.vue";
 export default {
@@ -49,7 +72,7 @@ export default {
     CommonTable,
     OrgAddAndEditDialog,
     AddDeviceDialog,
-    DeviceListDialog
+    DeviceListDialog,
   },
   data() {
     return {
@@ -108,13 +131,15 @@ export default {
   },
   methods: {
     updateList() {
-        this.getOrgList();
+      this.getOrgList();
     },
     pageChange(pageNum) {
       this.pageNum = pageNum;
+      this.getOrgList();
     },
     sizeChange(pageSize) {
       this.pageSize = pageSize;
+      this.getOrgList();
     },
     async getOrgList() {
       const res = await getOrgListAPI({
@@ -127,29 +152,40 @@ export default {
       }
     },
     handleAddDevice(row) {
-        this.DeviceDialogVisible = true;
-        this.itemOrgId = row.orgId
+      this.DeviceDialogVisible = true;
+      this.itemOrgId = row.orgId;
     },
     updateDeviceDialogVisible(val) {
-        this.DeviceDialogVisible = val;
+      this.DeviceDialogVisible = val;
     },
     handleDeviceList(row) {
-        this.deviceListVisible = true;
-        this.itemOrgId = row.orgId;
+      this.deviceListVisible = true;
+      this.itemOrgId = row.orgId;
     },
     updateDeviceListVisible(val) {
-        this.deviceListVisible = val;
+      this.deviceListVisible = val;
     },
     handleEdit(row) {
       this.editRow = row;
-      this.title = '编辑组织';
+      this.title = "编辑组织";
       this.updateDialogVisible(true);
     },
     handleDelete(row) {
-      console.log(row);
+      deleteOrgAPI(row.orgId)
+        .then((res) => {
+          if (res.code === 200) {
+            this.$message.success("删除成功");
+            this.getOrgList();
+          } else {
+            this.$message.error("删除失败");
+          }
+        })
+        .catch((err) => {
+          this.$message.error("删除失败");
+        });
     },
     updateDialogVisible(dialogVisible) {
-      this.$emit('updateDialogVisible', dialogVisible);
+      this.$emit("updateDialogVisible", dialogVisible);
     },
   },
 };
