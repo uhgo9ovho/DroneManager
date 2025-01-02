@@ -65,6 +65,9 @@ export default {
     .item-title {
       margin-top: 4px;
     }
+    i {
+      font-size: 18px;
+    }
   }
   .active {
     background-color: #f5f5f6;

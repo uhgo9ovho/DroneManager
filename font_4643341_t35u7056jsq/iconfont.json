@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "9011933",
+      "name": "设备",
+      "font_class": "shebei",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
+      "icon_id": "8765257",
+      "name": "组织",
+      "font_class": "zuzhi",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "146070",
+      "name": "日历_填充",
+      "font_class": "rilitianchong",
+      "unicode": "e6ae",
+      "unicode_decimal": 59054
+    },
+    {
       "icon_id": "441341",
       "name": "信号",
       "font_class": "xinhao",

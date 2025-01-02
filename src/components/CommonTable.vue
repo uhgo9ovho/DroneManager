@@ -1,7 +1,7 @@
 <template>
   <div class="common-table">
     <div class="table-box">
-      <el-table :data="tableList" style="width: 100%" height="100%" @selection-change="handleSelectionChange">
+      <el-table :data="tableList" style="width: 100%" :height="height" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" v-if="showSelection"></el-table-column>
         <el-table-column
           v-for="(item, index) in columns"
@@ -100,6 +100,10 @@ export default {
       default() {
         return [10, 15, 50, 80, 100];
       },
+    },
+    height: {
+      type: String,
+      default: '100%'
     },
     //是否显示多选框
     showSelection: {

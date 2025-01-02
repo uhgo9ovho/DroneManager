@@ -109,6 +109,20 @@ export const constantRoutes = [
         active: false,
       },
       {
+        path: 'orgList',
+        component: () => import('@/views/OrgManager.vue'),
+        name: 'OrgList',
+        meta: { title: '组织管理', icon: 'el-icon-zuzhi' },
+        active: false,
+      },
+      {
+        path: 'deviceList',
+        component: () => import('@/views/Device.vue'),
+        name: 'device',
+        meta: { title: '设备列表', icon: 'el-icon-shebei' },
+        active: false,
+      },
+      {
         path: 'deviceLogs',
         component: () => import('@/views/DeviceLogs.vue'),
         name: 'DeviceLogs',

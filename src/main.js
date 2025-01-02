@@ -19,7 +19,7 @@ import './assets/icons' // icon
 import './permission' // permission control
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree } from "@/utils/ruoyi";
 //引入自定义icon
-import '../font_4643341_2ci6nu9hegh/iconfont.css'
+import '../font_4643341_t35u7056jsq/iconfont.css'
 
 
 // 全局方法挂载

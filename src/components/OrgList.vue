@@ -2,7 +2,6 @@
   <div class="org">
     <div class="org-box">
       <div class="back-icon el-icon-back" @click="backLogin"></div>
-      <div class="org-box-title">组织管理</div>
     </div>
     <div class="title">{{ title }}</div>
     <div class="tip">{{ tip }}</div>
