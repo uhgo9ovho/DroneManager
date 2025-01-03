@@ -5,7 +5,7 @@
     </div>
     <div class="info-right">
       <div class="task-name">
-        【{{ row.taskType | filterType }}】{{ row.taskName }}
+        {{ row.taskName }}
       </div>
       <div class="right-bottom">
         <div class="air-line-popover">

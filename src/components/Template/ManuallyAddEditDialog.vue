@@ -95,7 +95,7 @@ export default {
           this.options = res.rows.map(item => {
             return {
               value: item.id,
-              label: item.orgDeptName
+              label: item.orgDeptName,
             }
           })
 
@@ -109,12 +109,14 @@ export default {
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
           if (this.title == "添加成员") {
+
             const params = {
               userName: this.ruleForm.name,
               nickName: this.ruleForm.name,
               phonenumber: this.ruleForm.phone,
               password: this.ruleForm.password,
               orgId: +this.$store.getters.orgId,
+              orgDeptId: this.ruleForm.department,
               roleIds: [2],
             }
             addUser(params).then((res) => {

@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export const getOrgListAPI = (params) => {
   return request({
-    url: "/wrj/org/list",
+    url: "/wrj/org/list2",
     method: "get",
     params,
   });
@@ -80,5 +80,18 @@ export const editDeviceAPI = (params) => {
         url: `/crm/device`,
         method: 'put',
         data: params
+    })
+}
+
+/**
+ * 获取角色列表
+ * @param {params} params 
+ * @returns 
+ */
+export const getRoleListAPI = (params) => {
+    return request({
+        url: `/system/role/list?`,
+        method: 'get',
+        params
     })
 }

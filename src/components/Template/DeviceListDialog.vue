@@ -24,7 +24,10 @@
             <el-button type="text" size="small" @click="handleEdit(scope.row)"
               >编辑</el-button
             >
-            <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row)">
+            <el-popconfirm
+              title="确定删除吗？"
+              @confirm="handleDelete(scope.row)"
+            >
               <el-button
                 style="margin-left: 10px; color: #ff4d4f"
                 type="text"
@@ -183,6 +186,4 @@ export default {
 </script>
   
   <style lang="scss">
-.device-list-box {
-}
 </style>

@@ -4,6 +4,7 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="部门" name="department"> </el-tab-pane>
         <el-tab-pane label="成员" name="member"></el-tab-pane>
+        <el-tab-pane label="角色" name="role"></el-tab-pane>
       </el-tabs>
       <div class="operate-box">
         <div
@@ -53,7 +54,6 @@
       </div>
     </div>
     <div class="task-list-grid" v-if="currentTab == 'department'">
-      <!-- <filght-table></filght-table> -->
       <contacts-table ref="contactsRef"></contacts-table>
     </div>
     <div class="flight-log" v-if="currentTab == 'member'">
@@ -63,7 +63,10 @@
         @deleteIds="deleteIds"
       ></member-table>
     </div>
-    <div class="flight-date" v-if="currentTab == 'role'">飞行排期</div>
+    <div class="role-list" v-if="currentTab == 'role'">
+      <!-- 角色列表 -->
+      <role-table></role-table>
+    </div>
     <!-- 手动添加dialog组件 -->
     <div v-if="manuallyVisible">
       <ManuallyAddEditDialog
@@ -89,6 +92,7 @@ import MemberTable from "../components/MemberTable.vue";
 import { deleteAllUser } from "@/api/user.js";
 import ManuallyAddEditDialog from "../components/Template/ManuallyAddEditDialog.vue";
 import InviteDialog from '@/components/InviteDialog.vue'
+import RoleTable from '@/components/RoleTable.vue'
 export default {
   name: "Contacts",
   data() {
@@ -110,6 +114,7 @@ export default {
     ContactsTable,
     MemberTable,
     ManuallyAddEditDialog,
+    RoleTable
   },
   computed: {
     checkedTip() {

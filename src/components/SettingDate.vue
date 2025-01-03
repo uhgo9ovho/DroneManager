@@ -156,10 +156,8 @@ export default {
         frequency: "天",
         inspection: "",
         checkedCharacters: [],
-        startDate: `${now.getFullYear()}-${
-          now.getMonth() + 1
-        }-${now.getDate()}`,
-        endDate: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+        startDate: `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`,
+        endDate: `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`,
       },
       options: [
         {
