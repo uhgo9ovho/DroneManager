@@ -3,7 +3,7 @@
     <div class="top">
       <div class="left">
         <div class="search-list-box">
-          <el-select v-model="searchName" placeholder="请选择">
+          <el-select v-model="searchName" placeholder="请选择" @change="handleSearchNameChange">
             <el-option
               v-for="item in searchListName"
               :key="item.id"
@@ -20,6 +20,7 @@
             v-model="searchValue"
             @focus="focus"
             @blur="blur"
+            @input="handleInput"
           ></el-input>
         </div>
       </div>
@@ -64,10 +65,6 @@ export default {
           id: 2,
           name: "负责人",
         },
-        {
-          id: 3,
-          name: "绑定码",
-        },
       ],
     };
   },
@@ -103,6 +100,14 @@ export default {
     updateDialogVisible(dialogVisible) {
       this.dialogVisible = dialogVisible;
     },
+    handleInput(val) {
+      this.$refs.orgTable.searchValue = val;
+    },
+    handleSearchNameChange(val) {
+      this.$refs.orgTable.searchValue = '';
+      this.searchValue = '';
+      this.$refs.orgTable.searchType = val;
+    }
   },
 };
 </script>

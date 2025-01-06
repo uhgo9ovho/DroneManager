@@ -76,12 +76,14 @@ export default {
   },
   data() {
     return {
+      searchValue: "",
+      searchType: 1,
       columns: [
-        {
-          prop: "orgId",
-          label: "组织id",
-          showOverflowTooltip: true,
-        },
+        // {
+        //   prop: "orgId",
+        //   label: "组织id",
+        //   showOverflowTooltip: true,
+        // },
         {
           prop: "orgName",
           label: "组织名称",
@@ -125,6 +127,24 @@ export default {
       deviceListVisible: false,
       itemOrgId: 0,
     };
+  },
+  watch: {
+    async searchValue(val) {
+      const params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+      }
+      if(this.searchType === 1) {
+        params.orgName = val;
+      } else if(this.searchType === 2) {
+        params.head = val;
+      }
+      const res = await getOrgListAPI(params);
+      if (res.code === 200) {
+        this.tableList = res.rows;
+        this.total = res.total.total;
+      }
+    },
   },
   mounted() {
     this.getOrgList();

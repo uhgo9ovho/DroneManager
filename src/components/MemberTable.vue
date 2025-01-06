@@ -115,12 +115,12 @@
       <template #createTime="{ row }">
         {{ row.createTime | filterTime }}
       </template>
-      <template #operate="{ row }">
-        <el-button type="text" @click="editBtn(row)">编辑</el-button>
-        <el-button type="text" style="margin-right: 10px">调岗</el-button>
+      <template #operate="scope">
+        <el-button type="text" @click="editBtn(scope.row)" style="margin-right: 10px">编辑</el-button>
+        <!-- <el-button type="text" style="margin-right: 10px">调岗</el-button> -->
 
-        <el-popconfirm title="你确定要删除吗？" @confirm="confirm(row)">
-          <el-button type="text" style="color: red" slot="reference" v-if="row.roleName!=='超级管理员'"
+        <el-popconfirm :ref="`popover-${scope.$index}`" title="你确定要删除吗？" @confirm="confirm(scope.row)">
+          <el-button type="text" style="color: red" slot="reference" v-show="scope.row.roleName!=='超级管理员'"
             >删除</el-button
           >
         </el-popconfirm>
