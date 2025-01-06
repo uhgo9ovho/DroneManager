@@ -232,3 +232,22 @@ export const authorityAPI = (params,sn) => {
         data: params
     })
 }
+
+/**
+ * 获取消息通知列表
+ */
+export const getMessageListAPI = (params) => {
+    return request({
+        url: `/wrj/message/unreadList`,
+        method: 'get',
+        data: params
+    })
+}
+
+// 更新消息状态
+export const updateMessageStatusAPI = (ids) => {
+    return request({
+        url: `/wrj/message/read/${ids}`,
+        method: 'get',
+    })
+}

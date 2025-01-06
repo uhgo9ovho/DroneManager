@@ -6,9 +6,9 @@
         {{ platformName }}
       </div>
     <div class="user-info">
-      <el-popover placement="top-start" width="370" trigger="click" popper-class="popper-notification">
-        <notification></notification>
-        <el-badge is-dot class="item" slot="reference">
+      <el-popover placement="top-start" width="370" trigger="click" popper-class="popper-notification" @after-enter="updateInfoStatus">
+        <notification ref="notification" @updateCount="updateCount"></notification>
+        <el-badge is-dot class="item" slot="reference" :hidden="count ? false : true">
           <div class="notification iconfont el-icon-icon"></div>
         </el-badge>
       </el-popover>
@@ -32,12 +32,14 @@
 import logoImg from '@/assets/logo/logo.png'
 import UserInfo from '@/components/Template/UserInfo.vue'
 import Notification from '@/components/Notification.vue'
-
+import { updateMessageStatusAPI } from '@/api/user'
 export default {
   name: 'NavBar',
   data() {
     return {
-      logoUrl: '/icon.ico'
+      logoUrl: '/icon.ico',
+      count: 0,
+      ids: '',
     }
   },
   components: { UserInfo, Notification },
@@ -47,6 +49,16 @@ export default {
     },
   },
   methods: {
+    updateInfoStatus() {
+      updateMessageStatusAPI(this.ids).then((res) => {
+        this.$refs.notification.getMessageList();
+      });
+
+    },
+    updateCount(count, ids) {
+      this.count = count;
+      this.ids = ids;
+    },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
