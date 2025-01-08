@@ -64,11 +64,11 @@
       <template #operate="{ row }">
         <div class="operate-box">
           <el-button type="text" @click="detailsBtn(row)">详情</el-button>
-          <el-dropdown @command="operateCommand(row)">
+          <el-dropdown @command="operateCommand(row)" v-show="row.status == '0'">
             <span class="el-dropdown-link el-icon-more"></span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
-                v-if="row.status === '0' && item.label === '忽略'"
+                
                 v-for="(item, index) in operateOptions"
                 :key="index"
                 :command="item.label"
@@ -203,6 +203,7 @@ export default {
         {
           label: "忽略",
           icon: "el-icon-hulve",
+          checked: false,
         },
         // {
         //   label: "设为典型",
@@ -310,6 +311,7 @@ export default {
     },
     statusCommand(itemCommand) {},
     operateCommand(itemCommand) {
+      console.log(itemCommand);
       this.neglectVisible = true;
       this.itemRow = itemCommand;
     },

@@ -29,11 +29,12 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="部门" prop="department">
-        <!-- <el-input
-          placeholder="请输入部门"
-          v-model="ruleForm.department"
-        ></el-input> -->
         <el-select v-model="ruleForm.department">
+          <el-option v-for="(item, index) in options" :key="index" :value="item.value" :label="item.label"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="角色" prop="role">
+        <el-select v-model="ruleForm.role">
           <el-option v-for="(item, index) in options" :key="index" :value="item.value" :label="item.label"></el-option>
         </el-select>
       </el-form-item>
@@ -70,6 +71,7 @@ export default {
         phone: "",
         department: "",
         password: "",
+        role: "",
       },
       options: [],
       rules: {
@@ -79,6 +81,7 @@ export default {
           { required: true, message: "请输入部门", trigger: "blur" },
         ],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        role: [{ required: true, message: "请选择角色", trigger: "blur" }],
       },
       page: {
         pageNum: 1,

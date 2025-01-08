@@ -232,3 +232,33 @@ export const authorityAPI = (params,sn) => {
         data: params
     })
 }
+
+/**
+ * 获取消息通知列表
+ */
+export const getMessageListAPI = (params) => {
+    return request({
+        url: `/wrj/message/unreadList`,
+        method: 'get',
+        data: params
+    })
+}
+
+// 更新消息状态
+export const updateMessageStatusAPI = (ids) => {
+    return request({
+        url: `/wrj/message/read/${ids}`,
+        method: 'get',
+    })
+}
+
+/**
+ * 获取权限列表
+ * parentId=2大屏端   3 大屏端   4小程序端
+ */
+export const getPermissionListAPI = (parentId) => {
+    return request({
+        url: `/system/menu/list?parentId=${parentId}`,
+        method: 'get',
+    })
+}

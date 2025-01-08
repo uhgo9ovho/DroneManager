@@ -10,7 +10,9 @@
         :key="index"
       >
         <div class="info-top">
-          <el-tag :type="type(item.status)">{{ item.status }}</el-tag>
+          <el-tag :type="type(item.status)">{{
+            item.status | filterStatus
+          }}</el-tag>
           <span class="task-name">{{ item.taskName }}</span>
         </div>
         <div class="info-middle">{{ item.warnSource }}</div>
@@ -27,55 +29,65 @@
 </template>
 
 <script>
+import { getMessageListAPI } from "@/api/user.js";
 export default {
   name: "Notification",
   data() {
     return {
-      infoList: [
-        {
-          status: "在线",
-          taskName: "西安-周至(大疆二代)",
-          warnSource: "电池温度过高(>44℃)无法开始充电",
-          time: "2024-08-06 14:47:45",
-        },
-        {
-          status: "离线",
-          taskName: "西安-周至(大疆二代)",
-          warnSource: "无法起飞:指南针受到干扰，请远离干扰或校准指南针",
-          time: "2024-08-06 14:47:46",
-        },
-        {
-          status: "离线",
-          taskName: "西安-周至(大疆二代)",
-          warnSource: "无法起飞:指南针受到干扰，请远离干扰或校准指南针",
-          time: "2024-08-06 14:47:46",
-        },
-        {
-          status: "离线",
-          taskName: "西安-周至(大疆二代)",
-          warnSource: "无法起飞:指南针受到干扰，请远离干扰或校准指南针",
-          time: "2024-08-06 14:47:46",
-        },
-        {
-          status: "离线",
-          taskName: "西安-周至(大疆二代)",
-          warnSource: "无法起飞:指南针受到干扰，请远离干扰或校准指南针",
-          time: "2024-08-06 14:47:46",
-        },
-      ],
+      infoList: [],
+      timer: null, // 添加timer变量
     };
   },
   computed: {
     type() {
       return function (status) {
         switch (status) {
-          case "在线":
+          case "info":
             return "";
           default:
             return "danger";
         }
       };
     },
+  },
+  filters: {
+    filterStatus(status) {
+      switch (status) {
+        case "info":
+          return "信息";
+        default:
+          return "警告";
+      }
+    },
+  },
+  methods: {
+    getMessageList() {
+      const orgId = localStorage.getItem("org_id");
+      getMessageListAPI(orgId).then((res) => {
+        if (res.code == 200) {
+          this.infoList = res.rows.map((item) => {
+            return {
+              status: item.level,
+              taskName: item.messageType,
+              warnSource: item.messageText,
+              time: item.logTime,
+              id: item.id,
+            };
+          });
+          const ids = this.infoList.map((item) => item.id).join(",");
+          this.$emit("updateCount", this.infoList.length, ids);
+        }
+      });
+    },
+  },
+  created() {
+    this.getMessageList();
+    this.timer = setInterval(() => {
+      this.getMessageList();
+    }, 30000); // 每30秒轮询一次
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
 };
 </script>
@@ -106,8 +118,8 @@ export default {
       margin: 10px 0;
     }
     .footer-tip {
-        text-align: center;
-        color: #ababab;
+      text-align: center;
+      color: #ababab;
     }
   }
 }
