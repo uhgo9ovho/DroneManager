@@ -21,7 +21,7 @@
     </common-table>
     <!-- 编辑弹窗 -->
     <div v-if="dialogVisible">
-      <role-edit-dialog :dialogVisible="dialogVisible" @updateDialogVisible="updateDialogVisible"></role-edit-dialog>
+      <role-edit-dialog :row="row" :dialogVisible="dialogVisible" @updateDialogVisible="updateDialogVisible"></role-edit-dialog>
     </div>
   </div>
 </template>
@@ -38,6 +38,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      row: null,
       columns: [
         {
           prop: "roleName",
@@ -93,6 +94,7 @@ export default {
     },
     handleEdit(row) {
       this.dialogVisible = true;
+      this.row = row
     },
     handleDelete(row) {
       console.log(row);

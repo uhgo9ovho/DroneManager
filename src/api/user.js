@@ -254,7 +254,7 @@ export const updateMessageStatusAPI = (ids) => {
 
 /**
  * 获取权限列表
- * parentId=2大屏端   3 大屏端   4小程序端
+ * parentId=2大屏端   3 管理端   4小程序端
  */
 export const getPermissionListAPI = (parentId) => {
     return request({

@@ -1,4 +1,5 @@
 import store from '@/store';
+import { gcj02ToWgs84 } from "@/utils/CoordinateTransformation.js";
 let polygon = null
 let polyline = null;
 let polygonCoord = null;
