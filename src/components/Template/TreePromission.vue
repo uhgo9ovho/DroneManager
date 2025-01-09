@@ -3,10 +3,12 @@
     <el-tree
       ref="tree"
       :data="data"
+      node-key="menuId"
       :props="defaultProps"
-      @node-click="handleNodeClick"
       :show-checkbox="showCheckbox"
       highlight-current
+      :default-checked-keys="checkedKeys"
+      @check="currentChecked"
     ></el-tree>
   </div>
 </template>
@@ -22,19 +24,24 @@ export default {
       type: Boolean,
       default: false,
     },
+    checkedKeys: {
+      type: Array,
+      default: () => []
+    }
   },
   data() {
     return {
       defaultProps: {
         children: "children",
-        label: "label",
+        label: "menuName",
       },
     };
   },
   methods: {
-    handleNodeClick(data) {
-      console.log(data);
-    },
+    currentChecked(nodeObj, SelectedObj) {
+      console.log(nodeObj, SelectedObj);
+      this.$emit('selectedKeys', SelectedObj.checkedKeys)
+    }
   },
 };
 </script>

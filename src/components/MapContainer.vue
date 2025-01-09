@@ -12,7 +12,7 @@ import AMapLoader from "@amap/amap-jsapi-loader";
 import { wgs84ToGcj02 } from "@/utils/CoordinateTransformation.js";
 import { DronePlottingRoute } from "@/utils/PlottingRoute.js";
 import { mapMutations, mapState } from "vuex";
-import planeMarkerIcon from "@/assets/images/planeMarkerIcon.png";
+import planeMarkerIcon from "@/assets/images/WechatIMG76.jpg";
 let map = null;
 let planeMarker = null;
 let lastPosition = null;
@@ -128,7 +128,8 @@ export default {
 
             this.lineInfoObj.pointsList.forEach((item) => {
               const formattedArr = [...item];
-              const formarItemArr = formattedArr.map((it) => [it.lon, it.lat]);
+              // const formarItemArr = formattedArr.map((it) => [it.lon, it.lat]);
+              const formarItemArr = formattedArr.map((it) => wgs84ToGcj02(it.lon, it.lat));
               this.lonlatArr.push(...formarItemArr);
             });
           }
@@ -179,12 +180,7 @@ export default {
           AMap.plugin(
             ["AMap.Scale", "AMap.Geolocation", "AMap.MouseTool"],
             function () {
-              // let toolbar = new AMap.Scale();
-              // let Geolocation = new AMap.Geolocation();
               that.mouseTool = new AMap.MouseTool(map); //创建鼠标工具对像
-
-              // map.addControl(toolbar);
-              // map.addControl(Geolocation);
             }
           );
           let position = null;
@@ -257,7 +253,6 @@ export default {
         (item) => new AMap.LngLat(item[0], item[1])
       );
       
-      console.log(path.map(item => [item.lng, item.lat]));
       return path;
     },
     markerClick() {

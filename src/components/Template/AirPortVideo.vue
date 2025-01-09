@@ -137,7 +137,7 @@ export default {
       player.play(this.url, 1);
     },
     callbackfun(e) {
-      console.log("callbackfun", e);
+      // console.log("callbackfun", e);
     },
   },
   components: {

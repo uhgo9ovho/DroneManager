@@ -246,7 +246,6 @@ export default {
   mounted() {
     this.getDateRange('week')
     this.timeRange = this.getTimeRangeTimestamps('week')
-    console.log(this.timeRange)
     this.getstatisticsData();
     // this.connectWS()
   },

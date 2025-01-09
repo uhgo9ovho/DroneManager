@@ -10,34 +10,43 @@
         <el-input v-model="form.roleName"></el-input>
       </el-form-item>
       <el-form-item label="角色描述">
-        <el-input v-model="form.roleDesc"></el-input>
+        <el-input v-model="form.remark"></el-input>
       </el-form-item>
       <el-form-item label="角色状态">
         <el-switch
           v-model="form.status"
-          :active-value="0"
-          :inactive-value="1"
+          active-value="0"
+          inactive-value="1"
         ></el-switch>
       </el-form-item>
       <el-form-item label="角色权限">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="小程序" name="miniProgram"> </el-tab-pane>
-          <el-tab-pane label="看板大屏" name="dashboard"></el-tab-pane>
+        <el-tabs v-model="activeName">
           <el-tab-pane label="管理侧" name="admin"></el-tab-pane>
+          <el-tab-pane label="看板大屏" name="dashboard"></el-tab-pane>
+          <el-tab-pane label="小程序" name="miniProgram"> </el-tab-pane>
         </el-tabs>
-        <div v-if="activeName == 'miniProgram'">
-          <tree-promission :data="data" :show-checkbox="true"></tree-promission>
-        </div>
-        <div v-if="activeName == 'dashboard'">
+        <div v-show="activeName == 'miniProgram'">
           <tree-promission
-            :data="data1"
+            :checkedKeys="checkedKeys"
+            :data="programsPermissions"
             :show-checkbox="true"
+            @selectedKeys="selectedKeys"
           ></tree-promission>
         </div>
-        <div v-if="activeName == 'admin'">
+        <div v-show="activeName == 'dashboard'">
           <tree-promission
-            :data="data2"
+            :data="screenPermissions"
+            :checkedKeys="checkedKeys"
             :show-checkbox="true"
+            @selectedKeys="selectedKeys"
+          ></tree-promission>
+        </div>
+        <div v-show="activeName == 'admin'">
+          <tree-promission
+            :data="managerPermissions"
+            :show-checkbox="true"
+            :checkedKeys="checkedKeys"
+            @selectedKeys="selectedKeys"
           ></tree-promission>
         </div>
       </el-form-item>
@@ -51,6 +60,8 @@
 
 <script>
 import TreePromission from "./TreePromission.vue";
+import { mapState } from "vuex";
+import { roleMenuTreeselectAPI, editRoleAPI } from "@/api/orgModel";
 export default {
   components: {
     TreePromission,
@@ -60,74 +71,53 @@ export default {
       type: Boolean,
       default: false,
     },
+    row: {
+      type: Object,
+      default: () => null,
+    },
+  },
+  computed: {
+    ...mapState("app", [
+      "managerPermissions",
+      "screenPermissions",
+      "programsPermissions",
+    ]),
   },
   data() {
     return {
-      form: {},
+      form: {
+        roleName: "",
+        remark: "",
+        status: "1",
+      },
+      checkedKeys: [],
       activeName: "admin",
-      data: [
-        {
-          id: 3,
-          label: "一级 3",
-          children: [
-            {
-              id: 7,
-              label: "二级 3-1",
-            },
-            {
-              id: 8,
-              label: "二级 3-2",
-            },
-          ],
-        },
-      ],
-      data1: [
-        {
-          id: 1,
-          label: "一级 1",
-          children: [
-            {
-              id: 4,
-              label: "二级 1-1",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1",
-                },
-                {
-                  id: 10,
-                  label: "三级 1-1-2",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      data2: [
-        {
-          id: 2,
-          label: "一级 2",
-          children: [
-            {
-              id: 5,
-              label: "二级 2-1",
-            },
-            {
-              id: 6,
-              label: "二级 2-2",
-            },
-          ],
-        },
-      ],
     };
   },
+  created() {
+    this.form = Object.assign({}, this.row);
+    this.roleMenuTreeselect();
+  },
   methods: {
+    selectedKeys(checkedKeys) {
+      console.log(checkedKeys,'aa');
+      
+    },
     handleClose() {
       this.$emit("updateDialogVisible", false);
     },
     handleSave() {
       console.log(this.form);
+      console.log(this.$refs.tree);
+      
       this.handleClose();
+    },
+    roleMenuTreeselect() {
+      roleMenuTreeselectAPI(this.row.roleId).then((res) => {
+        if (res.code == 200) {
+          this.checkedKeys = res.checkedKeys;
+        }
+      });
     },
   },
 };

@@ -8,7 +8,6 @@ import { isRelogin } from '@/utils/request'
 import { constantRoutes } from "@/router";
 import Cookies from 'js-cookie';
 NProgress.configure({ showSpinner: false })
-console.log(store, "store");
 const whiteList = ['/login', '/register', '/videoMap', '/WordPreview']
 let routeList = constantRoutes.filter((item, index) => {
   return !item.hidden;
