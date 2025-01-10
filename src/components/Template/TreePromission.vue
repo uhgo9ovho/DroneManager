@@ -1,7 +1,6 @@
 <template>
   <div class="tree-promission">
     <el-tree
-      ref="tree"
       :data="data"
       node-key="menuId"
       :props="defaultProps"
