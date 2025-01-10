@@ -15,8 +15,8 @@
         }}</el-tag>
       </template>
       <template #operate="{ row }">
-        <el-button type="text" @click="handleEdit(row)">编辑</el-button>
-        <el-button type="text" @click="handleDelete(row)" style="color: red">删除</el-button>
+        <el-button type="text" @click="handleEdit(row)" v-if="row.roleName !='超级管理员'">编辑</el-button>
+        <el-button type="text" @click="handleDelete(row)" style="color: red" v-if="row.roleName !='超级管理员'">删除</el-button>
       </template>
     </common-table>
     <!-- 编辑弹窗 -->

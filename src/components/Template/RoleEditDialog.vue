@@ -27,7 +27,8 @@
         </el-tabs>
         <div v-show="activeName == 'miniProgram'">
           <tree-promission
-            :checkedKeys="checkedKeys"
+            ref="programsRef"
+            :checkedKeys="checkedKeysObj.miniProgram"
             :data="programsPermissions"
             :show-checkbox="true"
             @selectedKeys="selectedKeys"
@@ -35,17 +36,19 @@
         </div>
         <div v-show="activeName == 'dashboard'">
           <tree-promission
+            ref="screenRef"
             :data="screenPermissions"
-            :checkedKeys="checkedKeys"
+            :checkedKeys="checkedKeysObj.dashboard"
             :show-checkbox="true"
             @selectedKeys="selectedKeys"
           ></tree-promission>
         </div>
         <div v-show="activeName == 'admin'">
           <tree-promission
+            ref="managerRef"
             :data="managerPermissions"
             :show-checkbox="true"
-            :checkedKeys="checkedKeys"
+            :checkedKeys="checkedKeysObj.admin"
             @selectedKeys="selectedKeys"
           ></tree-promission>
         </div>
@@ -92,6 +95,11 @@ export default {
       },
       checkedKeys: [],
       activeName: "admin",
+      checkedKeysObj: {
+        admin: [],
+        dashboard: [],
+        miniProgram: [],
+      },
     };
   },
   created() {
@@ -100,24 +108,80 @@ export default {
   },
   methods: {
     selectedKeys(checkedKeys) {
-      console.log(checkedKeys,'aa');
-      
+      // 只更新当前激活标签页的选中状态
+      this.checkedKeysObj[this.activeName] = checkedKeys || [];
+      console.log(`${this.activeName}模块权限更新为:`, checkedKeys);
     },
     handleClose() {
+      this.resetCheckedKeys();
       this.$emit("updateDialogVisible", false);
     },
     handleSave() {
-      console.log(this.form);
-      console.log(this.$refs.tree);
+      // 合并所有模块当前选中的权限
+      this.form.menuIds = [
+        ...new Set([
+          ...(this.checkedKeysObj.admin || []),
+          ...(this.checkedKeysObj.dashboard || []),
+          ...(this.checkedKeysObj.miniProgram || []),
+        ]),
+      ];
       
-      this.handleClose();
+      console.log('保存前的权限数据:', this.form.menuIds);
+      
+      editRoleAPI(this.form).then((res) => {
+        if (res.code === 200) {
+          this.$message.success(res.msg);
+          this.handleClose();
+        } else {
+          this.$message.error('操作失败');
+        }
+      }).catch(err => {
+        this.$message.error('操作失败');
+      });
     },
     roleMenuTreeselect() {
       roleMenuTreeselectAPI(this.row.roleId).then((res) => {
         if (res.code == 200) {
-          this.checkedKeys = res.checkedKeys;
+          const allCheckedKeys = res.checkedKeys || [];
+          const menus = res.menus || [];
+          
+          // 找到三个主模块的ID
+          const adminModule = menus.find(item => item.label === "管理侧");
+          const dashboardModule = menus.find(item => item.label === "大屏端");
+          const miniProgramModule = menus.find(item => item.label === "小程序");
+          
+          // 递归查找某个ID是否属于指定模块
+          const isInModule = (id, moduleData) => {
+            if (!moduleData) return false;
+            
+            const findId = (node) => {
+              if (node.id === id) return true;
+              if (node.children) {
+                return node.children.some(child => findId(child));
+              }
+              return false;
+            };
+            
+            return findId(moduleData);
+          };
+          
+          // 分类权限ID
+          this.checkedKeysObj = {
+            admin: allCheckedKeys.filter(id => isInModule(id, adminModule)),
+            dashboard: allCheckedKeys.filter(id => isInModule(id, dashboardModule)),
+            miniProgram: allCheckedKeys.filter(id => isInModule(id, miniProgramModule))
+          };
+          
+          console.log('初始化各模块权限数据：', this.checkedKeysObj);
         }
       });
+    },
+    resetCheckedKeys() {
+      this.checkedKeysObj = {
+        admin: [],
+        dashboard: [],
+        miniProgram: [],
+      };
     },
   },
 };

@@ -111,8 +111,28 @@ export const roleMenuTreeselectAPI = (roleId) => {
  */
 export const editRoleAPI = (params) => {
   return request({
-    ur: '/system/role',
+    url: '/system/role',
     method: 'put',
     data: params
+  })
+}
+
+/**
+ * 获取角色下拉框数据
+ */
+export const roleOptionsAPI = () => {
+  return request({
+    url: '/system/user/',
+    method: 'get'
+  })
+}
+
+/**
+ * 成员编辑回显接口
+ */
+export const EditEchoAPI = (id) => {
+  return request({
+    url: `/system/user/${id}`,
+    method: 'get'
   })
 }
