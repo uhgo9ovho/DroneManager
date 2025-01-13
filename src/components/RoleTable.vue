@@ -15,13 +15,13 @@
         }}</el-tag>
       </template>
       <template #operate="{ row }">
-        <el-button type="text" @click="handleEdit(row)">编辑</el-button>
-        <el-button type="text" @click="handleDelete(row)" style="color: red">删除</el-button>
+        <el-button type="text" @click="handleEdit(row)" v-if="row.roleName !='超级管理员'">编辑</el-button>
+        <el-button type="text" @click="handleDelete(row)" style="color: red" v-if="row.roleName !='超级管理员'">删除</el-button>
       </template>
     </common-table>
     <!-- 编辑弹窗 -->
     <div v-if="dialogVisible">
-      <role-edit-dialog :dialogVisible="dialogVisible" @updateDialogVisible="updateDialogVisible"></role-edit-dialog>
+      <role-edit-dialog :row="row" :dialogVisible="dialogVisible" @updateDialogVisible="updateDialogVisible"></role-edit-dialog>
     </div>
   </div>
 </template>
@@ -38,6 +38,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      row: null,
       columns: [
         {
           prop: "roleName",
@@ -93,6 +94,7 @@ export default {
     },
     handleEdit(row) {
       this.dialogVisible = true;
+      this.row = row
     },
     handleDelete(row) {
       console.log(row);

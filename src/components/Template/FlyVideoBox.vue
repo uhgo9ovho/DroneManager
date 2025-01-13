@@ -16,6 +16,8 @@
 import MapContainer from "../MapContainer.vue";
 import Aliplayer from "aliyun-aliplayer";
 import "aliyun-aliplayer/build/skins/default/aliplayer-min.css";
+import { mapState } from "vuex";
+import { getStreamAPI } from "@/api/droneControl.js";
 let player = null;
 export default {
   props: {
@@ -78,6 +80,9 @@ export default {
       immediate: true,
     },
   },
+  computed: {
+    ...mapState("droneStatus", ["airPostInfo"]),
+  },
   mounted() {},
   methods: {
     changeVideo() {
@@ -85,28 +90,32 @@ export default {
     },
     initPlayer() {
       let _this = this;
-      player = new Aliplayer(
-        {
-          id: "J_prismPlayer2",
-          width: "100%",
-          height: "100%",
-          source: "artc://drone.szyfu.com/wrjFlyDrone/1581F6Q8D23CT00A4491",
-          // rtsFallbackSource: "https://drone.szyfu.com/wrjFly/7CTDLCE00A6Y68.flv",
-          autoplay: true,
-          mute: true,
-          isLive: true,
-          playsinline: true,
-          preload: true,
-          license: {
-            domain: "jky.szyfu.com", // 申请 License 时填写的域名
-            key: "dPzLKTbJSeu1aRyexef24a6e5308f43fc9d495acef1a08f0f", // 申请成功后，在控制台可以看到 License Key
-          },
-        },
-        function (player) {
-          console.log("success");
-          player.play();
+      getStreamAPI(this.airPostInfo.id).then((result) => {
+        if (result.code === 200) {
+          player = new Aliplayer(
+            {
+              id: "J_prismPlayer2",
+              width: "100%",
+              height: "100%",
+              source: result.data.dockStream.droneStream.flv,
+              // rtsFallbackSource: "https://drone.szyfu.com/wrjFly/7CTDLCE00A6Y68.flv",
+              autoplay: true,
+              mute: true,
+              isLive: true,
+              playsinline: true,
+              preload: true,
+              license: {
+                domain: "jky.szyfu.com", // 申请 License 时填写的域名
+                key: "dPzLKTbJSeu1aRyexef24a6e5308f43fc9d495acef1a08f0f", // 申请成功后，在控制台可以看到 License Key
+              },
+            },
+            function (player) {
+              console.log("success");
+              player.play();
+            }
+          );
         }
-      );
+      });
     },
   },
   components: {

@@ -39,7 +39,7 @@ const user = {
     SET_ORG_WORKSPACEID(state, workspaceId) {
       state.workspaceId = workspaceId;
       localStorage.setItem('workspaceId', workspaceId);
-    }
+    },
   },
 
   actions: {
@@ -105,7 +105,7 @@ const user = {
         removeToken()
         resolve()
       })
-    }
+    },
   }
 }
 

@@ -10,34 +10,46 @@
         <el-input v-model="form.roleName"></el-input>
       </el-form-item>
       <el-form-item label="角色描述">
-        <el-input v-model="form.roleDesc"></el-input>
+        <el-input v-model="form.remark"></el-input>
       </el-form-item>
       <el-form-item label="角色状态">
         <el-switch
           v-model="form.status"
-          :active-value="0"
-          :inactive-value="1"
+          active-value="0"
+          inactive-value="1"
         ></el-switch>
       </el-form-item>
       <el-form-item label="角色权限">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="小程序" name="miniProgram"> </el-tab-pane>
-          <el-tab-pane label="看板大屏" name="dashboard"></el-tab-pane>
+        <el-tabs v-model="activeName">
           <el-tab-pane label="管理侧" name="admin"></el-tab-pane>
+          <el-tab-pane label="看板大屏" name="dashboard"></el-tab-pane>
+          <el-tab-pane label="小程序" name="miniProgram"> </el-tab-pane>
         </el-tabs>
-        <div v-if="activeName == 'miniProgram'">
-          <tree-promission :data="data" :show-checkbox="true"></tree-promission>
-        </div>
-        <div v-if="activeName == 'dashboard'">
+        <div v-show="activeName == 'miniProgram'">
           <tree-promission
-            :data="data1"
+            ref="programsRef"
+            :checkedKeys="checkedKeysObj.miniProgram"
+            :data="programsPermissions"
             :show-checkbox="true"
+            @selectedKeys="selectedKeys"
           ></tree-promission>
         </div>
-        <div v-if="activeName == 'admin'">
+        <div v-show="activeName == 'dashboard'">
           <tree-promission
-            :data="data2"
+            ref="screenRef"
+            :data="screenPermissions"
+            :checkedKeys="checkedKeysObj.dashboard"
             :show-checkbox="true"
+            @selectedKeys="selectedKeys"
+          ></tree-promission>
+        </div>
+        <div v-show="activeName == 'admin'">
+          <tree-promission
+            ref="managerRef"
+            :data="managerPermissions"
+            :show-checkbox="true"
+            :checkedKeys="checkedKeysObj.admin"
+            @selectedKeys="selectedKeys"
           ></tree-promission>
         </div>
       </el-form-item>
@@ -51,6 +63,8 @@
 
 <script>
 import TreePromission from "./TreePromission.vue";
+import { mapState } from "vuex";
+import { roleMenuTreeselectAPI, editRoleAPI } from "@/api/orgModel";
 export default {
   components: {
     TreePromission,
@@ -60,74 +74,114 @@ export default {
       type: Boolean,
       default: false,
     },
+    row: {
+      type: Object,
+      default: () => null,
+    },
+  },
+  computed: {
+    ...mapState("app", [
+      "managerPermissions",
+      "screenPermissions",
+      "programsPermissions",
+    ]),
   },
   data() {
     return {
-      form: {},
+      form: {
+        roleName: "",
+        remark: "",
+        status: "1",
+      },
+      checkedKeys: [],
       activeName: "admin",
-      data: [
-        {
-          id: 3,
-          label: "一级 3",
-          children: [
-            {
-              id: 7,
-              label: "二级 3-1",
-            },
-            {
-              id: 8,
-              label: "二级 3-2",
-            },
-          ],
-        },
-      ],
-      data1: [
-        {
-          id: 1,
-          label: "一级 1",
-          children: [
-            {
-              id: 4,
-              label: "二级 1-1",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1",
-                },
-                {
-                  id: 10,
-                  label: "三级 1-1-2",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      data2: [
-        {
-          id: 2,
-          label: "一级 2",
-          children: [
-            {
-              id: 5,
-              label: "二级 2-1",
-            },
-            {
-              id: 6,
-              label: "二级 2-2",
-            },
-          ],
-        },
-      ],
+      checkedKeysObj: {
+        admin: [],
+        dashboard: [],
+        miniProgram: [],
+      },
     };
   },
+  created() {
+    this.form = Object.assign({}, this.row);
+    this.roleMenuTreeselect();
+  },
   methods: {
+    selectedKeys(checkedKeys) {
+      // 只更新当前激活标签页的选中状态
+      this.checkedKeysObj[this.activeName] = checkedKeys || [];
+      console.log(`${this.activeName}模块权限更新为:`, checkedKeys);
+    },
     handleClose() {
+      this.resetCheckedKeys();
       this.$emit("updateDialogVisible", false);
     },
     handleSave() {
-      console.log(this.form);
-      this.handleClose();
+      // 合并所有模块当前选中的权限
+      this.form.menuIds = [
+        ...new Set([
+          ...(this.checkedKeysObj.admin || []),
+          ...(this.checkedKeysObj.dashboard || []),
+          ...(this.checkedKeysObj.miniProgram || []),
+        ]),
+      ];
+      
+      console.log('保存前的权限数据:', this.form.menuIds);
+      
+      editRoleAPI(this.form).then((res) => {
+        if (res.code === 200) {
+          this.$message.success(res.msg);
+          this.handleClose();
+        } else {
+          this.$message.error('操作失败');
+        }
+      }).catch(err => {
+        this.$message.error('操作失败');
+      });
+    },
+    roleMenuTreeselect() {
+      roleMenuTreeselectAPI(this.row.roleId).then((res) => {
+        if (res.code == 200) {
+          const allCheckedKeys = res.checkedKeys || [];
+          const menus = res.menus || [];
+          
+          // 找到三个主模块的ID
+          const adminModule = menus.find(item => item.label === "管理侧");
+          const dashboardModule = menus.find(item => item.label === "大屏端");
+          const miniProgramModule = menus.find(item => item.label === "小程序");
+          
+          // 递归查找某个ID是否属于指定模块
+          const isInModule = (id, moduleData) => {
+            if (!moduleData) return false;
+            
+            const findId = (node) => {
+              if (node.id === id) return true;
+              if (node.children) {
+                return node.children.some(child => findId(child));
+              }
+              return false;
+            };
+            
+            return findId(moduleData);
+          };
+          
+          // 分类权限ID
+          this.checkedKeysObj = {
+            admin: allCheckedKeys.filter(id => isInModule(id, adminModule)),
+            dashboard: allCheckedKeys.filter(id => isInModule(id, dashboardModule)),
+            miniProgram: allCheckedKeys.filter(id => isInModule(id, miniProgramModule))
+          };
+          
+          console.log('初始化各模块权限数据：', this.checkedKeysObj);
+        }
+      });
+    },
+    resetCheckedKeys() {
+      this.checkedKeysObj = {
+        admin: [],
+        dashboard: [],
+        miniProgram: [],
+      };
     },
   },
 };

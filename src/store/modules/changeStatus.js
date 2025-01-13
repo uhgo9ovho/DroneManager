@@ -1,6 +1,7 @@
 
 import { getAirLineAPI } from '@/api/TaskManager';
 import { Message } from 'element-ui';
+import { gcj02ToWgs84, wgs84ToGcj02 } from "@/utils/CoordinateTransformation.js";
 const state = {
     downloadStatus: false,
     isDrawText: "",
@@ -17,23 +18,45 @@ const mutations = {
         state.isDrawText = flag;
     },
     CHANGE_COORDINATESARR(state, arr) {
-        const result = arr.map(item => ({
+        const aaa = gcj02ToWgs84(116.481499, 39.990475)
+        console.log(wgs84ToGcj02(aaa[0], aaa[1]),'asdsadasdasdasd');
+        
+
+
+
+        const formatArr = arr.map(item => {
+            return gcj02ToWgs84(item[0], item[1]);
+        })
+        console.log(arr,'高德地图的框选坐标（gcj02）');
+        
+        const result = formatArr.map(item => ({
             lon: item[0],
             lat: item[1]
         }));
+        console.log(result, '传给后台的框选坐标（gcj02-》 wgs84）');
+        
         const params = {
             type: state.type,
             taskType: state.taskType,
             pointsList: result,
             workspaceId: localStorage.getItem('workspaceId')
         }
-        getAirLineAPI(params).then(res=> {
-            if(res.code == 200) {
+        getAirLineAPI(params).then(res => {
+            if (res.code == 200) {
                 state.airlineList = res.airlineList;
                 res.airlineList.forEach(item => {
-                    const pointsArr = item.drawLineInfo.pointsList.map(it => [it.lon, it.lat])
-                    state.pointsList.push(pointsArr)
+                    // const pointsArr = item.drawLineInfo.pointsList.map(it => {
+                    //     return [it.lon, it.lat]
+                    // })
+                    const pointsArr = item.drawLineInfo.pointsList.map(it => wgs84ToGcj02(it.lon, it.lat))
+                    // const pointsArr = item.drawLineInfo.pointsList.map(it => [it.lon, it.lat])
+
+                    state.pointsList.push(...pointsArr)
                 })
+                console.log(res.airlineList[0].drawLineInfo.pointsList, '返回的航线坐标（wgs84）');
+                
+                console.log(state.pointsList, '返回的航线坐标（wgs84-》gcj02）');
+                
             } else {
                 Message.error(res.msg);
                 state.isDrawText = "取消";

@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-
+import { handleTree } from '@/utils/ruoyi';
 const state = {
   sidebar: {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
@@ -9,6 +9,9 @@ const state = {
   device: 'desktop',
   size: Cookies.get('size') || 'medium',
   addFilter: false,
+  managerPermissions: [],  //管理
+  screenPermissions: [],   //大屏
+  programsPermissions: [] //小程序
 }
 
 const mutations = {
@@ -42,6 +45,36 @@ const mutations = {
   //弹窗添加蒙层
   SET_FILTER_BULR(state, flag) {
     state.addFilter = flag;
+  },
+  GET_PERMISSION(state, values) {
+    const formatManagerList = values[0].data.map(item => {
+      return {
+        parentId: item.parentId,
+        menuId: item.menuId,
+        menuName: item.menuName,
+        path: item.path,
+      }
+    })
+    const formatScreenList = values[1].data.map(item => {
+      return {
+        parentId: item.parentId,
+        menuId: item.menuId,
+        menuName: item.menuName,
+        path: item.path,
+      }
+    })
+    const formatProgramsList = values[2].data.map(item => {
+      return {
+        parentId: item.parentId,
+        menuId: item.menuId,
+        menuName: item.menuName,
+        path: item.path,
+      }
+    })
+    state.managerPermissions = handleTree(formatManagerList, 'menuId', 'parentId');
+    state.screenPermissions = handleTree(formatScreenList, 'menuId', 'parentId');
+    state.programsPermissions = handleTree(formatProgramsList, 'menuId', 'parentId');
+
   }
 }
 
@@ -60,6 +93,11 @@ const actions = {
   },
   toggleSideBarHide({ commit }, status) {
     commit('SET_SIDEBAR_HIDE', status)
+  },
+  //获取所有权限
+  GetPermissionsList({ commit }, values) {
+    commit('GET_PERMISSION', values);
+
   }
 }
 

@@ -95,3 +95,44 @@ export const getRoleListAPI = (params) => {
         params
     })
 }
+
+/**
+ * 角色编辑回显
+ */
+export const roleMenuTreeselectAPI = (roleId) => {
+  return request({
+    url: `/system/menu/roleMenuTreeselect/${roleId}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 角色编辑
+ */
+export const editRoleAPI = (params) => {
+  return request({
+    url: '/system/role',
+    method: 'put',
+    data: params
+  })
+}
+
+/**
+ * 获取角色下拉框数据
+ */
+export const roleOptionsAPI = () => {
+  return request({
+    url: '/system/user/',
+    method: 'get'
+  })
+}
+
+/**
+ * 成员编辑回显接口
+ */
+export const EditEchoAPI = (id) => {
+  return request({
+    url: `/system/user/${id}`,
+    method: 'get'
+  })
+}

@@ -6,17 +6,19 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-
+import { getToken } from '@/utils/auth'
 export default {
   name: "App",
   computed: {
-    ...mapState('app', ['addFilter'])
+    ...mapState('app', ['addFilter']),
+
   },
   mounted() {
     document.title = localStorage.getItem("platformName") ? localStorage.getItem("platformName") : "城市空天智慧管理平台";
   },
   methods: {
     ...mapActions("droneStatus", ["getAirPostInfo"]),
+    
   },
   metaInfo() {
     return {

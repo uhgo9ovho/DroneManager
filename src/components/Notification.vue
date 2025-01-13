@@ -29,7 +29,9 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import { getMessageListAPI } from "@/api/user.js";
+import { getPermissionListAPI } from '@/api/user';
 export default {
   name: "Notification",
   data() {
@@ -61,6 +63,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions("app", ["GetPermissionsList"]),
     getMessageList() {
       const orgId = localStorage.getItem("org_id");
       getMessageListAPI(orgId).then((res) => {
@@ -79,9 +82,22 @@ export default {
         }
       });
     },
+    getPermissionList() {
+      const managerPermission = getPermissionListAPI(3); //管理
+      const screenPermission = getPermissionListAPI(2); //大屏
+      const programsPermission = getPermissionListAPI(4); //小程序
+      Promise.all([
+        managerPermission,
+        screenPermission,
+        programsPermission,
+      ]).then((values) => {
+        this.GetPermissionsList(values);
+      });
+    },
   },
   created() {
     this.getMessageList();
+    this.getPermissionList()
     this.timer = setInterval(() => {
       this.getMessageList();
     }, 30000); // 每30秒轮询一次

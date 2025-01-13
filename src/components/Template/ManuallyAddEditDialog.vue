@@ -30,12 +30,22 @@
       </el-form-item>
       <el-form-item label="部门" prop="department">
         <el-select v-model="ruleForm.department">
-          <el-option v-for="(item, index) in options" :key="index" :value="item.value" :label="item.label"></el-option>
+          <el-option
+            v-for="(item, index) in options"
+            :key="index"
+            :value="item.value"
+            :label="item.label"
+          ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="角色" prop="role">
-        <el-select v-model="ruleForm.role">
-          <el-option v-for="(item, index) in options" :key="index" :value="item.value" :label="item.label"></el-option>
+      <el-form-item label="角色" prop="roleIds">
+        <el-select v-model="ruleForm.roleIds" multiple>
+          <el-option
+            v-for="(item, index) in roleList"
+            :key="index"
+            :value="item.roleId"
+            :label="item.roleName"
+          ></el-option>
         </el-select>
       </el-form-item>
     </el-form>
@@ -47,6 +57,7 @@
 </template>
 
 <script>
+import { roleOptionsAPI, EditEchoAPI } from "@/api/orgModel";
 import { addUser, editUserInfo, getDeptList } from "@/api/user.js";
 export default {
   name: "ManuallyAddDialog",
@@ -71,7 +82,7 @@ export default {
         phone: "",
         department: "",
         password: "",
-        role: "",
+        roleIds: [],
       },
       options: [],
       rules: {
@@ -87,23 +98,41 @@ export default {
         pageNum: 1,
         pageSize: 10,
         orgId: this.$store.getters.orgId,
-        orgDeptName: ""
-      }
+        orgDeptName: "",
+      },
+      roleList: [],
     };
   },
   methods: {
     getOrgList() {
-      getDeptList(this.page).then(res => {
-        if(res.code === 200) {
-          this.options = res.rows.map(item => {
+      getDeptList(this.page).then((res) => {
+        if (res.code === 200) {
+          this.options = res.rows.map((item) => {
             return {
               value: item.id,
               label: item.orgDeptName,
-            }
-          })
-
+            };
+          });
         }
-      })
+      });
+    },
+    getRoleList() {
+      roleOptionsAPI().then((res) => {
+        if (res.code == 200) {
+          this.roleList = res.roles;
+        }
+      });
+    },
+    getRoleSIdList() {
+      console.log(this.itemRow);
+      if (this.itemRow) {
+        EditEchoAPI(this.itemRow.id).then((res) => {
+          console.log(res);
+          if(res.code == 200) {
+            this.ruleForm.roleIds = res.roleIds
+          }
+        });
+      }
     },
     handleClose() {
       this.$emit("menuallyClose");
@@ -112,7 +141,6 @@ export default {
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
           if (this.title == "添加成员") {
-
             const params = {
               userName: this.ruleForm.name,
               nickName: this.ruleForm.name,
@@ -120,12 +148,12 @@ export default {
               password: this.ruleForm.password,
               orgId: +this.$store.getters.orgId,
               orgDeptId: this.ruleForm.department,
-              roleIds: [2],
-            }
+              roleIds: this.ruleForm.roleIds,
+            };
             addUser(params).then((res) => {
               if (res.code == 200) {
                 this.$message.success(res.msg);
-                this.$emit('updateList');
+                this.$emit("updateList");
               } else {
                 this.$message.error(res.msg);
               }
@@ -137,16 +165,16 @@ export default {
               orgId: this.itemRow.orgId,
               phonenumber: this.ruleForm.phone,
               orgDeptId: this.itemRow.orgDeptId,
-              orgDeptIdTo: this.ruleForm.department
-            }
-            editUserInfo(params).then(res => {
-              if(res.code === 200) {
+              orgDeptIdTo: this.ruleForm.department,
+            };
+            editUserInfo(params).then((res) => {
+              if (res.code === 200) {
                 this.$message.success(res.msg);
-                this.$emit('updateList');
+                this.$emit("updateList");
               } else {
-                this.$message.error('编辑失败');
+                this.$message.error("编辑失败");
               }
-            })
+            });
           }
         } else {
           console.log("error submit!!");
@@ -156,13 +184,15 @@ export default {
     },
   },
   mounted() {
-    this.getOrgList()
+    this.getOrgList();
+    this.getRoleList();
+    this.getRoleSIdList();
     if (this.title == "编辑成员") {
       console.log(this.itemRow);
       this.ruleForm.name = this.itemRow.userName;
       this.ruleForm.phone = this.itemRow.phonenumber;
       this.ruleForm.department = this.itemRow.orgDeptId;
-    };
+    }
   },
 };
 </script>
