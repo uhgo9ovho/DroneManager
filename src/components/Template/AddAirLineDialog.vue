@@ -29,8 +29,8 @@
             :key="item.ticket_id"
             @click="checkedLine(item)"
           >
-            <div class="hidden_line" style="flex: 1 1 0%; text-align: start">
-              【{{ item.taskType | filterType }}】{{ item.taskName }} ({{
+            <div class="hidden_line" style="flex: 1 1 0%; text-align: start;">
+             {{ item.taskName }} ({{
                 item.wrjAirlineFiles.length
               }})
             </div>
@@ -185,6 +185,7 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         .add-title {
           font-weight: 550;
           font-size: 16px;
@@ -252,6 +253,18 @@ export default {
             margin-bottom: 4px;
             padding-left: 16px;
             cursor: pointer;
+            .hidden_line{
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+            .hidden_line:hover{
+              white-space: normal;
+              overflow: visible;
+              background-color: #f0f0f0; /* 可选，悬浮时的背景色变化 */
+              z-index: 1; /* 确保悬浮时显示在其他内容之上 */
+              position: relative; /* 确保z-index有效 */
+            }
           }
           .left-item-selected {
             font-weight: 550;
@@ -266,6 +279,7 @@ export default {
           align-items: left;
           justify-content: flex-start;
           overflow: auto;
+          padding-top: 18px;
           .right-item {
             display: flex;
             height: 40px;
@@ -280,6 +294,7 @@ export default {
             cursor: pointer;
             justify-content: space-between;
             align-items: center;
+
           }
           .right-item-selected {
             font-weight: 400;

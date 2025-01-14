@@ -50,7 +50,7 @@
             >
           </el-popover>
         </div>
-        <div class="info-details">{{ row.note }}</div>
+        <div class="info-details">{{row.note==null?"暂无排期":row.note}}</div>
       </div>
     </div>
   </div>
