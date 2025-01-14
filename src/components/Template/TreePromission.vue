@@ -2,6 +2,7 @@
   <div class="tree-promission">
     <el-tree
       :data="data"
+      ref="menu"
       node-key="menuId"
       :props="defaultProps"
       :show-checkbox="showCheckbox"
@@ -38,8 +39,10 @@ export default {
   },
   methods: {
     currentChecked(nodeObj, SelectedObj) {
-      console.log(nodeObj, SelectedObj);
-      this.$emit('selectedKeys', SelectedObj.checkedKeys)
+      let halfCheckedKeys = this.$refs.menu.getHalfCheckedKeys()
+      console.log(halfCheckedKeys);
+      
+      this.$emit('selectedKeys', SelectedObj.checkedKeys, halfCheckedKeys);
     }
   },
 };

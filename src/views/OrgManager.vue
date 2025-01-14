@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="right">
-        <div class="add-btn">
+        <div class="add-btn" v-permisssions="'wrj:org:add'">
           <el-button type="primary" icon="el-icon-plus" @click="handleAdd"
             >新增</el-button
           >
@@ -37,6 +37,7 @@
         ref="orgTable"
         :dialogVisible="dialogVisible"
         @updateDialogVisible="updateDialogVisible"
+        v-permissions="'mngSide:org'"
       ></org-table>
     </div>
   </div>

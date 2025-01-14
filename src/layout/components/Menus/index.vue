@@ -6,7 +6,7 @@
       v-for="(item, index) in routeList"
       :key="index"
       @click="toPath(item)"
-      v-show="!item.hidden"
+      v-show="!item.hidden && permission(item.permissions)"
     >
       <i :class="item.meta.icon" class="iconfont"></i>
       <div class="item-title">{{ item.meta.title }}</div>
@@ -16,6 +16,7 @@
 
 <script>
 import { constantRoutes } from "@/router";
+import { mapState } from "vuex";
 export default {
   name: "Menus",
   data() {
@@ -24,7 +25,25 @@ export default {
     };
   },
   computed: {
-
+    ...mapState("app", ["managerPermissions"]),
+    permission() {
+      return function (item) {
+        if (this.managerPermissions.length) {
+          // const allMenuPermissions = this.managerPermissions.map(it => it.perms);
+          const userPermissions = JSON.parse(
+            localStorage.getItem("userPermission")
+          );
+          if (userPermissions[0] == "*:*:*") return true;
+          if (userPermissions.includes(item[0])) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return false
+        }
+      };
+    },
   },
   methods: {
     toPath(item) {
