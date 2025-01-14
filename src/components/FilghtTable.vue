@@ -81,6 +81,7 @@
             round
             size="mini"
             class="iconfont el-icon-guijifeihang"
+            v-permissions="'wurenji:scheduling:fly'"
             style="
               width: 84px;
               height: 32px;
