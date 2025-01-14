@@ -116,10 +116,10 @@
         {{ row.createTime | filterTime }}
       </template>
       <template #operate="scope">
-        <el-button type="text" @click="editBtn(scope.row)" style="margin-right: 10px">编辑</el-button>
+        <el-button type="text" @click="editBtn(scope.row)" style="margin-right: 10px" v-permissions="'wrj:user:edit'">编辑</el-button>
         <!-- <el-button type="text" style="margin-right: 10px">调岗</el-button> -->
 
-        <el-popconfirm :ref="`popover-${scope.$index}`" title="你确定要删除吗？" @confirm="confirm(scope.row)">
+        <el-popconfirm :ref="`popover-${scope.$index}`" title="你确定要删除吗？" @confirm="confirm(scope.row)" v-permissions="'wrj:user:remove'">
           <el-button type="text" style="color: red" slot="reference" v-show="scope.row.roleName!=='超级管理员'"
             >删除</el-button
           >

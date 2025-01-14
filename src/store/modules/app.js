@@ -53,6 +53,7 @@ const mutations = {
         menuId: item.menuId,
         menuName: item.menuName,
         path: item.path,
+        perms: item.perms
       }
     })
     const formatScreenList = values[1].data.map(item => {
@@ -61,6 +62,7 @@ const mutations = {
         menuId: item.menuId,
         menuName: item.menuName,
         path: item.path,
+        perms: item.perms
       }
     })
     const formatProgramsList = values[2].data.map(item => {
@@ -69,6 +71,7 @@ const mutations = {
         menuId: item.menuId,
         menuName: item.menuName,
         path: item.path,
+        perms: item.perms
       }
     })
     state.managerPermissions = handleTree(formatManagerList, 'menuId', 'parentId');

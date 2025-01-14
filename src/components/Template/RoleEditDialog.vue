@@ -95,6 +95,7 @@ export default {
       },
       checkedKeys: [],
       activeName: "admin",
+      halfCheckedKeys: [],
       checkedKeysObj: {
         admin: [],
         dashboard: [],
@@ -107,10 +108,11 @@ export default {
     this.roleMenuTreeselect();
   },
   methods: {
-    selectedKeys(checkedKeys) {
+    selectedKeys(checkedKeys, halfCheckedKeys) {
       // 只更新当前激活标签页的选中状态
       this.checkedKeysObj[this.activeName] = checkedKeys || [];
       console.log(`${this.activeName}模块权限更新为:`, checkedKeys);
+      this.halfCheckedKeys.push(...halfCheckedKeys);
     },
     handleClose() {
       this.resetCheckedKeys();
@@ -125,7 +127,8 @@ export default {
           ...(this.checkedKeysObj.miniProgram || []),
         ]),
       ];
-      
+      this.form.menuIds.push(...this.halfCheckedKeys);
+      this.form.menuIds = [...new Set(this.form.menuIds)]
       console.log('保存前的权限数据:', this.form.menuIds);
       
       editRoleAPI(this.form).then((res) => {

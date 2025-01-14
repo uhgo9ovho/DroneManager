@@ -121,53 +121,19 @@ export default {
     beforeAvatarUpload() {},
     handleAvatarSuccess(res) {
       this.webUrl = res.url;
-      if (res.code == 200) {
-        imgUrl(res.url).then((re) => {
-          console.log(re);
-          this.ruleForm.webLogo = URL.createObjectURL(re);
-          this.$message.success("上传成功");
-        });
-      }
+      this.ruleForm.webLogo = "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + res.url;
     },
     handleAvatarSuccess2(res) {
       this.palteUrl = res.url;
-      if (res.code == 200) {
-        imgUrl(res.url).then((re) => {
-          this.$message.success("上传成功");
-          this.ruleForm.platformLogo = URL.createObjectURL(re);
-        });
-      }
+      this.ruleForm.platformLogo = "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + res.url;
     },
     beforeAvatarUpload2() {},
     //获取组织列表
-    getorgList() {
-      let _this = this;
-      const params = {
-        pageSize: 10,
-        pageNum: 1,
-      };
-      getDepartmentList(params).then((res) => {
-        if (res.code === 200) {
-          const rows = res.rows;
-          let currentOrg = rows.filter(
-            (item) => item.orgId == this.itemRow.orgId
-          )[0];
-          _this.webUrl = currentOrg.webLogo;
-          _this.palteUrl = currentOrg.platformLogo;
-          const getWebUrl = imgUrl(currentOrg.webLogo);
-          const getPlateFormUrl = imgUrl(currentOrg.platformLogo);
-          Promise.all([getWebUrl, getPlateFormUrl]).then((values) => {
-            _this.ruleForm.webLogo = URL.createObjectURL(values[0]);
-            _this.ruleForm.platformLogo = URL.createObjectURL(values[1]);
-          });
-        }
-      });
-    },
   },
   mounted() {
     this.ruleForm.orgName = this.itemRow.orgDeptName;
-
-    this.getorgList();
+    this.ruleForm.webLogo = 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + this.itemRow.webLogo;
+    this.ruleForm.platformLogo = 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + this.itemRow.platformLogo;
   },
 };
 </script>
