@@ -25,10 +25,10 @@ router.beforeEach((to, from, next) => {
   const userPermissions = JSON.parse(localStorage.getItem('userPermission'));
   const currentAuths = to.meta.auth;
   let hasCommonValue = true
-  // if (userPermissions) {
-  //   hasCommonValue = userPermissions.some(value => currentAuths.includes(value));
+  if (userPermissions && currentAuths) {
+    hasCommonValue = userPermissions.some(value => currentAuths.includes(value));
 
-  // }
+  }
   const path = to.path.substring(1);
   const orgArr = Cookies.get('orgList');
   activePath(path)
@@ -38,7 +38,7 @@ router.beforeEach((to, from, next) => {
   if (getToken() && orgId) {
     console.log(to);
     /* has token*/
-    if (to.path === '/login' && !orgArr) {
+    if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done()
     } else {
