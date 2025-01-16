@@ -10,18 +10,19 @@
           <div class="title">{{ title }}</div>
           <div class="subtitle">{{ subtitle }}</div>
           <p class="date">日期：{{ report.reportTime }}</p>
+          <hr class="date-line" />
         </div>
 
         <!-- 描述部分 -->
         <div class="description-section">
-          <p>{{ description }}</p>
+          <p class="text-indent-2em">{{ description }}</p>
         </div>
 
         <!-- 总体情况 -->
         <div class="section">
           <h2>一、总体情况</h2>
-          <div v-for="(paragraph, index) in overall" :key="'overall-' + index" style="text-indent:32px;text-align: justify">
-            {{ paragraph}}
+          <div v-for="(paragraph, index) in overall" :key="'overall-' + index" class="text-indent-2em">
+            {{ paragraph }}
           </div>
         </div>
 
@@ -327,7 +328,7 @@ export default {
             longitude: 108.98489432310971,
           },
           {
-            problemName: "1206-0002-裸土未覆���",
+            problemName: "1206-0002-裸土未覆",
             foundTime: "2024-12-06 11:17:46",
             foundLocation: "陕西省西安市未央区谭家街道仁惠路",
             photoDetail: "system/1733455066051.png",
@@ -447,6 +448,7 @@ export default {
             this.report = res.data;
             this.isShow = true;
             this.loading = false;
+            console.log('shouid',this.shouldShowDiv)
           } else if (res.code === 500) {
             // this.isShow = true
           }
@@ -609,15 +611,16 @@ export default {
       return this.tableType == 1 ? "无人机巡检日报" : "无人机巡检周报";
     },
     shouldShowDiv() {
-      // 检查三个列表是否都为空
+      // 检查三个列表是否都为 null 或空数组
       if (
-        this.problemList == null &&
-        this.modelList == null &&
-        this.orthoList == null
+        (this.report.problemList == null || this.report.problemList.length === 0) &&
+        (this.report.modelList == null || this.report.modelList.length === 0) &&
+        (this.report.orthoList == null || this.report.orthoList.length === 0)
       ) {
         return false;
+      } else {
+        return true;
       }
-      return true;
     },
     problemListLength() {
       if (this.report.problemList) {
@@ -881,6 +884,18 @@ export default {
   text-align: center;
   color: #888888;
   font-size: 16px;
+}
+
+.date-line {
+  border: none;
+  border-top: 2px solid red; /* 设置红色的横线 */
+  width: 100%;
+  margin-top: 10px; /* 横线和日期之间的间距 */
+  margin-bottom: 40px;
+}
+
+.text-indent-2em {
+  text-indent: 2em; /* 使段落前有2个字的缩进 */
 }
 
 /* 附件部分样式 */

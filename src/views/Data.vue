@@ -2,14 +2,14 @@
   <div class="data">
     <div class="top">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="预警事件" name="warningEvent"></el-tab-pane>
-        <el-tab-pane label="统计报告" name="statisticalReports"></el-tab-pane>
+        <el-tab-pane label="预警事件" name="warningEvent" v-if="permissions.includes('wurenji:warning:list') || permissions[0] == '*:*:*'"></el-tab-pane>
+        <el-tab-pane label="统计报告" name="statisticalReports" v-if="permissions.includes('mngSide:data:report') || permissions[0] == '*:*:*'"></el-tab-pane>
       </el-tabs>
-      <div class="report-selector" v-if="currentTab == 'statisticalReports'">
+      <div class="report-selector" v-if="currentTab == 'statisticalReports'" v-permissions="'mngSide:data:report'">
         <!--        <div class="tab-container">-->
         <el-tabs v-model="activeTab" @tab-click="handleTabClick">
-          <el-tab-pane label="日报" name="daily"></el-tab-pane>
-          <el-tab-pane label="周报" name="weekly"></el-tab-pane>
+          <el-tab-pane label="日报" name="daily" v-if="permissions.includes('mngSide:data:report:day') || permissions[0] == '*:*:*'"></el-tab-pane>
+          <el-tab-pane label="周报" name="weekly" v-if="permissions.includes('mngSide:data:report:weeks') || permissions[0] == '*:*:*'"></el-tab-pane>
         </el-tabs>
         <!--        </div>-->
 
@@ -39,10 +39,10 @@
     </div>
     <div></div>
     <div class="task-list-grid" v-if="currentTab == 'warningEvent'">
-      <warning-event ref="warningRef"></warning-event>
+      <warning-event ref="warningRef" v-permissions="'wurenji:warning:list'"></warning-event>
     </div>
     <div class="task-list-grid" v-else :key="forceRerender">
-      <StatisticalReports @changeLookUp="changeLookUp" :reportParams="params"></StatisticalReports>
+      <StatisticalReports @changeLookUp="changeLookUp" :reportParams="params" v-permissions="'mngSide:data:report'"></StatisticalReports>
     </div>
     <div class="page-wrap" v-if="showLookUp">
       <WordPreviewVue @closeLookUp="closeLookUp" :itemRow="itemRow"></WordPreviewVue>
@@ -58,6 +58,7 @@ export default {
   name: "Flight",
   data() {
     return {
+      permissions: JSON.parse(localStorage.getItem('userPermission')),
       itemRow: null,
       showLookUp: false,
       activeName: "warningEvent",

@@ -1,5 +1,11 @@
 import { userMqtt } from './useMqtt';
 import Vue from 'vue';
+//drc连接状态
+const DrcStateEnum = {
+    DISCONNECT: 0,  //未连接
+    CONNECTING: 1, //连接中
+    CONNECTED: 2 //已连接
+}
 const vm = new Vue({
     data: {
         isCurrentFlightController: null,
@@ -46,6 +52,9 @@ export function useManualControl(deviceTopicInfo, isCurrentFlightController) {
         handleClearInterval()
         myInterval = setInterval(() => {
             body.data.seq = seq++
+            seq++
+            console.log(body.data.seq, 'body.data.seq');
+
             mqttHooks?.publishMqtt(deviceTopicInfo.pubTopic, body, { qos: 1 })
         }, 50)
     };

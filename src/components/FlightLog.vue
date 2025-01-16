@@ -24,7 +24,7 @@
         <el-tag type="success">{{ row.record_status }}</el-tag>
       </template>
       <template #operate="{ row }">
-        <el-button class="look-btn" @click="lookBtn(row)">查看</el-button>
+        <el-button class="look-btn" @click="lookBtn(row)" v-permissions="'wurenji:record:query'">查看</el-button>
       </template>
     </common-table>
     <!-- 查看弹窗 -->
@@ -65,12 +65,6 @@ export default {
         {
           prop: "airportName",
           label: "机场",
-          showOverflowTooltip: true,
-        },
-        {
-          prop: "createBy",
-          label: "创建人/操作人",
-          slot: true,
           showOverflowTooltip: true,
         },
         {

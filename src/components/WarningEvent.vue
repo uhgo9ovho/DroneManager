@@ -63,8 +63,8 @@
       </template>
       <template #operate="{ row }">
         <div class="operate-box">
-          <el-button type="text" @click="detailsBtn(row)">详情</el-button>
-          <el-dropdown @command="operateCommand(row)" v-show="row.status == '0'">
+          <el-button type="text" @click="detailsBtn(row)" v-permissions="'wurenji:warning:list'">详情</el-button>
+          <el-dropdown @command="operateCommand(row)" v-show="row.status == '0'" v-permissions="'wurenji:warning:updateStatus'">
             <span class="el-dropdown-link el-icon-more"></span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
@@ -81,6 +81,7 @@
 
           <el-button
             :disabled="row.status != '0'"
+            v-permissions="'wurenji:warning:updateStatus'"
             type="primary"
             round
             size="mini"

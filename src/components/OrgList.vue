@@ -102,6 +102,7 @@ export default {
           let userInfo = res.user;
           Cookies.set("user", JSON.stringify(userInfo), { expires: 30 });
           this.params.userId = userInfo.userId;
+          localStorage.setItem('userPermission', JSON.stringify(res.permissions))
           this.getOrgList();
         }
       });

@@ -2,13 +2,33 @@
   <div class="task-grid">
     <div class="task-container">
       <div class="task_map">
-        <MapContainer :lineInfoObj="lineInfoObj"></MapContainer>
+        <MapContainer
+          :lineInfoObj="lineInfoObj"
+          ref="mapContainer"
+        ></MapContainer>
         <div v-if="detailsShow">
           <div class="task_name">{{ taskName }}</div>
           <div class="task_airline-list">
             <div class="airline-list-warp">
-              <el-switch v-model="value"></el-switch>
-              <div class="count">共 1 条航线</div>
+              <el-switch v-model="value" @change="showLine"></el-switch>
+              <div class="count">共{{ totalLine }}条航线</div>
+              <div class="airline-list" v-if="pointsList.length > 1">
+                <div class="content">
+                  <div
+                    class="air"
+                    v-for="(item, index) in pointsList"
+                    :key="index"
+                    @click="checkedItem(item, index)"
+                  >
+                    <div
+                      class="airline"
+                      :class="{ selectedAirline: item.checked }"
+                    >
+                      <div>航线{{ index + 1 }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -16,6 +36,7 @@
       <!-- 飞行任务info -->
       <div v-if="detailsShow">
         <FilghtTaskInfo
+          ref="taskInfo"
           @closeDialog="closeDialog"
           @lineInfo="lineInfo"
           :taskDetails="taskDetails"
@@ -27,7 +48,11 @@
       </div>
       <!-- 飞行info -->
       <div v-if="filghtShow">
-        <FilghtInfo @closeDialog="closeDialog" :row="row" @lineInfo="lineInfo"></FilghtInfo>
+        <FilghtInfo
+          @closeDialog="closeDialog"
+          :row="row"
+          @lineInfo="lineInfo"
+        ></FilghtInfo>
       </div>
     </div>
   </div>
@@ -65,17 +90,16 @@ export default {
   },
   data() {
     return {
-      value: false,
+      value: true,
       totalLine: 0,
       taskName: "",
       note: "",
       lineInfoObj: null,
+      pointsList: [],
     };
   },
   created() {
     if (this.detailsShow) {
-      console.log(this.row);
-
       taskInfoApI(this.row.taskId).then((res) => {
         if (res.code === 200) {
           this.totalLine = res.data.airlineNumber;
@@ -84,7 +108,6 @@ export default {
         }
       });
     } else {
-
     }
   },
   methods: {
@@ -92,8 +115,41 @@ export default {
       this.$emit("closeDialog");
     },
     lineInfo(info) {
-      this.lineInfoObj = info
-    }
+      this.lineInfoObj = info;
+      console.log(info, "info");
+      const tempObj = Object.assign({}, info);
+      this.pointsList = tempObj.pointsList.map((item) => {
+        return {
+          ...item,
+          checked: false,
+        };
+      });
+    },
+    checkedItem(item, index) {
+      const filteredArray = this.lineInfoObj.pointsList.filter(
+        (lineItem, lineIdx) => {
+          return index == lineIdx;
+        }
+      );
+      console.log(filteredArray, "filteredArray");
+      const formarItemArr = filteredArray[0].map((it) => [it.lon, it.lat]);
+      this.$refs.mapContainer.checkedPolylineColor(formarItemArr);
+      this.pointsList.forEach((it) => {
+        it.checked = false;
+      });
+      item.checked = true;
+    },
+    showLine(val) {
+      this.pointsList.forEach((it) => {
+        it.checked = false;
+      });
+      if (val) {
+        this.$refs.mapContainer.polylineShow();
+        this.$refs.mapContainer.initAMap();
+      } else {
+        this.$refs.mapContainer.polylineVisible();
+      }
+    },
   },
 };
 </script>
@@ -166,6 +222,44 @@ export default {
             color: rgb(110, 110, 115);
             width: 110px;
             margin-left: 10px;
+          }
+          .airline-list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-y: hidden;
+            overflow-x: auto;
+            position: relative;
+            width: calc(100% - 110px);
+            .content {
+              display: flex;
+              overflow: hidden;
+              width: calc(100% - 64px);
+              .air {
+                cursor: pointer;
+                .airline {
+                  position: relative;
+                  width: 80px;
+                  height: 32px;
+                  border-radius: 8px;
+                  margin-right: 8px;
+                  pointer-events: none;
+                  overflow-y: scroll;
+                  font-weight: 400;
+                  font-size: 12px;
+                  color: #6e6e73;
+                  text-align: center;
+                  line-height: 32px;
+                  background: #e7e7e8;
+                  cursor: pointer;
+                }
+                .selectedAirline {
+                  transform: scale(1);
+                  background: #faad14 !important;
+                  color: #fff !important;
+                }
+              }
+            }
           }
         }
       }

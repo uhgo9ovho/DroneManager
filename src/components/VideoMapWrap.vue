@@ -266,12 +266,7 @@ export default {
       showRemote: false,
       mapWidth: "100vw",
       mapHeight: "100vh",
-      taskOptions: [
-        {
-          label: "西安-周至",
-          value: "西安-周至",
-        },
-      ],
+      taskOptions: [],
       task: "",
       toolsVisible: false,
       openDebug: false,
@@ -331,6 +326,7 @@ export default {
       insideStreamUrl: "",
       outsideStreamUrl: "",
       droneStreamUrl: "",
+      drcState: 0,
     };
   },
   components: {
@@ -340,7 +336,12 @@ export default {
     FlyRemote,
   },
   computed: {
-    ...mapState("droneStatus", ["statusInfo", "deviceSN", "airPostInfo"]),
+    ...mapState("droneStatus", [
+      "statusInfo",
+      "deviceSN",
+      "airPostInfo",
+      "airOptions",
+    ]),
     title() {
       return "当前无人控制该设备，是否确认继续申请控制权？";
     },
@@ -354,7 +355,7 @@ export default {
   watch: {
     showRemote(val) {
       if (!val) {
-        this.unsubscribe();
+        // this.unsubscribe();
       }
     },
     mqttState: {
@@ -371,7 +372,6 @@ export default {
         //无人机数据（正在飞行中）
         if (host) {
           this.payloadIndex = host.payload[0]?.payload_index;
-          console.log(this.payloadIndex);
 
           this.latitudeLine = host.latitude;
           this.longitudeLine = host.longitude;
@@ -411,6 +411,11 @@ export default {
         //飞行进度
         this.percentage = val.data.output.progress.percent;
       } else if (val.biz_code === "dock_osd") {
+        if ("drc_state" in host) {
+          this.drcState = host.drc_state;
+          console.log(host.drc_state, "drc_status");
+        }
+
         if (host.network_state && host.network_state.rate) {
           this.tempNetworkState = host.network_state.rate;
         }
@@ -430,7 +435,6 @@ export default {
     this.getEQToken();
     this.getDeviceInfo();
     this.getPlotInfo();
-    console.log(this.airPostInfo, "this.airPostInfo");
   },
   methods: {
     ...mapActions("droneStatus", [
@@ -449,6 +453,8 @@ export default {
     async getDeviceInfo() {
       if (!this.airPostInfo) {
         await this.fetchAirPostInfo();
+        this.task = this.airPostInfo.address;
+        this.taskOptions = this.airOptions;
       }
       this.getDeviceSN(this.airPostInfo.deviceId);
       let lonlatArr = this.airPostInfo.location.split(",");
@@ -555,7 +561,7 @@ export default {
               this.unsubscribe = unsubscribe;
               this.getToicpSubPub(topic);
               //抢夺控制权
-              authorityAPI({}, this.deviceSN).then((res) => {});
+              // authorityAPI({}, this.deviceSN).then((res) => {});
             } else {
               this.$message.error(res.message || res.msg);
             }
@@ -582,6 +588,7 @@ export default {
             this.flightController = false; //退出控制
             this.getToicpSubPub({});
             this.$message.success("Exit flight control");
+            this.unsubscribe();
             this.mqttState?.destroyed();
           }
         });

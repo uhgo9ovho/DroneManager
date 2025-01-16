@@ -152,13 +152,26 @@
     border-top-color: rgba(29, 29, 31, .9215686274509803) !important;
   }
 }
-.user-popover,.popper-notification,.airLine,.fly-task-info {
+
+.user-popover,
+.popper-notification,
+.airLine,
+.fly-task-info {
   color: #000;
   background-color: #fff;
   border-color: #fff;
 }
+
 // .popper__arrow {
 //   &::after {
 //     border-bottom-color: #000 !important;
 //   }
 // }
+.schedule-nest-popover {
+  left: 150px !important;
+  background-color: #fff;
+  border-color: transparent;
+  .popper__arrow::after {
+      color: block !important;
+  }
+}

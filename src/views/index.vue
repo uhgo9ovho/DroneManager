@@ -235,11 +235,6 @@ export default {
           tips: '减少碳排'
         }
       ]
-      // pickerOptions: {
-      //   disabledDate(time) {
-      //     return time.getTime() > Date.now();
-      //   },
-      // },
     }
   },
   computed: {},
@@ -247,7 +242,6 @@ export default {
     this.getDateRange('week')
     this.timeRange = this.getTimeRangeTimestamps('week')
     this.getstatisticsData();
-    // this.connectWS()
   },
   methods: {
     connectWS() {
@@ -400,13 +394,15 @@ export default {
       }
     },
     changeDate(e) {
-      console.log(e[0])
       const formatDateArr = e.map((item) => this.formatDateToYMD(item))
-      // console.log('e',e);
+      // 设置开始时间为当天 00:00:00
       this.timeRange.startTime = this.convertToTimestamp(e[0])
-      this.timeRange.endTime = this.convertToTimestamp(e[1])
+      // 设置结束时间为当天 23:59:59
+      const endDate = new Date(e[1])
+      endDate.setHours(23, 59, 59, 999)
+      this.timeRange.endTime = endDate.getTime()
+      
       this.getstatisticsData()
-      console.log(formatDateArr)
       this.currentDate = formatDateArr.join('-')
     },
     formatDateToYMD(dateString) {

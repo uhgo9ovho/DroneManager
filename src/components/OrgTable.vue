@@ -10,10 +10,10 @@
       @sizeChange="sizeChange"
     >
       <template #operate="scope">
-        <el-button type="text" @click="handleAddDevice(scope.row)"
+        <el-button type="text" @click="handleAddDevice(scope.row)" v-permissions="'wrj:device:add'"
           >新增设备</el-button
         >
-        <el-button type="text" @click="handleDeviceList(scope.row)"
+        <el-button type="text" @click="handleDeviceList(scope.row)" v-permissions="'wrj:device:list'"
           >设备列表</el-button
         >
         <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
@@ -21,6 +21,7 @@
           type="text"
           style="color: #f56c6c"
           @click="handleDelete(scope.row)"
+          v-permissions="'wrj:org:remove'"
           >删除</el-button
         >
       </template>
