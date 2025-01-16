@@ -68,7 +68,7 @@
             <span class="el-dropdown-link el-icon-more"></span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
-                
+
                 v-for="(item, index) in operateOptions"
                 :key="index"
                 :command="item.label"
@@ -148,7 +148,7 @@ export default {
       columns: [
         {
           prop: "warnName",
-          label: "任务名称/类型",
+          label: "事件名称",
           showOverflowTooltip: true,
           slot: true,
           minWidth: "200",
@@ -187,18 +187,24 @@ export default {
         "全覆盖",
       ],
       statusOptions: [
-        "全部状态",
-        "已挂起",
-        "执行终止",
-        "待审核",
-        "审核中",
-        "待执行",
-        "执行中",
-        "制作中",
-        "制作失败",
-        "已完成",
-        "已过期",
-        "执行失败",
+        // "全部状态",
+        // "已挂起",
+        // "执行终止",
+        // "待审核",
+        // "审核中",
+        // "待执行",
+        // "执行中",
+        // "制作中",
+        // "制作失败",
+        // "已完成",
+        // "已过期",
+        // "执行失败",
+        "新发现",
+        "已上报",
+        "已受理",
+        "已办结",
+        "已超期",
+        "已忽略",
       ],
       operateOptions: [
         {
@@ -256,6 +262,26 @@ export default {
         }
       };
     },
+    statusTypes(status) {
+      return function (status) {
+        switch (status) {
+          case "新发现":
+            return '0';
+          case "已上报":
+            return '1';
+          case "已受理":
+            return '2';
+          case "已办结":
+            return '3';
+          case "已超期":
+            return '4';
+          case "已忽略":
+            return '5';
+          default:
+            return '';
+        }
+      };
+    },
   },
   mounted() {
     this.getWarningList();
@@ -310,9 +336,22 @@ export default {
     nameCommand(itemCommand) {
       console.log(itemCommand);
     },
-    statusCommand(itemCommand) {},
+    statusCommand(itemCommand) {
+      const params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+        orgId: localStorage.getItem('org_id'),
+        warnName:'',
+        status: this.statusTypes(itemCommand)
+      };
+      warningListAPI(params).then((res) => {
+        if (res.code === 200) {
+          this.warningList = res.rows;
+          this.total = res.total;
+        }
+      });
+    },
     operateCommand(itemCommand) {
-      console.log(itemCommand);
       this.neglectVisible = true;
       this.itemRow = itemCommand;
     },

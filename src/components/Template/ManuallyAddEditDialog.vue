@@ -19,12 +19,14 @@
         <el-input
           placeholder="请输入联系方式"
           v-model="ruleForm.phone"
+          autocomplete="new-password"
         ></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password" v-if="title == '添加成员'">
         <el-input
           placeholder="请输入密码"
           v-model="ruleForm.password"
+          autocomplete="new-password"
           show-password
         ></el-input>
       </el-form-item>
@@ -124,7 +126,6 @@ export default {
       });
     },
     getRoleSIdList() {
-      console.log(this.itemRow);
       if (this.itemRow) {
         EditEchoAPI(this.itemRow.userId).then((res) => {
           console.log(res);
@@ -134,10 +135,12 @@ export default {
         });
       }
     },
+
     handleClose() {
       this.$emit("menuallyClose");
     },
     handleSave() {
+
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
           if (this.title == "添加成员") {
@@ -185,11 +188,20 @@ export default {
     },
   },
   mounted() {
+    console.log("2222",this.ruleForm)
+    this.ruleForm = {
+        name: "",
+        phone: "",
+        department: "",
+        password: "",
+        roleIds: [],
+    },
+      console.log("33",this.ruleForm)
     this.getOrgList();
     this.getRoleList();
     this.getRoleSIdList();
     if (this.title == "编辑成员") {
-      console.log(this.itemRow);
+      console.log("111",this.itemRow);
       this.ruleForm.name = this.itemRow.userName;
       this.ruleForm.phone = this.itemRow.phonenumber;
       this.ruleForm.department = this.itemRow.orgDeptId;

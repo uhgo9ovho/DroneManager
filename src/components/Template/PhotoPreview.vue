@@ -378,6 +378,11 @@ export default {
     max-width: 1200px;
     max-height: 900px;
     border-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    //background-color: rgba(255, 255, 255, 1);
     position: relative;
     .quanjing {
       .img_box {

@@ -681,6 +681,9 @@ export default {
 
     overall() {
       const totalTime = this.report.totalTime || 0;
+      console.log("报告时间",this.report.reportTime)
+      // let tempTime = this.report.reportTime
+      // this.report.reportTime=format(tempTime,'yyyy-MM-dd')
       return [
         this.report.reportTime +
           "，共有" +

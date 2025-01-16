@@ -11,7 +11,7 @@
     </div>
     <div class="certification">
       <div class="local">{{ orgName }}</div>
-      <el-tag type="info">未认证</el-tag>
+<!--      <el-tag type="info">未认证</el-tag>-->
     </div>
     <el-divider></el-divider>
     <div class="invite-members" @click="openDialog">

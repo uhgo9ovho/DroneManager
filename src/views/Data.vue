@@ -136,7 +136,7 @@ export default {
     },
     checkedTip() {
       if (this.checked) {
-        return "搜索名称";
+        return "请输入事件名称";
       }
       return "搜索";
     },
