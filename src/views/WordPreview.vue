@@ -9,7 +9,7 @@
         <div class="title-section">
           <div class="title">{{ title }}</div>
           <div class="subtitle">{{ subtitle }}</div>
-          <p class="date">日期：{{ report.reportTime }}</p>
+          <p class="date">日期：{{ formattedDate }}</p>
           <hr class="date-line" />
           <hr class="date-line1" />
 
@@ -266,7 +266,7 @@ export default {
       description:
         "本报告根据日常无人机巡检工作包括使用人员提交任务、无人机执行任务、数据生产情况等进行统计汇总。",
       report: {
-        reportTime: "-",
+        reportTime: " ",
         deviceNum: 0,
         sortieNum: 0,
         totalTime: 0,
@@ -609,6 +609,13 @@ export default {
     },
   },
   computed: {
+    formattedDate() {
+      const date = new Date(this.report.reportTime);
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 月份从0开始，需要加1
+      const day = date.getDate().toString().padStart(2, '0'); // 获取日期并补零
+      return `${year}-${month}-${day}`;
+    },
     subtitle() {
       return this.tableType == 1 ? "无人机巡检日报" : "无人机巡检周报";
     },
@@ -683,11 +690,9 @@ export default {
 
     overall() {
       const totalTime = this.report.totalTime || 0;
-      console.log("报告时间",this.report.reportTime)
-      // let tempTime = this.report.reportTime
-      // this.report.reportTime=format(tempTime,'yyyy-MM-dd')
+
       return [
-        this.report.reportTime +
+        this.formattedDate +
           "，共有" +
           this.report.deviceNum +
           "台无人机正常工作，共计飞行架次" +
