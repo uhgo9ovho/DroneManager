@@ -85,6 +85,7 @@ export default {
   },
   data() {
     return {
+      sortPhotoList:[],
       timeOptions: [],
       url: "",
     };
@@ -111,9 +112,14 @@ export default {
       getWarningPhotosAPI(this.row.id).then((res) => {
         if (res.code === 200) {
           const responseData = res.rows;
+          this.sortPhotoList = responseData.slice().sort((a, b) => {
+            const dateA = new Date(a.photodate);
+            const dateB = new Date(b.photodate);
+            return dateB - dateA; // 从近到远排序
+          });
           // 获取当前日期
           const currentDate = new Date();
-          this.timeOptions = responseData.map((item, index) => {
+          this.timeOptions = this.sortPhotoList.map((item, index) => {
             if (index === 0) {
               this.url =
                 "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.pic;

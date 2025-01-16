@@ -20,8 +20,8 @@
         <!-- 总体情况 -->
         <div class="section">
           <h2>一、总体情况</h2>
-          <div v-for="(paragraph, index) in overall" :key="'overall-' + index">
-            {{ paragraph }}
+          <div v-for="(paragraph, index) in overall" :key="'overall-' + index" style="text-indent:32px;text-align: justify">
+            {{ paragraph}}
           </div>
         </div>
 
@@ -678,6 +678,9 @@ export default {
 
     overall() {
       const totalTime = this.report.totalTime || 0;
+      console.log("报告时间",this.report.reportTime)
+      // let tempTime = this.report.reportTime
+      // this.report.reportTime=format(tempTime,'yyyy-MM-dd')
       return [
         this.report.reportTime +
           "，共有" +

@@ -126,9 +126,8 @@ export default {
       });
     },
     getRoleSIdList() {
-      console.log(this.itemRow);
       if (this.itemRow) {
-        EditEchoAPI(this.itemRow.id).then((res) => {
+        EditEchoAPI(this.itemRow.userId).then((res) => {
           if(res.code == 200) {
             this.ruleForm.roleIds = res.roleIds
           }
@@ -140,6 +139,7 @@ export default {
       this.$emit("menuallyClose");
     },
     handleSave() {
+
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
           if (this.title == "添加成员") {
@@ -168,6 +168,7 @@ export default {
               phonenumber: this.ruleForm.phone,
               orgDeptId: this.itemRow.orgDeptId,
               orgDeptIdTo: this.ruleForm.department,
+              roleIds: this.ruleForm.roleIds,
             };
             editUserInfo(params).then((res) => {
               if (res.code === 200) {

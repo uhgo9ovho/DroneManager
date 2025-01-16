@@ -114,8 +114,9 @@ export const deleteTaskAPI = (taskIds) => {
  */
 export const warningListAPI = (params) => {
   return request({
-    url: `/wurenji/warning/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${params.orgId}&warnName=${params.warnName ? params.warnName : ''}`,
-    method: 'get'
+    url: `/wurenji/warning/list`,
+    method: 'get',
+    params,
   })
 }
 
