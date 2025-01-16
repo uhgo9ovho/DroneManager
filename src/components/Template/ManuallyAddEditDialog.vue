@@ -126,7 +126,7 @@ export default {
     getRoleSIdList() {
       console.log(this.itemRow);
       if (this.itemRow) {
-        EditEchoAPI(this.itemRow.id).then((res) => {
+        EditEchoAPI(this.itemRow.userId).then((res) => {
           console.log(res);
           if(res.code == 200) {
             this.ruleForm.roleIds = res.roleIds
@@ -166,6 +166,7 @@ export default {
               phonenumber: this.ruleForm.phone,
               orgDeptId: this.itemRow.orgDeptId,
               orgDeptIdTo: this.ruleForm.department,
+              roleIds: this.ruleForm.roleIds
             };
             editUserInfo(params).then((res) => {
               if (res.code === 200) {

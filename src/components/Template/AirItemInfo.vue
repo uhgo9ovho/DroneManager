@@ -21,6 +21,7 @@
       class="task-btn"
       @click="takeOffBtn"
       v-if="info.schedulingStatus === 3 || info.schedulingStatus === 0"
+      v-permissions="'wurenji:scheduling:fly'"
     >
       <!-- 待执行和已执行 -->
       <div>起飞</div>
@@ -33,6 +34,7 @@
       class="task-btn2"
       v-if="info.schedulingStatus === 1"
       @click="toVideoMap"
+      v-permissions="'wurenji:scheduling:fly'"
     >
       <!-- 正在飞行 -->
       <div>实况</div>
@@ -47,8 +49,8 @@
           <i class="el-icon-more"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="details">查看详情</el-dropdown-item>
-          <el-dropdown-item command="delete">删除</el-dropdown-item>
+          <el-dropdown-item command="details" v-permissions="'wurenji:scheduling:query'">查看详情</el-dropdown-item>
+          <el-dropdown-item command="delete" v-permissions="'wurenji:scheduling:remove'">删除</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>

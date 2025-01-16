@@ -15,12 +15,12 @@
                   <div class="nest-item nest-item-selected">全部机场(1)</div>
                 </div>
                 <div class="nest-list-wrap">
-                  <div class="nest-item nest-item-selected">西安-周至</div>
+                  <div class="nest-item nest-item-selected">西安-西部研发中心</div>
                 </div>
               </div>
 
               <div slot="reference">
-                <span>西安-周至</span>
+                <span>西安-西部研发中心</span>
                 <i class="el-icon-arrow-down"></i>
               </div>
             </el-popover>

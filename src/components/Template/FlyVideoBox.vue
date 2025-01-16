@@ -64,26 +64,28 @@ export default {
     };
   },
   watch: {
-    mode_code: {
-      handler(val) {
-        if (val === 0) {
-          console.log(this.devId);
-          if (player) {
-            player.dispose();
-          }
-        } else {
-          this.$nextTick(() => {
-            this.initPlayer();
-          });
-        }
-      },
-      immediate: true,
-    },
+    // mode_code: {
+    //   handler(val) {
+    //     if (val === 0) {
+    //       console.log(this.devId);
+    //       if (player) {
+    //         player.dispose();
+    //       }
+    //     } else {
+    //       this.$nextTick(() => {
+    //         this.initPlayer();
+    //       });
+    //     }
+    //   },
+    //   immediate: true,
+    // },
   },
   computed: {
     ...mapState("droneStatus", ["airPostInfo"]),
   },
-  mounted() {},
+  mounted() {
+    this.initPlayer();
+  },
   methods: {
     changeVideo() {
       this.$emit("changeVideo", "video2");

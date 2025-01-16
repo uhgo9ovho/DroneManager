@@ -54,7 +54,9 @@ export const constantRoutes = [
   {
     path: '/videoMap',
     component: () => import('@/views/VideoMap'),
-    hidden: true
+    hidden: true,
+    meta: { auth: 'mngSide:index', auth: ["mngSide:airport", "wurenji:scheduling:fly", "wurenji:scheduling:fly"] },
+    permissions: ["mngSide:airport", "wurenji:scheduling:fly", "wurenji:scheduling:fly"]
   },
   {
     path: '/wordPreview',
@@ -70,29 +72,33 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/index'),
         name: 'Index',
-        meta: { title: '首页', icon: 'el-icon-shouye', affix: true },
+        meta: { title: '首页', icon: 'el-icon-shouye', affix: true, auth: ['mngSide:index'] },
         active: true,
+        permissions: ["mngSide:index"]
       },
       {
         path: 'flight',
         component: () => import('@/views/Flight.vue'),
         name: 'Flight',
-        meta: { title: '飞行', icon: 'el-icon-guijifeihang' },
+        meta: { title: '飞行', icon: 'el-icon-guijifeihang', auth: ['mngSide:flight'] },
         active: false,
+        permissions: ["mngSide:flight"]
       },
       {
         path: 'airport',
         component: () => import('@/views/Airport.vue'),
         name: 'Airport',
-        meta: { title: '机场', icon: 'el-icon-hangpai' },
+        meta: { title: '机场', icon: 'el-icon-hangpai', auth: ['mngSide:airport'] },
         active: false,
+        permissions: ['mngSide:airport']
       },
       {
         path: 'data',
         component: () => import('@/views/Data.vue'),
         name: 'Data',
-        meta: { title: '数据', icon: 'el-icon-shuju' },
+        meta: { title: '数据', icon: 'el-icon-shuju', auth: ['mngSide:data'] },
         active: false,
+        permissions: ['mngSide:data']
       },
       // {
       //   path: 'plots',
@@ -105,30 +111,34 @@ export const constantRoutes = [
         path: 'contacts',
         component: () => import('@/views/Contacts.vue'),
         name: 'Contacts',
-        meta: { title: '通讯录', icon: 'el-icon-tongxunlu' },
+        meta: { title: '通讯录', icon: 'el-icon-tongxunlu', auth: ['mngSide:contacts'] },
         active: false,
+        permissions: ['mngSide:contacts']
       },
       {
         path: 'orgList',
         component: () => import('@/views/OrgManager.vue'),
         name: 'OrgList',
-        meta: { title: '组织管理', icon: 'el-icon-zuzhi' },
+        meta: { title: '组织管理', icon: 'el-icon-zuzhi', auth: ['mngSide:org'] },
         active: false,
+        permissions: ['mngSide:org']
       },
       {
         path: 'deviceLogs',
         component: () => import('@/views/DeviceLogs.vue'),
         name: 'DeviceLogs',
-        meta: { title: '设备日志', icon: 'el-icon-shebeirizhi' },
+        meta: { title: '设备日志', icon: 'el-icon-shebeirizhi', auth: ['mngSide:deviceLogs'] },
         active: false,
+        permissions: ['mngSide:deviceLogs']
       },
       {
         path: 'openMap',
         component: () => import('@/views/OpenMap.vue'),
         name: 'OpenMap',
-        meta: { title: '新建任务', icon: '' },
+        meta: { title: '新建任务', icon: '', auth: ['wurenji:task:add'] },
         active: false,
         hidden: true,
+        permissions: ['wurenji:task:add']
       },
     ]
   },

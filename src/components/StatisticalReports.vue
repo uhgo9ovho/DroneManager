@@ -15,7 +15,7 @@
       </template>
       <template #operate="{row}">
         <div class="operate-box">
-          <el-button type="text" @click="detailsBtn(row)">查看</el-button>
+          <el-button type="text" @click="detailsBtn(row)" v-permissions="'wurenji:report:view'">查看</el-button>
         </div>
       </template>
     </common-table>

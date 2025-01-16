@@ -8,7 +8,7 @@ import { isRelogin } from '@/utils/request'
 import { constantRoutes } from "@/router";
 import Cookies from 'js-cookie';
 NProgress.configure({ showSpinner: false })
-const whiteList = ['/login', '/register', '/videoMap', '/WordPreview']
+const whiteList = ['/login', '/register', '/WordPreview'];
 let routeList = constantRoutes.filter((item, index) => {
   return !item.hidden;
 })[0].children;
@@ -22,6 +22,13 @@ function activePath(path) {
   });
 };
 router.beforeEach((to, from, next) => {
+  const userPermissions = JSON.parse(localStorage.getItem('userPermission'));
+  const currentAuths = to.meta.auth;
+  let hasCommonValue = true
+  // if (userPermissions) {
+  //   hasCommonValue = userPermissions.some(value => currentAuths.includes(value));
+
+  // }
   const path = to.path.substring(1);
   const orgArr = Cookies.get('orgList');
   activePath(path)
@@ -29,12 +36,19 @@ router.beforeEach((to, from, next) => {
   const orgId = localStorage.getItem("org_id");
   // next()
   if (getToken() && orgId) {
+    console.log(to);
     /* has token*/
     if (to.path === '/login' && !orgArr) {
       next({ path: '/' })
       NProgress.done()
     } else {
-      next()
+      if (userPermissions[0] == '*:*:*') {
+        next()
+      } else if (hasCommonValue) {
+        next()
+      } else {
+        next({ path: '/' })
+      }
     }
   } else {
     // 没有token

@@ -19,16 +19,16 @@
         </div>
       </template>
       <template #operate="{ row }">
-        <div v-if="row.isOrg">
+        <div v-if="row.isOrg" v-permissions="'wrj:dept:edit'">
           <el-button type="text" @click="openPersonalization(row)"
             >个性化</el-button
           >
         </div>
         <div class="edit-btns" v-else>
-          <el-button type="text" @click="openEditDialog(row)">编辑</el-button>
-          <el-button type="text" @click="openMigrateDialog">迁移</el-button>
-          <el-button type="text">权限</el-button>
-          <el-button type="text" style="color: red" @click="delBtn(row.id)"
+          <el-button type="text" @click="openEditDialog(row)" v-permissions="'wrj:dept:edit'">编辑</el-button>
+          <!-- <el-button type="text" @click="openMigrateDialog">迁移</el-button> -->
+          <!-- <el-button type="text">权限</el-button> -->
+          <el-button type="text" style="color: red" @click="delBtn(row.id)" v-permissions="'wrj:dept:remove'"
             >删除</el-button
           >
         </div>
