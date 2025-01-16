@@ -70,6 +70,11 @@ export default {
         this.value = val;
         this.formatData()
       }
+    },
+    value(val) {
+      console.log(val,'aaa');
+      this.$emit('changeDate', val);
+      
     }
   },
   data() {
