@@ -11,6 +11,12 @@ import {
     ISubscriptionGrant,
     IClientOptions,
 } from 'mqtt/dist/mqtt.min'
+import {
+    connectDRCAPI,
+    enterDRCAPI,
+    exitDRCAPI
+} from "@/api/user.js";
+import store from '@/store'
 export class UranusMqtt extends EventEmitter {
 
     constructor(url, options) {
@@ -51,7 +57,6 @@ export class UranusMqtt extends EventEmitter {
 
     // 发布
     publishMqtt = (topic, body, opts) => {
-        console.log(topic, '发布');
 
         if (!this._client?.connected) {
             this.initMqtt()
@@ -65,6 +70,8 @@ export class UranusMqtt extends EventEmitter {
 
     // 订阅
     subscribeMqtt = (topic) => {
+        console.log(topic, '订阅');
+
         if (!this._client?.connected) {
             this.initMqtt()
         }
@@ -87,8 +94,27 @@ export class UranusMqtt extends EventEmitter {
     }
 
     _onReconnect = () => {
-        debugger
-        if (this._client) { window.console.error('mqtt reconnect,') }
+        if (this._client) {
+            window.console.error('mqtt reconnect,')
+            exitDRCAPI(params).then(res => {
+                if (res.code === 0) {
+                    connectDRCAPI({}).then(res => {
+                        if (res.code === 0) {
+                            const { address, client_id, username, password, expire_time } =
+                                res.data;
+                            console.log(store);
+
+                            const params = {
+                                clientId: client_id,
+                                dockSn: store.state.droneStatus.deviceSN,
+                            };
+                            enterDRCAPI(params)
+                        }
+                    })
+                }
+            })
+
+        }
     }
 
     _onMessage = (topic, payload, packet) => {
