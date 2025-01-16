@@ -68,12 +68,6 @@ export default {
           showOverflowTooltip: true,
         },
         {
-          prop: "createBy",
-          label: "创建人/操作人",
-          slot: true,
-          showOverflowTooltip: true,
-        },
-        {
           prop: "executionTime",
           label: "执行时间",
           showOverflowTooltip: true,

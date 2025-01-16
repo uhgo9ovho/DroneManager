@@ -12,21 +12,30 @@
             >
               <div class="nest-dialog">
                 <div class="nest-area-wrap">
-                  <div class="nest-item nest-item-selected">全部机场(1)</div>
+                  <div class="nest-item nest-item-selected">
+                    全部机场({{ taskOptions.length }})
+                  </div>
                 </div>
                 <div class="nest-list-wrap">
-                  <div class="nest-item nest-item-selected">西安-西部研发中心</div>
+                  <div
+                    class="nest-item nest-item-selected"
+                    @click="checkedAirPost(item)"
+                    v-for="(item, index) in taskOptions"
+                    :key="index"
+                  >
+                    {{ item.label }}
+                  </div>
                 </div>
               </div>
 
               <div slot="reference">
-                <span>西安-西部研发中心</span>
+                <span>{{ task }}</span>
                 <i class="el-icon-arrow-down"></i>
               </div>
             </el-popover>
             <el-button type="text" @click="openAI">AI托管设置</el-button>
             <el-tooltip class="item" effect="dark" placement="bottom">
-              <div slot="content" style="width: 400px;">
+              <div slot="content" style="width: 400px">
                 AI托管：<br />无人机按预设时间自动起飞，自主返回，失败续飞，高效执行任务。系统依托智能调度算法动态计算起飞时间。且在无人机起飞前会进行全面的安全校验，包括机体状态、气象条件、电量预测等多因素，确保每次飞行任务的安全可靠。在飞行过程中，系统时刻监测飞行状态，确保无人机在遇到恶劣天气、设备故障等情况下自动报警或返航，必要时触发机场停飞，降低炸机风险。
                 然而，尽管AI托管赋予了飞行自动化，我们仍建议您保持警惕的关注，以防任何事故的发生。
               </div>
@@ -35,6 +44,7 @@
           </div>
           <div>
             <date-title
+              ref="dateTitle"
               :isDay="isDay"
               :total="total"
               @formattedDate="formattedDate"
@@ -69,6 +79,7 @@
             :sortMonthList="sortMonthList"
             :currentMonthDate="currentMonthDate"
             ref="MonthList"
+            @changeDate="changeDate"
           ></sort-month-list>
         </div>
       </div>
@@ -89,6 +100,7 @@ import DateTitle from "./Template/DateTitle.vue";
 import SortDayList from "./Template/SortDayList.vue";
 import SortMonthList from "./Template/SortMonthList.vue";
 import { heduledListAPI, heduledMonthListAPI } from "@/api/TaskManager.js";
+import { mapState, mapActions } from "vuex";
 export default {
   name: "FlightDate",
   components: {
@@ -107,11 +119,33 @@ export default {
       currentDate: "",
       sortMonthList: [],
       total: 0,
-      currentMonthDate: ""
+      currentMonthDate: "",
+      task: "",
+      taskOptions: []
     };
   },
-  mounted() {},
+  computed: {
+    ...mapState("droneStatus", ["airPostInfo", "airOptions"]),
+  },
+  mounted() {
+    this.getDeviceInfo()
+  },
   methods: {
+    ...mapActions("droneStatus", ["fetchAirPostInfo"]),
+    async getDeviceInfo() {
+      if (!this.airPostInfo) {
+        await this.fetchAirPostInfo();
+        this.task = this.airPostInfo.address;
+        this.taskOptions = this.airOptions;
+      }
+    },
+    checkedAirPost(item) {
+      this.task = item.label;
+    },
+    changeDate(date) {
+      const dateFormat = new Date(date);
+      this.$refs.dateTitle.formatDate(dateFormat)
+    },
     updateData(currentDate) {
       this.initDayList(currentDate);
     },

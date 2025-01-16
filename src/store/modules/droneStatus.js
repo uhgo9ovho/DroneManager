@@ -6,7 +6,8 @@ const state = {
     topic: {},
     mqttState: null,
     outsideStreamUrl: "",
-    airPostInfo: null
+    airPostInfo: null,
+    airOptions: []
 }
 const mutations = {
     GET_DRONE_INFO(state, info) {
@@ -31,10 +32,17 @@ const mutations = {
         state.outsideStreamUrl = obj;
     },
     SET_AIR_POST_INFO(state, info) {
-        console.log(info, "info");
         
         state.airPostInfo = info;
     },
+    SET_AIR_OPTIONS(state, info) {
+        state.airOptions = info.map(item => {
+            return {
+                value: item.address,
+                label: item.address
+            }
+        })
+    }
 }
 
 const actions = {
@@ -70,7 +78,7 @@ const actions = {
             const res = await airPostAPI(params);
             if (res.code === 200) {
                 commit('SET_AIR_POST_INFO', res.rows[0]);
-                console.log(res.rows[0], "res.rows[0]");
+                commit('SET_AIR_OPTIONS', res.rows);
             }
         } catch (error) {
             console.error('获取机场信息失败:', error);
