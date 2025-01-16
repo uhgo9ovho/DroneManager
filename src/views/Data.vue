@@ -10,8 +10,6 @@
         <el-tabs v-model="activeTab" @tab-click="handleTabClick">
           <el-tab-pane label="日报" name="daily" v-if="permissions.includes('mngSide:data:report:day') || permissions[0] == '*:*:*'"></el-tab-pane>
           <el-tab-pane label="周报" name="weekly" v-if="permissions.includes('mngSide:data:report:weeks') || permissions[0] == '*:*:*'"></el-tab-pane>
-          <el-tab-pane label="月报" name="monthly" v-if="permissions.includes('mngSide:data:report:month') || permissions[0] == '*:*:*'"></el-tab-pane>
-
         </el-tabs>
         <!--        </div>-->
 

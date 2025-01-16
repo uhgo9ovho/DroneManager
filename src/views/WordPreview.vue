@@ -11,6 +11,8 @@
           <div class="subtitle">{{ subtitle }}</div>
           <p class="date">日期：{{ report.reportTime }}</p>
           <hr class="date-line" />
+          <hr class="date-line1" />
+
         </div>
 
         <!-- 描述部分 -->
@@ -888,9 +890,17 @@ export default {
 
 .date-line {
   border: none;
+  border-top: 4px solid red; /* 设置红色的横线 */
+  width: 100%;
+  margin-top: 10px;
+  //margin-bottom: 2px;
+}
+
+.date-line1 {
+  border: none;
   border-top: 2px solid red; /* 设置红色的横线 */
   width: 100%;
-  margin-top: 10px; /* 横线和日期之间的间距 */
+  margin-top: -5px;
   margin-bottom: 40px;
 }
 
