@@ -40,8 +40,8 @@ module.exports = {
         // target: `http://172.16.40.119:9002`, //赵影妮
         // target: `http://172.16.40.41:9002`, //ch
         // target: `http://172.16.40.126:9002`, //王高
-        target: `http://172.16.40.119:9002`, //测试
-        // target: `https://jky.szyfu.com:9003/prod-api/`,//线上
+        // target: `http://172.16.40.119:9002`, //测试
+        target: `https://jky.szyfu.com:9003/prod-api/`,//线上
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''

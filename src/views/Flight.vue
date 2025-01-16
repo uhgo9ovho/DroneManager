@@ -2,9 +2,9 @@
   <div class="flight">
     <div class="top">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="飞行任务" name="flightTask"></el-tab-pane>
-        <el-tab-pane label="飞行排期" name="flightDate"></el-tab-pane>
-        <el-tab-pane label="飞行记录" name="flightLog"></el-tab-pane>
+        <el-tab-pane label="飞行任务" name="flightTask" v-permissions="'mngSide:flight:task'"></el-tab-pane>
+        <el-tab-pane label="飞行排期" name="flightDate"  v-permissions="'mngSide:flight:schedule'"></el-tab-pane>
+        <el-tab-pane label="飞行记录" name="flightLog" v-permissions="'mngSide:flight:records'"></el-tab-pane>
       </el-tabs>
       <div class="operate-box">
         <div
@@ -24,20 +24,20 @@
           ></el-input>
         </div>
         <div class="create-task-btn" v-if="currentTab == 'flightTask'">
-          <el-button round icon="el-icon-plus" @click="addAndEditTask">新建任务</el-button>
+          <el-button round icon="el-icon-plus" @click="addAndEditTask" v-permissions="'wurenji:task:add'">新建任务</el-button>
         </div>
       </div>
     </div>
     <div class="task-list-grid" v-if="currentTab == 'flightTask'">
-      <filght-table ref="tableRef"></filght-table>
+      <filght-table ref="tableRef" v-permissions="'mngSide:flight:task'"></filght-table>
     </div>
     <!-- 飞行记录 -->
     <div class="flight-log" v-if="currentTab == 'flightLog'">
-      <flight-log ref="logRef"></flight-log>
+      <flight-log ref="logRef"  v-permissions="'mngSide:flight:records'"></flight-log>
     </div>
     <!-- 飞行排期 -->
     <div v-if="currentTab == 'flightDate'">
-      <flight-date></flight-date>
+      <flight-date  v-permissions="'mngSide:flight:schedule'"></flight-date>
     </div>
   </div>
 </template>

@@ -235,11 +235,6 @@ export default {
           tips: '减少碳排'
         }
       ]
-      // pickerOptions: {
-      //   disabledDate(time) {
-      //     return time.getTime() > Date.now();
-      //   },
-      // },
     }
   },
   computed: {},
@@ -247,7 +242,6 @@ export default {
     this.getDateRange('week')
     this.timeRange = this.getTimeRangeTimestamps('week')
     this.getstatisticsData();
-    // this.connectWS()
   },
   methods: {
     connectWS() {

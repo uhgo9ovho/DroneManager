@@ -60,7 +60,7 @@
       </template>
       <template #operate="{ row }">
         <div class="operate-box">
-          <el-button type="text" @click="detailsBtn(row)">详情 </el-button>
+          <el-button type="text" @click="detailsBtn(row)" v-permissions="'wurenji:task:query'">详情</el-button>
           <el-dropdown @command="operateCommand">
             <span class="el-dropdown-link el-icon-more"></span>
             <el-dropdown-menu slot="dropdown">
@@ -70,6 +70,7 @@
                 :command="beforeHandleCommand(row, item.label)"
                 :style="{ color: item.color }"
                 v-show="!(item.label == '成果' && row.taskType !== 2)"
+                v-permissions="item.permission"
                 ><i class="iconfont" :class="item.icon"></i>
                 {{ item.label }}
               </el-dropdown-item>
@@ -80,6 +81,7 @@
             round
             size="mini"
             class="iconfont el-icon-guijifeihang"
+            v-permissions="'wurenji:scheduling:fly'"
             style="
               width: 84px;
               height: 32px;
@@ -279,19 +281,23 @@ export default {
             {
               label: "成果",
               icon: "el-icon-zhaochengguo",
+              permission: 'wurenji:task:query'
             },
             {
               label: "排期",
               icon: "el-icon-paiqi",
+              permission: 'wurenji:task:add'
             },
             {
               label: "取消挂起",
               icon: "el-icon-3duihuacopy",
+              permission: 'wurenji:task:guaqi'
             },
             {
               label: "删除",
               icon: "el-icon-shanchu",
               color: "red",
+              permission: 'wurenji:task:remove'
             },
           ];
         } else {
@@ -299,19 +305,23 @@ export default {
             {
               label: "成果",
               icon: "el-icon-zhaochengguo",
+              permission: 'wurenji:task:query'
             },
             {
               label: "排期",
               icon: "el-icon-paiqi",
+              permission: 'wurenji:task:add'
             },
             {
               label: "挂起",
               icon: "el-icon-3duihuacopy",
+              permission: 'wurenji:task:guaqi'
             },
             {
               label: "删除",
               icon: "el-icon-shanchu",
               color: "red",
+              permission: 'wurenji:task:remove'
             },
           ];
         }

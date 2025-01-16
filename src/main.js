@@ -40,6 +40,27 @@ Vue.directive('removeAriaHidden', {
     })
   }
 })
+
+//  按钮权限控制指令
+Vue.directive('permissions', {
+  inserted(el, binding) {
+    const { value } = binding
+    const all_permission = "*:*:*";
+    const permissions = JSON.parse(localStorage.getItem('userPermission'))
+    const permissionFlag = value;
+
+    const hasPermissions = permissions.includes(permissionFlag) || all_permission == permissions[0];
+    if (!hasPermissions) {
+      console.log(el);
+      el.parentNode && el.parentNode.removeChild(el)
+    }
+  }
+})
+// 判断权限的函数
+function checkPermission(permission) {
+  var permissions = JSON.parse(localStorage.getItem('userPermission'))
+  return permissions.includes(permission);
+}
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
