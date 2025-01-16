@@ -10,18 +10,19 @@
         <div class="titles">{{ taskName }}</div>
       </div>
       <div class="nest" v-if="!taskDetails">
-        <div class="task-name-type">
+        <div class="task-name-type" style="cursor: pointer">
           <el-popover
             placement="bottom-start"
             trigger="click"
             popper-class="fly-task-info"
           >
             <span slot="reference"
-            >{{ totalLine }} 条航线 <i class="el-icon-arrow-down"></i>，
+              >{{ totalLine }} 条航线 <i class="el-icon-arrow-down"></i>，
               {{ note }}
             </span>
             <span
               style="
+                display: block;
                 text-overflow: ellipsis;
                 word-break: break-word;
                 white-space: nowrap;
@@ -34,9 +35,10 @@
                 margin-bottom: 4px;
                 margin-right: 10px;
               "
-            >{{ taskName }}</span
+              v-for="(item, index) in row.wrjAirlineFiles"
+              :key="index"
+              >{{ item.lineName }}</span
             >
-            <el-tag size="mini">待执行</el-tag>
           </el-popover>
         </div>
       </div>
@@ -62,7 +64,7 @@
           class="iconfont"
           :class="[taskDetails ? 'el-icon-xiazai20' : 'el-icon-dikuai']"
         ></i>
-        <div class="msg">{{ taskDetails ? '任务信息' : '地块信息' }}</div>
+        <div class="msg">{{ taskDetails ? "任务信息" : "地块信息" }}</div>
         <el-divider></el-divider>
       </div>
       <div class="plot">
@@ -105,7 +107,7 @@ export default {
   props: {
     taskDetails: {
       type: Boolean,
-      default: false
+      default: false,
     },
     taskName: {
       type: String,
@@ -113,7 +115,7 @@ export default {
     },
     totalLine: {
       type: Number,
-      default: 0
+      default: 0,
     },
     note: {
       type: String,
@@ -125,7 +127,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.row);
     this.getCollectInformation();
   },
   computed: {
@@ -134,26 +135,26 @@ export default {
         //任务信息
         return [
           {
-            label: '所属任务',
+            label: "所属任务",
             value: `【${this.changeType(this.row.taskType)}】 ${
               this.row.taskName
-            }`
-          }
-        ]
+            }`,
+          },
+        ];
       } else {
         //地块信息
         return [
           {
-            label: '地块形状',
-            value: '面状地块'
+            label: "地块形状",
+            value: "面状地块",
           },
           {
-            label: '地块半径',
-            value: '-米'
-          }
-        ]
+            label: "地块半径",
+            value: "-米",
+          },
+        ];
       }
-    }
+    },
   },
   data() {
     return {
@@ -180,13 +181,26 @@ export default {
     getCollectInformation() {
       const arr = this.row.wrjAirlineFiles;
       if (arr && arr.length) {
-        arr.forEach(item => {
+        arr.forEach((item) => {
           this.info.push(JSON.parse(item.drawLineData));
-        })
-        const pointsList = this.info.map(item => item.pointsList);
-        this.detailOptions[0].value = this.info.reduce((total, obj) => total + (obj.lineInfo.predictTime || 0) / 60, 0).toFixed(2) + '分钟';
-        this.detailOptions[1].value = this.info.reduce((total, obj) => total + (obj.lineInfo.goAndBackDis || 0), 0).toFixed(2) + 'km';
-        this.detailOptions[2].value = this.info.reduce((total, obj) => total + (obj.lineInfo.pointCount || 0), 0) + '张';
+        });
+        const pointsList = this.info.map((item) => item.pointsList);
+        this.detailOptions[0].value =
+          this.info
+            .reduce(
+              (total, obj) => total + (obj.lineInfo.predictTime || 0) / 60,
+              0
+            )
+            .toFixed(2) + "分钟";
+        this.detailOptions[1].value =
+          this.info
+            .reduce((total, obj) => total + (obj.lineInfo.goAndBackDis || 0), 0)
+            .toFixed(2) + "km";
+        this.detailOptions[2].value =
+          this.info.reduce(
+            (total, obj) => total + (obj.lineInfo.pointCount || 0),
+            0
+          ) + "张";
         this.lineInfo = {
           centerInfo: this.info[0].center,
           pointsList,
@@ -372,10 +386,8 @@ export default {
             white-space: nowrap;
             text-align: left;
             line-height: 20px;
-
           }
         }
-
       }
     }
 
@@ -405,7 +417,7 @@ export default {
       height: 60px;
 
       .item {
-         //width: 61px;
+        //width: 61px;
         display: flex;
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
@@ -432,7 +444,6 @@ export default {
 
           white-space: nowrap;
           text-align: left;
-
         }
       }
     }

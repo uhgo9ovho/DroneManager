@@ -16,6 +16,7 @@ import planeMarkerIcon from "@/assets/images/WechatIMG76.jpg";
 let map = null;
 let planeMarker = null;
 let lastPosition = null;
+let polyline = null;
 export default {
   name: "map-view",
   props: {
@@ -129,7 +130,9 @@ export default {
             this.lineInfoObj.pointsList.forEach((item) => {
               const formattedArr = [...item];
               // const formarItemArr = formattedArr.map((it) => [it.lon, it.lat]);
-              const formarItemArr = formattedArr.map((it) => wgs84ToGcj02(it.lon, it.lat));
+              const formarItemArr = formattedArr.map((it) =>
+                wgs84ToGcj02(it.lon, it.lat)
+              );
               this.lonlatArr.push(...formarItemArr);
             });
           }
@@ -208,7 +211,7 @@ export default {
           }
 
           if (this.lonlatArr.length) {
-            var polyline = new AMap.Polyline({
+            polyline = new AMap.Polyline({
               path: this.formatAirLine(AMap),
               strokeWeight: 2, //线条宽度
               strokeColor: "red", //线条颜色
@@ -221,6 +224,22 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+    },
+    polylineShow() {
+      polyline.setMap(map);
+    },
+    polylineVisible() {
+      polyline.setMap(null);
+    },
+    checkedPolylineColor(formarItemArr) {
+      this.polylineVisible()
+      polyline = new this.AMap.Polyline({
+        path: formarItemArr,
+        strokeWeight: 2, //线条宽度
+        strokeColor: "blue", //线条颜色
+        lineJoin: "round", //折线拐点连接处样式
+      });
+      map.add(polyline);
     },
     changeArea(val) {
       const { addPolygon, removePolygon } = DronePlottingRoute(
@@ -243,16 +262,10 @@ export default {
       }
     },
     formatAirLine(AMap) {
-      // AMap.convertFrom(this.lonlatArr, "gps", function (status, result) {
-      //   if (result.info === "ok") {
-      //   console.log(result.locations.map(item => [item.lng, item.lat]));
-      //     return result.locations; // Array.<LngLat>
-      //   }
-      // });
       let path = this.lonlatArr.map(
         (item) => new AMap.LngLat(item[0], item[1])
       );
-      
+
       return path;
     },
     markerClick() {

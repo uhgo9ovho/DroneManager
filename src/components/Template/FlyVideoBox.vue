@@ -2,12 +2,25 @@
   <div
     class="flyVideoBox right-window-position"
     @click="changeVideo"
-    :style="{ width: '100%', height: '100%' }"
+    :style="{ width: '100%', height: '100%', background: '#000' }"
   >
-    <div class="wrap wrap_window">
+    <div class="wrap wrap_window" v-if="showVideo">
       <div :style="{ width: '100%', height: '100%' }">
         <div id="J_prismPlayer2"></div>
       </div>
+    </div>
+    <div
+      v-else
+      style="
+        width: 100%;
+        height: 100%;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      暂无视频流
     </div>
   </div>
 </template>
@@ -60,31 +73,32 @@ export default {
   },
   data() {
     return {
-      showVideo: true,
+      showVideo: false,
     };
   },
   watch: {
-    // mode_code: {
-    //   handler(val) {
-    //     if (val === 0) {
-    //       console.log(this.devId);
-    //       if (player) {
-    //         player.dispose();
-    //       }
-    //     } else {
-    //       this.$nextTick(() => {
-    //         this.initPlayer();
-    //       });
-    //     }
-    //   },
-    //   immediate: true,
-    // },
+    mode_code: {
+      handler(val) {
+        if (val === 0) {
+          this.showVideo = false;
+          if (player) {
+            player.dispose();
+          }
+        } else {
+          this.showVideo = true;
+          this.$nextTick(() => {
+            this.initPlayer();
+          });
+        }
+      },
+      immediate: true,
+    },
   },
   computed: {
     ...mapState("droneStatus", ["airPostInfo"]),
   },
   mounted() {
-    this.initPlayer();
+    // this.initPlayer();
   },
   methods: {
     changeVideo() {
