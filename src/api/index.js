@@ -25,10 +25,11 @@ export const getDayReportAPI = (params) => {
  */
 export const getWeekReportAPI = (params) => {
   return request({
-    url: `/wurenji/report/getWeekReport?orgId=${params.orgId}&begin_date=${params.begin_date}&end_date=${params.end_date}`,
+    url: `/wurenji/report/getWeekReport?orgId=${params.orgId}&begin_date=${params.begin_date}&end_date=${params.end_date}&taskType=${params.tableType}`,
     method: 'get'
   })
 }
+
 
 /**
  * 报告列表接口

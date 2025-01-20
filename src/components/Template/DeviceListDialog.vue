@@ -51,7 +51,7 @@
     </div>
   </div>
 </template>
-  
+
   <script>
 import { getDeviceListAPI, deleteDeviceAPI } from "@/api/orgModel";
 import CommonTable from "@/components/CommonTable.vue";
@@ -184,6 +184,6 @@ export default {
   },
 };
 </script>
-  
+
   <style lang="scss">
 </style>
