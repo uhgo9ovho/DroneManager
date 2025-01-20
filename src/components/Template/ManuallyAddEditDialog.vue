@@ -94,7 +94,7 @@ export default {
           { required: true, message: "请输入部门", trigger: "blur" },
         ],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
-        role: [{ required: true, message: "请选择角色", trigger: "blur" }],
+        roleIds: [{ required: true, message: "请选择角色", trigger: "blur" }],
       },
       page: {
         pageNum: 1,
@@ -140,7 +140,6 @@ export default {
       this.$emit("menuallyClose");
     },
     handleSave() {
-
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
           if (this.title == "添加成员") {

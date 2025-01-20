@@ -11,6 +11,7 @@
       :rules="rules"
       label-position="top"
       height="500px"
+      ref="Reform"
     >
       <el-form-item label="部门名称" prop="name">
         <el-input
@@ -24,7 +25,9 @@
         <el-input
           type="textarea"
           placeholder="请输入内容"
-          v-model="ruleForm.desc"
+          v-model.trim="ruleForm.desc"
+          maxlength="50"
+          show-word-limit
         >
         </el-input>
       </el-form-item>
@@ -62,7 +65,13 @@ export default {
         desc: ''
       },
       rules: {
-        name: [{ required: true, message: '请输入部门名称', trigger: 'blur' }]
+        name: [{ required: true, message: '请输入部门名称', trigger: 'blur' },
+          {
+            required: true,
+            transform: (value) => value && value.trim(),
+            message: '部门名称不能全部为空',
+            trigger: 'blur'
+          }]
       }
     }
   },
@@ -71,49 +80,51 @@ export default {
       this.$emit('handleClose')
     },
     saveBtn() {
-      if (this.title == '新建部门') {
-        const params = {
-          orgDeptName: this.ruleForm.name,
-          isOrg: 0,
-          orgId: +localStorage.getItem('org_id')
-        }
-        addDept(params).then((res) => {
-          if (res.code == 200) {
-            this.$message.success(res.msg)
-            this.$emit('updateList')
-            this.handleClose()
+      this.$refs.Reform.validate((valid) => {
+        if (valid) {
+          if (this.title == '新建部门') {
+            const params = {
+              orgDeptName: this.ruleForm.name,
+              isOrg: 0,
+              orgId: +localStorage.getItem('org_id')
+            }
+            addDept(params).then((res) => {
+              if (res.code == 200) {
+                this.$message.success(res.msg)
+                this.$emit('updateList')
+                this.handleClose()
+              } else {
+                this.$message.error(res.msg)
+              }
+
+            })
           } else {
-            this.$message.error(res.msg)
+            //编辑保存
+            if (!this.ruleForm.name) {
+              return
+            }
+            const params = {
+              id: this.itemRow.id,
+              createId: this.itemRow.createId,
+              orgDeptName: this.ruleForm.name,
+              marker: this.ruleForm.desc
+            }
+            editDeptInfo(params).then(res => {
+              if (res.code == 200) {
+                this.$message.success(res.msg)
+                this.$emit('editSuccess')
+                this.$emit('updateList')
+                this.handleClose()
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
           }
-
-        })
-      } else {
-        //编辑保存
-        if (!this.ruleForm.name) {
-          console.log('vvvvv')
-          return
+        } else {
+          return false;
         }
-        const params = {
-          id: this.itemRow.id,
-          createId: this.itemRow.createId,
-          orgDeptName: this.ruleForm.name,
-          marker: this.ruleForm.desc
-        }
-        editDeptInfo(params).then(res => {
-          if (res.code == 200) {
-            this.$message.success(res.msg)
-            this.$emit('editSuccess')
-            this.$emit('updateList')
-            this.handleClose()
+      });
 
-
-            // setTimeout(() => {
-            // }, 1000)
-          } else {
-            this.$message.error(res.msg)
-          }
-        })
-      }
     }
   },
   mounted() {

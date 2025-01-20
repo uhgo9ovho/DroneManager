@@ -10,6 +10,7 @@
         <el-tabs v-model="activeTab" @tab-click="handleTabClick">
           <el-tab-pane label="日报" name="daily" v-if="permissions.includes('mngSide:data:report:day') || permissions[0] == '*:*:*'"></el-tab-pane>
           <el-tab-pane label="周报" name="weekly" v-if="permissions.includes('mngSide:data:report:weeks') || permissions[0] == '*:*:*'"></el-tab-pane>
+          <el-tab-pane label="月报" name="monthly" v-if="permissions.includes('mngSide:data:report:months') || permissions[0] == '*:*:*'"></el-tab-pane>
         </el-tabs>
         <!--        </div>-->
 
@@ -198,9 +199,14 @@ export default {
         beginTime = start.getTime();
         endTime = now.getTime();
       }
-
-      const tableType = this.activeTab === "daily" ? 1 : 2;
-
+      let tableType = 1;
+      if(this.activeTab === "daily"){
+        tableType = 1;
+      } else if(this.activeTab === "weekly"){
+        tableType = 2;
+      } else {
+        tableType = 3;
+      }
       const params = {
         beginTime: beginTime,
         endTime: endTime,

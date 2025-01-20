@@ -25,7 +25,7 @@
           <el-tab-pane label="看板大屏" name="dashboard"></el-tab-pane>
           <el-tab-pane label="小程序" name="miniProgram"> </el-tab-pane>
         </el-tabs>
-        <div v-show="activeName == 'miniProgram'">
+        <div class="role-selector" v-show="activeName == 'miniProgram'" style="overflow-y: scroll">
           <tree-promission
             ref="programsRef"
             :checkedKeys="checkedKeysObj.miniProgram"
@@ -34,7 +34,7 @@
             @selectedKeys="selectedKeys"
           ></tree-promission>
         </div>
-        <div v-show="activeName == 'dashboard'">
+        <div class="role-selector" v-show="activeName == 'dashboard'">
           <tree-promission
             ref="screenRef"
             :data="screenPermissions"
@@ -43,7 +43,7 @@
             @selectedKeys="selectedKeys"
           ></tree-promission>
         </div>
-        <div v-show="activeName == 'admin'">
+        <div class="role-selector" v-show="activeName == 'admin'">
           <tree-promission
             ref="managerRef"
             :data="managerPermissions"
@@ -130,7 +130,7 @@ export default {
       this.form.menuIds.push(...this.halfCheckedKeys);
       this.form.menuIds = [...new Set(this.form.menuIds)]
       console.log('保存前的权限数据:', this.form.menuIds);
-      
+
       editRoleAPI(this.form).then((res) => {
         if (res.code === 200) {
           this.$message.success(res.msg);
@@ -147,16 +147,16 @@ export default {
         if (res.code == 200) {
           const allCheckedKeys = res.checkedKeys || [];
           const menus = res.menus || [];
-          
+
           // 找到三个主模块的ID
           const adminModule = menus.find(item => item.label === "管理侧");
           const dashboardModule = menus.find(item => item.label === "大屏端");
           const miniProgramModule = menus.find(item => item.label === "小程序");
-          
+
           // 递归查找某个ID是否属于指定模块
           const isInModule = (id, moduleData) => {
             if (!moduleData) return false;
-            
+
             const findId = (node) => {
               if (node.id === id) return true;
               if (node.children) {
@@ -164,17 +164,17 @@ export default {
               }
               return false;
             };
-            
+
             return findId(moduleData);
           };
-          
+
           // 分类权限ID
           this.checkedKeysObj = {
             admin: allCheckedKeys.filter(id => isInModule(id, adminModule)),
             dashboard: allCheckedKeys.filter(id => isInModule(id, dashboardModule)),
             miniProgram: allCheckedKeys.filter(id => isInModule(id, miniProgramModule))
           };
-          
+
           console.log('初始化各模块权限数据：', this.checkedKeysObj);
         }
       });
@@ -191,4 +191,9 @@ export default {
 </script>
 
 <style>
+.role-selector{
+ margin-top:10px;
+ overflow-y: scroll;
+ height: 26vw;
+}
 </style>

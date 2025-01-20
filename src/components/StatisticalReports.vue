@@ -11,7 +11,7 @@
     >
       <!-- 内容插槽 -->
       <template #dateTime="{ row }">
-        <data-time :row="row"></data-time>
+        <data-time :row="row" :taskType="taskType"></data-time>
       </template>
       <template #operate="{row}">
         <div class="operate-box">
@@ -87,7 +87,8 @@ export default {
       flyRecordTable: [],
       total: 0,
       pageNum: 1,
-      pageSize: 10
+      pageSize: 10,
+      taskType:0
     }
   },
   computed: {
@@ -122,6 +123,7 @@ export default {
         pageNum: this.pageNum,
         pageSize: this.pageSize
       }
+      this.taskType = this.reportParams.tableType;
       getFlyRecordTableAPI(params)
         .then((res) => {
           if (res.code === 0) {

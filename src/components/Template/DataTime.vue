@@ -5,7 +5,10 @@
         {{ row.dateTime.split('-')[2] }} <em>{{ dayOfWeek }}</em>
       </p>
     </div>
-    <div class="task-title">{{ row.dateTime }}</div>
+
+    <div v-if="taskType ==1" class="task-title">{{ row.dateTime }}</div>
+    <div v-if="taskType == 2" class="task-title">{{ row.dateTime+"-"+this.getLastDate(row,taskType)}}</div>
+    <div v-if="taskType ==3" class="task-title">{{ row.date+"-"+ this.getLastDate(row,taskType)}}</div>
   </div>
 </template>
 
@@ -17,9 +20,16 @@ export default {
       type: Object,
       default: () => {},
     },
+    taskType: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {};
+  },
+  created() {
+    console.log("zheshi shi",this.row,this.taskType)
   },
   computed: {
     dayOfWeek() {
@@ -38,7 +48,36 @@ export default {
       ];
       return days[dayOfWeek];
     },
+
+
   },
+  methods:{
+    getLastDate(row,taskType){
+      if(taskType === 2){
+        const now = row.dateTime
+        const monday = new Date(now);
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6); // 周天是周一的基础上再加6天
+        const res = sunday.toISOString().split('T')[0];
+        return res;
+      }else if(taskType ===3){
+        //row.date 是本月第一天，需要return本月的最后一天日期，如row.date=2024-12-01，则返回2024-12-31
+        const firstDayOfMonth = new Date(row.date);
+
+        // 获取下个月的第一天，然后减去1毫秒，得到本月的最后一天
+        // 设置下个月的日期为1，然后减去1毫秒
+        const nextMonth = firstDayOfMonth.getMonth() + 1;
+        const nextMonthFirstDay = new Date(firstDayOfMonth.getFullYear(), nextMonth, 1);
+        const lastDayOfMonth = new Date(nextMonthFirstDay - 1);
+
+        // 格式化日期为 YYYY-MM-DD 字符串（或其他你需要的格式）
+        const year = lastDayOfMonth.getFullYear();
+        const month = String(lastDayOfMonth.getMonth() + 1).padStart(2, '0');
+        const day = String(lastDayOfMonth.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+    }
+  }
 };
 </script>
 

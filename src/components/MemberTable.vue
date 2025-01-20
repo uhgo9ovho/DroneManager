@@ -86,26 +86,6 @@
               <i class="iconfont el-icon-weixin1"></i>
             </el-tooltip>
           </div>
-          <!-- <div class="zzd_icon">
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="浙政钉已绑定"
-              placement="top-start"
-              v-if="row.zzd_bind == '已绑定'"
-            >
-              <i class="iconfont el-icon-zhezhengding"></i>
-            </el-tooltip>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="浙政钉未绑定"
-              placement="top"
-              v-else
-            >
-              <i class="iconfont el-icon-zhezhengding1"></i>
-            </el-tooltip>
-          </div> -->
         </div>
       </template>
       <template #status="{ row }">

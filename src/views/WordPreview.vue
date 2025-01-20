@@ -479,7 +479,6 @@ export default {
       const content = document.getElementById("content").innerHTML;
       //内容样式
       const cssStyle = `<style>
-
                 .title-section h1 {
                 text-align: center;
                 color: red;
@@ -550,7 +549,7 @@ export default {
       const element = document.getElementById("content");
       // 自定义样式，改变PDF样式
       const opt = {
-        margin: 1, // 页面边距
+        margin: 20, // 页面边距
         filename: `${this.dateTime}${
           this.tableType == 1 ? "无人机巡检日报" : "无人机巡检周报"
         }.pdf`, // PDF 文件名
@@ -843,6 +842,7 @@ export default {
   align-items: center;
   justify-content: center;
   min-height: 100vh; /* 确保容器高度覆盖整个视口 */
+
   // background-color: #f2f2f2; /* 淡灰色背景 */
   //padding: 20px;
 }
@@ -858,7 +858,13 @@ export default {
   padding: 60px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   //border-radius: 8px;
-
+  #content{
+    margin-top: 1vw;
+    //padding-right: 5vw;
+    //padding-left: 5vw;
+    height: 45vw;
+    overflow-y: scroll;
+  }
   .btn {
     position: absolute;
     right: 40px;
