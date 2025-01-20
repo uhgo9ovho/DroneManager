@@ -37,7 +37,8 @@ export default {
         },
         legend: {
           orient: 'vertical',
-          left: 'left',
+          left: 'right',
+          top: '20%',
           data: Object.keys(this.questData).map(key => ({
             name: key // 图例名称
           }))
