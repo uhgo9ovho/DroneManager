@@ -947,7 +947,7 @@ table {
   border: 1px solid #dddddd;
   width: 100%;
   margin: 10px 0;
-  border-collapse: collapse; /* 使边框更美观 */
+  border-collapse: collapse;
 }
 
 th {
@@ -976,14 +976,13 @@ tr td {
   flex-direction: column; /* 垂直排列 */
   align-items: center; /* 竖直居中 */
   justify-content: center;
-  /* 水平居中
-   height: 100vh; /* 或者你想要的任何高度 */
-  width: 100%; /* 或者你想要的任何宽度 */
-  text-align: center; /* 确保图片在水平方向上也居中（尽管flex已经处理了） */
+
+  width: 100%;
+  text-align: center;
 }
 
 .problem-image {
-  width: 80%; /* 或者你想要的任何宽度，确保两个图片宽度相同 */
+  width: 80%;
   max-width: 1280px; /* 可选：限制最大宽度 */
   margin: 10px 0; /* 可选：添加一些垂直间距 */
 }
