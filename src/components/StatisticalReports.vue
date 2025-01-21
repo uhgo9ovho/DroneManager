@@ -110,7 +110,8 @@ export default {
       //     tableType: this.reportParams.tableType
       //   }
       // })
-      this.$emit('changeLookUp',row.dateTime, this.reportParams.tableType)
+      this.$emit('changeLookUp',row.dateTime,row.date, this.reportParams.tableType)
+
     },
 
     //获取报告列表

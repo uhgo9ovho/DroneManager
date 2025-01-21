@@ -144,9 +144,9 @@ export default {
     closeLookUp() {
       this.showLookUp = false;
     },
-    changeLookUp(dateTime, tableType) {
+    changeLookUp(dateTime, date,tableType) {
       this.showLookUp = true;
-      this.itemRow = {dateTime, tableType};
+      this.itemRow = {dateTime,date,tableType};
     },
     focus() {
       this.checked = true;

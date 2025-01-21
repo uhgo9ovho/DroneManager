@@ -9,7 +9,8 @@
         <div class="title-section">
           <div class="title">{{ title }}</div>
           <div class="subtitle">{{ subtitle }}</div>
-          <p class="date">日期：{{ formattedDate }}</p>
+          <p v-if="tableType==1" class="date">日期：{{ formattedDate }}</p>
+          <p v-if="tableType==2||tableType==3" class="date">日期：{{ formattedDate+"到"+getLastDate}}</p>
           <hr class="date-line" />
           <hr class="date-line1" />
 
@@ -244,9 +245,10 @@ import ReportTable2 from "@/components/ReportTable2.vue";
 import htmlDocx from "html-docx-js/dist/html-docx";
 import html2pdf from "html2pdf.js";
 import photo from "../assets/images/login-background0.jpg";
-import { getDayReportAPI, getWeekReportAPI } from "@/api/index.js";
+import { getDayReportAPI, getWeekReportAPI } from '@/api/index.js'
 import PieChart from "@/components/PieChart.vue";
 import axios from "axios";
+import { formatDate } from '@/utils'
 export default {
   name: "App",
   props: {
@@ -258,6 +260,7 @@ export default {
   components: { ReportTable, ReportTable1, ReportTable2, PieChart },
   data() {
     return {
+      monthLastDate: "",
       showBtn: true,
       isPieChartShow: true,
       chartImage: null,
@@ -266,7 +269,8 @@ export default {
       description:
         "本报告根据日常无人机巡检工作包括使用人员提交任务、无人机执行任务、数据生产情况等进行统计汇总。",
       report: {
-        reportTime: " ",
+        date:"",
+        reportTime: "",
         deviceNum: 0,
         sortieNum: 0,
         totalTime: 0,
@@ -408,6 +412,7 @@ export default {
       isShow: false,
       dateTime: null,
       tableType: null,
+      dateScope:null,
     };
   },
   methods: {
@@ -450,7 +455,6 @@ export default {
             this.report = res.data;
             this.isShow = true;
             this.loading = false;
-            console.log('shouid',this.shouldShowDiv)
           } else if (res.code === 500) {
             // this.isShow = true
           }
@@ -463,6 +467,24 @@ export default {
         orgId: localStorage.getItem("org_id"),
         begin_date: this.begin_date,
         end_date: this.end_date,
+      };
+      getWeekReportAPI(params)
+        .then((res) => {
+          if (res.code === 200) {
+            this.report = res.data;
+            this.isShow = true;
+          } else if (res.code === 500) {
+            this.isShow = true;
+          }
+        })
+        .catch((err) => {});
+    },
+    getMonthReport() {
+      const params = {
+        orgId: localStorage.getItem("org_id"),
+        begin_date: this.begin_date,
+        end_date: this.end_date,
+        tableType: this.tableType,
       };
       getWeekReportAPI(params)
         .then((res) => {
@@ -553,7 +575,8 @@ export default {
       const opt = {
         margin: 20, // 页面边距
         filename: `${this.dateTime}${
-          this.tableType == 1 ? "无人机巡检日报" : "无人机巡检周报"
+          this.tableType == 1 ? "无人机巡检日报" : this.tableType == 2 ? "无人机巡检周报" : this.tableType == 3 ? "无人机巡检月报" :
+                ""
         }.pdf`, // PDF 文件名
         image: { type: "jpeg", quality: 0.98 }, // 图像格式
         pagebreak: {
@@ -571,7 +594,6 @@ export default {
     shareReport() {
       // 获取 localStorage 中的参数
       const localParam = localStorage.getItem("org_id");
-
       // 构造分享链接
       const currentUrl = this.getBaseUrl(window.location.href) + "/WordPreview";
       const shareUrl = `${currentUrl}?org_id=${encodeURIComponent(
@@ -616,7 +638,44 @@ export default {
       return `${year}-${month}-${day}`;
     },
     subtitle() {
-      return this.tableType == 1 ? "无人机巡检日报" : "无人机巡检周报";
+      if(this.tableType == 1 ){
+        return "无人机巡检日报";
+      } else if(this.tableType ==2){
+        return "无人机巡检周报"
+      }else if(this.tableType ==3){
+        return "无人机巡检月报"
+      }
+
+    },
+    getLastDate(){
+      console.log(this.tableType,this.report.reportTime)
+      let date;
+      if(this.getHrefInfo().tableType ==2 || this.getHrefInfo().tableType ==3){
+         date = new Date(this.report.reportTime);
+      } else{
+        date = new Date(this.itemRow.dateTime);
+      }
+      if(this.tableType == 2){
+        const now = date
+        const monday = new Date(now);
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6); // 周天是周一的基础上再加6天
+        const res = sunday.toISOString().split('T')[0];
+        return res;
+      }else if(this.tableType == 3){
+        const  firstDayOfMonth = date
+        console.log("didi1",firstDayOfMonth)
+        // 获取下个月的第一天，然后减去1毫秒，得到本月的最后一天
+        // 设置下个月的日期为1，然后减去1毫秒
+        const nextMonth = firstDayOfMonth.getMonth() + 1;
+        const nextMonthFirstDay = new Date(firstDayOfMonth.getFullYear(), nextMonth, 1);
+        const lastDayOfMonth = new Date(nextMonthFirstDay - 1);
+        // 格式化日期为 YYYY-MM-DD 字符串（或其他你需要的格式）
+        const year = lastDayOfMonth.getFullYear();
+        const month = String(lastDayOfMonth.getMonth() + 1).padStart(2, '0');
+        const day = String(lastDayOfMonth.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
     },
     shouldShowDiv() {
       // 检查三个列表是否都为 null 或空数组
@@ -657,14 +716,19 @@ export default {
       return date.getTime();
     },
     end_date() {
-      const date = new Date(this.dateTime);
-      if (isNaN(date.getTime())) {
-        console.error("Invalid date string:", this.dateTime);
+      if(this.tableType ==2 || this.tableType ==3){
+        let temp = this.getLastDate;
+        const date = new Date(temp)
+        if (isNaN(date.getTime())) {
+          console.error("Invalid date string:", date);
+          return null;
+        }
+        const endDate = new Date(date);
+        return endDate.getTime();
+      } else{
         return null;
       }
-      const endDate = new Date(date);
-      endDate.setDate(endDate.getDate() + 7);
-      return endDate.getTime();
+
     },
 
     questData() {
@@ -689,9 +753,12 @@ export default {
 
     overall() {
       const totalTime = this.report.totalTime || 0;
-
+      this.dateScope = this.formattedDate;
+      if(this.tableType ==2 || this.tableType == 3){
+        this.dateScope = this.formattedDate+'至'+this.getLastDate
+      }
       return [
-        this.formattedDate +
+        this.dateScope +
           "，共有" +
           this.report.deviceNum +
           "台无人机正常工作，共计飞行架次" +
@@ -761,7 +828,7 @@ export default {
   },
 
   mounted() {
-    console.log(this.getHrefInfo());
+    console.log(this.getHrefInfo(),'this.getHrefInfo()');
     if (this.getHrefInfo().org_id) {
       let that = this;
       that.showBtn = false;
@@ -785,7 +852,7 @@ export default {
           that.isShow = true;
           that.loading = false;
         });
-      } else {
+      } else if(this.getHrefInfo().tableType == 2){
         axios({
           method: "get",
           url: `${
@@ -805,6 +872,26 @@ export default {
           that.report = res.data;
           that.isShow = true;
         });
+      } else if(this.getHrefInfo().tableType == 3){
+        axios({
+          method: "get",
+          url: `${
+            process.env.VUE_APP_BASE_API
+          }/wurenji/report/getWeekReport?orgId=${
+            that.getHrefInfo().org_id
+          }&begin_date=${that.getHrefInfo().begin_date}&end_date=${
+            that.getHrefInfo().end_date
+          }`,
+          headers: {
+            "Content-Type": "application/json",
+            tenant: "test",
+          },
+        }).then(function (response) {
+          let res = response.data;
+          that.report = res.data;
+          that.isShow = true;
+          this.monthLastDate = res.reportTime
+        });
       }
     } else {
       // 正常进入页面的逻辑
@@ -815,11 +902,12 @@ export default {
           this.getDayReport();
         } else if (this.tableType == 2) {
           this.getWeekReport();
+        } else if(this.tableType ==3){
+          this.getMonthReport()
         }
       }
     }
   },
-
   created() {},
 };
 </script>
