@@ -20,7 +20,7 @@
     <div
       class="task-btn"
       @click="takeOffBtn"
-      v-if="info.schedulingStatus === 3 || info.schedulingStatus === 0"
+      v-if="(info.schedulingStatus === 3 || info.schedulingStatus === 0) && (dateSHowBtn && isShowAddBtn)"
       v-permissions="'wurenji:scheduling:fly'"
     >
       <!-- 待执行和已执行 -->
@@ -81,6 +81,14 @@ export default {
       type: Object,
       default: () => {},
     },
+    dateSHowBtn: {
+      type: Boolean,
+      default: false
+    },
+    isShowAddBtn: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {

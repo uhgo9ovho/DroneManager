@@ -30,9 +30,17 @@ class WebSocketClient {
 
     onmessage(e) {
         if (e.data) {
-            const data = JSON.parse(e.data);
-            // console.log(data);
-            store.dispatch('droneStatus/getDroneInfo', data);
+            // 预处理字符串，确保键加上引号
+            const validJSON = e.data.replace(/([{,])(\d+)(:)/g, '$1"$2"$3');
+
+            // 转换为对象
+            const data = JSON.parse(validJSON);
+            if (data.code == 'noticeControl') {
+                // data
+                store.dispatch('droneStatus/getControler', data.data);
+            } else {
+                store.dispatch('droneStatus/getDroneInfo', data);
+            }
             const type = 'message';
             if (type in this._callbacks) {
                 this._callbacks[type](data);

@@ -44,7 +44,7 @@
             :key="item.airlineId"
             @click="selectAirLine(item)"
           >
-            <div class="hidden_line">{{ item.lineName }}</div>
+            <div class="hidden_line" style="margin-top: 20px">{{ item.lineName }}</div>
             <i class="el-icon-check" v-if="item.airlineId == code"></i>
           </div>
         </div>
@@ -157,6 +157,7 @@ export default {
     checkedLine(item) {
       this.currentId = item.taskId;
       this.checkedItem = item;
+      this.code = ""
     },
     selectAirLine(item) {
       this.code = item.airlineId;

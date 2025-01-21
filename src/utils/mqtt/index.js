@@ -96,6 +96,10 @@ export class UranusMqtt extends EventEmitter {
     _onReconnect = () => {
         if (this._client) {
             window.console.error('mqtt reconnect,')
+            const params = {
+                clientId: 'aaa',
+                dockSn: store.state.droneStatus.deviceSN,
+            };
             exitDRCAPI(params).then(res => {
                 if (res.code === 0) {
                     connectDRCAPI({}).then(res => {
@@ -104,10 +108,7 @@ export class UranusMqtt extends EventEmitter {
                                 res.data;
                             console.log(store);
 
-                            const params = {
-                                clientId: client_id,
-                                dockSn: store.state.droneStatus.deviceSN,
-                            };
+
                             enterDRCAPI(params)
                         }
                     })

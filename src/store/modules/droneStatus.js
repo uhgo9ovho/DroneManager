@@ -7,7 +7,8 @@ const state = {
     mqttState: null,
     outsideStreamUrl: "",
     airPostInfo: null,
-    airOptions: []
+    airOptions: [],
+    controler: null
 }
 const mutations = {
     GET_DRONE_INFO(state, info) {
@@ -42,6 +43,9 @@ const mutations = {
                 label: item.address
             }
         })
+    },
+    GET_CONTROLER(state, info) {
+        state.controler = info;
     }
 }
 
@@ -61,6 +65,9 @@ const actions = {
     },
     getOutsideStreamUrl({ commit }, obj) {
         commit('GET_OUTSIDE_STREAM_URL', obj);
+    },
+    getControler({ commit }, obj) {
+        commit("GET_CONTROLER", obj)
     },
     async fetchAirPostInfo({ commit }) {
         // 添加参数校验

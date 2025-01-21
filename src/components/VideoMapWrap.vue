@@ -216,6 +216,15 @@
         </div>
       </div>
     </el-popconfirm>
+    <!-- controlsUser -->
+    <div class="controlUserBox">
+      <div class="control_user">
+        <span>控制：{{ controler && controler.userName }}</span>
+      </div>
+      <div class="monitor_user">
+        <span>监视：{{ "暂无" }}</span>
+      </div>
+    </div>
     <!-- 控制无人机操作界面 -->
     <!-- <div> -->
     <div v-if="showRemote">
@@ -341,8 +350,10 @@ export default {
       "deviceSN",
       "airPostInfo",
       "airOptions",
+      "controler",
     ]),
     title() {
+      if(this.controler && this.controler.userName != '暂无') return `当前${this.controler.userName}正在控制该设备，是否确认继续申请控制权？`
       return "当前无人控制该设备，是否确认继续申请控制权？";
     },
     titleCream() {
@@ -527,10 +538,12 @@ export default {
             res.data;
           const userInfo = JSON.parse(Cookies.get("user"));
           this.client_id = client_id;
-          this.mqttState = new UranusMqtt(address, {
-            clientId: client_id,
-            username: `${userInfo.userName}_test`,
-            password: getToken(),
+          this.mqttState = new UranusMqtt('ws://114.55.1.221:8083/mqtt', {
+            clientId: 'mqttx_8d312074',
+            username: `admin`,
+            // username: `${userInfo.userName}_test`,
+            // password: getToken(),
+            password: 'admin',
           });
           this.getMqttState(this.mqttState);
           this.mqttState.initMqtt();
@@ -539,31 +552,35 @@ export default {
             clientId: this.client_id,
             dockSn: this.deviceSN,
           };
-          enterDRCAPI(params).then((res) => {
+          //抢夺控制权
+          authorityAPI({}, this.deviceSN).then((res) => {
+            //进入指令飞行模式
             if (res.code === 0) {
-              //打开控制页面
-              this.showRemote = true;
-              this.flightController = true; //已控制无人机
-              const topic = {
-                pubTopic: res.data.pub[0],
-                subTopic: res.data.sub[0],
-                sn: this.deviceSN,
-              };
-              const {
-                handleKeyup,
-                handleEmergencyStop,
-                resetControlState,
-                unsubscribe,
-              } = useManualControl(topic, this.flightController);
-              this.handleKeyup = handleKeyup;
-              this.resetControlState = resetControlState;
-              this.handleEmergencyStop = handleEmergencyStop;
-              this.unsubscribe = unsubscribe;
-              this.getToicpSubPub(topic);
-              //抢夺控制权
-              // authorityAPI({}, this.deviceSN).then((res) => {});
-            } else {
-              this.$message.error(res.message || res.msg);
+              enterDRCAPI(params).then((res) => {
+                if (res.code === 0) {
+                  //打开控制页面
+                  this.showRemote = true;
+                  this.flightController = true; //已控制无人机
+                  const topic = {
+                    pubTopic: res.data.pub[0],
+                    subTopic: res.data.sub[0],
+                    sn: this.deviceSN,
+                  };
+                  const {
+                    handleKeyup,
+                    handleEmergencyStop,
+                    resetControlState,
+                    unsubscribe,
+                  } = useManualControl(topic, this.flightController);
+                  this.handleKeyup = handleKeyup;
+                  this.resetControlState = resetControlState;
+                  this.handleEmergencyStop = handleEmergencyStop;
+                  this.unsubscribe = unsubscribe;
+                  this.getToicpSubPub(topic);
+                } else {
+                  this.$message.error(res.message || res.msg);
+                }
+              });
             }
           });
         }
@@ -640,6 +657,37 @@ export default {
   height: 100vh;
   position: relative;
   overflow: hidden;
+  .controlUserBox {
+    position: absolute;
+    font-size: 12px;
+    left: 200px;
+    bottom: 16px;
+    color: #fff;
+    z-index: 1000;
+    height: 32px;
+    line-height: 32px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 16px;
+    display: flex;
+    padding: 0 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    .control_user {
+      display: flex;
+      align-items: center;
+      word-break: break-all;
+      white-space: nowrap;
+      border-radius: 6px;
+      padding-right: 10px;
+    }
+    .monitor_user {
+      display: flex;
+      word-break: break-all;
+      white-space: nowrap;
+      padding: 0 10px;
+      margin-bottom: 2px;
+      border-radius: 6px;
+    }
+  }
   .full-screen {
     width: 100%;
     height: 100%;

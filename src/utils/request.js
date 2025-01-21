@@ -18,7 +18,7 @@ const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
   // baseURL: '',
   // 超时
-  timeout: 20000
+  // timeout: 20000
 })
 
 // request拦截器

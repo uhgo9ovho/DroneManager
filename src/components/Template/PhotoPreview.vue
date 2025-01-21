@@ -1,7 +1,7 @@
 <template>
   <div class="photo-preview">
     <div class="imgPrewBox">
-      <div v-if="true">
+      <div>
         <div class="innerImgBox">
           <ImageZoom
             :src="currentUrl"
@@ -20,12 +20,12 @@
             <div class="feixiangbet disabled">
               <i class="el-icon-share"></i>
             </div>
-            <div class="xiazaibtn">
+            <div class="xiazaibtn" @click="downloadBZImage">
               <i class="el-icon-download"></i>
             </div>
           </div>
         </div>
-        <div class="download" v-else>
+        <div class="download" v-else @click="downloadImage">
           <i class="el-icon-download"></i>
         </div>
         <div class="mark">
@@ -59,14 +59,20 @@
             </div>
           </div>
           <div class="inputBox">
-            <el-input id="typeInput" type="text" placeholder="搜索" />
+            <el-input
+              v-model="searchText"
+              id="typeInput"
+              type="text"
+              placeholder="搜索"
+              @input="searchQuestion"
+            />
           </div>
-          <div class="tipstitle">
+          <!-- <div class="tipstitle">
             <el-tabs v-model="activeName" @tab-click="handleClick">
               <el-tab-pane label="常用" name="common"></el-tab-pane>
               <el-tab-pane label="全部" name="all"></el-tab-pane>
             </el-tabs>
-          </div>
+          </div> -->
           <div class="typeList_ul">
             <div
               class="typeList_li"
@@ -80,12 +86,12 @@
           <div class="typeList_ul"></div>
         </div>
       </div>
-      <div class="quanjing" v-else>
+      <!-- <div class="quanjing" v-else>
         <div class="img_box" ref="panorama"></div>
         <div class="close" @click="closePreview">
           <i class="el-icon-close"></i>
         </div>
-      </div>
+      </div> -->
     </div>
     <div id="map"></div>
   </div>
@@ -95,7 +101,8 @@
 import ImageZoom from "./ImageZoom.vue";
 import { addWarningAPI, uploadAPI, dictListAPI } from "@/api/TaskManager.js";
 import AMapLoader from "@amap/amap-jsapi-loader";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import { downloadPhoto } from "@/utils/ruoyi";
 export default {
   name: "PhotoPreview",
   props: {
@@ -117,8 +124,8 @@ export default {
     },
     resultId: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data() {
     return {
@@ -141,7 +148,9 @@ export default {
       currentTypeName: "",
       currentId: "",
       address: "",
-      locationArr: []
+      locationArr: [],
+      searchText: "",
+      allTypeList: []
     };
   },
   computed: {
@@ -176,6 +185,21 @@ export default {
     ImageZoom,
   },
   methods: {
+    searchQuestion(query) {
+      const keyword = query.trim().toLowerCase();
+      
+      this.typeList = this.allTypeList.filter((item) =>
+        item.dictLabel.toLowerCase().includes(keyword)
+      );
+    },
+    downloadImage() {
+      downloadPhoto(this.currentUrl, this.row.fileName);
+    },
+    downloadBZImage() {
+      const url = this.$refs.imageZoom.$refs.canvas.toDataURL("image/png");
+
+      downloadPhoto(url, this.row.fileName);
+    },
     loadPanorama() {
       pannellum.viewer(this.$refs.panorama, {
         type: "equirectangular",
@@ -257,7 +281,7 @@ export default {
               console.log(res);
               const resUrl = res.url;
               if (res.code == 200) {
-                this.$message.success('上传成功,请稍后');
+                this.$message.success("上传成功,请稍后");
                 //上传成功
                 const params = {
                   warnName: this.currentName,
@@ -274,14 +298,14 @@ export default {
                   status: "0",
                   description: "",
                   rectangles: `${this.locationArr}`,
-                  orgId: localStorage.getItem('org_id'),
-                  orgName: Cookies.get('orgName'),
-                  recordId:this.row.recordId,
-                  resultId: this.resultId
+                  orgId: localStorage.getItem("org_id"),
+                  orgName: Cookies.get("orgName"),
+                  recordId: this.row.recordId,
+                  resultId: this.resultId,
                 };
-                addWarningAPI(params).then(res => {
-                  if(res.code === 200) {
-                    this.$message.success('问题上报成功');
+                addWarningAPI(params).then((res) => {
+                  if (res.code === 200) {
+                    this.$message.success("问题上报成功");
                   } else {
                     this.$message.error(res.msg);
                   }
@@ -296,6 +320,7 @@ export default {
       dictListAPI("warn_type").then((res) => {
         if (res.code === 200) {
           this.typeList = res.rows;
+          this.allTypeList = res.rows;
         }
       });
     },
@@ -330,7 +355,6 @@ export default {
               // address即经纬度转换后的地点名称
               that.address = regeocode?.formattedAddress;
               console.log(that.address);
-
             }
           });
         })
@@ -340,7 +364,6 @@ export default {
     },
   },
   mounted() {
-
     this.getDictList();
     this.initMap();
     window.addEventListener("resize", () => {

@@ -17,6 +17,7 @@
       :frequencyValue="frequencyValue"
       :inspectionValue="inspectionValue"
       :settingInfo="settingInfo"
+      :length="length"
       :valArr="valArr"
       @openSettingDate="openSettingDate"
       @changeDownContentShow="changeDownContentShow"
@@ -70,6 +71,7 @@ export default {
       longitude: 0,
       latitude: 0,
       coordinates: null,
+      length: 0
     };
   },
   computed: {
@@ -133,8 +135,10 @@ export default {
     closeSettingDate() {
       this.showSetting = false;
     },
-    updateFormatInfo(info) {
+    updateFormatInfo(info, length) {
       this.settingInfo = info;
+      
+      this.length = length;
     },
     schedulingType(val) {
       this.inspectionValue = val;
