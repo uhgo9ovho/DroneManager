@@ -135,6 +135,10 @@ export default {
     InputNumber,
   },
   props: {
+    length: {
+      type: Number,
+      default: 0
+    },
     settingInfo: {
       type: String,
       default: "",
@@ -265,6 +269,7 @@ export default {
     },
     outBtn() {
       this.$router.push("/flight");
+      this.CHANGE_DROC_STATUS("");
     },
     fileChange(file, files) {
       this.airlineNumber = files.length;
@@ -298,6 +303,9 @@ export default {
     addTaskBtn() {
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
+          if(!this.length) {
+            return this.$message.error('请选择具体的日期');
+          }
           this.loading = true;
           const params = {
             lineTaskType: this.isImport ? 2 : 1, //绘制1  导入2

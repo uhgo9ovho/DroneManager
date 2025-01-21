@@ -241,6 +241,7 @@ export function downloadPhoto(link, picName) {
   let img = new Image()
   img.setAttribute('crossOrigin', 'Anonymous')
   img.onload = function () {
+    
     let canvas = document.createElement('canvas')
     let context = canvas.getContext('2d')
     canvas.width = img.width
@@ -253,7 +254,7 @@ export function downloadPhoto(link, picName) {
     a.href = url
     a.dispatchEvent(event)
   }
-  img.src = link + '?v=' + Date.now()
+  img.src = link
 }
 //下载视频
 export function downVideo (url, name){

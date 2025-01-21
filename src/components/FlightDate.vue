@@ -133,11 +133,10 @@ export default {
   methods: {
     ...mapActions("droneStatus", ["fetchAirPostInfo"]),
     async getDeviceInfo() {
-      if (!this.airPostInfo) {
         await this.fetchAirPostInfo();
         this.task = this.airPostInfo.address;
         this.taskOptions = this.airOptions;
-      }
+        
     },
     checkedAirPost(item) {
       this.task = item.label;
@@ -172,6 +171,7 @@ export default {
     formattedDate(date) {
       if (this.isDay) {
         this.currentDate = date;
+        
         this.initDayList(date);
       } else {
         console.log(date, "monthDate");

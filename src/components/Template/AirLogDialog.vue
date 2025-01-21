@@ -186,7 +186,7 @@ import { airLineAPI } from "@/api/TaskManager.js";
 import { downloadImagesAsZip } from "@/utils/ruoyi";
 import { mapState, mapMutations } from "vuex";
 import flvjs from "flv.js";
-import { downloadPhoto, downVideo } from "@/utils/ruoyi";
+import { downloadPhoto } from "@/utils/ruoyi";
 export default {
   name: "AirLogDialog",
   props: {

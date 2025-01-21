@@ -120,6 +120,8 @@ export default {
         .then((AMap) => {
           this.AMap = AMap;
           let center = [];
+          let startLine = [];
+          let endLine = [];
           if (this.lineInfoObj) {
             //详情中的航线信息
             center = wgs84ToGcj02(
@@ -135,6 +137,9 @@ export default {
               );
               this.lonlatArr.push(...formarItemArr);
             });
+            startLine = [center, this.lonlatArr[0]];
+            endLine = [center, this.lonlatArr[this.lonlatArr.length - 1]];
+
           }
           if (this.airLineData.length) {
             //任务记录中的航线信息
@@ -212,13 +217,27 @@ export default {
 
           if (this.lonlatArr.length) {
             polyline = new AMap.Polyline({
-              path: this.formatAirLine(AMap),
+              path: this.formatAirLine(AMap, this.lonlatArr),
               strokeWeight: 2, //线条宽度
               strokeColor: "red", //线条颜色
               lineJoin: "round", //折线拐点连接处样式
             });
             map.add(polyline);
-            console.log(this.lonlatArr);
+          }
+          if(startLine.length && endLine.length) {
+            let polylineStart = new AMap.Polyline({
+              path: this.formatAirLine(AMap, startLine),
+              strokeWeight: 2, //线条宽度
+              strokeColor: "blue", //线条颜色
+              lineJoin: "round", //折线拐点连接处样式
+            });
+            let polylineEnd = new AMap.Polyline({
+              path: this.formatAirLine(AMap, endLine),
+              strokeWeight: 2, //线条宽度
+              strokeColor: "blue", //线条颜色
+              lineJoin: "round", //折线拐点连接处样式
+            });
+            map.add([polylineStart, polylineEnd])
           }
         })
         .catch((e) => {
@@ -261,11 +280,10 @@ export default {
         removePolygon();
       }
     },
-    formatAirLine(AMap) {
-      let path = this.lonlatArr.map(
+    formatAirLine(AMap, arr) {
+      let path = arr.map(
         (item) => new AMap.LngLat(item[0], item[1])
       );
-
       return path;
     },
     markerClick() {

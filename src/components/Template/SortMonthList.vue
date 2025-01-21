@@ -65,14 +65,11 @@ export default {
   watch: {
     currentMonthDate: {
       handler(val) {
-        console.log(new Date(val),'val');
-        console.log(this.value);
-        this.value = val;
+        // this.value = val;
         this.formatData()
       }
     },
     value(val) {
-      console.log(val,'aaa');
       this.$emit('changeDate', val);
       
     }
@@ -143,9 +140,6 @@ export default {
     },
   },
   methods: {
-    sss(data) {
-      console.log(data);
-    },
     formatData() {
       // 按日期分组
       this.dayList = []

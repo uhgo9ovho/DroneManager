@@ -2,12 +2,17 @@ import store from '@/store';
 import { DRC_METHOD } from './use-manual-control';
 import Vue from 'vue';
 const vm = new Vue()
+// 心跳
+let heartBeatSeq = 0
+const state = {
+    heartState: new Map()
+};
 export const userMqtt = (deviceTopicInfo) => {
     let cacheSubscribeArr = [];
     const mqttState = store.state.droneStatus.mqttState;
     function subscribeMqtt(topic, handleMessageMqtt) {
         //订阅
-        
+
         mqttState?.subscribeMqtt(topic)
         const handler = handleMessageMqtt || onMessageMqtt
         mqttState?.on('onMessageMqtt', handler)
@@ -15,7 +20,7 @@ export const userMqtt = (deviceTopicInfo) => {
             topic,
             callback: handler,
         })
-        
+
     };
     function publishMqtt(topic, body, ots) {
         mqttState?.publishMqtt(topic, JSON.stringify(body), ots);
@@ -49,11 +54,7 @@ export const userMqtt = (deviceTopicInfo) => {
         cacheSubscribeArr = []
         heartBeatSeq = 0
     }
-    // 心跳
-    let heartBeatSeq = 0
-    const state = {
-        heartState: new Map()
-      };
+
 
     // 监听云控控制权
     vm.$watch(() => deviceTopicInfo, (val, oldVal) => {
@@ -77,16 +78,23 @@ export const userMqtt = (deviceTopicInfo) => {
                 seq: heartBeatSeq,
             },
         }
+        console.log(sn,'sn');
+        
         const pingInterval = setInterval(() => {
             if (!mqttState) return
             heartBeatSeq += 1
             body.data.ts = new Date().getTime()
             body.data.seq = heartBeatSeq
+            body.data.timestamp = new Date().getTime();
+            console.log(body);
+            
             publishMqtt(deviceTopicInfo.pubTopic, body, { qos: 0 })
         }, 1000)
         state.heartState.set(sn, {
             pingInterval,
         })
+        console.log(state,'state');
+        
     }
     return {
         mqttState,
