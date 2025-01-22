@@ -143,7 +143,7 @@ export default {
         } else {
           //成员搜索
           if (e) {
-            this.$refs.member.params.nickName = e;
+            this.$refs.member.params.searchValue = e;
             this.$refs.member.searchList();
           } else {
             this.$refs.member.getList();

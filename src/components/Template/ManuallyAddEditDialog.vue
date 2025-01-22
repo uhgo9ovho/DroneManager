@@ -97,8 +97,8 @@ export default {
         roleIds: [{ required: true, message: "请选择角色", trigger: "blur" }],
       },
       page: {
-        pageNum: 1,
-        pageSize: 10,
+        // pageNum: 1,
+        // pageSize: 10,
         orgId: this.$store.getters.orgId,
         orgDeptName: "",
       },
@@ -187,7 +187,6 @@ export default {
     },
   },
   mounted() {
-    console.log("2222",this.ruleForm)
     this.ruleForm = {
         name: "",
         phone: "",
@@ -200,7 +199,6 @@ export default {
     this.getRoleList();
     this.getRoleSIdList();
     if (this.title == "编辑成员") {
-      console.log("111",this.itemRow);
       this.ruleForm.name = this.itemRow.userName;
       this.ruleForm.phone = this.itemRow.phonenumber;
       this.ruleForm.department = this.itemRow.orgDeptId;

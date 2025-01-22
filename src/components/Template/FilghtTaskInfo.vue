@@ -59,26 +59,26 @@
         <div class="top">执行机场</div>
         <div class="data">{{ row.airportName }}</div>
       </div>
-      <div class="item">
-        <i
-          class="iconfont"
-          :class="[taskDetails ? 'el-icon-xiazai20' : 'el-icon-dikuai']"
-        ></i>
-        <div class="msg">{{ taskDetails ? "任务信息" : "地块信息" }}</div>
-        <el-divider></el-divider>
-      </div>
-      <div class="plot">
-        <div class="item" v-for="(item, index) in plotOptions" :key="index">
-          <div class="top">{{ item.label }}</div>
-          <div class="data">{{ item.value }}</div>
-        </div>
-      </div>
-      <div class="single">
-        <div class="top">位置详情</div>
-        <div class="data">
-          {{ row.taskAddress }}
-        </div>
-      </div>
+<!--      <div class="item">-->
+<!--        <i-->
+<!--          class="iconfont"-->
+<!--          :class="[taskDetails ? 'el-icon-xiazai20' : 'el-icon-dikuai']"-->
+<!--        ></i>-->
+<!--        <div class="msg">{{ taskDetails ? "任务信息" : "地块信息" }}</div>-->
+<!--        <el-divider></el-divider>-->
+<!--      </div>-->
+<!--      <div class="plot">-->
+<!--        <div class="item" v-for="(item, index) in plotOptions" :key="index">-->
+<!--          <div class="top">{{ item.label }}</div>-->
+<!--          <div class="data">{{ item.value }}</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="single">-->
+<!--        <div class="top">位置详情</div>-->
+<!--        <div class="data">-->
+<!--          {{ row.taskAddress }}-->
+<!--        </div>-->
+<!--      </div>-->
       <div class="item">
         <i class="el-icon-document"></i>
         <div class="msg">创建信息</div>
@@ -96,7 +96,7 @@
       </div>
       <div class="single">
         <div class="top">备注</div>
-        <div class="data"></div>
+        <div class="data">{{ row.note }}</div>
       </div>
     </div>
   </div>
@@ -182,7 +182,8 @@ export default {
             }`,
           },
         ];
-      } else {
+      }
+      else {
         //地块信息
         return [
           {

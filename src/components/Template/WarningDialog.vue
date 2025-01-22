@@ -108,6 +108,13 @@ export default {
       });
       item.checked = true;
     },
+
+    formattedDate(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    },
     getPhotoList() {
       getWarningPhotosAPI(this.row.id).then((res) => {
         if (res.code === 200) {
@@ -132,8 +139,10 @@ export default {
               timeDiffInMs / (1000 * 60 * 60 * 24)
             );
 
+            //获取具体的时间
+            let phototime =this.formattedDate(photoDate);
             // 根据时间差生成描述文本
-            let text = "";
+            let text;
             if (timeDiffInDays < 7) {
               text = `${timeDiffInDays}天前`;
             } else if (timeDiffInDays < 14) {
@@ -153,13 +162,14 @@ export default {
             }
 
             return {
-              time: item.photo_time,
+              time: phototime,
               url: "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.pic,
               text: text,
+              // phototime:phototime,
               checked: index === 0, // 第一个对象的checked为true
             };
           });
-          console.log(this.timeOptions);
+          console.log(item,this.timeOptions);
         }
       });
     },
