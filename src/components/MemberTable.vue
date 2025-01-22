@@ -62,7 +62,7 @@
         {{ row.roleName }}
       </template>
       <template #orgName="{ row }">
-        {{ row.orgName }}
+        {{ row.orgDeptName == null ? "":row.orgDeptName}}
       </template>
       <template #bind="{ row }">
         <div class="bind_icon">
@@ -137,7 +137,7 @@ export default {
           showOverflowTooltip: false,
         },
         {
-          prop: "nickName",
+          prop: "inviterName",
           label: "添加/邀请人",
           showOverflowTooltip: false,
         },

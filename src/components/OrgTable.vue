@@ -40,6 +40,7 @@
     <div class="add-device-box" v-if="DeviceDialogVisible">
       <AddDeviceDialog
         :itemOrgId="itemOrgId"
+        :deviceTitle="deviceTitle"
         :DeviceDialogVisible="DeviceDialogVisible"
         @updateDeviceDialogVisible="updateDeviceDialogVisible"
       ></AddDeviceDialog>
@@ -77,6 +78,7 @@ export default {
   },
   data() {
     return {
+      deviceTitle:"新增设备",
       searchValue: "",
       searchType: 1,
       columns: [

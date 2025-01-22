@@ -2,7 +2,7 @@
   <el-dialog
     :visible="DeviceDialogVisible"
     @close="handleClose"
-    title="新增设备"
+    :title="deviceTitle"
   >
     <el-form :model="deviceForm">
       <el-form-item label="设备id">
@@ -52,6 +52,10 @@ export default {
       default: 0,
     },
     itemRow: {
+      type: Object,
+      default: null,
+    },
+    deviceTitle:{
       type: Object,
       default: null,
     },

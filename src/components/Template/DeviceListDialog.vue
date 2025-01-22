@@ -4,7 +4,7 @@
       :visible="deviceListVisible"
       @close="handleClose"
       title="设备列表"
-      top="2vh !important"
+      top="6vh !important"
     >
       <CommonTable
         :tableList="tableList"
@@ -46,6 +46,7 @@
         :DeviceDialogVisible="DeviceDialogVisible"
         @updateDeviceDialogVisible="updateDeviceDialogVisible"
         :itemRow="itemRow"
+        :deviceTitle = "deviceTitle"
         @updateDeviceList="updateDeviceList"
       ></EditDeviceDialog>
     </div>
@@ -74,6 +75,7 @@ export default {
   },
   data() {
     return {
+      deviceTitle:"编辑设备信息",
       itemRow: null,
       DeviceDialogVisible: false,
       height: "484px",

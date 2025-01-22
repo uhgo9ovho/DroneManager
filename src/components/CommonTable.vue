@@ -1,7 +1,7 @@
 <template>
   <div class="common-table">
     <div class="table-box">
-      <el-table :data="tableList" style="width: 100%" :height="height" @selection-change="handleSelectionChange">
+      <el-table :data="tableList" style="width: 100%;" :height="height" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" v-if="showSelection"></el-table-column>
         <el-table-column
           v-for="(item, index) in columns"
@@ -154,6 +154,9 @@ export default {
 .common-table {
   .table-box {
     height: calc(100vh - 212px);
+    .el-table {
+      position: static !important;
+    }
   }
   .pagination {
     width: 100%;
