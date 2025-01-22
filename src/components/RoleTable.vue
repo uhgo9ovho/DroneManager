@@ -21,7 +21,7 @@
     </common-table>
     <!-- 编辑弹窗 -->
     <div v-if="dialogVisible">
-      <role-edit-dialog :row="row" :dialogVisible="dialogVisible" @updateDialogVisible="updateDialogVisible"></role-edit-dialog>
+      <role-edit-dialog @updateList="updateList" :row="row" :dialogVisible="dialogVisible" @updateDialogVisible="updateDialogVisible"></role-edit-dialog>
     </div>
   </div>
 </template>
@@ -102,6 +102,9 @@ export default {
     updateDialogVisible(visible) {
       this.dialogVisible = visible;
     },
+    updateList() {
+      this.getRoleList()
+    }
   },
   mounted() {
     this.getRoleList();

@@ -134,6 +134,7 @@ export default {
       editRoleAPI(this.form).then((res) => {
         if (res.code === 200) {
           this.$message.success(res.msg);
+          this.$emit('updateList')
           this.handleClose();
         } else {
           this.$message.error('操作失败');

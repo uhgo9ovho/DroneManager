@@ -260,7 +260,6 @@ import { getPlotAPI } from "@/api/TaskManager.js";
 import { returnHomeAPI } from "@/api/droneControl.js";
 import { UranusMqtt } from "@/utils/mqtt";
 import Cookies from "js-cookie";
-import { getToken } from "@/utils/auth";
 import { useManualControl } from "@/utils/mqtt/use-manual-control";
 export default {
   name: "VideoMapWrap",
@@ -312,7 +311,7 @@ export default {
       tempWind_speed: "-",
       tempHumidity: "-",
       capacity_percent: "-",
-      tempRainfall: "-",
+      tempRainfall: "无雨雪",
       tempCapacityPercent: "-",
       percentage: 0,
       mqttState: null,
@@ -538,12 +537,10 @@ export default {
             res.data;
           const userInfo = JSON.parse(Cookies.get("user"));
           this.client_id = client_id;
-          this.mqttState = new UranusMqtt('ws://114.55.1.221:8083/mqtt', {
-            clientId: 'mqttx_8d312074',
-            username: `admin`,
-            // username: `${userInfo.userName}_test`,
-            // password: getToken(),
-            password: 'admin',
+          this.mqttState = new UranusMqtt(address, {
+            clientId: client_id,
+            username: `hjh`,
+            password: '123123',
           });
           this.getMqttState(this.mqttState);
           this.mqttState.initMqtt();

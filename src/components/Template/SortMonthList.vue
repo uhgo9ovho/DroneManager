@@ -200,7 +200,9 @@ export default {
     flex: 1 1 0%;
     overflow: auto;
     background: none !important;
-
+    .el-calendar-table .el-calendar-day:hover {
+      background-color: transparent;
+    }
     .el-calendar__header {
       display: none;
     }

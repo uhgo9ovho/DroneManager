@@ -173,6 +173,7 @@ export default {
         this.currentDate = date;
         
         this.initDayList(date);
+        
       } else {
         console.log(date, "monthDate");
         const params = {

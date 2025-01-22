@@ -1,7 +1,7 @@
 <template>
   <div class="photo-preview">
     <div class="imgPrewBox">
-      <div>
+      <div style="position: relative">
         <div class="innerImgBox">
           <ImageZoom
             :src="currentUrl"
@@ -34,6 +34,17 @@
         </div>
         <div class="close" @click="closePreview">
           <i class="el-icon-close"></i>
+        </div>
+        <div class="last" @click="prevImage">
+          <i class="el-icon-arrow-left"></i>
+        </div>
+        <div class="next" @click="nextImage">
+          <i class="el-icon-arrow-right"></i>
+        </div>
+        <div class="page">
+          <div class="currentPage">{{ currentIndex }}</div>
+          <i>/</i>
+          <div class="totalPage">{{ row.photoNum }}</div>
         </div>
         <div
           class="deleteBtn"
@@ -126,6 +137,10 @@ export default {
       type: Number,
       default: 0,
     },
+    currentIndex: {
+      type: Number,
+      default: 0
+    }
   },
   data() {
     return {
@@ -150,7 +165,7 @@ export default {
       address: "",
       locationArr: [],
       searchText: "",
-      allTypeList: []
+      allTypeList: [],
     };
   },
   computed: {
@@ -185,9 +200,19 @@ export default {
     ImageZoom,
   },
   methods: {
+    prevImage() {
+      if (this.currentIndex > 0) {
+        this.$emit("prevImage");
+      }
+    },
+    nextImage() {
+      if (this.currentIndex < this.row.photoNum) {
+        this.$emit("nextImage");
+      }
+    },
     searchQuestion(query) {
       const keyword = query.trim().toLowerCase();
-      
+
       this.typeList = this.allTypeList.filter((item) =>
         item.dictLabel.toLowerCase().includes(keyword)
       );
@@ -222,11 +247,14 @@ export default {
       if (!selectedArea.width || !selectedArea.height) {
         this.isShow = false;
         this.isShowSelect = false;
-        this.showSure = false;
       } else {
         this.isShow = true;
-        this.showSure = false;
         this.isShowSelect = true;
+      }
+      if(selectedArea.size) {
+        this.showSure = true;
+      } else {
+        this.showSure = false;
       }
       console.log(selectedArea, "asdasd");
       this.top = selectedArea.y2;
@@ -490,7 +518,7 @@ export default {
       background: #fff;
       border-radius: 20px;
       position: absolute;
-      bottom: 16px;
+      bottom: 46px;
       right: 16px;
       display: flex;
       justify-content: center;
@@ -522,6 +550,48 @@ export default {
       align-items: center;
       cursor: pointer;
       font-size: 16px;
+    }
+    .last {
+      color: #fff;
+      width: 40px;
+      height: 40px;
+      background: rgba(134, 134, 140, 0.7019607843137254);
+      border-radius: 20px;
+      position: absolute;
+      left: -48px;
+      top: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+    .next {
+      width: 40px;
+      height: 40px;
+      background: rgba(134, 134, 140, 0.7019607843137254);
+      border-radius: 20px;
+      position: absolute;
+      right: -48px;
+      top: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #fff;
+    }
+    .page {
+      display: flex;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      margin-top: 16px;
+      position: relative;
+      z-index: 0;
+      margin-left: calc(50% - 20px);
+      .totalPage {
+        color: #ababab;
+      }
     }
     .deleteBtn {
       position: absolute;

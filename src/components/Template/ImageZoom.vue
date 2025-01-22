@@ -1,6 +1,6 @@
 <template>
   <div ref="canvasWrapEl">
-    <canvas id="canvas" ref="canvas"></canvas>
+    <canvas id="canvas" ref="canvas" ></canvas>
   </div>
 </template>
 
@@ -87,6 +87,8 @@ export default {
 
       if (activeObject && activeObject.type === "rect") {
         // 如果点击在已有的矩形上，启动拖动操作
+        console.log(this.textMap.size);
+        
         this.isDragging = true;
         this.canvas.setActiveObject(activeObject);
         // 获取矩形的起始位置和结束位置
@@ -103,6 +105,7 @@ export default {
           y2: bottom,
           width,
           height,
+          size: this.textMap.size
         });
         this.hasPos = true;
       } else {
@@ -294,10 +297,11 @@ export default {
 
         // 将文字添加到画布上
         this.canvas.add(text);
-        this.canvas.setActiveObject(text);
+        // this.canvas.setActiveObject(text);
         // 绑定矩形框和文字
         this.textMap.set(activeObject, text);
         this.canvas.renderAll();
+        
       } else {
         console.log("请选择一个矩形框进行标注");
       }
@@ -339,8 +343,14 @@ export default {
       }
     },
   },
+  watch: {
+    src(val) {
+      this.init()
+    }
+  },
   mounted() {
     this.init();
+    
   },
 };
 </script>

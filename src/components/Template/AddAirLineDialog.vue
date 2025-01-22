@@ -8,31 +8,36 @@
   >
     <div class="add-task-wrap">
       <div class="add-task-head">
-        <div class="add-title">添加航线</div>
+        <div class="add-title">
+          添加航线
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="左边为任务，右边为对应的航线"
+            placement="top-start"
+          >
+            <span class="el-icon-warning-outline"></span>
+          </el-tooltip>
+        </div>
         <div style="flex: 1 1 0%"></div>
         <el-input
-          placeholder="请输入任务或航线名称"
+          placeholder="请输入任务名称"
           v-model="taskName"
+          clearable
         ></el-input>
         <i class="el-icon-close" @click="handleClose"></i>
       </div>
-      <!-- <div class="add-task-content">
-        <div class="select-task-title">已选航线</div>
-        <div class="select-task">【全覆盖】西安-周至-3000mB01</div>
-      </div> -->
       <div class="add-task-list">
         <div class="add-task-left-list">
           <div
             class="left-item"
             :class="{ 'left-item-selected': item.taskId == currentId }"
-            v-for="item in airLineList"
+            v-for="item in filteredTasks"
             :key="item.ticket_id"
             @click="checkedLine(item)"
           >
-            <div class="hidden_line" style="flex: 1 1 0%; text-align: start;">
-             {{ item.taskName }} ({{
-                item.wrjAirlineFiles.length
-              }})
+            <div class="hidden_line" style="flex: 1 1 0%; text-align: start">
+              {{ item.taskName }} ({{ item.wrjAirlineFiles.length }})
             </div>
           </div>
         </div>
@@ -44,7 +49,9 @@
             :key="item.airlineId"
             @click="selectAirLine(item)"
           >
-            <div class="hidden_line" style="margin-top: 20px">{{ item.lineName }}</div>
+            <div class="hidden_line" style="margin-top: 20px">
+              {{ item.lineName }}
+            </div>
             <i class="el-icon-check" v-if="item.airlineId == code"></i>
           </div>
         </div>
@@ -115,6 +122,12 @@ export default {
         return [];
       }
     },
+    filteredTasks() {
+      const lowerCaseQuery = this.taskName.toLowerCase();
+      return this.airLineList.filter((task) =>
+        task.taskName.toLowerCase().includes(lowerCaseQuery)
+      );
+    },
   },
   methods: {
     initList() {
@@ -132,12 +145,12 @@ export default {
       this.$emit("closeLineDialog");
     },
     sureBtn() {
-      if(!this.code) {
-        this.$message.error('请选择航线');
+      if (!this.code) {
+        this.$message.error("请选择航线");
         return;
       }
-      if(!this.checkedItem.taskId) {
-        this.$message.error('请选择任务');
+      if (!this.checkedItem.taskId) {
+        this.$message.error("请选择任务");
         return;
       }
       const params = {
@@ -149,7 +162,7 @@ export default {
 
       addSchedulingAPI(params).then((res) => {
         if (res.code === 200) {
-          this.$emit('updateData', this.currentDate);
+          this.$emit("updateData", this.currentDate);
           this.handleClose();
         }
       });
@@ -157,7 +170,7 @@ export default {
     checkedLine(item) {
       this.currentId = item.taskId;
       this.checkedItem = item;
-      this.code = ""
+      this.code = "";
     },
     selectAirLine(item) {
       this.code = item.airlineId;
@@ -233,6 +246,7 @@ export default {
         margin-top: 18px;
         width: 100%;
         flex: 1;
+        min-height: 310px;
         display: flex;
         flex-direction: row;
         max-height: 40vh;
@@ -254,12 +268,12 @@ export default {
             margin-bottom: 4px;
             padding-left: 16px;
             cursor: pointer;
-            .hidden_line{
+            .hidden_line {
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
             }
-            .hidden_line:hover{
+            .hidden_line:hover {
               white-space: normal;
               overflow: visible;
               background-color: #f0f0f0; /* 可选，悬浮时的背景色变化 */
@@ -295,7 +309,6 @@ export default {
             cursor: pointer;
             justify-content: space-between;
             align-items: center;
-
           }
           .right-item-selected {
             font-weight: 400;

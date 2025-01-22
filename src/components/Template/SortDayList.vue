@@ -15,28 +15,23 @@
               </div>
               <div class="item-container" style="flex: 1 1 0%">
                 <div class="task-item">
-                  <div
-                    v-for="(item2, index) in airInfos"
-                    :key="index"
-                    v-show="item.taskName"
-                  >
+                  <template v-if="hasTaskForTime(item.time)">
                     <div
-                      class="task-past-card"
-                      v-if="
-                        formatTime(item2.formatTime) === item.time ||
-                        airTime(item2.formatTime) === item.time
-                      "
+                      v-for="(item2, index) in getTasksForTime(item.time)"
+                      :key="index"
                     >
-                      <AirItemInfo
-                        :info="item2"
-                        @openDialog="openDialog"
-                        @updateData="updateDataDel"
-                        :isShowAddBtn="isShowAddBtn(item.time)"
-                        :dateSHowBtn="dateSHowBtn"
-                      ></AirItemInfo>
+                      <div class="task-past-card">
+                        <AirItemInfo
+                          :info="item2"
+                          @openDialog="openDialog"
+                          @updateData="updateDataDel"
+                          :isShowAddBtn="isShowAddBtn(item.time)"
+                          :dateSHowBtn="dateSHowBtn"
+                        ></AirItemInfo>
+                      </div>
                     </div>
-                  </div>
-                  <div v-if="!item.taskName">
+                  </template>
+                  <div v-else>
                     <div
                       class="task-card3"
                       @click="addAirBtn(item)"
@@ -320,6 +315,18 @@ export default {
         }
       });
     },
+    hasTaskForTime(time) {
+      return this.airInfos.some(item => 
+        this.formatTime(item.formatTime) === time || 
+        this.airTime(item.formatTime) === time
+      );
+    },
+    getTasksForTime(time) {
+      return this.airInfos.filter(item => 
+        this.formatTime(item.formatTime) === time || 
+        this.airTime(item.formatTime) === time
+      );
+    }
   },
   mounted() {
     this.updateTime();
