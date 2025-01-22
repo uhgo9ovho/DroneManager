@@ -89,6 +89,7 @@
         <div class="new-item-badge" @click="showQRCode = !showQRCode">
           <i class="el-icon-user-solid"></i>
         </div>
+
         <div v-if="statusMessage === '二维码已扫描'" class="web_qrcode_wrp">
           <i class="el-icon-success"></i>
           <h1 class="web_qrcode_msg_title">扫描成功</h1>
@@ -98,17 +99,25 @@
           <h1 class="web_qrcode_msg_title">你已取消此次登录</h1>
           <el-button type="success">重试</el-button>
         </div>
-        <el-image
-          v-else
-          :src="QRCodeUrl"
-          alt=""
-          @click="updateUrl"
-          v-loading="loading"
-        >
-          <div slot="error" class="image-slot">
-            <i class="el-icon-loading" style="font-size: 40px"></i>
+
+        <div v-else class="qrcode-container" >
+          <el-image
+            :src="QRCodeUrl"
+            alt="二维码"
+            class="qrcode-image"
+            v-loading="loading"
+            @click="updateUrl"
+          >
+            <div slot="error" class="image-slot">-->
+                 <i class="el-icon-loading" style="font-size: 40px"></i>
+            </div>
+          </el-image>
+          <div v-if="statusMessage == '二维码已过期' && !loading" class="overlay" >
+            <div class="overlay-icon" @click="updateUrl" >
+              <i class="el-icon-refresh-right" style="font-size: 60px; color: #706f6f;"></i>
+            </div>
           </div>
-        </el-image>
+        </div>
       </div>
     </div>
 
@@ -202,6 +211,7 @@ export default {
     },
     getCode() {
       getCodeImg().then((res) => {
+
         this.captchaEnabled =
           res.captchaEnabled === undefined ? true : res.captchaEnabled;
         if (this.captchaEnabled) {
@@ -271,7 +281,6 @@ export default {
         page: "pages/scanLogin/scanLogin",
       };
       getQRCodeAPI(params).then((res) => {
-        console.log(res);
         if (res.code === 200) {
           this.QRCodeUrl = "data:image/png;base64," + res.msg;
           // 启动轮询请求，检查二维码状态
@@ -293,6 +302,8 @@ export default {
           const statusResponse = await getQRCodeStatusAPI(qrCodeId);
           if (statusResponse.code != 200) {
             //停止轮询
+            this.statusMessage="二维码已过期";
+            console.log(this.statusMessage)
             this.stopPolling();
             return this.$message.error("二维码过期,请刷新");
           }
@@ -340,6 +351,7 @@ export default {
     },
     updateUrl() {
       this.QRCodeUrl = "";
+      this.statusMessage="";
       this.getQRCode();
     },
   },
@@ -515,4 +527,33 @@ export default {
 .login-code-img {
   height: 38px;
 }
+
+.qrcode-container {
+  position: relative;
+  display: inline-block;
+}
+
+.qrcode-image {
+  display: block; /* 确保图片占据整个容器 */
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255,0.7); /* 灰色蒙版 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-icon {
+  background-color: rgba(255, 255, 255, 0.7); /* 可选：图标背景，增加一点可见性 */
+  padding: 10px; /* 可选：增加内边距 */
+  border-radius: 50%; /* 可选：将背景设置为圆形 */
+  cursor: pointer; /* 鼠标悬停时显示为手形 */
+}
+
 </style>

@@ -18,8 +18,8 @@ export const getDepartmentDetails = (id) => {
 
 /**
  * 新增组织
- * @param { ad: "地址", head: "负责人姓名", headPhone: "负责人电话", orgName: "组织名称", platformLogo: "平台logo", platformName: "平台名称", webLogo: "网页链接logo" } params 
- * @returns 
+ * @param { ad: "地址", head: "负责人姓名", headPhone: "负责人电话", orgName: "组织名称", platformLogo: "平台logo", platformName: "平台名称", webLogo: "网页链接logo" } params
+ * @returns
  */
 export const addDepartment = (params) => {
     return request({
@@ -44,8 +44,8 @@ export const editOrgInfo = (params) => {
 
 /**
  * 新建部门
- * @param { orgDeptName: "部门名称", isOrg: "是否为组织 是为1 0为否", orgId: "组织id", member: 0 } params 
- * @returns 
+ * @param { orgDeptName: "部门名称", isOrg: "是否为组织 是为1 0为否", orgId: "组织id", member: 0 } params
+ * @returns
  */
 export const addDept = (params) => {
     return request({
@@ -57,8 +57,8 @@ export const addDept = (params) => {
 
 /**
  * 修改部门信息
- * @param { id: 10, orgDeptName: "质量管理部门", createId: 1, marker: "备注" } params 
- * @returns 
+ * @param { id: 10, orgDeptName: "质量管理部门", createId: 1, marker: "备注" } params
+ * @returns
  */
 export const editDeptInfo = (params) => {
     return request({
@@ -94,8 +94,8 @@ export const getDeptList = (params) => {
 
 /**
  * 新增成员接口
- * @param {"userName":"张巧莲", // 用户名 "nickName":"张巧莲", // 昵称 "phonenumber":"13256653223",// 手机号码 "password":"jky123", // 密码 "orgId":1, // 组织id "roleIds":[2] //默认角色id为2 } params 
- * @returns 
+ * @param {"userName":"张巧莲", // 用户名 "nickName":"张巧莲", // 昵称 "phonenumber":"13256653223",// 手机号码 "password":"jky123", // 密码 "orgId":1, // 组织id "roleIds":[2] //默认角色id为2 } params
+ * @returns
  */
 export const addUser = (params) => {
     return request({
@@ -115,8 +115,8 @@ export const getUserInfo = (id) => {
 
 /**
  * 修改成员
- * @param { "id": 5, "phonenumber": "13256653223" } params 
- * @returns 
+ * @param { "id": 5, "phonenumber": "13256653223" } params
+ * @returns
  */
 export const editUserInfo = (params) => {
     return request({
@@ -137,7 +137,7 @@ export const getUserList = (params) => {
 //成员搜索接口（只要是给后端传了nickName为空的时候返回的不是所有而是空）
 export const searchUser = (params) => {
     return request({
-        url: `/wrj/user/list?orgId=${params.orgId}&pageNum=${params.pageNum}&pageSize=${params.pageSize}&nickName=${params.nickName}`,
+        url: `/wrj/user/list?orgId=${params.orgId}&pageNum=${params.pageNum}&pageSize=${params.pageSize}&searchValue=${params.searchValue}`,
         method: "get"
     })
 };
