@@ -138,8 +138,8 @@ export default {
       codeUrl: "",
       showOrg: false,
       loginForm: {
-        username: "admin",
-        password: "Admin123..",
+        username: "",
+        password: "",
         rememberMe: false,
         code: "",
         uuid: "",

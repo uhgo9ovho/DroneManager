@@ -319,7 +319,7 @@ export default {
               : this.airlineList.length, //航线数量
             startTime: this.starttime,
             endTime: this.endtime,
-            dateArrays: this.valArr,
+            dateArrays: this.valArr.join(','),
             wrjAirlineFiles: this.fileArr, //导入的时候传这个
             lineFileCache: this.airlineList, //绘制的时候传这个
             note: this.settingInfo,

@@ -69,7 +69,7 @@
               <i class="el-icon-search"></i>
             </div>
           </div>
-          <div class="inputBox">
+          <!-- <div class="inputBox">
             <el-input
               v-model="searchText"
               id="typeInput"
@@ -77,16 +77,40 @@
               placeholder="搜索"
               @input="searchQuestion"
             />
-          </div>
+          </div> -->
           <!-- <div class="tipstitle">
             <el-tabs v-model="activeName" @tab-click="handleClick">
               <el-tab-pane label="常用" name="common"></el-tab-pane>
               <el-tab-pane label="全部" name="all"></el-tab-pane>
             </el-tabs>
+
+              
+
           </div> -->
           <div class="typeList_ul">
             <div
               class="typeList_li"
+              v-for="(item, index) in remarkList"
+              :key="index"
+              @click="changeRemark(item)"
+              :class="{ checked: item.checked }"
+            >
+              <div
+                style="
+                  width: 100%;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                {{ item.remark }}
+                <i class="el-icon-arrow-right"></i>
+              </div>
+            </div>
+          </div>
+          <div class="remark_list_ul" v-if="showRemark">
+            <div
+              class="remark_list_li"
               v-for="(item, index) in typeList"
               :key="index"
               @click="selectItem(item)"
@@ -94,7 +118,6 @@
               {{ item.dictLabel }}
             </div>
           </div>
-          <div class="typeList_ul"></div>
         </div>
       </div>
       <!-- <div class="quanjing" v-else>
@@ -139,11 +162,12 @@ export default {
     },
     currentIndex: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data() {
     return {
+      showRemark: false,
       isEdit: false,
       isChecked: false,
       top: 0,
@@ -166,6 +190,7 @@ export default {
       locationArr: [],
       searchText: "",
       allTypeList: [],
+      remarkList: [],
     };
   },
   computed: {
@@ -210,13 +235,21 @@ export default {
         this.$emit("nextImage");
       }
     },
-    searchQuestion(query) {
-      const keyword = query.trim().toLowerCase();
-
-      this.typeList = this.allTypeList.filter((item) =>
-        item.dictLabel.toLowerCase().includes(keyword)
+    changeRemark(obj) {
+      this.showRemark = true;
+      this.remarkList.forEach((it) => (it.checked = false));
+      obj.checked = true;
+      this.typeList = this.allTypeList.filter(
+        (item) => item.remark == obj.remark
       );
     },
+    // searchQuestion(query) {
+    //   const keyword = query.trim().toLowerCase();
+
+    //   this.typeList = this.allTypeList.filter((item) =>
+    //     item.dictLabel.toLowerCase().includes(keyword)
+    //   );
+    // },
     downloadImage() {
       downloadPhoto(this.currentUrl, this.row.fileName);
     },
@@ -251,7 +284,7 @@ export default {
         this.isShow = true;
         this.isShowSelect = true;
       }
-      if(selectedArea.size) {
+      if (selectedArea.size) {
         this.showSure = true;
       } else {
         this.showSure = false;
@@ -279,11 +312,15 @@ export default {
       this.isShow = false;
       this.isShowSelect = false;
       this.showSure = false;
+      this.showRemark = false;
+      this.remarkList.forEach((it) => (it.checked = false));
     },
     sureDrawBtn() {
       this.isShow = false;
       this.showSure = false;
       this.generateImageURL();
+      this.showRemark = false;
+      this.remarkList.forEach((it) => (it.checked = false));
     },
     selectItem(item) {
       this.$refs.imageZoom.addTextToSelectedBox(item.dictLabel);
@@ -347,8 +384,18 @@ export default {
     getDictList() {
       dictListAPI("warn_type").then((res) => {
         if (res.code === 200) {
-          this.typeList = res.rows;
           this.allTypeList = res.rows;
+          let remarkArr = res.rows.map((item) => {
+            return {
+              remark: item.remark,
+              checked: false,
+            };
+          });
+          this.remarkList = remarkArr.filter(
+            (item, index, self) =>
+              index === self.findIndex((obj) => obj.remark === item.remark)
+          );
+          console.log(this.remarkList, "remarkList");
         }
       });
     },
@@ -626,6 +673,37 @@ export default {
       backdrop-filter: blur(5px);
       padding: 12px 8px 8px 8px;
       z-index: 1000;
+      .remark_list_ul {
+        position: absolute;
+        width: 100%;
+        background: rgba(29, 29, 31, 0.7490196078431373);
+        border-radius: 12px;
+        backdrop-filter: blur(5px);
+        padding: 12px 8px 8px 8px;
+        z-index: 1000;
+        top: 0px;
+        right: -150px;
+        margin-top: 4px;
+        max-height: 200px;
+        overflow: auto;
+        .remark_list_li {
+          font-size: 12px;
+          line-height: 28px;
+          height: 28px;
+          cursor: pointer;
+          text-indent: 5px;
+          padding-left: 12px;
+          padding-right: 8px;
+          margin-bottom: 2px;
+          white-space: pre;
+          color: hsla(0, 0%, 100%, 0.8509803921568627);
+          &:hover {
+            background: #0271e3;
+            border-radius: 6px;
+            color: #fff;
+          }
+        }
+      }
       .top {
         padding-left: 12px;
         padding-right: 4px;
@@ -716,6 +794,11 @@ export default {
             border-radius: 6px;
             color: #fff;
           }
+        }
+        .checked {
+          background: #0271e3;
+          border-radius: 6px;
+          color: #fff;
         }
       }
     }

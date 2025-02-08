@@ -6,8 +6,6 @@ let polygonCoord = null;
 let editor = []
 let isDraw = false
 export function DronePlottingRoute(map, mouseTool, AMap) {
-    console.log(store, 'store');
-    console.log(AMap, 'amap');
     AMap.Event.addListener(mouseTool, 'draw', function (e) {
         isDraw = false
         mouseTool.close()
