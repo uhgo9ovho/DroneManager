@@ -42,13 +42,8 @@
                 ></el-option>
               </el-select>
             </div>
-            <div class="tools-container debug_control">
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="远程调试"
-                v-if="false"
-              >
+            <div class="tools-container debug_control" v-if="false">
+              <el-tooltip class="item" effect="dark" content="远程调试">
                 <i class="el-icon-setting" @click="showTools"></i>
               </el-tooltip>
               <div class="tools-box" v-if="toolsVisible">
@@ -85,6 +80,44 @@
             </div>
           </div>
         </div>
+        <!-- 无人机远程调试数据展示 -->
+        <div class="fly_status">
+          <div class="fly_icon">
+            <i class="el-icon-switch-button"></i>
+          </div>
+          <div class="fly_text">
+            <p>电源</p>
+            <p>开机</p>
+          </div>
+        </div>
+        <div class="fly_status">
+          <div class="fly_icon">
+            <i class="el-icon-dianliang iconfont"></i>
+          </div>
+          <div class="fly_text">
+            <p>充电状态</p>
+            <p>断电</p>
+          </div>
+        </div>
+        <div class="fly_status">
+          <div class="fly_icon">
+            <i class="el-icon-hangpai iconfont"></i>
+          </div>
+          <div class="fly_text">
+            <p>机场系统</p>
+            <p>空闲中</p>
+          </div>
+        </div>
+        <div class="fly_status">
+          <div class="fly_icon">
+            <i class="el-icon-box"></i>
+          </div>
+          <div class="fly_text">
+            <p>舱盖</p>
+            <p>关</p>
+          </div>
+        </div>
+        <!-- aaa -->
         <div class="top_center">
           <div class="flyinfo_center">
             <div class="fly_icon">
@@ -150,10 +183,8 @@
                   <span> {{ tempNetworkState }} kb/s </span>
                 </div>
                 <div class="electric-panel warning">
-                  <div class="panel">
-                    <div class="remainder" style="width: 30%"></div>
-                  </div>
-                  <div class="textNum">{{ tempCapacityPercent }}%</div>
+                  <!-- <div class="textNum">{{ tempCapacityPercent }}%</div> -->
+                  <ElectricQuantity :quantity="tempCapacityPercent"></ElectricQuantity>
                 </div>
                 <div class="signal_info">
                   <i class="iconfont el-icon-xinhao"></i>
@@ -261,6 +292,7 @@ import { returnHomeAPI } from "@/api/droneControl.js";
 import { UranusMqtt } from "@/utils/mqtt";
 import Cookies from "js-cookie";
 import { useManualControl } from "@/utils/mqtt/use-manual-control";
+import ElectricQuantity from '@/components/Template/ElectricQuantity.vue';
 export default {
   name: "VideoMapWrap",
   data() {
@@ -342,6 +374,7 @@ export default {
     FlyVideoBox,
     AirPortVideo,
     FlyRemote,
+    ElectricQuantity
   },
   computed: {
     ...mapState("droneStatus", [
@@ -352,7 +385,8 @@ export default {
       "controler",
     ]),
     title() {
-      if(this.controler && this.controler.userName != '暂无') return `当前${this.controler.userName}正在控制该设备，是否确认继续申请控制权？`
+      if (this.controler && this.controler.userName != "暂无")
+        return `当前${this.controler.userName}正在控制该设备，是否确认继续申请控制权？`;
       return "当前无人控制该设备，是否确认继续申请控制权？";
     },
     titleCream() {
@@ -540,7 +574,7 @@ export default {
           this.mqttState = new UranusMqtt(address, {
             clientId: client_id,
             username: `hjh`,
-            password: '123123',
+            password: "123123",
           });
           this.getMqttState(this.mqttState);
           this.mqttState.initMqtt();
@@ -748,10 +782,55 @@ export default {
       box-sizing: border-box;
       justify-content: space-between;
       align-items: center;
+      .fly_status {
+        display: flex;
+        background-image: none;
+        justify-content: center;
+        align-items: center;
+        .fly_icon {
+          width: 28px;
+          height: 100%;
+          display: flex;
+          background-image: none;
+          align-items: center;
+          i {
+            font-size: 28px;
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .fly_text {
+          line-height: 18px;
+          background-image: none;
+          font-size: 12px;
+          padding-left: 8px;
+          margin-right: 40px;
+          font-weight: 400;
+          p {
+            font-weight: 400;
+            background-image: none;
+            line-height: 18px;
+            .distance_number {
+              color: #fff;
+              font-weight: 500;
+              background-image: none;
+              line-height: 18px;
+              padding-left: 9px;
+            }
+            .distance_unit {
+              color: #fff;
+              background-image: none;
+              font-size: 12px;
+              font-weight: 400;
+              line-height: 18px;
+            }
+          }
+        }
+      }
       .toppaln_left {
         padding-top: 9px;
         background-image: none;
-        flex: 1;
+        // flex: 1;
         .flight_name {
           color: #fff;
           font-size: 14px;
@@ -969,7 +1048,6 @@ export default {
             padding-left: 8px;
             margin-right: 40px;
             font-weight: 400;
-            width: 136px;
             p {
               font-weight: 400;
               background-image: none;
