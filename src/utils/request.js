@@ -108,9 +108,6 @@ service.interceptors.response.use(res => {
   } else if (code === 601) {
     Message({ message: msg, type: 'warning' })
     return Promise.reject('error')
-  } else if (code === 500) {
-    Message({ message: '后台服务未启动，请稍后重试', type: 'warning' })
-    return Promise.reject('error')
   } else {
     return res.data
   }
