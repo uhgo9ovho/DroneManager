@@ -27,6 +27,11 @@
             >添加部门</el-button
           >
         </div>
+        <div class="create-task-btn" v-if="currentTab == 'role'" v-permissions="'wrj:role:add'">
+          <el-button round icon="el-icon-plus" @click="addRole"
+            >添加角色</el-button
+          >
+        </div>
         <div class="btn-group" v-if="currentTab == 'member'">
           <el-dropdown style="margin-right: 15px" @command="deleteAll" v-permissions="'wrj:dept:remove'">
             <el-button round
@@ -66,7 +71,7 @@
     </div>
     <div class="role-list" v-if="currentTab == 'role'">
       <!-- 角色列表 -->
-      <role-table v-permissions="'wrj:role:list'"></role-table>
+      <role-table ref="role" v-permissions="'wrj:role:list'"></role-table>
     </div>
     <!-- 手动添加dialog组件 -->
     <div v-if="manuallyVisible">
@@ -122,7 +127,7 @@ export default {
     checkedTip() {
       if (this.checked) {
         if (this.currentTab == "department") return "搜索部门名称";
-        return "搜索成员名称";
+        return "搜索成员姓名";
       }
       return "搜索";
     },
@@ -164,6 +169,10 @@ export default {
     addDepartment() {
       this.$refs.contactsRef.title = "新建部门";
       this.$refs.contactsRef.drawer = true;
+    },
+    addRole() {
+      this.$refs.role.title = '添加角色';
+      this.$refs.role.dialogVisible = true;
     },
     BatchImport() {
       //批量导入

@@ -113,13 +113,12 @@ $color-white: #fff;
     text-align: left;
     width: 42px;
   }
-
-  &.success {
-    @include panel($color-success);
-  }
-
   &.warning {
     @include panel($color-warning);
+  }
+  
+  &.success {
+    @include panel($color-success);
   }
 
   &.danger {

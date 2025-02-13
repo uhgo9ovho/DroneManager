@@ -1,5 +1,5 @@
 <template>
-  <div class="data">
+  <div class="data_box">
     <div class="top">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="预警事件" name="warningEvent" v-if="permissions.includes('wurenji:warning:list') || permissions[0] == '*:*:*'"></el-tab-pane>
@@ -233,8 +233,8 @@ function formatDateToTimestamp(date) {
 }
 </script>
 
-<style lang="scss" >
-.data {
+<style lang="scss">
+.data_box {
   margin-top: 20px;
   padding-right: 26px;
   padding-left: 32px;

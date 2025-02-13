@@ -70,6 +70,8 @@ export default {
       }
     },
     value(val) {
+      console.log(val,'aaasss');
+      
       this.$emit('changeDate', val);
       
     }

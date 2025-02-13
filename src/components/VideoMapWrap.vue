@@ -184,7 +184,9 @@
                 </div>
                 <div class="electric-panel warning">
                   <!-- <div class="textNum">{{ tempCapacityPercent }}%</div> -->
-                  <ElectricQuantity :quantity="tempCapacityPercent"></ElectricQuantity>
+                  <ElectricQuantity
+                    :quantity="tempCapacityPercent"
+                  ></ElectricQuantity>
                 </div>
                 <div class="signal_info">
                   <i class="iconfont el-icon-xinhao"></i>
@@ -292,7 +294,7 @@ import { returnHomeAPI } from "@/api/droneControl.js";
 import { UranusMqtt } from "@/utils/mqtt";
 import Cookies from "js-cookie";
 import { useManualControl } from "@/utils/mqtt/use-manual-control";
-import ElectricQuantity from '@/components/Template/ElectricQuantity.vue';
+import ElectricQuantity from "@/components/Template/ElectricQuantity.vue";
 export default {
   name: "VideoMapWrap",
   data() {
@@ -343,7 +345,7 @@ export default {
       tempWind_speed: "-",
       tempHumidity: "-",
       capacity_percent: "-",
-      tempRainfall: "无雨雪",
+      tempRainfall: "-",
       tempCapacityPercent: "-",
       percentage: 0,
       mqttState: null,
@@ -374,7 +376,7 @@ export default {
     FlyVideoBox,
     AirPortVideo,
     FlyRemote,
-    ElectricQuantity
+    ElectricQuantity,
   },
   computed: {
     ...mapState("droneStatus", [
@@ -419,24 +421,13 @@ export default {
 
           this.latitudeLine = host.latitude;
           this.longitudeLine = host.longitude;
-          this.tempRainfall =
-            host.rainfall == "1"
-              ? "小雨"
-              : host.rainfall == "2"
-              ? "中雨"
-              : host.rainfall == "3"
-              ? "大雨"
-              : "无雨";
+
           this.tempHeight = parseFloat(host.height.toFixed(2));
           this.tempHorizontal_speed = parseFloat(
             host.horizontal_speed.toFixed(2)
           );
           this.tempVertical_speed = parseFloat(host.vertical_speed.toFixed(2));
           this.tempElevation = parseFloat(host.elevation.toFixed(2));
-          this.tempWind_speed = parseFloat(host.wind_speed.toFixed(2));
-          if (host.humidity) {
-            this.tempHumidity = parseFloat(host.humidity.toFixed(2));
-          }
 
           this.capacity_percent = host.capacity_percent;
 
@@ -455,6 +446,18 @@ export default {
         //飞行进度
         this.percentage = val.data.output.progress.percent;
       } else if (val.biz_code === "dock_osd") {
+        if (host.humidity) {
+          this.tempHumidity = parseFloat(host.humidity.toFixed(2));
+        }
+        this.tempRainfall =
+          host.rainfall == "1"
+            ? "小雨"
+            : host.rainfall == "2"
+            ? "中雨"
+            : host.rainfall == "3"
+            ? "大雨"
+            : "无雨";
+        this.tempWind_speed = parseFloat(host.wind_speed.toFixed(2));
         if ("drc_state" in host) {
           this.drcState = host.drc_state;
           console.log(host.drc_state, "drc_status");
@@ -495,11 +498,9 @@ export default {
       this.cameraModel = val;
     },
     async getDeviceInfo() {
-      if (!this.airPostInfo) {
-        await this.fetchAirPostInfo();
-        this.task = this.airPostInfo.address;
-        this.taskOptions = this.airOptions;
-      }
+      await this.fetchAirPostInfo();
+      this.task = this.airPostInfo.address;
+      this.taskOptions = this.airOptions;
       this.getDeviceSN(this.airPostInfo.deviceId);
       let lonlatArr = this.airPostInfo.location.split(",");
       this.longitude = +lonlatArr[0];

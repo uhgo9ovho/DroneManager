@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="编辑角色"
+    :title="title"
     :visible.sync="dialogVisible"
     width="50%"
     :before-close="handleClose"
@@ -11,6 +11,9 @@
       </el-form-item>
       <el-form-item label="角色描述">
         <el-input v-model="form.remark"></el-input>
+      </el-form-item>
+      <el-form-item label="角色标识">
+        <el-input v-model="form.roleKey"></el-input>
       </el-form-item>
       <el-form-item label="角色状态">
         <el-switch
@@ -25,7 +28,11 @@
           <el-tab-pane label="看板大屏" name="dashboard"></el-tab-pane>
           <el-tab-pane label="小程序" name="miniProgram"> </el-tab-pane>
         </el-tabs>
-        <div class="role-selector" v-show="activeName == 'miniProgram'" style="overflow-y: scroll">
+        <div
+          class="role-selector"
+          v-show="activeName == 'miniProgram'"
+          style="overflow-y: scroll"
+        >
           <tree-promission
             ref="programsRef"
             :checkedKeys="checkedKeysObj.miniProgram"
@@ -64,7 +71,7 @@
 <script>
 import TreePromission from "./TreePromission.vue";
 import { mapState } from "vuex";
-import { roleMenuTreeselectAPI, editRoleAPI } from "@/api/orgModel";
+import { roleMenuTreeselectAPI, editRoleAPI, addRoleAPI } from "@/api/orgModel";
 export default {
   components: {
     TreePromission,
@@ -77,6 +84,10 @@ export default {
     row: {
       type: Object,
       default: () => null,
+    },
+    title: {
+      type: String,
+      default: "添加角色",
     },
   },
   computed: {
@@ -92,6 +103,8 @@ export default {
         roleName: "",
         remark: "",
         status: "1",
+        roleKey: "",
+        roleSort: 1
       },
       checkedKeys: [],
       activeName: "admin",
@@ -104,8 +117,10 @@ export default {
     };
   },
   created() {
-    this.form = Object.assign({}, this.row);
-    this.roleMenuTreeselect();
+    if (this.title === "编辑角色") {
+      this.form = Object.assign({}, this.row);
+      this.roleMenuTreeselect();
+    }
   },
   methods: {
     selectedKeys(checkedKeys, halfCheckedKeys) {
@@ -128,31 +143,52 @@ export default {
         ]),
       ];
       this.form.menuIds.push(...this.halfCheckedKeys);
-      this.form.menuIds = [...new Set(this.form.menuIds)]
-      console.log('保存前的权限数据:', this.form.menuIds);
-
-      editRoleAPI(this.form).then((res) => {
-        if (res.code === 200) {
-          this.$message.success(res.msg);
-          this.$emit('updateList')
-          this.handleClose();
-        } else {
-          this.$message.error('操作失败');
-        }
-      }).catch(err => {
-        this.$message.error('操作失败');
-      });
+      this.form.menuIds = [...new Set(this.form.menuIds)];
+      console.log("保存前的权限数据:", this.form.menuIds);
+      if (this.title === "编辑角色") {
+        editRoleAPI(this.form)
+          .then((res) => {
+            if (res.code === 200) {
+              this.$message.success(res.msg);
+              this.$emit("updateList");
+              this.handleClose();
+            } else {
+              this.$message.error("操作失败");
+            }
+          })
+          .catch((err) => {
+            this.$message.error("操作失败");
+          });
+      } else {
+        const params = {...this.form, orgId: localStorage.getItem('org_id')}
+        addRoleAPI(params)
+          .then((res) => {
+            if (res.code === 200) {
+              this.$message.success(res.msg);
+              this.$emit("updateList");
+              this.handleClose();
+            } else {
+              this.$message.error("操作失败");
+            }
+          })
+          .catch((err) => {
+            this.$message.error("操作失败");
+          });
+      }
     },
     roleMenuTreeselect() {
       roleMenuTreeselectAPI(this.row.roleId).then((res) => {
         if (res.code == 200) {
+          debugger
           const allCheckedKeys = res.checkedKeys || [];
           const menus = res.menus || [];
 
           // 找到三个主模块的ID
-          const adminModule = menus.find(item => item.label === "管理侧");
-          const dashboardModule = menus.find(item => item.label === "大屏端");
-          const miniProgramModule = menus.find(item => item.label === "小程序");
+          const adminModule = menus.find((item) => item.label === "管理侧");
+          const dashboardModule = menus.find((item) => item.label === "大屏端");
+          const miniProgramModule = menus.find(
+            (item) => item.label === "小程序"
+          );
 
           // 递归查找某个ID是否属于指定模块
           const isInModule = (id, moduleData) => {
@@ -161,7 +197,7 @@ export default {
             const findId = (node) => {
               if (node.id === id) return true;
               if (node.children) {
-                return node.children.some(child => findId(child));
+                return node.children.some((child) => findId(child));
               }
               return false;
             };
@@ -171,12 +207,16 @@ export default {
 
           // 分类权限ID
           this.checkedKeysObj = {
-            admin: allCheckedKeys.filter(id => isInModule(id, adminModule)),
-            dashboard: allCheckedKeys.filter(id => isInModule(id, dashboardModule)),
-            miniProgram: allCheckedKeys.filter(id => isInModule(id, miniProgramModule))
+            admin: allCheckedKeys.filter((id) => isInModule(id, adminModule)),
+            dashboard: allCheckedKeys.filter((id) =>
+              isInModule(id, dashboardModule)
+            ),
+            miniProgram: allCheckedKeys.filter((id) =>
+              isInModule(id, miniProgramModule)
+            ),
           };
 
-          console.log('初始化各模块权限数据：', this.checkedKeysObj);
+          console.log("初始化各模块权限数据：", this.checkedKeysObj);
         }
       });
     },
@@ -192,9 +232,8 @@ export default {
 </script>
 
 <style>
-.role-selector{
- margin-top:10px;
- overflow-y: scroll;
- height: 26vw;
+.role-selector {
+  margin-top: 10px;
+  overflow-y: scroll;
 }
 </style>

@@ -86,7 +86,8 @@ export default {
             const params = {
               orgDeptName: this.ruleForm.name,
               isOrg: 0,
-              orgId: +localStorage.getItem('org_id')
+              orgId: +localStorage.getItem('org_id'),
+              marker: this.ruleForm.desc
             }
             addDept(params).then((res) => {
               if (res.code == 200) {
