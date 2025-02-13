@@ -145,7 +145,7 @@ export default {
       });
       if (val) {
         this.$refs.mapContainer.polylineShow();
-        this.$refs.mapContainer.initAMap();
+        // this.$refs.mapContainer.initAMap();
       } else {
         this.$refs.mapContainer.polylineVisible();
       }

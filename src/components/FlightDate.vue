@@ -121,29 +121,28 @@ export default {
       total: 0,
       currentMonthDate: "",
       task: "",
-      taskOptions: []
+      taskOptions: [],
     };
   },
   computed: {
     ...mapState("droneStatus", ["airPostInfo", "airOptions"]),
   },
   mounted() {
-    this.getDeviceInfo()
+    this.getDeviceInfo();
   },
   methods: {
     ...mapActions("droneStatus", ["fetchAirPostInfo"]),
     async getDeviceInfo() {
-        await this.fetchAirPostInfo();
-        this.task = this.airPostInfo.address;
-        this.taskOptions = this.airOptions;
-        
+      await this.fetchAirPostInfo();
+      this.task = this.airPostInfo.address;
+      this.taskOptions = this.airOptions;
     },
     checkedAirPost(item) {
       this.task = item.label;
     },
     changeDate(date) {
       const dateFormat = new Date(date);
-      this.$refs.dateTitle.formatDate(dateFormat)
+      this.$refs.dateTitle.formatDate(dateFormat);
     },
     updateData(currentDate) {
       this.initDayList(currentDate);
@@ -168,14 +167,25 @@ export default {
         }
       });
     },
+    convertDate(inputDate) {
+      if (!inputDate.match(/^\d{4}\/\d{2}$/)) {
+        alert("请输入正确格式，例如 2025/02");
+        return;
+      }
+
+      const [year, month] = inputDate.split("/").map(Number);
+      const date = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0)); // 创建 UTC 日期
+      const dateInCST = new Date(date.getTime() + 8 * 60 * 60 * 1000); // 转换为中国标准时间
+
+      return dateInCST.toString(); // 格式化输出
+    },
     formattedDate(date) {
       if (this.isDay) {
         this.currentDate = date;
-        
+
         this.initDayList(date);
-        
       } else {
-        console.log(date, "monthDate");
+        this.$refs.MonthList.value = this.convertDate(date);
         const params = {
           start: this.getMonthStartAndEnd(date).firstDay,
           end: this.getMonthStartAndEnd(date).lastDay,

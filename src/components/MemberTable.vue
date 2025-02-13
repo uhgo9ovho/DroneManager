@@ -61,10 +61,10 @@
       <template #roleName="{ row }">
         {{ row.roleName }}
       </template>
-      <template #orgName="{ row }">
-        {{ row.orgName }}
+      <template #orgDeptName="{ row }">
+        {{ row.orgDeptName }}
       </template>
-      <template #bind="{ row }">
+      <!-- <template #bind="{ row }">
         <div class="bind_icon">
           <div class="wx_icon">
             <el-tooltip
@@ -87,7 +87,7 @@
             </el-tooltip>
           </div>
         </div>
-      </template>
+      </template> -->
       <template #status="{ row }">
         <el-switch v-model="row.status" active-value="0" inactive-value="1">
         </el-switch>
@@ -125,7 +125,7 @@ export default {
           minWidth: "200",
         },
         {
-          prop: "orgName",
+          prop: "orgDeptName",
           label: "所在部门",
           slot: true,
           showOverflowTooltip: true,

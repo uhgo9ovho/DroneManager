@@ -6,7 +6,7 @@
         {{ platformName }}
       </div>
     <div class="user-info">
-      <el-popover placement="top-start" width="370" trigger="click" popper-class="popper-notification" @after-enter="updateInfoStatus">
+      <el-popover placement="top-start" width="370" trigger="click" popper-class="popper-notification" @after-leave="updateInfoStatus">
         <notification ref="notification" @updateCount="updateCount"></notification>
         <el-badge is-dot class="item" slot="reference" :hidden="count ? false : true">
           <div class="notification iconfont el-icon-icon"></div>

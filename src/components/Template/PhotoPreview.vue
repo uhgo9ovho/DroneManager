@@ -65,9 +65,9 @@
         <div class="typeList" :style="getListPosition" v-if="isShowSelect">
           <div class="top">
             <div class="title">选择问题</div>
-            <div class="search">
+            <!-- <div class="search">
               <i class="el-icon-search"></i>
-            </div>
+            </div> -->
           </div>
           <!-- <div class="inputBox">
             <el-input

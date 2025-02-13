@@ -97,8 +97,8 @@ export default {
         roleIds: [{ required: true, message: "请选择角色", trigger: "blur" }],
       },
       page: {
-        pageNum: 1,
-        pageSize: 10,
+        pageNum: "",
+        pageSize: "",
         orgId: this.$store.getters.orgId,
         orgDeptName: "",
       },

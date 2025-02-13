@@ -107,10 +107,13 @@ export default {
     },
   },
   unmounted() {
-    map?.destroy();
+    this.destroyMap()
   },
   methods: {
     ...mapMutations("changeStatus", ["CHANGE_DROC_STATUS"]),
+    destroyMap() {
+      map?.destroy();
+    },
     initAMap() {
       let that = this;
       window._AMapSecurityConfig = {
@@ -259,15 +262,24 @@ export default {
         });
     },
     polylineShow() {
-      polyline.setMap(map);
+      polyline = new this.AMap.Polyline({
+        path: this.lonlatArr,
+        strokeWeight: 2, //线条宽度
+        strokeColor: "red", //线条颜色
+        lineJoin: "round", //折线拐点连接处样式
+      });
+      map.add(polyline);
     },
     polylineVisible() {
       polyline.setMap(null);
     },
     checkedPolylineColor(formarItemArr) {
+      const conArr = formarItemArr.map((item) => {
+        return wgs84ToGcj02(item[0], item[1]);
+      });
       this.polylineVisible();
       polyline = new this.AMap.Polyline({
-        path: formarItemArr,
+        path: conArr,
         strokeWeight: 2, //线条宽度
         strokeColor: "blue", //线条颜色
         lineJoin: "round", //折线拐点连接处样式
@@ -408,40 +420,35 @@ export default {
       background: #666;
     }
 
-    
-
-
-
-
     .custom-content-warning {
-            position: relative;
-            width: 25px;
-            height: 34px;
-        }
+      position: relative;
+      width: 25px;
+      height: 34px;
+    }
 
-        .custom-content-warning img {
-            width: 100%;
-            height: 100%;
-        }
+    .custom-content-warning img {
+      width: 100%;
+      height: 100%;
+    }
 
-        .custom-content-warning .close-btn {
-            position: absolute;
-            top: -6px;
-            right: -8px;
-            width: 15px;
-            height: 15px;
-            font-size: 12px;
-            background: #ccc;
-            border-radius: 50%;
-            color: #fff;
-            text-align: center;
-            line-height: 15px;
-            box-shadow: -1px 1px 1px rgba(10, 10, 10, .2);
-        }
+    .custom-content-warning .close-btn {
+      position: absolute;
+      top: -6px;
+      right: -8px;
+      width: 15px;
+      height: 15px;
+      font-size: 12px;
+      background: #ccc;
+      border-radius: 50%;
+      color: #fff;
+      text-align: center;
+      line-height: 15px;
+      box-shadow: -1px 1px 1px rgba(10, 10, 10, 0.2);
+    }
 
-        .custom-content-warning .close-btn:hover{
-            background: #666;
-        }
+    .custom-content-warning .close-btn:hover {
+      background: #666;
+    }
   }
 }
 </style>

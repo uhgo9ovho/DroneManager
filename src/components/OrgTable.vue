@@ -154,12 +154,12 @@ export default {
     updateList() {
       this.getOrgList();
     },
-    pageChange(pageNum) {
-      this.pageNum = pageNum;
+    pageChange(pageNum) {      
+      this.pageNum = pageNum.pageNum;
       this.getOrgList();
     },
     sizeChange(pageSize) {
-      this.pageSize = pageSize;
+      this.pageSize = pageSize.pageSize;
       this.getOrgList();
     },
     async getOrgList() {
@@ -169,7 +169,7 @@ export default {
       });
       if (res.code === 200) {
         this.tableList = res.rows;
-        this.total = res.total.total;
+        this.total = res.total;
       }
     },
     handleAddDevice(row) {

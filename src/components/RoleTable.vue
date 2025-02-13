@@ -15,25 +15,25 @@
         }}</el-tag>
       </template>
       <template #operate="{ row }">
-        <el-button type="text" @click="handleEdit(row)" v-if="row.roleName !='超级管理员'" v-permissions="'wrj:role:edit'">编辑</el-button>
-        <el-button type="text" @click="handleDelete(row)" style="color: red" v-if="row.roleName !='超级管理员'" v-permissions="'wrj:role:remove'">删除</el-button>
+        <el-button type="text" @click="handleEdit(row)" v-if="row.roleName !='超级管理员' && row === `org_admin_${params.orgId}`" v-permissions="'wrj:role:edit'">编辑</el-button>
+        <el-button type="text" @click="handleDelete(row)" style="color: red" v-if="row.roleName !='超级管理员' && row === `org_admin_${params.orgId}`" v-permissions="'wrj:role:remove'">删除</el-button>
       </template>
     </common-table>
-    <!-- 编辑弹窗 -->
+    <!-- 编辑新增弹窗 -->
     <div v-if="dialogVisible">
-      <role-edit-dialog @updateList="updateList" :row="row" :dialogVisible="dialogVisible" @updateDialogVisible="updateDialogVisible"></role-edit-dialog>
+      <role-dialog :title="title" @updateList="updateList" :row="row" :dialogVisible="dialogVisible" @updateDialogVisible="updateDialogVisible"></role-dialog>
     </div>
   </div>
 </template>
 
 <script>
-import RoleEditDialog from "./Template/RoleEditDialog.vue";
+import RoleDialog from "./Template/RoleDialog.vue";
 import CommonTable from "./CommonTable.vue";
 import { getRoleListAPI } from "@/api/orgModel";
 export default {
   components: {
     CommonTable,
-    RoleEditDialog,
+    RoleDialog,
   },
   data() {
     return {
@@ -75,7 +75,9 @@ export default {
       params: {
         pageSize: 10,
         pageNum: 1,
+        orgId: localStorage.getItem('org_id')
       },
+      title: "",
     };
   },
   methods: {
@@ -94,7 +96,8 @@ export default {
     },
     handleEdit(row) {
       this.dialogVisible = true;
-      this.row = row
+      this.title = '编辑角色';
+      this.row = row;
     },
     handleDelete(row) {
       console.log(row);
