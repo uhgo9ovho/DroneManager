@@ -156,8 +156,12 @@ export default {
         frequency: "天",
         inspection: "",
         checkedCharacters: [],
-        startDate: `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`,
-        endDate: `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`,
+        startDate: `${now.getFullYear()}-${(now.getMonth() + 1)
+          .toString()
+          .padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")}`,
+        endDate: `${now.getFullYear()}-${(now.getMonth() + 1)
+          .toString()
+          .padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")}`,
       },
       options: [
         {
@@ -248,13 +252,11 @@ export default {
           let charactersLength = this.characters.filter(
             (item) => item.checked
           ).length;
-          if (charactersLength < 1) charactersLength = 1;
           return charactersLength;
         case "月":
           let moonListLength = this.moonList.filter(
             (item) => item.checked
           ).length;
-          if (moonListLength < 1) moonListLength = 1;
           return moonListLength;
       }
     },
@@ -288,10 +290,16 @@ export default {
       this.$emit("closeSettingDate");
     },
     formatInfo() {
-      this.$emit("updateFormatInfo", this.currentInfo);
+      this.$emit("updateFormatInfo", this.currentInfo, this.frequencyLength);
     },
     frequencyChange(val) {
       let value = 0; //天
+      this.moonList.forEach((item) => {
+        item.checked = false;
+      });
+      this.characters.forEach((item) => {
+        item.checked = false;
+      });
       switch (val) {
         case "天":
           value = 0;

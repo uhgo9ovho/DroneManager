@@ -6,7 +6,7 @@
       </div>
       <div class="issue-photo-wrap">
         <div class="innerImgBox">
-          <img :src="url" alt="" />
+          <img :src="url" alt="" @wheel.prevent="handleWheel" :style="imageStyle"/>
         </div>
         <div class="download" @click="downloadBtn">
           <i class="el-icon-download"></i>
@@ -63,6 +63,7 @@
           <MapContainer
             :longitude="row.longitude"
             :latitude="row.latitude"
+            :warningShow="true"
           ></MapContainer>
         </div>
       </div>
@@ -88,13 +89,30 @@ export default {
       sortPhotoList:[],
       timeOptions: [],
       url: "",
+      scale: 1, // 初始缩放比例
     };
   },
   components: {
     ImageZoom,
     MapContainer,
   },
+  computed: {
+    imageStyle() {
+      return {
+        transform: `scale(${this.scale})`,
+        transition: 'transform 0.2s',
+        cursor: this.scale > 1 ? 'zoom-out' : 'zoom-in',
+      }
+    }
+  },
   methods: {
+    handleWheel(event) {
+      const zoomIntensity = 0.1;
+      const delta = event.deltaY < 0 ? 1 + zoomIntensity : 1 - zoomIntensity;
+
+      // 缩放范围限制：最小1（初始大小），最大3倍
+      this.scale = Math.min(Math.max(this.scale * delta, 1), 3);
+    },
     downloadBtn() {
       downloadPhoto(this.url, this.url+'.png')
     },

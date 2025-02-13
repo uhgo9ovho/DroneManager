@@ -65,14 +65,13 @@ export default {
   watch: {
     currentMonthDate: {
       handler(val) {
-        console.log(new Date(val),'val');
-        console.log(this.value);
-        this.value = val;
+        // this.value = val;
         this.formatData()
       }
     },
     value(val) {
-      console.log(val,'aaa');
+      console.log(val,'aaasss');
+      
       this.$emit('changeDate', val);
       
     }
@@ -143,9 +142,6 @@ export default {
     },
   },
   methods: {
-    sss(data) {
-      console.log(data);
-    },
     formatData() {
       // 按日期分组
       this.dayList = []
@@ -206,7 +202,9 @@ export default {
     flex: 1 1 0%;
     overflow: auto;
     background: none !important;
-
+    .el-calendar-table .el-calendar-day:hover {
+      background-color: transparent;
+    }
     .el-calendar__header {
       display: none;
     }

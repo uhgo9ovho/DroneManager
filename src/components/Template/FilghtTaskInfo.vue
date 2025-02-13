@@ -4,7 +4,7 @@
       <i class="el-icon-close"></i>
     </div>
     <div class="task-info-wrap">
-      <div class="state">已完成</div>
+      <div class="state" :style="{'background-color': statusType(row.taskStatus)}">{{ row.taskStatus | filterStatus }}</div>
       <div class="title_wrap">
         <div class="tag">任务</div>
         <div class="titles">{{ taskName }}</div>
@@ -129,7 +129,48 @@ export default {
   mounted() {
     this.getCollectInformation();
   },
+  filters: {
+    filterStatus(val) {
+      let value = "";
+      switch (val) {
+        case 0:
+          value = "待审核";
+          break;
+        case 1:
+          value = "待执行";
+          break;
+        case 2:
+          value = "执行中";
+          break;
+        case 3:
+          value = "已完成";
+          break;
+        case 4:
+          value = "已挂起";
+          break;
+        default:
+          break;
+      }
+      return value;
+    },
+  },
   computed: {
+    statusType() {
+      return function (status) {
+        switch (status) {
+          case 2:
+            return "";
+          case 3:
+            return "green";
+          case 1:
+            return "#4678ff";
+          case 4:
+            return "grey";
+          default:
+            return "";
+        }
+      };
+    },
     plotOptions() {
       if (this.taskDetails) {
         //任务信息

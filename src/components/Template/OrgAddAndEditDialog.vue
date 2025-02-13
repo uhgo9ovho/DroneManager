@@ -91,7 +91,24 @@ export default {
         lng: "",
         lat: "",
       },
-      rules: {},
+      rules: {
+        orgName: [
+          { required: true, message: "请输入组织名称", trigger: "blur" },
+        ],
+        ad: [{ required: true, message: "请输入省市区县", trigger: "blur" }],
+        head: [{ required: true, message: "请输入负责人", trigger: "blur" }],
+        headPhone: [
+          { required: true, message: "请输入联系电话", trigger: "blur" },
+        ],
+        platformName: [
+          { required: true, message: "请输入平台名称", trigger: "blur" },
+        ],
+        bindCode: [
+          { required: true, message: "请输入绑定码", trigger: "blur" },
+        ],
+        lng: [{ required: true, message: "请输入经度", trigger: "blur" }],
+        lat: [{ required: true, message: "请输入纬度", trigger: "blur" }],
+      },
       fileList: [],
       imageUrl: "",
       uploadUrl: "/dev-api/common/upload",
@@ -108,13 +125,13 @@ export default {
   },
   mounted() {
     console.log(this.title);
-    
-    if(this.editRow) {
-        this.form = {
-            ...this.editRow,
-            lng: this.editRow.location ? this.editRow.location.split(',')[0] : '',
-            lat: this.editRow.location ? this.editRow.location.split(',')[1] : '',
-        };
+
+    if (this.editRow) {
+      this.form = {
+        ...this.editRow,
+        lng: this.editRow.location ? this.editRow.location.split(",")[0] : "",
+        lat: this.editRow.location ? this.editRow.location.split(",")[1] : "",
+      };
     }
   },
   methods: {
@@ -126,31 +143,47 @@ export default {
       };
       if (this.editRow) {
         //编辑保存
-        editOrgAPI(params).then(res => {
-            if(res.code === 200) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            editOrgAPI(params).then((res) => {
+              if (res.code === 200) {
                 this.loading = false;
                 this.$message.success("编辑组织成功");
                 this.handleCancel();
                 this.$emit("updateList");
-            } else {
+              } else {
                 this.loading = false;
-            }
-        })
-      } else {
-        addOrgAPI(params)
-          .then((res) => {
-            if (res.code === 200) {
-              this.loading = false;
-              this.$message.success("新增组织成功");
-              this.handleCancel();
-              this.$emit("updateList");
-            } else {
-              this.loading = false;
-            }
-          })
-          .catch((err) => {
+              }
+            });
+          } else {
+            console.log("error submit!!");
             this.loading = false;
-          });
+            return false;
+          }
+        });
+      } else {
+        this.$refs.formRef.validate((valid) => {
+          if (valid) {
+            addOrgAPI(params)
+              .then((res) => {
+                if (res.code === 200) {
+                  this.loading = false;
+                  this.$message.success("新增组织成功");
+                  this.handleCancel();
+                  this.$emit("updateList");
+                } else {
+                  this.loading = false;
+                }
+              })
+              .catch((err) => {
+                this.loading = false;
+              });
+          } else {
+            console.log("error submit!!");
+            this.loading = false;
+            return false;
+          }
+        });
       }
     },
     handleCancel() {

@@ -20,7 +20,7 @@
     <div
       class="task-btn"
       @click="takeOffBtn"
-      v-if="info.schedulingStatus === 3 || info.schedulingStatus === 0"
+      v-if="(info.schedulingStatus === 3 || info.schedulingStatus === 0) && (dateSHowBtn && isShowAddBtn)"
       v-permissions="'wurenji:scheduling:fly'"
     >
       <!-- 待执行和已执行 -->
@@ -50,7 +50,7 @@
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="details" v-permissions="'wurenji:scheduling:query'">查看详情</el-dropdown-item>
-          <el-dropdown-item command="delete" v-permissions="'wurenji:scheduling:remove'">删除</el-dropdown-item>
+          <el-dropdown-item command="delete" v-if="isShowAddBtn" v-permissions="'wurenji:scheduling:remove'">删除</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -81,6 +81,14 @@ export default {
       type: Object,
       default: () => {},
     },
+    dateSHowBtn: {
+      type: Boolean,
+      default: false
+    },
+    isShowAddBtn: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {

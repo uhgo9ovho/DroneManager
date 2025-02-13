@@ -7,6 +7,8 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import { getToken } from '@/utils/auth'
+import WebSocketClient from "@/utils/websocket.js";
+import Cookies from 'js-cookie'
 export default {
   name: "App",
   computed: {
@@ -14,11 +16,15 @@ export default {
 
   },
   mounted() {
+    this.connectWS()
     document.title = localStorage.getItem("platformName") ? localStorage.getItem("platformName") : "城市空天智慧管理平台";
   },
   methods: {
     ...mapActions("droneStatus", ["getAirPostInfo"]),
-    
+    connectWS() {
+      let userId = JSON.parse(Cookies.get('user')).userId
+      new WebSocketClient(`ws://172.16.40.225:9002/websocket/${localStorage.getItem('workspaceId')}/${userId}`);
+    },
   },
   metaInfo() {
     return {

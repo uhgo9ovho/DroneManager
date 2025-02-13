@@ -15,26 +15,23 @@
               </div>
               <div class="item-container" style="flex: 1 1 0%">
                 <div class="task-item">
-                  <div
-                    v-for="(item2, index) in airInfos"
-                    :key="index"
-                    v-show="item.taskName"
-                  >
+                  <template v-if="hasTaskForTime(item.time)">
                     <div
-                      class="task-past-card"
-                      v-if="
-                        formatTime(item2.formatTime) === item.time ||
-                        airTime(item2.formatTime) === item.time
-                      "
+                      v-for="(item2, index) in getTasksForTime(item.time)"
+                      :key="index"
                     >
-                      <AirItemInfo
-                        :info="item2"
-                        @openDialog="openDialog"
-                        @updateData="updateDataDel"
-                      ></AirItemInfo>
+                      <div class="task-past-card">
+                        <AirItemInfo
+                          :info="item2"
+                          @openDialog="openDialog"
+                          @updateData="updateDataDel"
+                          :isShowAddBtn="isShowAddBtn(item.time)"
+                          :dateSHowBtn="dateSHowBtn"
+                        ></AirItemInfo>
+                      </div>
                     </div>
-                  </div>
-                  <div v-if="!item.taskName">
+                  </template>
+                  <div v-else>
                     <div
                       class="task-card3"
                       @click="addAirBtn(item)"
@@ -49,7 +46,7 @@
             </div>
           </div>
         </div>
-        <div class="time-line-wrap" :style="topPX">
+        <div class="time-line-wrap" :style="topPX" v-if="isToday(currentDate)">
           <div class="time-text">{{ currentTime }}</div>
           <div class="time-line"></div>
         </div>
@@ -149,10 +146,34 @@ export default {
       visible: false,
       addAirShow: false,
       startTime: "",
-      row: null
+      row: null,
     };
   },
   computed: {
+    isToday() {
+      return function (dateString) {
+        // 将传入的字符串转换为日期对象
+        const inputDate = new Date(dateString);
+        const today = new Date();
+
+        // 获取当天的年份、月份和日期
+        const currentYear = today.getFullYear();
+        const currentMonth = today.getMonth(); // 月份是从0开始的
+        const currentDate = today.getDate();
+
+        // 获取输入日期的年份、月份和日期
+        const inputYear = inputDate.getFullYear();
+        const inputMonth = inputDate.getMonth();
+        const inputDateOnly = inputDate.getDate();
+
+        // 比较日期是否一致
+        return (
+          inputYear === currentYear &&
+          inputMonth === currentMonth &&
+          inputDateOnly === currentDate
+        );
+      };
+    },
     topPX() {
       return {
         top: `${this.top}px`,
@@ -169,9 +190,9 @@ export default {
     dateSHowBtn() {
       const today = new Date();
       today.setHours(0, 0, 0, 0); // 设置时间为当天的0点
-      const currentDateObj = new Date(this.currentDate.replace(/\//g, '-')); // 将 YYYY/MM/DD 转换为日期对象
+      const currentDateObj = new Date(this.currentDate.replace(/\//g, "-")); // 将 YYYY/MM/DD 转换为日期对象
       return currentDateObj >= today; // 比较日期对象
-    }
+    },
   },
   watch: {
     sortList(arr) {
@@ -294,6 +315,18 @@ export default {
         }
       });
     },
+    hasTaskForTime(time) {
+      return this.airInfos.some(item => 
+        this.formatTime(item.formatTime) === time || 
+        this.airTime(item.formatTime) === time
+      );
+    },
+    getTasksForTime(time) {
+      return this.airInfos.filter(item => 
+        this.formatTime(item.formatTime) === time || 
+        this.airTime(item.formatTime) === time
+      );
+    }
   },
   mounted() {
     this.updateTime();

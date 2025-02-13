@@ -52,6 +52,10 @@ export default {
       type: Number,
       default: 0,
     },
+    warningShow: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -103,10 +107,13 @@ export default {
     },
   },
   unmounted() {
-    map?.destroy();
+    this.destroyMap()
   },
   methods: {
     ...mapMutations("changeStatus", ["CHANGE_DROC_STATUS"]),
+    destroyMap() {
+      map?.destroy();
+    },
     initAMap() {
       let that = this;
       window._AMapSecurityConfig = {
@@ -120,6 +127,8 @@ export default {
         .then((AMap) => {
           this.AMap = AMap;
           let center = [];
+          let startLine = [];
+          let endLine = [];
           if (this.lineInfoObj) {
             //详情中的航线信息
             center = wgs84ToGcj02(
@@ -135,6 +144,8 @@ export default {
               );
               this.lonlatArr.push(...formarItemArr);
             });
+            startLine = [center, this.lonlatArr[0]];
+            endLine = [center, this.lonlatArr[this.lonlatArr.length - 1]];
           }
           if (this.airLineData.length) {
             //任务记录中的航线信息
@@ -196,11 +207,22 @@ export default {
             position = new AMap.LngLat(center[0], center[1]); //经纬度
           }
           if (position) {
-            var markerContent =
-              "" +
-              '<div class="custom-content-marker">' +
-              '   <img src="/airIcon.png">' +
-              "</div>";
+            var markerContent;
+            if (this.warningShow) {
+              //预警详情坐标icon
+              markerContent =
+                "" +
+                '<div class="custom-content-warning">' +
+                '   <img src="//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png">' +
+                "</div>";
+            } else {
+              markerContent =
+                "" +
+                '<div class="custom-content-marker">' +
+                '   <img src="/airIcon.png">' +
+                "</div>";
+            }
+
             const marker = new AMap.Marker({
               position: position,
               content: markerContent,
@@ -212,13 +234,27 @@ export default {
 
           if (this.lonlatArr.length) {
             polyline = new AMap.Polyline({
-              path: this.formatAirLine(AMap),
+              path: this.formatAirLine(AMap, this.lonlatArr),
               strokeWeight: 2, //线条宽度
               strokeColor: "red", //线条颜色
               lineJoin: "round", //折线拐点连接处样式
             });
             map.add(polyline);
-            console.log(this.lonlatArr);
+          }
+          if (startLine.length && endLine.length) {
+            let polylineStart = new AMap.Polyline({
+              path: this.formatAirLine(AMap, startLine),
+              strokeWeight: 2, //线条宽度
+              strokeColor: "blue", //线条颜色
+              lineJoin: "round", //折线拐点连接处样式
+            });
+            let polylineEnd = new AMap.Polyline({
+              path: this.formatAirLine(AMap, endLine),
+              strokeWeight: 2, //线条宽度
+              strokeColor: "blue", //线条颜色
+              lineJoin: "round", //折线拐点连接处样式
+            });
+            map.add([polylineStart, polylineEnd]);
           }
         })
         .catch((e) => {
@@ -226,15 +262,24 @@ export default {
         });
     },
     polylineShow() {
-      polyline.setMap(map);
+      polyline = new this.AMap.Polyline({
+        path: this.lonlatArr,
+        strokeWeight: 2, //线条宽度
+        strokeColor: "red", //线条颜色
+        lineJoin: "round", //折线拐点连接处样式
+      });
+      map.add(polyline);
     },
     polylineVisible() {
       polyline.setMap(null);
     },
     checkedPolylineColor(formarItemArr) {
-      this.polylineVisible()
+      const conArr = formarItemArr.map((item) => {
+        return wgs84ToGcj02(item[0], item[1]);
+      });
+      this.polylineVisible();
       polyline = new this.AMap.Polyline({
-        path: formarItemArr,
+        path: conArr,
         strokeWeight: 2, //线条宽度
         strokeColor: "blue", //线条颜色
         lineJoin: "round", //折线拐点连接处样式
@@ -261,11 +306,8 @@ export default {
         removePolygon();
       }
     },
-    formatAirLine(AMap) {
-      let path = this.lonlatArr.map(
-        (item) => new AMap.LngLat(item[0], item[1])
-      );
-
+    formatAirLine(AMap, arr) {
+      let path = arr.map((item) => new AMap.LngLat(item[0], item[1]));
       return path;
     },
     markerClick() {
@@ -375,6 +417,36 @@ export default {
     }
 
     .custom-content-marker .close-btn:hover {
+      background: #666;
+    }
+
+    .custom-content-warning {
+      position: relative;
+      width: 25px;
+      height: 34px;
+    }
+
+    .custom-content-warning img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .custom-content-warning .close-btn {
+      position: absolute;
+      top: -6px;
+      right: -8px;
+      width: 15px;
+      height: 15px;
+      font-size: 12px;
+      background: #ccc;
+      border-radius: 50%;
+      color: #fff;
+      text-align: center;
+      line-height: 15px;
+      box-shadow: -1px 1px 1px rgba(10, 10, 10, 0.2);
+    }
+
+    .custom-content-warning .close-btn:hover {
       background: #666;
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="photo-preview">
     <div class="imgPrewBox">
-      <div v-if="true">
+      <div style="position: relative">
         <div class="innerImgBox">
           <ImageZoom
             :src="currentUrl"
@@ -20,12 +20,12 @@
             <div class="feixiangbet disabled">
               <i class="el-icon-share"></i>
             </div>
-            <div class="xiazaibtn">
+            <div class="xiazaibtn" @click="downloadBZImage">
               <i class="el-icon-download"></i>
             </div>
           </div>
         </div>
-        <div class="download" v-else>
+        <div class="download" v-else @click="downloadImage">
           <i class="el-icon-download"></i>
         </div>
         <div class="mark">
@@ -34,6 +34,17 @@
         </div>
         <div class="close" @click="closePreview">
           <i class="el-icon-close"></i>
+        </div>
+        <div class="last" @click="prevImage">
+          <i class="el-icon-arrow-left"></i>
+        </div>
+        <div class="next" @click="nextImage">
+          <i class="el-icon-arrow-right"></i>
+        </div>
+        <div class="page">
+          <div class="currentPage">{{ currentIndex }}</div>
+          <i>/</i>
+          <div class="totalPage">{{ row.photoNum }}</div>
         </div>
         <div
           class="deleteBtn"
@@ -54,22 +65,52 @@
         <div class="typeList" :style="getListPosition" v-if="isShowSelect">
           <div class="top">
             <div class="title">选择问题</div>
-            <div class="search">
+            <!-- <div class="search">
               <i class="el-icon-search"></i>
-            </div>
+            </div> -->
           </div>
-          <div class="inputBox">
-            <el-input id="typeInput" type="text" placeholder="搜索" />
-          </div>
-          <div class="tipstitle">
+          <!-- <div class="inputBox">
+            <el-input
+              v-model="searchText"
+              id="typeInput"
+              type="text"
+              placeholder="搜索"
+              @input="searchQuestion"
+            />
+          </div> -->
+          <!-- <div class="tipstitle">
             <el-tabs v-model="activeName" @tab-click="handleClick">
               <el-tab-pane label="常用" name="common"></el-tab-pane>
               <el-tab-pane label="全部" name="all"></el-tab-pane>
             </el-tabs>
-          </div>
+
+              
+
+          </div> -->
           <div class="typeList_ul">
             <div
               class="typeList_li"
+              v-for="(item, index) in remarkList"
+              :key="index"
+              @click="changeRemark(item)"
+              :class="{ checked: item.checked }"
+            >
+              <div
+                style="
+                  width: 100%;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                {{ item.remark }}
+                <i class="el-icon-arrow-right"></i>
+              </div>
+            </div>
+          </div>
+          <div class="remark_list_ul" v-if="showRemark">
+            <div
+              class="remark_list_li"
               v-for="(item, index) in typeList"
               :key="index"
               @click="selectItem(item)"
@@ -77,15 +118,14 @@
               {{ item.dictLabel }}
             </div>
           </div>
-          <div class="typeList_ul"></div>
         </div>
       </div>
-      <div class="quanjing" v-else>
+      <!-- <div class="quanjing" v-else>
         <div class="img_box" ref="panorama"></div>
         <div class="close" @click="closePreview">
           <i class="el-icon-close"></i>
         </div>
-      </div>
+      </div> -->
     </div>
     <div id="map"></div>
   </div>
@@ -95,7 +135,8 @@
 import ImageZoom from "./ImageZoom.vue";
 import { addWarningAPI, uploadAPI, dictListAPI } from "@/api/TaskManager.js";
 import AMapLoader from "@amap/amap-jsapi-loader";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import { downloadPhoto } from "@/utils/ruoyi";
 export default {
   name: "PhotoPreview",
   props: {
@@ -117,11 +158,16 @@ export default {
     },
     resultId: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
+    currentIndex: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
+      showRemark: false,
       isEdit: false,
       isChecked: false,
       top: 0,
@@ -141,7 +187,10 @@ export default {
       currentTypeName: "",
       currentId: "",
       address: "",
-      locationArr: []
+      locationArr: [],
+      searchText: "",
+      allTypeList: [],
+      remarkList: [],
     };
   },
   computed: {
@@ -176,6 +225,39 @@ export default {
     ImageZoom,
   },
   methods: {
+    prevImage() {
+      if (this.currentIndex > 0) {
+        this.$emit("prevImage");
+      }
+    },
+    nextImage() {
+      if (this.currentIndex < this.row.photoNum) {
+        this.$emit("nextImage");
+      }
+    },
+    changeRemark(obj) {
+      this.showRemark = true;
+      this.remarkList.forEach((it) => (it.checked = false));
+      obj.checked = true;
+      this.typeList = this.allTypeList.filter(
+        (item) => item.remark == obj.remark
+      );
+    },
+    // searchQuestion(query) {
+    //   const keyword = query.trim().toLowerCase();
+
+    //   this.typeList = this.allTypeList.filter((item) =>
+    //     item.dictLabel.toLowerCase().includes(keyword)
+    //   );
+    // },
+    downloadImage() {
+      downloadPhoto(this.currentUrl, this.row.fileName);
+    },
+    downloadBZImage() {
+      const url = this.$refs.imageZoom.$refs.canvas.toDataURL("image/png");
+
+      downloadPhoto(url, this.row.fileName);
+    },
     loadPanorama() {
       pannellum.viewer(this.$refs.panorama, {
         type: "equirectangular",
@@ -198,11 +280,14 @@ export default {
       if (!selectedArea.width || !selectedArea.height) {
         this.isShow = false;
         this.isShowSelect = false;
-        this.showSure = false;
       } else {
         this.isShow = true;
-        this.showSure = false;
         this.isShowSelect = true;
+      }
+      if (selectedArea.size) {
+        this.showSure = true;
+      } else {
+        this.showSure = false;
       }
       console.log(selectedArea, "asdasd");
       this.top = selectedArea.y2;
@@ -227,11 +312,15 @@ export default {
       this.isShow = false;
       this.isShowSelect = false;
       this.showSure = false;
+      this.showRemark = false;
+      this.remarkList.forEach((it) => (it.checked = false));
     },
     sureDrawBtn() {
       this.isShow = false;
       this.showSure = false;
       this.generateImageURL();
+      this.showRemark = false;
+      this.remarkList.forEach((it) => (it.checked = false));
     },
     selectItem(item) {
       this.$refs.imageZoom.addTextToSelectedBox(item.dictLabel);
@@ -257,7 +346,7 @@ export default {
               console.log(res);
               const resUrl = res.url;
               if (res.code == 200) {
-                this.$message.success('上传成功,请稍后');
+                this.$message.success("上传成功,请稍后");
                 //上传成功
                 const params = {
                   warnName: this.currentName,
@@ -274,14 +363,14 @@ export default {
                   status: "0",
                   description: "",
                   rectangles: `${this.locationArr}`,
-                  orgId: localStorage.getItem('org_id'),
-                  orgName: Cookies.get('orgName'),
-                  recordId:this.row.recordId,
-                  resultId: this.resultId
+                  orgId: localStorage.getItem("org_id"),
+                  orgName: Cookies.get("orgName"),
+                  recordId: this.row.recordId,
+                  resultId: this.resultId,
                 };
-                addWarningAPI(params).then(res => {
-                  if(res.code === 200) {
-                    this.$message.success('问题上报成功');
+                addWarningAPI(params).then((res) => {
+                  if (res.code === 200) {
+                    this.$message.success("问题上报成功");
                   } else {
                     this.$message.error(res.msg);
                   }
@@ -295,7 +384,18 @@ export default {
     getDictList() {
       dictListAPI("warn_type").then((res) => {
         if (res.code === 200) {
-          this.typeList = res.rows;
+          this.allTypeList = res.rows;
+          let remarkArr = res.rows.map((item) => {
+            return {
+              remark: item.remark,
+              checked: false,
+            };
+          });
+          this.remarkList = remarkArr.filter(
+            (item, index, self) =>
+              index === self.findIndex((obj) => obj.remark === item.remark)
+          );
+          console.log(this.remarkList, "remarkList");
         }
       });
     },
@@ -330,7 +430,6 @@ export default {
               // address即经纬度转换后的地点名称
               that.address = regeocode?.formattedAddress;
               console.log(that.address);
-
             }
           });
         })
@@ -340,7 +439,6 @@ export default {
     },
   },
   mounted() {
-
     this.getDictList();
     this.initMap();
     window.addEventListener("resize", () => {
@@ -467,7 +565,7 @@ export default {
       background: #fff;
       border-radius: 20px;
       position: absolute;
-      bottom: 16px;
+      bottom: 46px;
       right: 16px;
       display: flex;
       justify-content: center;
@@ -499,6 +597,48 @@ export default {
       align-items: center;
       cursor: pointer;
       font-size: 16px;
+    }
+    .last {
+      color: #fff;
+      width: 40px;
+      height: 40px;
+      background: rgba(134, 134, 140, 0.7019607843137254);
+      border-radius: 20px;
+      position: absolute;
+      left: -48px;
+      top: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+    .next {
+      width: 40px;
+      height: 40px;
+      background: rgba(134, 134, 140, 0.7019607843137254);
+      border-radius: 20px;
+      position: absolute;
+      right: -48px;
+      top: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #fff;
+    }
+    .page {
+      display: flex;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      margin-top: 16px;
+      position: relative;
+      z-index: 0;
+      margin-left: calc(50% - 20px);
+      .totalPage {
+        color: #ababab;
+      }
     }
     .deleteBtn {
       position: absolute;
@@ -533,6 +673,37 @@ export default {
       backdrop-filter: blur(5px);
       padding: 12px 8px 8px 8px;
       z-index: 1000;
+      .remark_list_ul {
+        position: absolute;
+        width: 100%;
+        background: rgba(29, 29, 31, 0.7490196078431373);
+        border-radius: 12px;
+        backdrop-filter: blur(5px);
+        padding: 12px 8px 8px 8px;
+        z-index: 1000;
+        top: 0px;
+        right: -150px;
+        margin-top: 4px;
+        max-height: 200px;
+        overflow: auto;
+        .remark_list_li {
+          font-size: 12px;
+          line-height: 28px;
+          height: 28px;
+          cursor: pointer;
+          text-indent: 5px;
+          padding-left: 12px;
+          padding-right: 8px;
+          margin-bottom: 2px;
+          white-space: pre;
+          color: hsla(0, 0%, 100%, 0.8509803921568627);
+          &:hover {
+            background: #0271e3;
+            border-radius: 6px;
+            color: #fff;
+          }
+        }
+      }
       .top {
         padding-left: 12px;
         padding-right: 4px;
@@ -623,6 +794,11 @@ export default {
             border-radius: 6px;
             color: #fff;
           }
+        }
+        .checked {
+          background: #0271e3;
+          border-radius: 6px;
+          color: #fff;
         }
       }
     }

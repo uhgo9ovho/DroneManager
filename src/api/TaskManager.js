@@ -84,7 +84,7 @@ export const searchLineAPI = (taskId) => {
  */
 export const recordListAPI = (params) => {
   return request({
-    url: `/wurenji/record/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${params.orgId}&taskName=${params.taskName ? params.taskName : ''}`,
+    url: `/wurenji/record/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${params.orgId}&searchValue=${params.taskName ? params.taskName : ''}`,
     method: 'get'
   })
 }

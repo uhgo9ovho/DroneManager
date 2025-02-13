@@ -42,13 +42,8 @@
                 ></el-option>
               </el-select>
             </div>
-            <div class="tools-container debug_control">
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="远程调试"
-                v-if="false"
-              >
+            <div class="tools-container debug_control" v-if="false">
+              <el-tooltip class="item" effect="dark" content="远程调试">
                 <i class="el-icon-setting" @click="showTools"></i>
               </el-tooltip>
               <div class="tools-box" v-if="toolsVisible">
@@ -85,6 +80,44 @@
             </div>
           </div>
         </div>
+        <!-- 无人机远程调试数据展示 -->
+        <div class="fly_status">
+          <div class="fly_icon">
+            <i class="el-icon-switch-button"></i>
+          </div>
+          <div class="fly_text">
+            <p>电源</p>
+            <p>开机</p>
+          </div>
+        </div>
+        <div class="fly_status">
+          <div class="fly_icon">
+            <i class="el-icon-dianliang iconfont"></i>
+          </div>
+          <div class="fly_text">
+            <p>充电状态</p>
+            <p>断电</p>
+          </div>
+        </div>
+        <div class="fly_status">
+          <div class="fly_icon">
+            <i class="el-icon-hangpai iconfont"></i>
+          </div>
+          <div class="fly_text">
+            <p>机场系统</p>
+            <p>空闲中</p>
+          </div>
+        </div>
+        <div class="fly_status">
+          <div class="fly_icon">
+            <i class="el-icon-box"></i>
+          </div>
+          <div class="fly_text">
+            <p>舱盖</p>
+            <p>关</p>
+          </div>
+        </div>
+        <!-- aaa -->
         <div class="top_center">
           <div class="flyinfo_center">
             <div class="fly_icon">
@@ -150,10 +183,10 @@
                   <span> {{ tempNetworkState }} kb/s </span>
                 </div>
                 <div class="electric-panel warning">
-                  <div class="panel">
-                    <div class="remainder" style="width: 30%"></div>
-                  </div>
-                  <div class="textNum">{{ tempCapacityPercent }}%</div>
+                  <!-- <div class="textNum">{{ tempCapacityPercent }}%</div> -->
+                  <ElectricQuantity
+                    :quantity="tempCapacityPercent"
+                  ></ElectricQuantity>
                 </div>
                 <div class="signal_info">
                   <i class="iconfont el-icon-xinhao"></i>
@@ -216,6 +249,15 @@
         </div>
       </div>
     </el-popconfirm>
+    <!-- controlsUser -->
+    <div class="controlUserBox">
+      <div class="control_user">
+        <span>控制：{{ controler && controler.userName }}</span>
+      </div>
+      <div class="monitor_user">
+        <span>监视：{{ "暂无" }}</span>
+      </div>
+    </div>
     <!-- 控制无人机操作界面 -->
     <!-- <div> -->
     <div v-if="showRemote">
@@ -251,8 +293,8 @@ import { getPlotAPI } from "@/api/TaskManager.js";
 import { returnHomeAPI } from "@/api/droneControl.js";
 import { UranusMqtt } from "@/utils/mqtt";
 import Cookies from "js-cookie";
-import { getToken } from "@/utils/auth";
 import { useManualControl } from "@/utils/mqtt/use-manual-control";
+import ElectricQuantity from "@/components/Template/ElectricQuantity.vue";
 export default {
   name: "VideoMapWrap",
   data() {
@@ -334,6 +376,7 @@ export default {
     FlyVideoBox,
     AirPortVideo,
     FlyRemote,
+    ElectricQuantity,
   },
   computed: {
     ...mapState("droneStatus", [
@@ -341,8 +384,11 @@ export default {
       "deviceSN",
       "airPostInfo",
       "airOptions",
+      "controler",
     ]),
     title() {
+      if (this.controler && this.controler.userName != "暂无")
+        return `当前${this.controler.userName}正在控制该设备，是否确认继续申请控制权？`;
       return "当前无人控制该设备，是否确认继续申请控制权？";
     },
     titleCream() {
@@ -375,24 +421,13 @@ export default {
 
           this.latitudeLine = host.latitude;
           this.longitudeLine = host.longitude;
-          this.tempRainfall =
-            host.rainfall == "1"
-              ? "小雨"
-              : host.rainfall == "2"
-              ? "中雨"
-              : host.rainfall == "3"
-              ? "大雨"
-              : "无雨";
+
           this.tempHeight = parseFloat(host.height.toFixed(2));
           this.tempHorizontal_speed = parseFloat(
             host.horizontal_speed.toFixed(2)
           );
           this.tempVertical_speed = parseFloat(host.vertical_speed.toFixed(2));
           this.tempElevation = parseFloat(host.elevation.toFixed(2));
-          this.tempWind_speed = parseFloat(host.wind_speed.toFixed(2));
-          if (host.humidity) {
-            this.tempHumidity = parseFloat(host.humidity.toFixed(2));
-          }
 
           this.capacity_percent = host.capacity_percent;
 
@@ -411,6 +446,18 @@ export default {
         //飞行进度
         this.percentage = val.data.output.progress.percent;
       } else if (val.biz_code === "dock_osd") {
+        if (host.humidity) {
+          this.tempHumidity = parseFloat(host.humidity.toFixed(2));
+        }
+        this.tempRainfall =
+          host.rainfall == "1"
+            ? "小雨"
+            : host.rainfall == "2"
+            ? "中雨"
+            : host.rainfall == "3"
+            ? "大雨"
+            : "无雨";
+        this.tempWind_speed = parseFloat(host.wind_speed.toFixed(2));
         if ("drc_state" in host) {
           this.drcState = host.drc_state;
           console.log(host.drc_state, "drc_status");
@@ -451,11 +498,9 @@ export default {
       this.cameraModel = val;
     },
     async getDeviceInfo() {
-      if (!this.airPostInfo) {
-        await this.fetchAirPostInfo();
-        this.task = this.airPostInfo.address;
-        this.taskOptions = this.airOptions;
-      }
+      await this.fetchAirPostInfo();
+      this.task = this.airPostInfo.address;
+      this.taskOptions = this.airOptions;
       this.getDeviceSN(this.airPostInfo.deviceId);
       let lonlatArr = this.airPostInfo.location.split(",");
       this.longitude = +lonlatArr[0];
@@ -529,8 +574,8 @@ export default {
           this.client_id = client_id;
           this.mqttState = new UranusMqtt(address, {
             clientId: client_id,
-            username: `${userInfo.userName}_test`,
-            password: getToken(),
+            username: `hjh`,
+            password: "123123",
           });
           this.getMqttState(this.mqttState);
           this.mqttState.initMqtt();
@@ -539,31 +584,35 @@ export default {
             clientId: this.client_id,
             dockSn: this.deviceSN,
           };
-          enterDRCAPI(params).then((res) => {
+          //抢夺控制权
+          authorityAPI({}, this.deviceSN).then((res) => {
+            //进入指令飞行模式
             if (res.code === 0) {
-              //打开控制页面
-              this.showRemote = true;
-              this.flightController = true; //已控制无人机
-              const topic = {
-                pubTopic: res.data.pub[0],
-                subTopic: res.data.sub[0],
-                sn: this.deviceSN,
-              };
-              const {
-                handleKeyup,
-                handleEmergencyStop,
-                resetControlState,
-                unsubscribe,
-              } = useManualControl(topic, this.flightController);
-              this.handleKeyup = handleKeyup;
-              this.resetControlState = resetControlState;
-              this.handleEmergencyStop = handleEmergencyStop;
-              this.unsubscribe = unsubscribe;
-              this.getToicpSubPub(topic);
-              //抢夺控制权
-              // authorityAPI({}, this.deviceSN).then((res) => {});
-            } else {
-              this.$message.error(res.message || res.msg);
+              enterDRCAPI(params).then((res) => {
+                if (res.code === 0) {
+                  //打开控制页面
+                  this.showRemote = true;
+                  this.flightController = true; //已控制无人机
+                  const topic = {
+                    pubTopic: res.data.pub[0],
+                    subTopic: res.data.sub[0],
+                    sn: this.deviceSN,
+                  };
+                  const {
+                    handleKeyup,
+                    handleEmergencyStop,
+                    resetControlState,
+                    unsubscribe,
+                  } = useManualControl(topic, this.flightController);
+                  this.handleKeyup = handleKeyup;
+                  this.resetControlState = resetControlState;
+                  this.handleEmergencyStop = handleEmergencyStop;
+                  this.unsubscribe = unsubscribe;
+                  this.getToicpSubPub(topic);
+                } else {
+                  this.$message.error(res.message || res.msg);
+                }
+              });
             }
           });
         }
@@ -640,6 +689,37 @@ export default {
   height: 100vh;
   position: relative;
   overflow: hidden;
+  .controlUserBox {
+    position: absolute;
+    font-size: 12px;
+    left: 200px;
+    bottom: 16px;
+    color: #fff;
+    z-index: 1000;
+    height: 32px;
+    line-height: 32px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 16px;
+    display: flex;
+    padding: 0 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    .control_user {
+      display: flex;
+      align-items: center;
+      word-break: break-all;
+      white-space: nowrap;
+      border-radius: 6px;
+      padding-right: 10px;
+    }
+    .monitor_user {
+      display: flex;
+      word-break: break-all;
+      white-space: nowrap;
+      padding: 0 10px;
+      margin-bottom: 2px;
+      border-radius: 6px;
+    }
+  }
   .full-screen {
     width: 100%;
     height: 100%;
@@ -703,10 +783,55 @@ export default {
       box-sizing: border-box;
       justify-content: space-between;
       align-items: center;
+      .fly_status {
+        display: flex;
+        background-image: none;
+        justify-content: center;
+        align-items: center;
+        .fly_icon {
+          width: 28px;
+          height: 100%;
+          display: flex;
+          background-image: none;
+          align-items: center;
+          i {
+            font-size: 28px;
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .fly_text {
+          line-height: 18px;
+          background-image: none;
+          font-size: 12px;
+          padding-left: 8px;
+          margin-right: 40px;
+          font-weight: 400;
+          p {
+            font-weight: 400;
+            background-image: none;
+            line-height: 18px;
+            .distance_number {
+              color: #fff;
+              font-weight: 500;
+              background-image: none;
+              line-height: 18px;
+              padding-left: 9px;
+            }
+            .distance_unit {
+              color: #fff;
+              background-image: none;
+              font-size: 12px;
+              font-weight: 400;
+              line-height: 18px;
+            }
+          }
+        }
+      }
       .toppaln_left {
         padding-top: 9px;
         background-image: none;
-        flex: 1;
+        // flex: 1;
         .flight_name {
           color: #fff;
           font-size: 14px;
@@ -924,7 +1049,6 @@ export default {
             padding-left: 8px;
             margin-right: 40px;
             font-weight: 400;
-            width: 136px;
             p {
               font-weight: 400;
               background-image: none;

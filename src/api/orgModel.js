@@ -90,7 +90,7 @@ export const editDeviceAPI = (params) => {
  */
 export const getRoleListAPI = (params) => {
     return request({
-        url: `/system/role/list?`,
+        url: `/system/role/list`,
         method: 'get',
         params
     })
@@ -122,7 +122,7 @@ export const editRoleAPI = (params) => {
  */
 export const roleOptionsAPI = () => {
   return request({
-    url: '/system/user/',
+    url: `/system/role/getRoleListByOrgId/${localStorage.getItem('org_id')}`,
     method: 'get'
   })
 }
@@ -132,7 +132,18 @@ export const roleOptionsAPI = () => {
  */
 export const EditEchoAPI = (id) => {
   return request({
-    url: `/system/user/${id}`,
+    url: `/system/user/${localStorage.getItem('org_id')}/${id}`,
     method: 'get'
+  })
+}
+
+/**
+ * 角色添加
+ */
+export const addRoleAPI = (params) => {
+  return request({
+    url: '/system/role',
+    method: 'post',
+    data: params
   })
 }

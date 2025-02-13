@@ -69,7 +69,7 @@
                 :key="index"
                 :command="beforeHandleCommand(row, item.label)"
                 :style="{ color: item.color }"
-                v-show="!(item.label == '成果' && row.taskType !== 2)"
+                v-show="!(item.label == '成果' && row.taskType !== 2) && !((item.label == '挂起' || item.label =='取消挂起' || item.label == '排期') && row.taskStatus == 3)"
                 v-permissions="item.permission"
                 ><i class="iconfont" :class="item.icon"></i>
                 {{ item.label }}

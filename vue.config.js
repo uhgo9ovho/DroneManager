@@ -36,10 +36,14 @@ module.exports = {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
         // target: `http://172.16.40.21:9002`, //巧莲
+<<<<<<< HEAD
         // target: `http://172.16.40.225:9002`, //张浪
         target: `http://172.16.40.225:9002`, //张浪
 
         // target: `http://172.16.40.225:9002`, //张浪
+=======
+        target: `http://172.16.40.225:9002`, //张浪
+>>>>>>> c9eb8413dad9ea898260d33543e906bcaafc2401
         // target: `http://172.16.40.119:9002`, //赵影妮
         // target: `http://172.16.40.41:9002`, //ch
         // target: `http://172.16.40.126:9002`, //王高

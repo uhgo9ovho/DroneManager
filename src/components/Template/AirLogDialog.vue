@@ -46,7 +46,7 @@
               class="img_item"
               v-for="(item, index) in imgOptions"
               :key="index"
-              @click="previewBtn(item)"
+              @click="previewBtn(item, index)"
               v-show="!isShowVideo"
             >
               <img :src="item.url" alt="" />
@@ -73,7 +73,7 @@
                 </div>
                 <div>
                   <span>
-                    {{ row.totalMileage && row.totalMileage.toFixed(1) || 0 }}
+                    {{ (row.totalMileage && row.totalMileage.toFixed(1)) || 0 }}
                     <span class="unit">&nbsp;米</span></span
                   >
                   <div>飞行距离</div>
@@ -163,15 +163,21 @@
       <PhotoPreview
         @closePreview="closePreview"
         :currentUrl="currentUrl"
+        :currentIndex="currentIndex"
         :lon="lon"
         :lat="lat"
         :row="row"
         :resultId="resultId"
+        @nextImage="nextImage"
+        @prevImage="prevImage"
       ></PhotoPreview>
     </div>
     <!-- 视频预览组件 -->
     <div v-if="videoPreview">
-      <VideoPreview :videoUrl="videoUrl" @closeVideoPreview="closeVideoPreview"></VideoPreview>
+      <VideoPreview
+        :videoUrl="videoUrl"
+        @closeVideoPreview="closeVideoPreview"
+      ></VideoPreview>
     </div>
   </div>
 </template>
@@ -186,7 +192,7 @@ import { airLineAPI } from "@/api/TaskManager.js";
 import { downloadImagesAsZip } from "@/utils/ruoyi";
 import { mapState, mapMutations } from "vuex";
 import flvjs from "flv.js";
-import { downloadPhoto, downVideo } from "@/utils/ruoyi";
+import { downloadPhoto } from "@/utils/ruoyi";
 export default {
   name: "AirLogDialog",
   props: {
@@ -197,6 +203,7 @@ export default {
   },
   data() {
     return {
+      currentIndex: 0,
       videoPreview: false,
       VideoPage: VideoPage,
       resultId: 0,
@@ -226,7 +233,7 @@ export default {
       videoOptions: [],
       isShowVideo: false,
       videoUrl: "",
-      warnNumber: 0
+      warnNumber: 0,
     };
   },
   filters: {
@@ -272,6 +279,18 @@ export default {
   },
   methods: {
     ...mapMutations("changeStatus", ["CHANGE_DOWNLOAD_STATUS"]),
+    prevImage() {
+      // 上一页
+      if (this.currentIndex <= 1) return; // 防止索引小于1
+      this.currentIndex--;
+      this.currentUrl = this.imgOptions[this.currentIndex - 1].originUrl;
+    },
+    nextImage() {
+      // 下一页
+      if (this.currentIndex >= this.imgOptions.length) return; // 防止索引超出范围
+      this.currentIndex++;
+      this.currentUrl = this.imgOptions[this.currentIndex - 1].originUrl;
+    },
     destoryVideo() {
       if (this.player) {
         this.player.pause(); // 暂停播放数据流
@@ -329,7 +348,7 @@ export default {
             enableWorker: false, //启用 Web Worker 进程来加速视频的解码和处理过程
             stashInitialSize: 32 * 1024, // 初始缓存大小。单位：字节。建议针对直播：调整为1024kb
             stashInitialTime: 0.2, // 缓存初始时间。单位：秒。建议针对直播：调整为200毫秒
-            seekType: "range", // 建议将其设置为“range”模式，以便更快地加载视频数据，提高视频的实时性。
+            seekType: "range", // 建议将其设置为"range"模式，以便更快地加载视频数据，提高视频的实时性。
             lazyLoad: false, //关闭懒加载模式，从而提高视频的实时性。建议针对直播：调整为false
             lazyLoadMaxDuration: 0.2, // 懒加载的最大时长。单位：秒。建议针对直播：调整为200毫秒
             deferLoadAfterSourceOpen: false,
@@ -419,7 +438,9 @@ export default {
       this.imgOptions = filterImgArr.map((item) => {
         return {
           url:
-            "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey + '?x-oss-process=style/200w',
+            "https://wurenji02.oss-cn-beijing.aliyuncs.com/" +
+            item.objectKey +
+            "?x-oss-process=style/200w",
           originUrl:
             "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
           createTime: item.createTime,
@@ -446,12 +467,13 @@ export default {
     showMap() {
       this.vedioVisible = false;
     },
-    previewBtn(item) {
+    previewBtn(item, index) {
       this.resultId = item.resultId;
       this.currentUrl = item.originUrl;
       this.lon = item.lon;
       this.lat = item.lat;
       this.preview = true;
+      this.currentIndex = index + 1;
     },
     previewVideoBtn(item) {
       this.videoPreview = true;
@@ -469,7 +491,7 @@ export default {
     },
     closeVideoPreview() {
       this.videoPreview = false;
-    }
+    },
   },
 };
 </script>

@@ -227,7 +227,7 @@ export const exitDRCAPI = (params) => {
 //抢夺控制权
 export const authorityAPI = (params,sn) => {
     return request({
-        url: `/drc/${sn}/authority/flight`,
+        url: `/drc/${sn}/authority/flight/${workspaceId}`,
         method: 'post',
         data: params
     })
