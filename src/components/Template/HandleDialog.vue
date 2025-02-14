@@ -27,8 +27,9 @@
         :limit="3"
         :file-list="fileList"
         :on-success="successUpload"
+        list-type="picture-card"
       >
-        <el-button size="small" type="primary">点击上传</el-button>
+        <i slot="default" class="el-icon-plus"></i>
       </el-upload>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog" class="cancel-btn">取 消</el-button>
@@ -43,6 +44,7 @@
 <script>
 import { getToken } from "@/utils/auth";
 import { updateWarningStatusAPI } from "@/api/TaskManager.js";
+import image from "@/assets/images/AI.png";
 export default {
   name: "NeglectDialog",
   props: {
@@ -61,6 +63,7 @@ export default {
       textarea: "",
       fileList: [],
       url: "",
+      src: image,
     };
   },
   computed: {
@@ -69,6 +72,9 @@ export default {
         Authorization: "Bearer " + getToken(),
         tenant: "test",
       };
+    },
+    defaultImg() {
+      return this.src;
     },
   },
   mounted() {
@@ -93,7 +99,7 @@ export default {
           this.$message.success("事件状态更新成功！");
           this.$emit("updateList");
           this.closeDialog();
-        }else {
+        } else {
           this.$message.error(res.msg);
         }
       });

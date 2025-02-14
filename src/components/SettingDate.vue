@@ -314,6 +314,7 @@ export default {
           break;
       }
       this.$emit("frequencyChange", value);
+      this.formatInfo()
     },
     inspectionChange(val) {
       let value = 0;
