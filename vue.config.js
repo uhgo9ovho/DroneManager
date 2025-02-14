@@ -36,18 +36,7 @@ module.exports = {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
         // target: `http://172.16.40.21:9002`, //巧莲
-<<<<<<< HEAD
-<<<<<<< HEAD
-        // target: `http://172.16.40.225:9002`, //张浪
         target: `http://172.16.40.225:9002`, //张浪
-
-        // target: `http://172.16.40.225:9002`, //张浪
-=======
-        target: `http://172.16.40.225:9002`, //张浪
->>>>>>> c9eb8413dad9ea898260d33543e906bcaafc2401
-=======
-        // target: `http://172.16.40.225:9002`, //张浪
->>>>>>> hjh
         // target: `http://172.16.40.119:9002`, //赵影妮
         // target: `http://172.16.40.41:9002`, //ch
         // target: `http://172.16.40.126:9002`, //王高
@@ -109,39 +98,39 @@ module.exports = {
       .end()
 
     config.when(process.env.NODE_ENV !== 'development', config => {
-          config
-            .plugin('ScriptExtHtmlWebpackPlugin')
-            .after('html')
-            .use('script-ext-html-webpack-plugin', [{
-            // `runtime` must same as runtimeChunk name. default is `runtime`
-              inline: /runtime\..*\.js$/
-            }])
-            .end()
+      config
+        .plugin('ScriptExtHtmlWebpackPlugin')
+        .after('html')
+        .use('script-ext-html-webpack-plugin', [{
+          // `runtime` must same as runtimeChunk name. default is `runtime`
+          inline: /runtime\..*\.js$/
+        }])
+        .end()
 
-          config.optimization.splitChunks({
-            chunks: 'all',
-            cacheGroups: {
-              libs: {
-                name: 'chunk-libs',
-                test: /[\\/]node_modules[\\/]/,
-                priority: 10,
-                chunks: 'initial' // only package third parties that are initially dependent
-              },
-              elementUI: {
-                name: 'chunk-elementUI', // split elementUI into a single package
-                test: /[\\/]node_modules[\\/]_?element-ui(.*)/, // in order to adapt to cnpm
-                priority: 20 // the weight needs to be larger than libs and app or it will be packaged into libs or app
-              },
-              commons: {
-                name: 'chunk-commons',
-                test: resolve('src/components'), // can customize your rules
-                minChunks: 3, //  minimum common number
-                priority: 5,
-                reuseExistingChunk: true
-              }
-            }
-          })
-          config.optimization.runtimeChunk('single')
+      config.optimization.splitChunks({
+        chunks: 'all',
+        cacheGroups: {
+          libs: {
+            name: 'chunk-libs',
+            test: /[\\/]node_modules[\\/]/,
+            priority: 10,
+            chunks: 'initial' // only package third parties that are initially dependent
+          },
+          elementUI: {
+            name: 'chunk-elementUI', // split elementUI into a single package
+            test: /[\\/]node_modules[\\/]_?element-ui(.*)/, // in order to adapt to cnpm
+            priority: 20 // the weight needs to be larger than libs and app or it will be packaged into libs or app
+          },
+          commons: {
+            name: 'chunk-commons',
+            test: resolve('src/components'), // can customize your rules
+            minChunks: 3, //  minimum common number
+            priority: 5,
+            reuseExistingChunk: true
+          }
+        }
+      })
+      config.optimization.runtimeChunk('single')
     })
   }
 }
