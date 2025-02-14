@@ -84,6 +84,13 @@ export default {
       default: "",
     },
   },
+  watch: {
+    currentId(val) {
+      if(val) {
+        this.code = this.currentList[0].airlineId
+      }
+    }
+  },
   data() {
     return {
       taskName: "",
@@ -138,6 +145,7 @@ export default {
       taskListAPI(params).then((res) => {
         if (res.code === 200) {
           this.airLineList = res.rows;
+          this.currentId = res.rows[0].taskId;
         }
       });
     },
