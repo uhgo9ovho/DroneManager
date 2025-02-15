@@ -5,6 +5,7 @@
         <div class="innerImgBox">
           <ImageZoom
             :src="currentUrl"
+            :warnPhoto="warnPhoto"
             :isEdit="isEdit"
             @handleMouseUp="handleMouseUp"
             @startLister="startLister"
@@ -120,12 +121,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="quanjing" v-else>
-        <div class="img_box" ref="panorama"></div>
-        <div class="close" @click="closePreview">
-          <i class="el-icon-close"></i>
-        </div>
-      </div> -->
     </div>
     <div id="map"></div>
   </div>

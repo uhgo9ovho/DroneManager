@@ -163,6 +163,7 @@
       <PhotoPreview
         @closePreview="closePreview"
         :currentUrl="currentUrl"
+        :warnPhoto="warnPhoto"
         :currentIndex="currentIndex"
         :lon="lon"
         :lat="lat"
@@ -234,6 +235,7 @@ export default {
       isShowVideo: false,
       videoUrl: "",
       warnNumber: 0,
+      warnPhoto: ""
     };
   },
   filters: {
@@ -283,13 +285,13 @@ export default {
       // 上一页
       if (this.currentIndex <= 1) return; // 防止索引小于1
       this.currentIndex--;
-      this.currentUrl = this.imgOptions[this.currentIndex - 1].originUrl;
+      this.currentUrl = this.imgOptions[this.currentIndex - 1].warnPhoto ? 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + this.imgOptions[this.currentIndex - 1].warnPhoto : this.imgOptions[this.currentIndex - 1].originUrl;
     },
     nextImage() {
       // 下一页
       if (this.currentIndex >= this.imgOptions.length) return; // 防止索引超出范围
       this.currentIndex++;
-      this.currentUrl = this.imgOptions[this.currentIndex - 1].originUrl;
+      this.currentUrl = this.imgOptions[this.currentIndex - 1].warnPhoto ? 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + this.imgOptions[this.currentIndex - 1].warnPhoto : this.imgOptions[this.currentIndex - 1].originUrl;
     },
     destoryVideo() {
       if (this.player) {
@@ -449,6 +451,7 @@ export default {
           resultId: item.resultId,
           warnId: item.warnId,
           name: item.fileName,
+          warnPhoto: item.warnPhoto
         };
       });
       this.warnNumber = this.imgOptions.filter((item) => item.warnId).length;
@@ -470,6 +473,9 @@ export default {
     previewBtn(item, index) {
       this.resultId = item.resultId;
       this.currentUrl = item.originUrl;
+      this.warnPhoto = item.warnPhoto;
+      console.log(item.warnPhoto,'asdas');
+      
       this.lon = item.lon;
       this.lat = item.lat;
       this.preview = true;

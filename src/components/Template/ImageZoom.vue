@@ -1,6 +1,6 @@
 <template>
   <div ref="canvasWrapEl">
-    <canvas id="canvas" ref="canvas" ></canvas>
+    <canvas id="canvas" ref="canvas"></canvas>
   </div>
 </template>
 
@@ -11,6 +11,10 @@ export default {
     src: {
       type: String,
       required: true,
+    },
+    warnPhoto: {
+      type: String,
+      default: ""
     },
     isEdit: {
       type: Boolean,
@@ -350,6 +354,7 @@ export default {
   },
   mounted() {
     this.init();
+    console.log(this.warnPhoto,'aswdgfdggfh');
     
   },
 };
