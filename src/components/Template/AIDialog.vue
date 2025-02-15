@@ -28,7 +28,7 @@
           <div class="ai-nest-list">
             <div class="ai-nest-item">
               <div class="curr-nest">当前</div>
-              <div style="flex: 1 1 0%">陕西-西安</div>
+              <div style="flex: 1 1 0%">{{ taskOptions[0].label }}</div>
               <div>
                 <el-switch v-model="openAI" @change="changeAI"></el-switch>
               </div>
@@ -49,6 +49,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    taskOptions: {
+      type: Array,
+      default: () => []
+    }
   },
   data() {
     return {

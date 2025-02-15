@@ -56,8 +56,8 @@ export default {
       default: null,
     },
     deviceTitle:{
-      type: Object,
-      default: null,
+      type: String,
+      default: "",
     },
   },
   data() {

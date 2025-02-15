@@ -197,7 +197,8 @@ export default {
       .task_airline-list {
         position: absolute;
         bottom: 0px;
-        width: 920px;
+        // width: 920px;
+        width: 100%;
         height: 48px;
         background: rgba(255, 255, 255, 0.65);
         border-radius: 0px 0px 0px 12px;
@@ -224,6 +225,8 @@ export default {
             margin-left: 10px;
           }
           .airline-list {
+            width: 100%;
+            overflow: scroll;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -235,6 +238,7 @@ export default {
               display: flex;
               overflow: hidden;
               width: calc(100% - 64px);
+              overflow: scroll;
               .air {
                 cursor: pointer;
                 .airline {

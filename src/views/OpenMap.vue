@@ -21,6 +21,7 @@
       :valArr="valArr"
       @openSettingDate="openSettingDate"
       @changeDownContentShow="changeDownContentShow"
+      @clearLine="clearLine"
       ref="createTask"
     ></create-task>
     <!-- 排期设置 -->
@@ -142,6 +143,9 @@ export default {
     },
     schedulingType(val) {
       this.inspectionValue = val;
+    },
+    clearLine(text) {
+      this.startDown(text);
     },
     startDown(text) {
       if (text == "取消") {

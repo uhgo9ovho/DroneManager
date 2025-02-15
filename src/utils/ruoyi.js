@@ -287,7 +287,9 @@ export async function downloadImagesAsZip(imageUrls, zipFileName = 'images.zip')
   // 将图片文件添加到 zip
   for (const [index, url] of imageUrls.entries()) {
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        mode: 'cors'
+      });
       const blob = await response.blob();
       const fileName = `image_${index + 1}.${blob.type.split('/')[1]}`; // 自动根据 MIME 类型命名
       zip.file(fileName, blob);

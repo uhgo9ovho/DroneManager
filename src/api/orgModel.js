@@ -97,6 +97,16 @@ export const getRoleListAPI = (params) => {
 }
 
 /**
+ * 获取组织管理下的角色列表
+ */
+export const getOrgRoleListAPI = (params) => {
+  return request({
+    url: '/system/role/listAdminToOrg',
+    method: 'get',
+    params
+  })
+}
+/**
  * 角色编辑回显
  */
 export const roleMenuTreeselectAPI = (roleId) => {

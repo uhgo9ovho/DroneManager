@@ -258,7 +258,17 @@ export const updateMessageStatusAPI = (ids) => {
  */
 export const getPermissionListAPI = (parentId) => {
     return request({
-        url: `/system/menu/list?parentId=${parentId}`,
+        url: `/system/menu/list?parentId=${parentId}&orgId=${localStorage.getItem('org_id')}`,
         method: 'get',
+    })
+}
+
+/**
+ * 判断手机号是否存在
+ */
+export const phoneIsExistAPI = (phone) => {
+    return request({
+        url: `/system/user/isExist/${phone}`,
+        method: 'get'
     })
 }

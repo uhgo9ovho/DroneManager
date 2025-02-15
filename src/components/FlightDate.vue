@@ -89,6 +89,7 @@
       <AIDialog
         :showAIDialog="showAIDialog"
         @handleClose="handleClose"
+        :taskOptions="taskOptions"
       ></AIDialog>
     </div>
   </div>

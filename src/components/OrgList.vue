@@ -48,7 +48,7 @@ export default {
       params: {
         pageNum: 1,
         pageSize: 10,
-        userId: null,
+        userId: Cookies.get("userId"),
       },
     };
   },
@@ -87,29 +87,31 @@ export default {
         }
       });
     },
-    async selectOrg(row) {
+    selectOrg(row) {
       this.$store.commit("SET_ORG_ID", row.orgId);
       this.$store.commit("SET_ORG_WORKSPACEID", row.workspaceId);
       localStorage.setItem("platformName", row.platformName);
       Cookies.set("orgName", row.orgName);
       document.title = row.platformName;
-      await this.fetchAirPostInfo();
-      this.$router.push({ path: this.redirect || "/" }).catch(() => {});
-    },
-    getUserInfo() {
-      getInfo().then((res) => {
+      getInfo(row.orgId, Cookies.get("userId")).then(async (res) => {
         if (res.code === 200) {
-          let userInfo = res.user;
+          let userInfo = res.data;
           Cookies.set("user", JSON.stringify(userInfo), { expires: 30 });
-          this.params.userId = userInfo.userId;
-          localStorage.setItem('userPermission', JSON.stringify(res.permissions))
-          this.getOrgList();
+          // this.params.userId = userInfo.userId;
+          localStorage.setItem(
+            "userPermission",
+            JSON.stringify(res.permissions)
+          );
+          await this.fetchAirPostInfo();
+          this.$router.push({ path: this.redirect || "/" }).catch(() => {});
         }
       });
     },
+    getUserInfo() {},
   },
   mounted() {
-    this.getUserInfo();
+    // this.getUserInfo();
+    this.getOrgList();
   },
 };
 </script>

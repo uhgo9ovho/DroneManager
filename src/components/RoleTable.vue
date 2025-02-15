@@ -15,13 +15,38 @@
         }}</el-tag>
       </template>
       <template #operate="{ row }">
-        <el-button type="text" @click="handleEdit(row)" v-if="row.roleName !='超级管理员' || row.roleKey === `org_admin_${params.orgId}`" v-permissions="'wrj:role:edit'">编辑</el-button>
-        <el-button type="text" @click="handleDelete(row)" style="color: red" v-if="row.roleName !='超级管理员' || row.roleKey === `org_admin_${params.orgId}`" v-permissions="'wrj:role:remove'">删除</el-button>
+        <el-button
+          type="text"
+          @click="handleEdit(row)"
+          v-if="
+            row.roleName != '超级管理员' ||
+            row.roleKey === `org_admin_${params.orgId}`
+          "
+          v-permissions="'wrj:role:edit'"
+          >编辑</el-button
+        >
+        <el-button
+          type="text"
+          @click="handleDelete(row)"
+          style="color: red"
+          v-if="
+            (row.roleName != '超级管理员' ||
+            row.roleKey === `org_admin_${params.orgId}`) && model == 'role'
+          "
+          v-permissions="'wrj:role:remove'"
+          >删除</el-button
+        >
       </template>
     </common-table>
     <!-- 编辑新增弹窗 -->
     <div v-if="dialogVisible">
-      <role-dialog :title="title" @updateList="updateList" :row="row" :dialogVisible="dialogVisible" @updateDialogVisible="updateDialogVisible"></role-dialog>
+      <role-dialog
+        :title="title"
+        @updateList="updateList"
+        :row="row"
+        :dialogVisible="dialogVisible"
+        @updateDialogVisible="updateDialogVisible"
+      ></role-dialog>
     </div>
   </div>
 </template>
@@ -29,8 +54,14 @@
 <script>
 import RoleDialog from "./Template/RoleDialog.vue";
 import CommonTable from "./CommonTable.vue";
-import { getRoleListAPI } from "@/api/orgModel";
+import { getRoleListAPI, getOrgRoleListAPI } from "@/api/orgModel";
 export default {
+  props: {
+    model: {
+      type: String,
+      default: "role",
+    },
+  },
   components: {
     CommonTable,
     RoleDialog,
@@ -75,28 +106,44 @@ export default {
       params: {
         pageSize: 10,
         pageNum: 1,
-        orgId: localStorage.getItem('org_id')
+        orgId: localStorage.getItem("org_id"),
+      },
+      orgParams: {
+        pageSize: 10,
+        pageNum: 1,
       },
       title: "",
     };
   },
   methods: {
     pageChange(pageNum) {
-      this.params.pageNum = pageNum;
+      console.log(pageNum);
+      
+      this.params.pageNum = pageNum.pageNum;
+      this.getRoleList()
     },
     sizeChange(pageSize) {
-      this.params.pageSize = pageSize;
+      this.params.pageSize = pageSize.pageSize;
+      this.getRoleList()
     },
     async getRoleList() {
-      const res = await getRoleListAPI(this.params);
-      if (res.code === 200) {
-        this.tableList = res.rows;
-        this.total = res.total;
+      if (this.model == "role") {
+        const res = await getRoleListAPI(this.params);
+        if (res.code === 200) {
+          this.tableList = res.rows;
+          this.total = res.total;
+        }
+      } else {
+        const res = await getOrgRoleListAPI(this.orgParams);
+        if (res.code === 200) {
+          this.tableList = res.rows;
+          this.total = res.total;
+        }
       }
     },
     handleEdit(row) {
       this.dialogVisible = true;
-      this.title = '编辑角色';
+      this.title = "编辑角色";
       this.row = row;
     },
     handleDelete(row) {
@@ -106,8 +153,8 @@ export default {
       this.dialogVisible = visible;
     },
     updateList() {
-      this.getRoleList()
-    }
+      this.getRoleList();
+    },
   },
   mounted() {
     this.getRoleList();
@@ -116,5 +163,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

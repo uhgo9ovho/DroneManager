@@ -5,6 +5,7 @@
         <el-tab-pane label="飞行任务" name="flightTask" v-permissions="'mngSide:flight:task'"></el-tab-pane>
         <el-tab-pane label="飞行排期" name="flightDate"  v-permissions="'mngSide:flight:schedule'"></el-tab-pane>
         <el-tab-pane label="飞行记录" name="flightLog" v-permissions="'mngSide:flight:records'"></el-tab-pane>
+        <!-- <el-tab-pane label="工单办结" name="flightLog" v-permissions="'mngSide:flight:records'"></el-tab-pane> -->
       </el-tabs>
       <div class="operate-box">
         <div
@@ -28,6 +29,7 @@
         </div>
       </div>
     </div>
+    <!-- 飞行任务 -->
     <div class="task-list-grid" v-if="currentTab == 'flightTask'">
       <filght-table ref="tableRef" v-permissions="'mngSide:flight:task'"></filght-table>
     </div>
@@ -39,6 +41,10 @@
     <div v-if="currentTab == 'flightDate'">
       <flight-date  v-permissions="'mngSide:flight:schedule'"></flight-date>
     </div>
+    <!-- 工单办结 -->
+    <!-- <div class="task-list-grid" v-if="currentTab == 'flightTask'">
+      <filght-table ref="tableRef" v-permissions="'mngSide:flight:task'"></filght-table>
+    </div> -->
   </div>
 </template>
 

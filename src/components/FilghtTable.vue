@@ -12,7 +12,7 @@
       <!-- 自定义表头 -->
       <template #taskName-header>
         <span>任务名称/类型</span>
-        <el-dropdown @command="nameCommand">
+        <el-dropdown @command="nameCommand" trigger="click">
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
           </span>
           <el-dropdown-menu slot="dropdown">
@@ -20,21 +20,23 @@
               v-for="(item, index) in nameOptions"
               :key="index"
               :command="item"
+              :class="{ dropdown_selected: dropdownName == item }"
               >{{ item }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </template>
-      <template #status-header="{ row }">
-        <span>本轮状态</span>
-        <el-dropdown @command="statusCommand">
+      <template #status-header>
+        <span>任务状态</span>
+        <el-dropdown @command="statusCommand" trigger="click">
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
               v-for="(item, index) in statusOptions"
               :key="index"
-              :command="beforeHandleCommand1(row)"
+              :command="item"
+              :class="{ dropdown_selected: dropdownStatus == item }"
               >{{ item }}
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -60,7 +62,12 @@
       </template>
       <template #operate="{ row }">
         <div class="operate-box">
-          <el-button type="text" @click="detailsBtn(row)" v-permissions="'wurenji:task:query'">详情</el-button>
+          <el-button
+            type="text"
+            @click="detailsBtn(row)"
+            v-permissions="'wurenji:task:query'"
+            >详情</el-button
+          >
           <el-dropdown @command="operateCommand">
             <span class="el-dropdown-link el-icon-more"></span>
             <el-dropdown-menu slot="dropdown">
@@ -69,7 +76,15 @@
                 :key="index"
                 :command="beforeHandleCommand(row, item.label)"
                 :style="{ color: item.color }"
-                v-show="!(item.label == '成果' && row.taskType !== 2) && !((item.label == '挂起' || item.label =='取消挂起' || item.label == '排期') && row.taskStatus == 3)"
+                v-show="
+                  !(item.label == '成果' && row.taskType !== 2) &&
+                  !(
+                    (item.label == '挂起' ||
+                      item.label == '取消挂起' ||
+                      item.label == '排期') &&
+                    row.taskStatus == 3
+                  )
+                "
                 v-permissions="item.permission"
                 ><i class="iconfont" :class="item.icon"></i>
                 {{ item.label }}
@@ -167,6 +182,7 @@ export default {
       flyDateVisible: false,
       hangupVisible: false,
       filghtList: [],
+      taskName: "",
       columns: [
         {
           prop: "taskName",
@@ -188,7 +204,7 @@ export default {
         },
         {
           prop: "status",
-          label: "本轮状态",
+          label: "任务状态",
           showOverflowTooltip: false,
           slot: true,
         },
@@ -207,25 +223,22 @@ export default {
         "全景",
         "三维",
         "正射",
+        "红外",
         // '全覆盖'
       ],
       statusOptions: [
         "全部状态",
-        "已挂起",
-        "执行终止",
         "待审核",
-        "审核中",
         "待执行",
         "执行中",
-        "制作中",
-        "制作失败",
         "已完成",
-        "已过期",
-        "执行失败",
+        "挂起",
       ],
       pageNum: 1,
       pageSize: 10,
       row: {},
+      dropdownName: "全部类型",
+      dropdownStatus: "全部状态",
     };
   },
   mounted() {
@@ -273,6 +286,62 @@ export default {
         }
       };
     },
+    taskType(status) {
+      return function (status) {
+        switch (status) {
+          case "拍照":
+            return 0;
+          case "直播":
+            return 1;
+          case "全景":
+            return 2;
+          case "正射":
+            return 3;
+          case "三维":
+            return 4;
+          default:
+            return "";
+        }
+      };
+    },
+    taskTypeStatus(status) {
+      return function (status) {
+        switch (status) {
+          case "拍照":
+            return 0;
+          case "直播":
+            return 1;
+          case "全景":
+            return 2;
+          case "正射":
+            return 3;
+          case "三维":
+            return 4;
+          case "红外":
+            return 5;
+          default:
+            return "";
+        }
+      };
+    },
+    currentStatus() {
+      return function (status) {
+        switch (status) {
+          case "待审核":
+            return 0;
+          case "待执行":
+            return 1;
+          case "执行中":
+            return 2;
+          case "已完成":
+            return 3;
+          case "挂起":
+            return 4;
+          default:
+            return "";
+        }
+      };
+    },
     operateOptions() {
       return function (taskStatus) {
         if (taskStatus === 4) {
@@ -281,23 +350,23 @@ export default {
             {
               label: "成果",
               icon: "el-icon-zhaochengguo",
-              permission: 'wurenji:task:query'
+              permission: "wurenji:task:query",
             },
             {
               label: "排期",
               icon: "el-icon-paiqi",
-              permission: 'wurenji:task:add'
+              permission: "wurenji:task:add",
             },
             {
               label: "取消挂起",
               icon: "el-icon-3duihuacopy",
-              permission: 'wurenji:task:guaqi'
+              permission: "wurenji:task:guaqi",
             },
             {
               label: "删除",
               icon: "el-icon-shanchu",
               color: "red",
-              permission: 'wurenji:task:remove'
+              permission: "wurenji:task:remove",
             },
           ];
         } else {
@@ -305,23 +374,23 @@ export default {
             {
               label: "成果",
               icon: "el-icon-zhaochengguo",
-              permission: 'wurenji:task:query'
+              permission: "wurenji:task:query",
             },
             {
               label: "排期",
               icon: "el-icon-paiqi",
-              permission: 'wurenji:task:add'
+              permission: "wurenji:task:add",
             },
             {
               label: "挂起",
               icon: "el-icon-3duihuacopy",
-              permission: 'wurenji:task:guaqi'
+              permission: "wurenji:task:guaqi",
             },
             {
               label: "删除",
               icon: "el-icon-shanchu",
               color: "red",
-              permission: 'wurenji:task:remove'
+              permission: "wurenji:task:remove",
             },
           ];
         }
@@ -359,6 +428,7 @@ export default {
     },
 
     searchTableName(val) {
+      this.taskName = val;
       const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
@@ -380,6 +450,7 @@ export default {
       const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
+        taskName: this.taskName,
       };
       taskListAPI(params).then((res) => {
         if (res.code === 200) {
@@ -389,6 +460,7 @@ export default {
       });
     },
     sizeChange(params) {
+      params.taskName = this.taskName;
       taskListAPI(params).then((res) => {
         if (res.code === 200) {
           this.filghtList = res.rows;
@@ -397,6 +469,7 @@ export default {
       });
     },
     pageChange(params) {
+      params.taskName = this.taskName;
       taskListAPI(params).then((res) => {
         if (res.code === 200) {
           this.filghtList = res.rows;
@@ -405,13 +478,36 @@ export default {
       });
     },
     nameCommand(itemCommand) {
+      this.dropdownName = itemCommand;
+      const data = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+        task_type: this.taskTypeStatus(itemCommand),
+        taskName: this.taskName
+      };
+      console.log(data);
+
+      taskListAPI(data).then((res) => {
+        this.filghtList = res.rows;
+        this.total = res.total;
+      });
+    },
+    statusCommand(itemCommand) {
       console.log(itemCommand);
+
+      this.dropdownStatus = itemCommand;
+      const data = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+        taskStatus: this.currentStatus(itemCommand),
+      };
+      console.log(data);
+
+      taskListAPI(data).then((res) => {
+        this.filghtList = res.rows;
+        this.total = res.total;
+      });
     },
-    beforeHandleCommand1(row) {
-      console.log("row:", row);
-      return row;
-    },
-    statusCommand(itemCommand) {},
     beforeHandleCommand(row, label) {
       return {
         row,
@@ -436,7 +532,7 @@ export default {
           console.log("挂起被点击");
           break;
         case "取消挂起":
-        this.taskId = itemCommand.row.taskId;
+          this.taskId = itemCommand.row.taskId;
           this.upDataTaskStatus();
           break;
         case "删除":

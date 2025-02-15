@@ -31,7 +31,7 @@ export const addAndEditTask = (params) => {
  */
 export const taskListAPI = (params) => {
   return request({
-    url: `/wurenji/task/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${localStorage.getItem('org_id')}&taskName=${params.taskName ? params.taskName : ''}`,
+    url: `/wurenji/task/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${localStorage.getItem('org_id')}&taskName=${params.taskName ? params.taskName : ''}&taskType=${params.task_type == undefined ? '' : params.task_type}&taskStatus=${params.taskStatus == undefined ? '' : params.taskStatus}`,
     method: 'get'
   })
 }
