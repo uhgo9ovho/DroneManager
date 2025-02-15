@@ -139,6 +139,10 @@ export default {
       type: String,
       default: "",
     },
+    warnPhoto: {
+      type: String,
+      default: "",
+    },
     row: {
       type: Object,
       default: () => {},
