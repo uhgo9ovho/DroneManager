@@ -443,7 +443,7 @@ export default {
             "https://wurenji02.oss-cn-beijing.aliyuncs.com/" +
             item.objectKey +
             "?x-oss-process=style/200w",
-          originUrl:
+          originUrl: item.warnPhoto ? "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.warnPhoto :
             "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
           createTime: item.createTime,
           lat: item.lat,
