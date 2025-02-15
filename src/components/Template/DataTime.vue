@@ -21,8 +21,8 @@ export default {
       default: () => {},
     },
     taskType: {
-      type: Object,
-      default: () => {},
+      type: Number,
+      default: 0,
     },
   },
   data() {

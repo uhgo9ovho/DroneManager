@@ -27,6 +27,7 @@
               v-model="ruleForm.taskType"
               @input="changeType"
               size="small"
+              @change="typeChange"
             >
               <el-radio-button label="拍照"></el-radio-button>
               <el-radio-button label="直播"></el-radio-button>
@@ -137,7 +138,7 @@ export default {
   props: {
     length: {
       type: Number,
-      default: 0
+      default: 0,
     },
     settingInfo: {
       type: String,
@@ -228,6 +229,11 @@ export default {
     clearFilesFn() {
       this.$refs.upload.clearFiles();
     },
+    typeChange() {
+      if (this.airlineList.length) {
+        this.$emit("clearLine", "重绘");
+      }
+    },
     handleChangeHeight(value) {
       console.log(value);
       this.ruleForm.height = value;
@@ -246,11 +252,16 @@ export default {
         if (!this.hasExist) callback(new Error("请选择航线文件"));
         callback(new Error(this.uploadMsg));
       } else {
-        callback();
+        if (this.uploadMsg && this.uploadMsg != "操作成功") {
+          callback(new Error(this.uploadMsg));
+        } else {
+          callback();
+        }
       }
     },
     removeFile(file) {
       this.fileArr = this.fileArr.filter((item) => item.uid != file.uid);
+      this.$refs["ruleForm"].clearValidate(["airLine"]);
     },
     successUpload(res, file) {
       if (res.code == 200) {
@@ -303,8 +314,8 @@ export default {
     addTaskBtn() {
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
-          if(!this.length) {
-            return this.$message.error('请选择具体的日期');
+          if (!this.length) {
+            return this.$message.error("请选择具体的日期");
           }
           this.loading = true;
           const params = {
@@ -319,7 +330,7 @@ export default {
               : this.airlineList.length, //航线数量
             startTime: this.starttime,
             endTime: this.endtime,
-            dateArrays: this.valArr.join(','),
+            dateArrays: this.valArr.join(","),
             wrjAirlineFiles: this.fileArr, //导入的时候传这个
             lineFileCache: this.airlineList, //绘制的时候传这个
             note: this.settingInfo,

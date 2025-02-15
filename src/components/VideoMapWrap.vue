@@ -252,7 +252,7 @@
     <!-- controlsUser -->
     <div class="controlUserBox">
       <div class="control_user">
-        <span>控制：{{ controler && controler.userName }}</span>
+        <span>控制：{{ controler ? controler.userName : '暂无' }}</span>
       </div>
       <div class="monitor_user">
         <span>监视：{{ "暂无" }}</span>
@@ -346,7 +346,7 @@ export default {
       tempHumidity: "-",
       capacity_percent: "-",
       tempRainfall: "-",
-      tempCapacityPercent: "-",
+      tempCapacityPercent: 0,
       percentage: 0,
       mqttState: null,
       client_id: "",
@@ -457,7 +457,9 @@ export default {
             : host.rainfall == "3"
             ? "大雨"
             : "无雨";
-        this.tempWind_speed = parseFloat(host.wind_speed.toFixed(2));
+        if (host.wind_speed) {
+          this.tempWind_speed = parseFloat(host.wind_speed.toFixed(2));
+        }
         if ("drc_state" in host) {
           this.drcState = host.drc_state;
           console.log(host.drc_state, "drc_status");
@@ -545,8 +547,8 @@ export default {
         if (res.code === 200) {
           const token = res.data.data["ws-token"];
           this.ws = new WebSocketClient(
-            // `ws://8.136.97.59:6789/api/v1/ws?ws-token=${token}` //线上
-            `${process.env.VUE_APP_WS_URL}?ws-token=${token}` //本地
+            `wss://8.136.97.59:6789/api/v1/ws?ws-token=${token}` //线上
+            // `${process.env.VUE_APP_WS_URL}?ws-token=${token}` //本地
           );
         }
       });
@@ -736,7 +738,6 @@ export default {
     bottom: 20px;
     height: 80px;
     width: 130px;
-    background-color: lightgray;
     cursor: pointer;
     z-index: 100;
   }

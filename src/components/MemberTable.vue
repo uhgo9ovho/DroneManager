@@ -58,11 +58,11 @@
           </div>
         </div>
       </template>
+      <template #orgDeptName="{ row }">
+        {{ row.orgDeptName }}
+      </template>
       <template #roleName="{ row }">
         {{ row.roleName }}
-      </template>
-      <template #orgName="{ row }">
-        {{ row.orgName }}
       </template>
       <!-- <template #bind="{ row }">
         <div class="bind_icon">
@@ -100,7 +100,7 @@
         <!-- <el-button type="text" style="margin-right: 10px">调岗</el-button> -->
 
         <el-popconfirm :ref="`popover-${scope.$index}`" title="你确定要删除吗？" @confirm="confirm(scope.row)" v-permissions="'wrj:user:remove'">
-          <el-button type="text" style="color: red" slot="reference" v-show="scope.row.roleName!=='超级管理员'"
+          <el-button type="text" style="color: red" slot="reference" v-show="scope.row.roleName!=='组织管理员'"
             >删除</el-button
           >
         </el-popconfirm>
@@ -119,7 +119,7 @@ export default {
       columns: [
         {
           prop: "userName",
-          label: "姓名",
+          label: "成员",
           showOverflowTooltip: true,
           slot: true,
           minWidth: "200",
@@ -147,12 +147,12 @@ export default {
           slot: true,
           showOverflowTooltip: true,
         },
-        {
-          prop: "bind",
-          label: "微信",
-          showOverflowTooltip: false,
-          slot: true,
-        },
+        // {
+        //   prop: "bind",
+        //   label: "微信",
+        //   showOverflowTooltip: false,
+        //   slot: true,
+        // },
         // {
         //   prop: "status",
         //   label: "账号状态",
@@ -231,6 +231,7 @@ export default {
       this.getList();
     },
     searchList() {
+      this.params.pageNum = 1;
       searchUser(this.params).then((res) => {
         if (res.code === 200) {
           this.memberList = res.rows;

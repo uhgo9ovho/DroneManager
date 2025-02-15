@@ -173,10 +173,12 @@ export default {
                   this.$emit("updateList");
                 } else {
                   this.loading = false;
+                  this.$message.error(res.msg)
                 }
               })
               .catch((err) => {
                 this.loading = false;
+                this.$message.error("操作失败")
               });
           } else {
             console.log("error submit!!");

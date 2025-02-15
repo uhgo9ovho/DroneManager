@@ -127,7 +127,7 @@ export default {
     checkedTip() {
       if (this.checked) {
         if (this.currentTab == "department") return "搜索部门名称";
-        return "搜索成员姓名";
+        return "搜索成员昵称或者联系方式";
       }
       return "搜索";
     },

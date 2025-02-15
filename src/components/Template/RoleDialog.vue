@@ -13,7 +13,7 @@
         <el-input v-model="form.remark"></el-input>
       </el-form-item>
       <el-form-item label="角色标识">
-        <el-input v-model="form.roleKey"></el-input>
+        <el-input v-model="form.roleKey" :disabled="title == '编辑角色'"></el-input>
       </el-form-item>
       <el-form-item label="角色状态">
         <el-switch
@@ -179,7 +179,6 @@ export default {
     roleMenuTreeselect() {
       roleMenuTreeselectAPI(this.row.roleId).then((res) => {
         if (res.code == 200) {
-          debugger
           const allCheckedKeys = res.checkedKeys || [];
           const menus = res.menus || [];
 

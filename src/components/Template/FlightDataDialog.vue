@@ -244,13 +244,11 @@ export default {
           let charactersLength = this.characters.filter(
             (item) => item.checked
           ).length;
-          if (charactersLength < 1) charactersLength = 1;
           return charactersLength;
         case 2:
           let moonListLength = this.moonList.filter(
             (item) => item.checked
           ).length;
-          if (moonListLength < 1) moonListLength = 1;
           return moonListLength;
       }
     },

@@ -69,18 +69,34 @@ export default {
     this.initAMap();
   },
   computed: {
-    ...mapState("changeStatus", ["pointsList"]),
+    ...mapState("changeStatus", ["pointsList", "lineType"]),
   },
   watch: {
     pointsList: {
       handler(val) {
         if (val.length) {
-          const { drawPolyline } = DronePlottingRoute(
-            map,
-            this.mouseTool,
-            this.AMap
-          );
-          drawPolyline(val);
+            if (this.lineType != 2) {
+            const { drawPolyline } = DronePlottingRoute(
+              map,
+              this.mouseTool,
+              this.AMap
+            );
+            drawPolyline(val);
+          } else {
+            //全景
+            const position = new this.AMap.LngLat(val[0][0], val[0][1]);
+            let markerContent =
+              "" +
+              '<div class="custom-content-warning">' +
+              '   <img src="//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png">' +
+              "</div>";
+            const marker = new this.AMap.Marker({
+              position: position,
+              content: markerContent,
+              offset: new this.AMap.Pixel(-10, -34),
+            });
+            map.add(marker);
+          }
         }
       },
     },
@@ -107,7 +123,7 @@ export default {
     },
   },
   unmounted() {
-    this.destroyMap()
+    this.destroyMap();
   },
   methods: {
     ...mapMutations("changeStatus", ["CHANGE_DROC_STATUS"]),

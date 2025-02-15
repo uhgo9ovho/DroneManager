@@ -35,7 +35,7 @@
                     <div
                       class="task-card3"
                       @click="addAirBtn(item)"
-                      v-if="dateSHowBtn && isShowAddBtn(item.time)"
+                      v-if="dateSHowBtn && isShowAddBtn(item.time) || !isToday(currentDate) "
                     >
                       <div class="icon-add">+</div>
                     </div>
