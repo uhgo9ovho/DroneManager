@@ -21,7 +21,7 @@
       </el-input>
       <el-upload
         class="upload-demo"
-        action="/dev-api/common/upload"
+        action="/prod-api/common/upload"
         :headers="headers"
         multiple
         :limit="3"

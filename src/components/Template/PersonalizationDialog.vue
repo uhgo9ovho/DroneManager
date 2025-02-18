@@ -18,7 +18,7 @@
         <div class="upload">
           <el-upload
             class="avatar-uploader"
-            action="/dev-api/common/upload"
+            action="/prod-api/common/upload"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -34,7 +34,7 @@
           </el-upload>
           <el-upload
             class="avatar-uploader"
-            action="/dev-api/common/upload"
+            action="/prod-api/common/upload"
             :show-file-list="false"
             :on-success="handleAvatarSuccess2"
             :before-upload="beforeAvatarUpload2"

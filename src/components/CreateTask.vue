@@ -261,7 +261,11 @@ export default {
     },
     removeFile(file) {
       this.fileArr = this.fileArr.filter((item) => item.uid != file.uid);
-      this.$refs["ruleForm"].clearValidate(["airLine"]);
+      // this.$refs["ruleForm"].clearValidate(["airLine"]);
+      if(!this.fileArr.length) {
+        this.hasExist = false;
+      }
+      this.$refs["ruleForm"].validateField(["airLine"]);
     },
     successUpload(res, file) {
       if (res.code == 200) {
@@ -269,6 +273,7 @@ export default {
         response["uid"] = file.uid;
         this.fileArr.push(response);
         this.hasExist = false;
+        this.uploadMsg = '操作成功'
       } else {
         this.hasExist = true;
         this.uploadMsg = res.msg;
