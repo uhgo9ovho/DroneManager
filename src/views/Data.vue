@@ -59,6 +59,10 @@ export default {
   name: "Flight",
   data() {
     return {
+      dayRange:28,
+      weekRange: 90,
+      monthRange: 365,
+      // yearRange: 365,
       permissions: JSON.parse(localStorage.getItem('userPermission')),
       itemRow: null,
       showLookUp: false,
@@ -101,7 +105,25 @@ export default {
             onClick(picker) {
               const end = new Date();
               const start = new Date();
-              start.setTime(end.getTime() - 3600 * 1000 * 24 * 28);
+              start.setTime(end.getTime() - 3600 * 1000 * 24 * this.dayRange);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近90天",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(end.getTime() - 3600 * 1000 * 24 * this.weekRange);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近365天",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(end.getTime() - 3600 * 1000 * 24 * this.monthRange);
               picker.$emit("pick", [start, end]);
             },
           },
@@ -165,7 +187,17 @@ export default {
     setDefaultDateRange() {
       const now = new Date();
       const start = new Date();
-      start.setTime(now.getTime() - 3600 * 1000 * 24 * 28);
+
+      if (this.activeTab === "daily") {
+        // 日报，默认28天
+        start.setTime(now.getTime() - 3600 * 1000 * 24 * this.dayRange);
+      } else if (this.activeTab === "weekly") {
+        // 周报，默认90天
+        start.setTime(now.getTime() - 3600 * 1000 * 24 * this.weekRange);
+      } else if (this.activeTab === "monthly") {
+        // 月报，默认365天
+        start.setTime(now.getTime() - 3600 * 1000 * 24 * this.monthRange);
+      }
       this.beginTime = start.getTime();
       this.endTime = now.getTime();
       this.dateRange = [start, now]; // 直接设置日期对象数组
@@ -173,7 +205,59 @@ export default {
     handleTabClick(tab) {
       this.activeTab = tab.name;
       this.forceRerender = Date.now(); // 使用当前时间戳作为唯一的 key 值
+      // 根据选中的 tab 更新日期选择范围
+      this.updateDateRangeByTab(this.activeTab);
       this.fetchReportData();
+    },
+    // 根据选中的 tab 来更新日期选择范围
+    updateDateRangeByTab(activeTab) {
+      let start = new Date();
+      let end = new Date();
+
+      // 根据选中的报表类型（日报、周报、月报）设置日期范围
+      if (activeTab === "daily") {
+        start.setTime(end.getTime() - 3600 * 1000 * 24 * this.dayRange); // 设置为28天
+        this.pickerOptions.shortcuts = [
+          {
+            text: "最近28天",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(end.getTime() - 3600 * 1000 * 24 * this.dayRange);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+        ];
+      } else if (activeTab === "weekly") {
+        start.setTime(end.getTime() - 3600 * 1000 * 24 * this.weekRange); // 设置为90天
+        this.pickerOptions.shortcuts = [
+          {
+            text: "最近90天",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(end.getTime() - 3600 * 1000 * 24 * this.weekRange);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+        ];
+      } else if (activeTab === "monthly") {
+        start.setTime(end.getTime() - 3600 * 1000 * 24 * this.monthRange); // 设置为365天
+        this.pickerOptions.shortcuts = [
+          {
+            text: "最近365天",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(end.getTime() - 3600 * 1000 * 24 * this.monthRange);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+        ];
+      }
+
+      // 更新默认时间范围
+      this.dateRange = [start, end];
     },
     handleDateRangeChange(value) {
       this.fetchReportData();
@@ -181,24 +265,30 @@ export default {
     },
     fetchReportData() {
       let beginTime, endTime;
+
       if (this.dateRange && this.dateRange.length === 2) {
         beginTime = this.dateRange[0].getTime();
         endTime = this.dateRange[1].getTime();
 
-        // 检查时间跨度是否超过28天
-        if ((endTime - beginTime) / (1000 * 60 * 60 * 24) > 28) {
-          return this.$message.error(
-            "时间跨度不能超过28天,请选择有效的时间范围"
-          );
+        // 检查时间跨度是否超过最大限制
+        if (this.activeTab === "daily" && (endTime - beginTime) / (1000 * 60 * 60 * 24) > this.dayRange) {
+          this.$message.error("时间跨度不能超过28天, 请选择有效的时间范围");
+          this.resetDateRangeToDefault(); // 重置日期范围为默认
+          return;
+        } else if (this.activeTab === "weekly" && (endTime - beginTime) / (1000 * 60 * 60 * 24) > this.weekRange) {
+          this.$message.error("时间跨度不能超过90天, 请选择有效的时间范围");
+          this.resetDateRangeToDefault(); // 重置日期范围为默认
+          return;
+        } else if (this.activeTab === "monthly" && (endTime - beginTime) / (1000 * 60 * 60 * 24) > this.monthRange) {
+          this.$message.error("时间跨度不能超过365天, 请选择有效的时间范围");
+          this.resetDateRangeToDefault(); // 重置日期范围为默认
+          return;
         }
       } else {
-        // 使用默认时间范围
-        const now = new Date();
-        const start = new Date();
-        start.setTime(now.getTime() - 3600 * 1000 * 24 * 28);
-        beginTime = start.getTime();
-        endTime = now.getTime();
+        // 如果没有选中日期范围，使用默认范围
+        this.resetDateRangeToDefault(); // 重置日期范围为默认
       }
+
       let tableType = 1;
       if(this.activeTab === "daily"){
         tableType = 1;
@@ -207,6 +297,7 @@ export default {
       } else {
         tableType = 3;
       }
+
       const params = {
         beginTime: beginTime,
         endTime: endTime,
@@ -217,6 +308,29 @@ export default {
       this.endTime = endTime;
       this.tableType = tableType;
       console.log("接口调用参数:", params);
+    },
+
+    // 重置日期范围为默认值，依据当前选项
+    resetDateRangeToDefault() {
+      const now = new Date();
+      let start = new Date();
+
+      // 根据当前选项设置默认日期范围
+      if (this.activeTab === "daily") {
+        // 默认28天
+        start.setTime(now.getTime() - 3600 * 1000 * 24 * this.dayRange);
+      } else if (this.activeTab === "weekly") {
+        // 默认90天
+        start.setTime(now.getTime() - 3600 * 1000 * 24 * this.weekRange);
+      } else if (this.activeTab === "monthly") {
+        // 默认365天
+        start.setTime(now.getTime() - 3600 * 1000 * 24 * this.monthRange);
+      }
+
+      this.dateRange = [start, now]; // 重置为相应的默认范围
+      // 更新本地的 beginTime 和 endTime
+      this.beginTime = start.getTime();
+      this.endTime = now.getTime();
     },
     inputChange(val) {
       if (this.activeName === "warningEvent") {

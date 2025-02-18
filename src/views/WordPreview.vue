@@ -914,6 +914,10 @@ export default {
 
 <style scoped lang="scss">
 @media print {
+  /* 隐藏按钮 */
+  .btn {
+    display: none !important;
+  }
   @page {
     /* 隐藏页眉和页脚 */
     @top-center {
@@ -945,7 +949,10 @@ export default {
 .word-preview {
   position: relative;
   height: 100vh;
-  overflow: auto;
+  //height: auto;  /* 改为自动高度 */
+  //min-height: 100vh; /* 保持最小高度 */
+  //overflow: visible; /* 允许内容溢出 */
+  //overflow: auto;
   width: 40%; /* 宽度占屏幕的40% */
   min-width: 760px; /* 最小宽度为760px */
   max-width: 1200px; /* 限制最大宽度，防止超大屏幕下内容过宽 */
@@ -962,8 +969,13 @@ export default {
   }
   .btn {
     position: absolute;
-    right: 40px;
-    top: 20px;
+    //position: fixed; /* 固定位置 */
+    //position: sticky;
+    right: 40px; /* 距离右侧40px */
+    //right: 32%; /* 距离右侧40px */
+
+    top: 20px; /* 距离顶部20px */
+    z-index: 999; /* 确保按钮在其他内容之上 */
   }
 }
 
