@@ -5,7 +5,6 @@
         <div class="innerImgBox">
           <ImageZoom
             :src="currentUrl"
-            :warnPhoto="warnPhoto"
             :isEdit="isEdit"
             @handleMouseUp="handleMouseUp"
             @startLister="startLister"
@@ -318,9 +317,11 @@ export default {
       this.remarkList.forEach((it) => (it.checked = false));
     },
     selectItem(item) {
+      console.log(item,'item');
+      
       this.$refs.imageZoom.addTextToSelectedBox(item.dictLabel);
       this.currentName = item.dictLabel;
-      this.currentTypeName = item.remark;
+      this.currentTypeName = item.dictLabel;
       this.currentId = item.dictValue;
       this.isShow = true;
       this.showSure = true;

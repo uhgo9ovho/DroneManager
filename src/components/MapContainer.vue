@@ -17,6 +17,7 @@ let map = null;
 let planeMarker = null;
 let lastPosition = null;
 let polyline = null;
+let marker = null;
 export default {
   name: "map-view",
   props: {
@@ -75,7 +76,7 @@ export default {
     pointsList: {
       handler(val) {
         if (val.length) {
-            if (this.lineType != 2) {
+          if (this.lineType != 2) {
             const { drawPolyline } = DronePlottingRoute(
               map,
               this.mouseTool,
@@ -90,7 +91,7 @@ export default {
               '<div class="custom-content-warning">' +
               '   <img src="//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png">' +
               "</div>";
-            const marker = new this.AMap.Marker({
+            marker = new this.AMap.Marker({
               position: position,
               content: markerContent,
               offset: new this.AMap.Pixel(-10, -34),
@@ -340,7 +341,7 @@ export default {
       }
     },
     resetPolyline() {
-      const { removeThis } = DronePlottingRoute(map, this.mouseTool, this.AMap);
+      const { removeThis } = DronePlottingRoute(map, this.mouseTool, this.AMap, marker);
       removeThis();
       this.CHANGE_DROC_STATUS("取消");
     },

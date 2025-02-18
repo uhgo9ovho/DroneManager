@@ -126,7 +126,7 @@ export default {
         },
         {
           prop: "orgDeptName",
-          label: "所在部门",
+          label: "部门",
           slot: true,
           showOverflowTooltip: true,
         },

@@ -5,15 +5,18 @@
     width="50%"
     :before-close="handleClose"
   >
-    <el-form :model="form" label-width="80px">
-      <el-form-item label="角色名称">
+    <el-form :model="form" label-width="80px" :rules="rules" ref="roleFrom">
+      <el-form-item label="角色名称" prop="roleName">
         <el-input v-model="form.roleName"></el-input>
       </el-form-item>
       <el-form-item label="角色描述">
         <el-input v-model="form.remark"></el-input>
       </el-form-item>
-      <el-form-item label="角色标识">
-        <el-input v-model="form.roleKey" :disabled="title == '编辑角色'"></el-input>
+      <el-form-item label="角色标识" prop="roleKey">
+        <el-input
+          v-model="form.roleKey"
+          :disabled="title == '编辑角色'"
+        ></el-input>
       </el-form-item>
       <el-form-item label="角色状态">
         <el-switch
@@ -22,7 +25,7 @@
           inactive-value="1"
         ></el-switch>
       </el-form-item>
-      <el-form-item label="角色权限">
+      <el-form-item label="角色权限" prop="menuIds">
         <el-tabs v-model="activeName">
           <el-tab-pane label="管理侧" name="admin"></el-tab-pane>
           <el-tab-pane label="看板大屏" name="dashboard"></el-tab-pane>
@@ -98,13 +101,21 @@ export default {
     ]),
   },
   data() {
+    let validatePass = (rules, value, callback) => {
+      if (this.form.menuIds.length) {
+        callback();
+      } else {
+        callback(new Error("请至少选择一个权限"));
+      }
+    };
     return {
       form: {
         roleName: "",
         remark: "",
         status: "1",
         roleKey: "",
-        roleSort: 1
+        roleSort: 1,
+        menuIds: [],
       },
       checkedKeys: [],
       activeName: "admin",
@@ -113,6 +124,15 @@ export default {
         admin: [],
         dashboard: [],
         miniProgram: [],
+      },
+      rules: {
+        roleName: [
+          { required: true, message: "请输入角色名称", trigger: "blur" },
+        ],
+        roleKey: [
+          { required: true, message: "请输入角色标识", trigger: "blur" },
+        ],
+        menuIds: [{ required: true, validator: validatePass, trigger: "blur" }],
       },
     };
   },
@@ -128,13 +148,13 @@ export default {
       this.checkedKeysObj[this.activeName] = checkedKeys || [];
       console.log(`${this.activeName}模块权限更新为:`, checkedKeys);
       this.halfCheckedKeys.push(...halfCheckedKeys);
+      this.$refs["roleFrom"].validateField(["menuIds"]);
     },
     handleClose() {
       this.resetCheckedKeys();
       this.$emit("updateDialogVisible", false);
     },
     handleSave() {
-      // 合并所有模块当前选中的权限
       this.form.menuIds = [
         ...new Set([
           ...(this.checkedKeysObj.admin || []),
@@ -145,36 +165,48 @@ export default {
       this.form.menuIds.push(...this.halfCheckedKeys);
       this.form.menuIds = [...new Set(this.form.menuIds)];
       console.log("保存前的权限数据:", this.form.menuIds);
-      if (this.title === "编辑角色") {
-        editRoleAPI(this.form)
-          .then((res) => {
-            if (res.code === 200) {
-              this.$message.success(res.msg);
-              this.$emit("updateList");
-              this.handleClose();
-            } else {
-              this.$message.error("操作失败");
-            }
-          })
-          .catch((err) => {
-            this.$message.error("操作失败");
-          });
-      } else {
-        const params = {...this.form, orgId: localStorage.getItem('org_id')}
-        addRoleAPI(params)
-          .then((res) => {
-            if (res.code === 200) {
-              this.$message.success(res.msg);
-              this.$emit("updateList");
-              this.handleClose();
-            } else {
-              this.$message.error("操作失败");
-            }
-          })
-          .catch((err) => {
-            this.$message.error("操作失败");
-          });
-      }
+      this.$refs.roleFrom.validate((valid) => {
+        if (valid) {
+          // 合并所有模块当前选中的权限
+
+          if (this.title === "编辑角色") {
+            editRoleAPI(this.form)
+              .then((res) => {
+                if (res.code === 200) {
+                  this.$message.success(res.msg);
+                  this.$emit("updateList");
+                  this.handleClose();
+                } else {
+                  this.$message.error("操作失败");
+                }
+              })
+              .catch((err) => {
+                this.$message.error("操作失败");
+              });
+          } else {
+            const params = {
+              ...this.form,
+              orgId: localStorage.getItem("org_id"),
+            };
+            addRoleAPI(params)
+              .then((res) => {
+                if (res.code === 200) {
+                  this.$message.success(res.msg);
+                  this.$emit("updateList");
+                  this.handleClose();
+                } else {
+                  this.$message.error("操作失败");
+                }
+              })
+              .catch((err) => {
+                this.$message.error("操作失败");
+              });
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     roleMenuTreeselect() {
       roleMenuTreeselectAPI(this.row.roleId).then((res) => {
