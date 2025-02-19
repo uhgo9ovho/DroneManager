@@ -942,6 +942,9 @@ export default {
 
 /* 标题部分样式 */
 .word-preview-container {
+  ::-webkit-scrollbar {
+    display: flex;
+  }
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -953,6 +956,7 @@ export default {
 }
 
 .word-preview {
+
   position: relative;
   height: 100vh;
   //height: auto;  /* 改为自动高度 */
@@ -1092,4 +1096,5 @@ tr td {
   max-width: 1280px; /* 可选：限制最大宽度 */
   margin: 10px 0; /* 可选：添加一些垂直间距 */
 }
+
 </style>
