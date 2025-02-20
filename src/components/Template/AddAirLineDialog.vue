@@ -172,6 +172,8 @@ export default {
         if (res.code === 200) {
           this.$emit("updateData", this.currentDate);
           this.handleClose();
+        } else {
+          this.$message.error(res.msg)
         }
       });
     },

@@ -98,6 +98,7 @@
               :on-change="fileChange"
               :on-success="successUpload"
               :on-remove="removeFile"
+              :before-upload="beforeUpload"
             >
               <el-button size="small" type="primary" icon="el-icon-plus"
                 >导入文件</el-button
@@ -198,9 +199,6 @@ export default {
         taskType: [
           { required: true, message: "请选择任务类型", trigger: "change" },
         ],
-        airLine: [
-          { required: true, validator: this.validatePass, trigger: "change" },
-        ],
         date: [{ required: true, validator: validatePass2, trigger: "change" }],
       },
     };
@@ -261,11 +259,17 @@ export default {
     },
     removeFile(file) {
       this.fileArr = this.fileArr.filter((item) => item.uid != file.uid);
-      // this.$refs["ruleForm"].clearValidate(["airLine"]);
       if(!this.fileArr.length) {
         this.hasExist = false;
       }
-      this.$refs["ruleForm"].validateField(["airLine"]);
+    },
+    beforeUpload(file) {
+      console.log(file);
+      const fileType = file.name.split('.')[1];
+      if(fileType != 'kmz') {
+        this.$message.error('只能上传kmz文件')
+      }
+      return fileType == 'kmz'
     },
     successUpload(res, file) {
       if (res.code == 200) {
@@ -278,7 +282,6 @@ export default {
         this.hasExist = true;
         this.uploadMsg = res.msg;
       }
-      this.$refs["ruleForm"].validateField(["airLine"]);
     },
     openSettingDate() {
       this.$emit("openSettingDate");
@@ -327,7 +330,6 @@ export default {
             lineTaskType: this.isImport ? 2 : 1, //绘制1  导入2
             taskName: this.ruleForm.taskName,
             taskType: this.taskTypeValue,
-            taskAddress: "陕西省咸阳市",
             schedulingType: this.inspectionValue,
             timesType: this.frequencyValue,
             airlineNumber: this.isImport

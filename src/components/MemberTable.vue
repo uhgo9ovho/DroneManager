@@ -53,7 +53,7 @@
             <img src="../assets/images/avatar.png" alt="" />
           </div>
           <div class="user_name_phone">
-            <div class="user_name">{{ row.userName }}</div>
+            <div class="user_name">{{ row.nickName }}</div>
             <div class="user_tel">{{ row.phonenumber }}</div>
           </div>
         </div>
@@ -64,30 +64,6 @@
       <template #roleName="{ row }">
         {{ row.roleName }}
       </template>
-      <!-- <template #bind="{ row }">
-        <div class="bind_icon">
-          <div class="wx_icon">
-            <el-tooltip
-              v-if="row.wx_bind == '已绑定'"
-              class="item"
-              effect="dark"
-              content="微信已绑定"
-              placement="top-start"
-            >
-              <i class="iconfont el-icon-weixin"></i>
-            </el-tooltip>
-            <el-tooltip
-              v-else
-              class="item"
-              effect="dark"
-              content="微信未绑定"
-              placement="top-start"
-            >
-              <i class="iconfont el-icon-weixin1"></i>
-            </el-tooltip>
-          </div>
-        </div>
-      </template> -->
       <template #status="{ row }">
         <el-switch v-model="row.status" active-value="0" inactive-value="1">
         </el-switch>
@@ -96,14 +72,36 @@
         {{ row.createTime | filterTime }}
       </template>
       <template #operate="scope">
-        <el-button type="text" @click="editBtn(scope.row)" style="margin-right: 10px" v-permissions="'wrj:user:edit'">编辑</el-button>
+        <el-button
+          type="text"
+          @click="editBtn(scope.row)"
+          style="margin-right: 10px"
+          v-permissions="'wrj:user:edit'"
+          >编辑</el-button
+        >
         <!-- <el-button type="text" style="margin-right: 10px">调岗</el-button> -->
 
-        <el-popconfirm :ref="`popover-${scope.$index}`" title="你确定要删除吗？" @confirm="confirm(scope.row)" v-permissions="'wrj:user:remove'">
-          <el-button type="text" style="color: red" slot="reference" v-show="scope.row.roleName!=='组织管理员'"
+        <el-popconfirm
+          :ref="`popover-${scope.$index}`"
+          title="你确定要删除吗？"
+          @confirm="confirm(scope.row)"
+          v-permissions="'wrj:user:remove'"
+        >
+          <el-button
+            type="text"
+            style="color: red"
+            slot="reference"
+            v-show="scope.row.roleName !== '组织管理员'"
             >删除</el-button
           >
         </el-popconfirm>
+        <el-button
+          type="text"
+          style="margin-left: 10px"
+          slot="reference"
+          @click="resetPass(scope.row)"
+          >重置密码</el-button
+        >
       </template>
     </common-table>
   </div>
@@ -111,7 +109,7 @@
 
 <script>
 import CommonTable from "./CommonTable.vue";
-import { getUserList, deleteUser, searchUser } from "@/api/user.js";
+import { getUserList, deleteUser, searchUser, resetPassAPI } from "@/api/user.js";
 export default {
   name: "MemberTable",
   data() {
@@ -141,24 +139,6 @@ export default {
           label: "添加/邀请人",
           showOverflowTooltip: false,
         },
-        {
-          prop: "createTime",
-          label: "创建日期",
-          slot: true,
-          showOverflowTooltip: true,
-        },
-        // {
-        //   prop: "bind",
-        //   label: "微信",
-        //   showOverflowTooltip: false,
-        //   slot: true,
-        // },
-        // {
-        //   prop: "status",
-        //   label: "账号状态",
-        //   showOverflowTooltip: false,
-        //   slot: true,
-        // },
         {
           prop: "operate",
           label: "操作",
@@ -192,13 +172,22 @@ export default {
       // 组合成所需格式
       const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
-      return formattedDate
+      return formattedDate;
     },
   },
   components: {
     CommonTable,
   },
   methods: {
+    resetPass(row) {
+      resetPassAPI(row.userId).then((res) => {
+        if (res.code === 200) {
+          this.$message.success(res.msg);
+        } else {
+          this.$message.error(res.msg);
+        }
+      });
+    },
     confirm(row) {
       deleteUser(row.id).then((res) => {
         if (res.code === 200) {
@@ -240,8 +229,8 @@ export default {
       });
     },
     handleSelectionChange(ids) {
-      const idStr = ids.map((item) => item.id).join(',');
-      this.$emit('deleteIds',idStr);
+      const idStr = ids.map((item) => item.id).join(",");
+      this.$emit("deleteIds", idStr);
     },
   },
   mounted() {
@@ -260,8 +249,9 @@ export default {
       border-radius: 50%;
       overflow: hidden;
       img {
-        width: 100%;
-        height: 100%;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
       }
     }
     .user_name_phone {

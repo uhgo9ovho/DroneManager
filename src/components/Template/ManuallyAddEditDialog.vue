@@ -219,7 +219,7 @@ export default {
     this.getRoleList();
     this.getRoleSIdList();
     if (this.title == "编辑成员") {
-      this.ruleForm.name = this.itemRow.userName;
+      this.ruleForm.name = this.itemRow.nickName;
       this.ruleForm.phone = this.itemRow.phonenumber;
       this.ruleForm.department = this.itemRow.orgDeptId;
     }

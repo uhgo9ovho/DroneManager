@@ -92,11 +92,28 @@
             </el-dropdown-menu>
           </el-dropdown>
           <el-button
+            v-if="isWork"
+            type="primary"
+            round
+            size="small"
+            class="el-icon-edit-outline"
+            @click="workBtn(row)"
+            style="
+              width: 84px;
+              height: 32px;
+              padding: 0;
+              line-height: 32px;
+              font-size: 14px;
+            "
+            >办结</el-button
+          >
+          <el-button
             type="primary"
             round
             size="mini"
             class="iconfont el-icon-guijifeihang"
             v-permissions="'wurenji:scheduling:fly'"
+            v-else
             style="
               width: 84px;
               height: 32px;
@@ -164,11 +181,22 @@ import {
   taskListAPI,
   deleteTaskAPI,
   upDataTaskStatusAPI,
+  workListAPI,
 } from "@/api/TaskManager.js";
 
 export default {
   name: "FlightTable",
-  props: {},
+  props: {
+    isWork: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  watch: {
+    isWork(val) {
+      this.initList();
+    },
+  },
   data() {
     return {
       taskId: "",
@@ -398,6 +426,25 @@ export default {
     },
   },
   methods: {
+    workBtn() {
+      this.$confirm("确认驳回吗？", "提示", {
+        confirmButtonText: "通过",
+        cancelButtonText: "驳回",
+        type: "warning",
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
     upDataTaskStatus() {
       upDataTaskStatusAPI(this.taskId).then((res) => {
         if (res.code === 200) {
@@ -413,15 +460,6 @@ export default {
       });
     },
 
-    // handleClose(done) {
-    //   this.$confirm('确认关闭？')
-    //     .then(_ => {
-    //       done()
-    //     })
-    //     .catch(_ => {
-    //     })
-    // },
-
     handleSuspend() {
       this.hangupVisible = false;
       this.upDataTaskStatus();
@@ -429,17 +467,8 @@ export default {
 
     searchTableName(val) {
       this.taskName = val;
-      const params = {
-        pageNum: this.pageNum,
-        pageSize: this.pageSize,
-        taskName: val,
-      };
-      taskListAPI(params).then((res) => {
-        if (res.code === 200) {
-          this.filghtList = res.rows;
-          this.total = res.total;
-        }
-      });
+      this.pageNum = 1;
+      this.initList()
     },
 
     changeVisible() {
@@ -452,30 +481,57 @@ export default {
         pageSize: this.pageSize,
         taskName: this.taskName,
       };
-      taskListAPI(params).then((res) => {
-        if (res.code === 200) {
-          this.filghtList = res.rows;
-          this.total = res.total;
-        }
-      });
+      if (this.isWork) {
+        workListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      } else {
+        taskListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      }
     },
     sizeChange(params) {
       params.taskName = this.taskName;
-      taskListAPI(params).then((res) => {
-        if (res.code === 200) {
-          this.filghtList = res.rows;
-          this.total = res.total;
-        }
-      });
+      if (this.isWork) {
+        workListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      } else {
+        taskListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      }
     },
     pageChange(params) {
       params.taskName = this.taskName;
-      taskListAPI(params).then((res) => {
-        if (res.code === 200) {
-          this.filghtList = res.rows;
-          this.total = res.total;
-        }
-      });
+      if (this.isWork) {
+        workListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      } else {
+        taskListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      }
     },
     nameCommand(itemCommand) {
       this.dropdownName = itemCommand;
@@ -483,14 +539,21 @@ export default {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
         task_type: this.taskTypeStatus(itemCommand),
-        taskName: this.taskName
+        taskName: this.taskName,
       };
-      console.log(data);
-
-      taskListAPI(data).then((res) => {
-        this.filghtList = res.rows;
-        this.total = res.total;
-      });
+      if (this.isWork) {
+        workListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      } else {
+        taskListAPI(data).then((res) => {
+          this.filghtList = res.rows;
+          this.total = res.total;
+        });
+      }
     },
     statusCommand(itemCommand) {
       console.log(itemCommand);
@@ -501,12 +564,19 @@ export default {
         pageSize: this.pageSize,
         taskStatus: this.currentStatus(itemCommand),
       };
-      console.log(data);
-
-      taskListAPI(data).then((res) => {
-        this.filghtList = res.rows;
-        this.total = res.total;
-      });
+      if (this.isWork) {
+        workListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      } else {
+        taskListAPI(data).then((res) => {
+          this.filghtList = res.rows;
+          this.total = res.total;
+        });
+      }
     },
     beforeHandleCommand(row, label) {
       return {
