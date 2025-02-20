@@ -20,9 +20,10 @@
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-          :picker-options="pickerOptions"
+
           @change="handleDateRangeChange"
         ></el-date-picker>
+<!--        :picker-options="pickerOptions"-->
       </div>
       <div class="operate-box" v-if="currentTab == 'warningEvent'">
         <div class="serach-box" :class="{ 'lang-search-box': checked }">
