@@ -197,6 +197,7 @@ export default {
       pageSize: 10,
       warningList: [],
       itemRow: {},
+      warnName: ""
     };
   },
   computed: {
@@ -264,6 +265,8 @@ export default {
   },
   methods: {
     searchWarningName(val) {
+      this.warnName = val;
+      this.pageNum = 1;
       const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
@@ -294,7 +297,8 @@ export default {
       const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
-        orgId: localStorage.getItem('org_id')
+        orgId: localStorage.getItem('org_id'),
+        warnName: this.warnName
       };
       warningListAPI(params).then((res) => {
         if (res.code === 200) {

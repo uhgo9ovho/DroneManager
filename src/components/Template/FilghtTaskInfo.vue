@@ -231,6 +231,7 @@ export default {
           this.info.push(JSON.parse(item.drawLineData));
         });
         const pointsList = this.info.map((item) => item.pointsList);
+        
         this.detailOptions[0].value =
           this.info
             .reduce(

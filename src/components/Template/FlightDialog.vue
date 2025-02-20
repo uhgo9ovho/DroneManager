@@ -4,6 +4,7 @@
       <div class="task_map">
         <MapContainer
           :lineInfoObj="lineInfoObj"
+          :taskType="row.taskType"
           ref="mapContainer"
         ></MapContainer>
         <div v-if="detailsShow">

@@ -5,13 +5,13 @@
         <el-tab-pane label="飞行任务" name="flightTask" v-permissions="'mngSide:flight:task'"></el-tab-pane>
         <el-tab-pane label="飞行排期" name="flightDate"  v-permissions="'mngSide:flight:schedule'"></el-tab-pane>
         <el-tab-pane label="飞行记录" name="flightLog" v-permissions="'mngSide:flight:records'"></el-tab-pane>
-        <!-- <el-tab-pane label="工单办结" name="flightLog" v-permissions="'mngSide:flight:records'"></el-tab-pane> -->
+        <el-tab-pane label="工单办结" name="WorkCompleted" v-permissions="'mngSide:flight:records'"></el-tab-pane>
       </el-tabs>
       <div class="operate-box">
         <div
           class="serach-box"
           :class="{ 'lang-search-box': checked }"
-          v-if="currentTab == 'flightTask' || currentTab == 'flightLog'"
+          v-if="currentTab == 'flightTask' || currentTab == 'flightLog' || currentTab == 'WorkCompleted'"
         >
           <el-input
             prefix-icon="el-icon-search"
@@ -42,9 +42,9 @@
       <flight-date  v-permissions="'mngSide:flight:schedule'"></flight-date>
     </div>
     <!-- 工单办结 -->
-    <!-- <div class="task-list-grid" v-if="currentTab == 'flightTask'">
-      <filght-table ref="tableRef" v-permissions="'mngSide:flight:task'"></filght-table>
-    </div> -->
+    <div class="task-list-grid" v-if="currentTab == 'WorkCompleted'">
+      <filght-table ref="tableRef" v-permissions="'mngSide:flight:task'" :isWork="true"></filght-table>
+    </div>
   </div>
 </template>
 
@@ -90,7 +90,7 @@ export default {
       this.$router.push('/openMap')
     },
     inputChange(val) {
-      if(this.activeName === 'flightTask') {
+      if(this.activeName === 'flightTask' || this.activeName === 'WorkCompleted') {
         //搜索飞行任务
         this.$refs.tableRef.searchTableName(val);
       } else if(this.activeName === 'flightLog') {

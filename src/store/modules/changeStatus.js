@@ -18,6 +18,9 @@ const mutations = {
     CHANGE_DROC_STATUS(state, flag) {
         state.isDrawText = flag;
     },
+    CLEAR_POINTSLIST(state) {
+        state.pointsList = [];
+    },
     CHANGE_COORDINATESARR(state, arr) {
         const formatArr = arr.map(item => {
             return gcj02ToWgs84(item[0], item[1]);

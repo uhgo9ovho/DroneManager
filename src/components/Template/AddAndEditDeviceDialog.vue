@@ -4,11 +4,11 @@
     @close="handleClose"
     :title="deviceTitle"
   >
-    <el-form :model="deviceForm">
-      <el-form-item label="设备id">
+    <el-form :model="deviceForm" :rules="rules" ref="ruleForm">
+      <el-form-item label="设备id" prop="deviceId">
         <el-input v-model="deviceForm.deviceId" placeholder="请输入设备名称" />
       </el-form-item>
-      <el-form-item label="设备名称">
+      <el-form-item label="设备名称" prop="deviceName">
         <el-input
           v-model="deviceForm.deviceName"
           placeholder="请输入设备名称"
@@ -55,13 +55,21 @@ export default {
       type: Object,
       default: null,
     },
-    deviceTitle:{
+    deviceTitle: {
       type: String,
       default: "",
     },
   },
   data() {
     return {
+      rules: {
+        deviceId: [
+          { required: true, message: "请输入设备id", trigger: "blur" },
+        ],
+        deviceName: [
+          { required: true, message: "请输入设备名称", trigger: "blur" },
+        ],
+      },
       deviceForm: {
         deviceName: "",
         deviceId: "",
@@ -103,42 +111,49 @@ export default {
       this.$emit("updateDeviceDialogVisible", false);
     },
     handleSubmit() {
-      if (this.itemRow) {
-        // 编辑设备
-        const params = {
-          ...this.deviceForm,
-        };
-        editDeviceAPI(params)
-          .then((res) => {
-            if (res.code === 200) {
-              this.$message.success("编辑设备成功");
-              this.$emit("updateDeviceList");
-              this.handleClose();
-            } else {
-              this.$message.error("编辑设备失败");
-            }
-          })
-          .catch((err) => {
-            this.$message.error("编辑设备失败");
-          });
-      } else {
-        const params = {
-          ...this.deviceForm,
-          orgId: this.itemOrgId,
-        };
-        addDeviceAPI(params)
-          .then((res) => {
-            if (res.code === 200) {
-              this.$message.success("新增设备成功");
-              this.handleClose();
-            } else {
-              this.$message.error("新增设备失败");
-            }
-          })
-          .catch((err) => {
-            this.$message.error("新增设备失败");
-          });
-      }
+      this.$refs["ruleForm"].validate((valid) => {
+        if (valid) {
+          if (this.itemRow) {
+            // 编辑设备
+            const params = {
+              ...this.deviceForm,
+            };
+            editDeviceAPI(params)
+              .then((res) => {
+                if (res.code === 200) {
+                  this.$message.success("编辑设备成功");
+                  this.$emit("updateDeviceList");
+                  this.handleClose();
+                } else {
+                  this.$message.error("编辑设备失败");
+                }
+              })
+              .catch((err) => {
+                this.$message.error("编辑设备失败");
+              });
+          } else {
+            const params = {
+              ...this.deviceForm,
+              orgId: this.itemOrgId,
+            };
+            addDeviceAPI(params)
+              .then((res) => {
+                if (res.code === 200) {
+                  this.$message.success("新增设备成功");
+                  this.handleClose();
+                } else {
+                  this.$message.error(res.msg);
+                }
+              })
+              .catch((err) => {
+                this.$message.error("新增设备失败");
+              });
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
   },
 };

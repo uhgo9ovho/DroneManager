@@ -272,3 +272,32 @@ export const phoneIsExistAPI = (phone) => {
         method: 'get'
     })
 }
+
+/**
+ * 重置密码
+ */
+export const resetPassAPI = (userId) => {
+    return request({
+        url: `system/user/resetOrgUserPwd/${userId}/${localStorage.getItem('org_id')}`,
+        method: 'get'
+    })
+}
+/**
+ * 原密码校验
+ */
+export const oldPassAPI = (pass) => {
+    return request({
+        url: `system/user/checkPassReal/${pass}`,
+        method: 'get'
+    })
+}
+/**
+ * 修改密码
+ */
+export const changePassAPI = (params) => {
+    return request({
+        url: 'system/user/modifyPass',
+        method: 'post',
+        data: params
+    })
+}

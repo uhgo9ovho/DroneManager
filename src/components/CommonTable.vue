@@ -54,7 +54,7 @@
         :layout="pagerLayout"
         :page-size="pageSize"
         :page-sizes="pageSizes"
-        :current-page="curPage"
+        :current-page="pageNum"
         @size-change="handleSizeChange"
         @current-change="handlePageChange"
         @prev-click="handlePageChange"
