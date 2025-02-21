@@ -13,7 +13,6 @@
           <p v-if="tableType==2||tableType==3" class="date">日期：{{ formattedDate + '到' + getLastDate }}</p>
           <hr class="date-line"/>
           <hr class="date-line1"/>
-
         </div>
 
         <!-- 描述部分 -->
@@ -682,6 +681,10 @@ export default {
       }
     },
     shouldShowDiv() {
+      // 判断tableType为2（周报）或3（月报），不显示附件
+      if (this.tableType == 2 || this.tableType == 3) {
+        return false
+      }
       // 检查三个列表是否都为 null 或空数组
       if (
         (this.report.problemList == null || this.report.problemList.length === 0) &&
@@ -809,9 +812,16 @@ export default {
         this.report.saveCost.toFixed(2) +
         '元' +
         '、减少碳排' +
-        this.report.reduceCarbon.toFixed(2) +
-        '吨。'
+        this.reduceCarbonFormatted + '。'
       ]
+    },
+    reduceCarbonFormatted() {
+      const reduceCarbon = this.report.reduceCarbon;
+      if (reduceCarbon >= 1) {
+        return `${reduceCarbon.toFixed(2)} 吨`;  // 大于等于1吨，显示吨
+      } else {
+        return `${(reduceCarbon * 1000).toFixed(2)} kg`;  // 小于1吨，显示kg，乘以1000转换为kg
+      }
     },
 
     valueTable() {
@@ -824,7 +834,7 @@ export default {
             this.report.flightMileage.toFixed(3) +
             '公里',
             this.report.saveCost.toFixed(2) + '元',
-            this.report.reduceCarbon.toFixed(2) + '吨'
+            this.reduceCarbonFormatted
           ]
         ]
       }
@@ -950,7 +960,6 @@ export default {
   align-items: center;
   justify-content: center;
   min-height: 100vh; /* 确保容器高度覆盖整个视口 */
-
   // background-color: #f2f2f2; /* 淡灰色背景 */
   //padding: 20px;
 }
