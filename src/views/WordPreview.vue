@@ -962,6 +962,8 @@ export default {
   min-height: 100vh; /* 确保容器高度覆盖整个视口 */
   // background-color: #f2f2f2; /* 淡灰色背景 */
   //padding: 20px;
+  overflow: hidden;
+
 }
 
 .word-preview {

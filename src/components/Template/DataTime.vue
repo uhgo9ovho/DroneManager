@@ -108,10 +108,18 @@ export default {
       );
     },
   },
-  methods: {
-    getLastDate(row, taskType) {
-      if (taskType === 2) {
-        const now = row.dateTime;
+  methods:{
+    formatDateMonth(dateTime) {
+      if (dateTime) {
+        const [year, month] = dateTime.split('-');
+        const newMonth = parseInt(month);
+        return `${year}年-${newMonth}月`;
+      }
+      return '';
+    },
+    getLastDate(row,taskType){
+      if(taskType === 2){
+        const now = row.dateTime
         const monday = new Date(now);
         const sunday = new Date(monday);
         sunday.setDate(monday.getDate() + 6); // 周天是周一的基础上再加6天
