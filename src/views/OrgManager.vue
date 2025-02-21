@@ -31,6 +31,7 @@
             @focus="focus"
             @blur="blur"
             @input="handleInput"
+            :maxlength="20"
           ></el-input>
         </div>
         <div class="add-btn">
@@ -81,7 +82,7 @@ export default {
       searchListName: [
         {
           id: 1,
-          name: "组织或项目名称",
+          name: "组织名称",
         },
         {
           id: 2,
@@ -94,7 +95,7 @@ export default {
     placeholderTitle() {
       switch (this.searchName) {
         case 1:
-          return "请输入组织或项目名称";
+          return "请输入组织名称";
         case 2:
           return "请输入负责人";
         case 3:

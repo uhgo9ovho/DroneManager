@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { addAndEditTask } from "@/api/TaskManager";
+import { EditTaskAPI } from "@/api/TaskManager";
 const now = new Date();
 export default {
   props: {
@@ -325,7 +325,7 @@ export default {
       };
       if (!params.timesType) delete params["dateArrays"];
 
-      addAndEditTask(params).then((res) => {
+      EditTaskAPI(params).then((res) => {
         console.log(res, "aaa");
         if (res.code === 200) {
           this.$message.success(res.msg);

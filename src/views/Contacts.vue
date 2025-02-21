@@ -229,6 +229,7 @@ export default {
     updateList() {
       this.menuallyClose();
       this.$refs.member.getList();
+      this.$refs.member.getAllUserList();
     },
   },
 };

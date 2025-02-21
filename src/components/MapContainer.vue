@@ -57,6 +57,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    taskType: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -85,6 +89,8 @@ export default {
             drawPolyline(val);
           } else {
             //全景
+            console.log(val[0][0], val[0][1]);
+            
             const position = new this.AMap.LngLat(val[0][0], val[0][1]);
             let markerContent =
               "" +
@@ -146,6 +152,8 @@ export default {
           let center = [];
           let startLine = [];
           let endLine = [];
+          let qjMarker = null;
+          let val = [];
           if (this.lineInfoObj) {
             //详情中的航线信息
             center = wgs84ToGcj02(
@@ -161,8 +169,14 @@ export default {
               );
               this.lonlatArr.push(...formarItemArr);
             });
-            startLine = [center, this.lonlatArr[0]];
-            endLine = [center, this.lonlatArr[this.lonlatArr.length - 1]];
+            if (this.taskType === 2) {
+              //全景
+
+              val = [this.lonlatArr[0][0], this.lonlatArr[0][1]];
+            } else {
+              startLine = [center, this.lonlatArr[0]];
+              endLine = [center, this.lonlatArr[this.lonlatArr.length - 1]];
+            }
           }
           if (this.airLineData.length) {
             //任务记录中的航线信息
@@ -214,6 +228,7 @@ export default {
               that.mouseTool = new AMap.MouseTool(map); //创建鼠标工具对像
             }
           );
+
           let position = null;
           if (this.airLineData.length) {
             position = new AMap.LngLat(
@@ -248,7 +263,20 @@ export default {
             marker.on("click", this.markerClick);
             map.add(marker);
           }
-
+          if (val.length) {
+            const position = new AMap.LngLat(val[0], val[1]);
+            let markerContent =
+              "" +
+              '<div class="custom-content-warning">' +
+              '   <img src="//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png">' +
+              "</div>";
+            qjMarker = new AMap.Marker({
+              position: position,
+              content: markerContent,
+              offset: new AMap.Pixel(-10, -34),
+            });
+            map.add(qjMarker);
+          }
           if (this.lonlatArr.length) {
             polyline = new AMap.Polyline({
               path: this.formatAirLine(AMap, this.lonlatArr),
@@ -341,7 +369,12 @@ export default {
       }
     },
     resetPolyline() {
-      const { removeThis } = DronePlottingRoute(map, this.mouseTool, this.AMap, marker);
+      const { removeThis } = DronePlottingRoute(
+        map,
+        this.mouseTool,
+        this.AMap,
+        marker
+      );
       removeThis();
       this.CHANGE_DROC_STATUS("取消");
     },

@@ -547,8 +547,7 @@ export default {
         if (res.code === 200) {
           const token = res.data.data["ws-token"];
           this.ws = new WebSocketClient(
-            `wss://8.136.97.59:6789/api/v1/ws?ws-token=${token}` //线上
-            // `${process.env.VUE_APP_WS_URL}?ws-token=${token}` //本地
+            `${process.env.VUE_APP_WS_URL}?ws-token=${token}` //本地
           );
         }
       });

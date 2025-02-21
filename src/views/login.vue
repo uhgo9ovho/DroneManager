@@ -308,7 +308,7 @@ export default {
             this.stopPolling();
             return this.$message.error("二维码过期,请刷新");
           }
-          if (statusResponse.data) {
+          if (statusResponse.data.state) {
             const status = statusResponse.data.state;
 
             // 根据状态更新消息
@@ -323,7 +323,8 @@ export default {
                 this.statusMessage = "等待扫描...";
             }
           } else {
-            setToken(statusResponse.msg);
+            setToken(statusResponse.data.token);
+            Cookies.set('userId', statusResponse.data.userId);
             this.showOrg = true;
             this.stopPolling();
           }

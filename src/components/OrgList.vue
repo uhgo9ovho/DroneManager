@@ -47,7 +47,7 @@ export default {
       orgList: [],
       params: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 100000000,
         userId: Cookies.get("userId"),
       },
     };
@@ -98,12 +98,16 @@ export default {
           let userInfo = res.data;
           Cookies.set("user", JSON.stringify(userInfo), { expires: 30 });
           // this.params.userId = userInfo.userId;
-          localStorage.setItem(
-            "userPermission",
-            JSON.stringify(res.permissions)
-          );
-          await this.fetchAirPostInfo();
-          this.$router.push({ path: this.redirect || "/" }).catch(() => {});
+          if (res.permissions.length) {
+            localStorage.setItem(
+              "userPermission",
+              JSON.stringify(res.permissions)
+            );
+            await this.fetchAirPostInfo();
+            this.$router.push({ path: this.redirect || "/" }).catch(() => {});
+          } else {
+            this.$message.error('该成员没有权限,请联系管理员')
+          }
         }
       });
     },

@@ -94,7 +94,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations("changeStatus", ["CHANGE_DROC_STATUS"]),
+    ...mapMutations("changeStatus", ["CHANGE_DROC_STATUS", "CLEAR_POINTSLIST"]),
     ...mapActions("droneStatus", ["fetchAirPostInfo"]),
     changeDownContentShow(flag) {
       this.isShow = flag;
@@ -151,9 +151,11 @@ export default {
       if (text == "取消") {
         //取消绘制
         this.$refs.AMAP.removePolyline();
+        this.CLEAR_POINTSLIST()
       } else if (text == "重绘") {
         //清除当前绘制重新画
         this.$refs.AMAP.resetPolyline();
+        this.CLEAR_POINTSLIST()
       } else {
         this.$refs.AMAP.renderPolyline();
       }

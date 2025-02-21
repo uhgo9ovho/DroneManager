@@ -5,7 +5,7 @@
     </div>
     <div style="flex: 1.7 1 0%">
       <div class="task-time">{{ info.formatTime }} 计划起飞</div>
-      <div class="task-name2">{{ info.taskName }}</div>
+      <div class="task-name2">{{ info.lineName }}</div>
     </div>
     <i class="el-icon-info" v-if="info.scheduledType === 1"></i>
     <div class="task-num">

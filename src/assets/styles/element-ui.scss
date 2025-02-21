@@ -181,3 +181,13 @@
   color: #409EFF;
   font-weight: bold;
 }
+.dropdown-max{
+  top: 150px !important;
+  max-width: 600px;
+  display: flex;
+  flex-flow: row wrap;
+  li{
+    margin-right: 5px;
+    white-space: nowrap;
+  }
+}

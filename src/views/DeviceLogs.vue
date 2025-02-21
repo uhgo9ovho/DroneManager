@@ -21,7 +21,7 @@
         >
           <el-input
             prefix-icon="el-icon-search"
-            placeholder=""
+            placeholder="请输入报警信息搜索"
             @focus="focus"
             @blur="blur"
             v-model="searchText"

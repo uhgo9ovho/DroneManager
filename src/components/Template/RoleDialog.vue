@@ -132,7 +132,14 @@ export default {
         roleKey: [
           { required: true, message: "请输入角色标识", trigger: "blur" },
         ],
-        menuIds: [{ required: true, validator: validatePass, trigger: "blur" }],
+        menuIds: [
+          {
+            type: "array",
+            required: true,
+            validator: validatePass,
+            trigger: "blur",
+          },
+        ],
       },
     };
   },
@@ -148,7 +155,7 @@ export default {
       this.checkedKeysObj[this.activeName] = checkedKeys || [];
       console.log(`${this.activeName}模块权限更新为:`, checkedKeys);
       this.halfCheckedKeys.push(...halfCheckedKeys);
-      this.$refs["roleFrom"].validateField(["menuIds"]);
+      this.$refs["roleFrom"].clearValidate(["menuIds"]);
     },
     handleClose() {
       this.resetCheckedKeys();
@@ -177,7 +184,7 @@ export default {
                   this.$emit("updateList");
                   this.handleClose();
                 } else {
-                  this.$message.error("操作失败");
+                  this.$message.error(res.msg);
                 }
               })
               .catch((err) => {
@@ -195,7 +202,7 @@ export default {
                   this.$emit("updateList");
                   this.handleClose();
                 } else {
-                  this.$message.error("操作失败");
+                  this.$message.error(res.msg);
                 }
               })
               .catch((err) => {
@@ -210,6 +217,7 @@ export default {
     },
     roleMenuTreeselect() {
       roleMenuTreeselectAPI(this.row.roleId).then((res) => {
+        debugger
         if (res.code == 200) {
           const allCheckedKeys = res.checkedKeys || [];
           const menus = res.menus || [];

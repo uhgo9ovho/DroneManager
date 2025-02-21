@@ -10,28 +10,28 @@
   >
     <el-form :model="form" :rules="rules" ref="formRef" label-width="100px">
       <el-form-item label="组织名称" prop="orgName">
-        <el-input v-model="form.orgName" placeholder="请输入组织名称" />
+        <el-input v-model.trim="form.orgName" placeholder="请输入组织名称" />
       </el-form-item>
       <el-form-item label="省市区县" prop="ad">
-        <el-input v-model="form.ad" placeholder="请输入省市区县" />
+        <el-input :disabled="title == '编辑组织'" v-model.trim="form.ad" placeholder="请输入省市区县" />
       </el-form-item>
       <el-form-item label="负责人" prop="head">
-        <el-input v-model="form.head" placeholder="请输入负责人" />
+        <el-input :disabled="title == '编辑组织'" v-model.trim="form.head" placeholder="请输入负责人" />
       </el-form-item>
       <el-form-item label="联系电话" prop="headPhone">
-        <el-input v-model="form.headPhone" placeholder="请输入联系电话" />
+        <el-input :disabled="title == '编辑组织'" v-model.trim="form.headPhone" placeholder="请输入联系电话" />
       </el-form-item>
       <el-form-item label="平台名称" prop="platformName">
-        <el-input v-model="form.platformName" placeholder="请输入平台名称" />
+        <el-input :disabled="title == '编辑组织'" v-model.trim="form.platformName" placeholder="请输入平台名称" />
       </el-form-item>
       <el-form-item label="绑定码" prop="bindCode">
-        <el-input v-model="form.bindCode" placeholder="请输入6位数字的绑定码" />
+        <el-input :disabled="title == '编辑组织'" v-model.trim="form.bindCode" placeholder="请输入6位数字的绑定码" />
       </el-form-item>
       <el-form-item label="经度" prop="lng">
-        <el-input v-model="form.lng" placeholder="请输入经度" />
+        <el-input :disabled="title == '编辑组织'" v-model.trim="form.lng" placeholder="请输入经度" />
       </el-form-item>
       <el-form-item label="纬度" prop="lat">
-        <el-input v-model="form.lat" placeholder="请输入纬度" />
+        <el-input :disabled="title == '编辑组织'" v-model.trim="form.lat" placeholder="请输入纬度" />
       </el-form-item>
       <el-form-item label="平台logo" prop="platformLogo">
         <el-upload
@@ -94,24 +94,28 @@ export default {
       rules: {
         orgName: [
           { required: true, message: "请输入组织名称", trigger: "blur" },
+          { min: 3, max: 10, message: '组织名称长度在3 到 10个字符', trigger: 'blur' }
         ],
         ad: [{ required: true, message: "请输入省市区县", trigger: "blur" }],
         head: [{ required: true, message: "请输入负责人", trigger: "blur" }],
         headPhone: [
           { required: true, message: "请输入联系电话", trigger: "blur" },
+          { min: 11, max: 11, message: '联系电话长度在11个字符', trigger: 'blur' }
         ],
         platformName: [
           { required: true, message: "请输入平台名称", trigger: "blur" },
+          { min: 3, max: 10, message: '平台名称长度在3 到 10个字符', trigger: 'blur' }
         ],
         bindCode: [
           { required: true, message: "请输入绑定码", trigger: "blur" },
+          { min: 6, max: 6, message: '绑定码长度在6个字符', trigger: 'blur' }
         ],
         lng: [{ required: true, message: "请输入经度", trigger: "blur" }],
         lat: [{ required: true, message: "请输入纬度", trigger: "blur" }],
       },
       fileList: [],
       imageUrl: "",
-      uploadUrl: "/dev-api/common/upload",
+      uploadUrl: process.env.VUE_APP_BASE_API + "/common/upload",
       loading: false,
     };
   },
@@ -124,9 +128,8 @@ export default {
     },
   },
   mounted() {
-    console.log(this.title);
 
-    if (this.editRow) {
+    if (this.title == '编辑组织') {
       this.form = {
         ...this.editRow,
         lng: this.editRow.location ? this.editRow.location.split(",")[0] : "",
@@ -143,7 +146,7 @@ export default {
       };
       if (this.editRow) {
         //编辑保存
-        this.$refs[formName].validate((valid) => {
+        this.$refs['formRef'].validate((valid) => {
           if (valid) {
             editOrgAPI(params).then((res) => {
               if (res.code === 200) {
@@ -153,6 +156,7 @@ export default {
                 this.$emit("updateList");
               } else {
                 this.loading = false;
+                this.$message.error(res.msg)
               }
             });
           } else {
