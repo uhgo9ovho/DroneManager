@@ -8,7 +8,8 @@
 
     <div v-if="taskType ==1" class="task-title">{{ row.dateTime }}</div>
     <div v-if="taskType == 2" class="task-title">{{ row.dateTime+"-"+this.getLastDate(row,taskType)}}</div>
-    <div v-if="taskType ==3" class="task-title">{{ row.date+"-"+ this.getLastDate(row,taskType)}}</div>
+<!--    <div v-if="taskType ==3" class="task-title">{{ row.date+"-"+ this.getLastDate(row,taskType)}}</div>-->
+    <div v-if="taskType ==3" class="task-title">{{ formatDateMonth(row.dateTime)}}</div>
   </div>
 </template>
 
@@ -52,6 +53,14 @@ export default {
 
   },
   methods:{
+    formatDateMonth(dateTime) {
+      if (dateTime) {
+        const [year, month] = dateTime.split('-');
+        const newMonth = parseInt(month);
+        return `${year}年-${newMonth}月`;
+      }
+      return '';
+    },
     getLastDate(row,taskType){
       if(taskType === 2){
         const now = row.dateTime
