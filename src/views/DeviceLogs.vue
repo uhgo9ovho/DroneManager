@@ -159,7 +159,14 @@ export default {
 
     handleDateRangeChange(value) {
       if (value) {
-        const [startTime, endTime] = value
+        console.log(value);
+        const val = value.map(item => {
+          const itemMap = item.split(' ')[0]
+          return itemMap
+        })
+        console.log(val);
+        
+        const [startTime, endTime] = val
         this.startTime = startTime
         this.endTime = endTime
         console.log(`开始时间: ${startTime}`)
@@ -169,6 +176,7 @@ export default {
         this.startTime = ''
         this.endTime = ''
       }
+      this.getDeviceList()
     },
 
     handleSearch(value) {

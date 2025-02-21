@@ -409,3 +409,14 @@ export const orderApprovalAPI = (params) => {
     data: params
   })
 }
+
+/**
+ * 文件下载
+ */
+export const fileDownloadAPI = (params) => {
+  return request({
+    url: '/wurenji/result/packageDownload',
+    method: 'get',
+    params
+  })
+}

@@ -2,7 +2,7 @@
   <div class="navbar">
       <div class="logo" >
 <!--        @click="toHome"-->
-        <img :src="logoUrl" alt="" style="width: 32px; height: 32px;margin-right: 50px"/>
+        <img :src="logoImg" alt="" style="width: 80px; height: 32px;margin-right: 50px"/>
         {{ platformName }}
       </div>
     <div class="user-info">
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import logoImg from '@/assets/logo/logo.png'
+import logoImg from '@/assets/images/jky.png'
 import UserInfo from '@/components/Template/UserInfo.vue'
 import Notification from '@/components/Notification.vue'
 import { updateMessageStatusAPI } from '@/api/user'
@@ -40,6 +40,7 @@ export default {
       logoUrl: '/icon.ico',
       count: 0,
       ids: '',
+      logoImg: logoImg
     }
   },
   components: { UserInfo, Notification },

@@ -159,6 +159,15 @@ export const addRoleAPI = (params) => {
 }
 
 /**
+ * 角色删除
+ */
+export const deleteRoleAPI = (roleIds) => {
+  return request({
+    url: `/system/role/${roleIds}`,
+    method: 'delete',
+  })
+}
+/**
  * 
  */
 export const transferOrgAdminAPI = (params) => {

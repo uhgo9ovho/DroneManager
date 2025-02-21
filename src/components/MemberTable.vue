@@ -11,30 +11,6 @@
       :pageSize="params.pageSize"
       :pageNum="params.pageNum"
     >
-      <template #dept-header>
-        <span>所属部门</span>
-        <el-dropdown>
-          <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <!-- <el-dropdown-item>黄金糕</el-dropdown-item>
-            <el-dropdown-item>狮子头</el-dropdown-item>
-            <el-dropdown-item>螺蛳粉</el-dropdown-item> -->
-          </el-dropdown-menu>
-        </el-dropdown>
-      </template>
-      <template #auth-header>
-        <span>所属角色</span>
-        <el-dropdown>
-          <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <!-- <el-dropdown-item>黄金糕</el-dropdown-item>
-            <el-dropdown-item>狮子头</el-dropdown-item>
-            <el-dropdown-item>螺蛳粉</el-dropdown-item> -->
-          </el-dropdown-menu>
-        </el-dropdown>
-      </template>
       <template #status-header>
         <span>账号状态</span>
         <el-tooltip
@@ -88,11 +64,11 @@
           @click="resetPass(scope.row)"
           >重置密码</el-button
         >
-        <el-dropdown trigger="click" @command="command">
+        <el-dropdown trigger="click" @command="command" v-if="scope.row.isOrgAdmin == 1">
           <span
             class="el-dropdown-link"
             style="color: #1890ff; font-size: 14px;"
-            v-if="scope.row.isOrgAdmin == 1"
+            
           >
             转移
           </span>

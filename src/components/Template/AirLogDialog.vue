@@ -194,6 +194,7 @@ import { downloadImagesAsZip } from "@/utils/ruoyi";
 import { mapState, mapMutations } from "vuex";
 import flvjs from "flv.js";
 import { downloadPhoto } from "@/utils/ruoyi";
+import { fileDownloadAPI } from "@/api/TaskManager.js";
 export default {
   name: "AirLogDialog",
   props: {
@@ -235,7 +236,7 @@ export default {
       isShowVideo: false,
       videoUrl: "",
       warnNumber: 0,
-      warnPhoto: ""
+      warnPhoto: "",
     };
   },
   filters: {
@@ -285,13 +286,19 @@ export default {
       // 上一页
       if (this.currentIndex <= 1) return; // 防止索引小于1
       this.currentIndex--;
-      this.currentUrl = this.imgOptions[this.currentIndex - 1].warnPhoto ? 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + this.imgOptions[this.currentIndex - 1].warnPhoto : this.imgOptions[this.currentIndex - 1].originUrl;
+      this.currentUrl = this.imgOptions[this.currentIndex - 1].warnPhoto
+        ? "https://wurenji02.oss-cn-beijing.aliyuncs.com/" +
+          this.imgOptions[this.currentIndex - 1].warnPhoto
+        : this.imgOptions[this.currentIndex - 1].originUrl;
     },
     nextImage() {
       // 下一页
       if (this.currentIndex >= this.imgOptions.length) return; // 防止索引超出范围
       this.currentIndex++;
-      this.currentUrl = this.imgOptions[this.currentIndex - 1].warnPhoto ? 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + this.imgOptions[this.currentIndex - 1].warnPhoto : this.imgOptions[this.currentIndex - 1].originUrl;
+      this.currentUrl = this.imgOptions[this.currentIndex - 1].warnPhoto
+        ? "https://wurenji02.oss-cn-beijing.aliyuncs.com/" +
+          this.imgOptions[this.currentIndex - 1].warnPhoto
+        : this.imgOptions[this.currentIndex - 1].originUrl;
     },
     destoryVideo() {
       if (this.player) {
@@ -331,9 +338,26 @@ export default {
       if (this.downloadStatus)
         return this.$message.warning("正在下载，请勿重复点击");
       this.$message.success("开始打包下载，请稍等片刻");
-      this.CHANGE_DOWNLOAD_STATUS(true);
-      const imgUrlArr = this.imgOptions.map((item) => item.url);
-      downloadImagesAsZip(imgUrlArr);
+      // this.CHANGE_DOWNLOAD_STATUS(true);
+      // const imgUrlArr = this.imgOptions.map((item) => item.url);
+      // downloadImagesAsZip(imgUrlArr);
+      const params = {
+        flightRecordId: this.row.recordId,
+        startIndex: 0,
+        endIndex: this.row.resultList.length,
+      };
+      // this.CHANGE_DOWNLOAD_STATUS(true);
+      fileDownloadAPI(params).then(res => {
+        console.log(res);
+        if(res.code == 200) {
+
+        }
+      this.CHANGE_DOWNLOAD_STATUS(false);
+
+      }).catch(err => {
+      this.CHANGE_DOWNLOAD_STATUS(false);
+
+      })
     },
     createVideo() {
       if (!this.row.recordVideo) return;
@@ -443,15 +467,16 @@ export default {
             "https://wurenji02.oss-cn-beijing.aliyuncs.com/" +
             item.objectKey +
             "?x-oss-process=style/200w",
-          originUrl: item.warnPhoto ? "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.warnPhoto :
-            "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
+          originUrl: item.warnPhoto
+            ? "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.warnPhoto
+            : "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
           createTime: item.createTime,
           lat: item.lat,
           lon: item.lon,
           resultId: item.resultId,
           warnId: item.warnId,
           name: item.fileName,
-          warnPhoto: item.warnPhoto
+          warnPhoto: item.warnPhoto,
         };
       });
       this.warnNumber = this.imgOptions.filter((item) => item.warnId).length;
@@ -474,8 +499,8 @@ export default {
       this.resultId = item.resultId;
       this.currentUrl = item.originUrl;
       this.warnPhoto = item.warnPhoto;
-      console.log(item.warnPhoto,'asdas');
-      
+      console.log(item.warnPhoto, "asdas");
+
       this.lon = item.lon;
       this.lat = item.lat;
       this.preview = true;

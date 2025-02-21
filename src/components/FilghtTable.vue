@@ -4,8 +4,8 @@
       :tableList="filghtList"
       :columns="columns"
       :total="total"
-      :pageNum="pageNum"
       :pageSize="pageSize"
+      :pageNum="pageNum"
       @pageChange="pageChange"
       @sizeChange="sizeChange"
     >
@@ -28,7 +28,7 @@
       </template>
       <template #status-header>
         <span>任务状态</span>
-        <el-dropdown @command="statusCommand" trigger="click">
+        <el-dropdown @command="statusCommand" trigger="click"  v-if="!isWork">
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
           </span>
           <el-dropdown-menu slot="dropdown">
@@ -50,7 +50,7 @@
         <div>{{ row.taskCreateTime }}</div>
         <div>{{ row.nickName }}</div>
       </template>
-      <template #status="{ row }">
+      <template #status="{ row }" v-if="!isWork">
         <el-tag :type="statusType(row.taskStatus)"
           >{{ row.taskStatus | filterStatus }}
         </el-tag>
@@ -59,6 +59,11 @@
             row.totalRound ? row.totalRound : 0
           }})</span
         >
+      </template>
+      <template #approvalStatus="{ row }" v-if="isWork">
+        <el-tag :type="approvalStatusType(row.taskStatus)"
+          >{{ row.approvalStatus | filterApprovalStatus }}
+        </el-tag>
       </template>
       <template #operate="{ row }">
         <div class="operate-box">
@@ -83,7 +88,7 @@
                       item.label == '取消挂起' ||
                       item.label == '排期') &&
                     row.taskStatus == 3
-                  ) && ((item.label !== '排期' && item.label !== '挂起') && isWork)
+                  )
                 "
                 v-permissions="item.permission"
                 ><i class="iconfont" :class="item.icon"></i>
@@ -182,6 +187,7 @@ import {
   deleteTaskAPI,
   upDataTaskStatusAPI,
   workListAPI,
+  orderApprovalAPI,
 } from "@/api/TaskManager.js";
 
 export default {
@@ -194,6 +200,76 @@ export default {
   },
   watch: {
     isWork(val) {
+      if (val) {
+        //工单
+        this.columns = [
+          {
+            prop: "taskName",
+            label: "任务名称/类型",
+            showOverflowTooltip: true,
+            slot: true,
+            minWidth: "220",
+          },
+          {
+            prop: "airportName",
+            label: "机场",
+            showOverflowTooltip: true,
+          },
+          {
+            prop: "creater",
+            label: "创建人/时间",
+            showOverflowTooltip: false,
+            slot: true,
+          },
+          {
+            prop: "approvalStatus",
+            label: "工单状态",
+            showOverflowTooltip: false,
+            slot: true,
+          },
+          {
+            prop: "operate",
+            label: "操作",
+            showOverflowTooltip: false,
+            width: "200px",
+            slot: true,
+          },
+        ];
+      } else {
+        this.columns = [
+          {
+            prop: "taskName",
+            label: "任务名称/类型",
+            showOverflowTooltip: true,
+            slot: true,
+            minWidth: "220",
+          },
+          {
+            prop: "airportName",
+            label: "机场",
+            showOverflowTooltip: true,
+          },
+          {
+            prop: "creater",
+            label: "创建人/时间",
+            showOverflowTooltip: false,
+            slot: true,
+          },
+          {
+            prop: "status",
+            label: "任务状态",
+            showOverflowTooltip: false,
+            slot: true,
+          },
+          {
+            prop: "operate",
+            label: "操作",
+            showOverflowTooltip: false,
+            width: "200px",
+            slot: true,
+          },
+        ];
+      }
       this.initList();
     },
   },
@@ -296,6 +372,20 @@ export default {
       }
       return value;
     },
+    filterApprovalStatus(val) {
+      let value = "";
+      switch (val) {
+        case 1:
+          value = "审核通过";
+          break;
+        case 2:
+          value = "被驳回";
+        default:
+          value = "待审核";
+          break;
+      }
+      return value;
+    },
   },
   computed: {
     statusType(status) {
@@ -330,6 +420,22 @@ export default {
           default:
             return "";
         }
+      };
+    },
+    approvalStatusType(status) {
+      return function (status) {
+        let value = "";
+        switch (status) {
+          case 1:
+            value = "success";
+            break;
+          case 2:
+            value = "danger";
+          default:
+            value = "info";
+            break;
+        }
+        return value;
       };
     },
     taskTypeStatus(status) {
@@ -426,22 +532,41 @@ export default {
     },
   },
   methods: {
-    workBtn() {
+    workBtn(row) {
       this.$confirm("确认驳回吗？", "提示", {
         confirmButtonText: "通过",
         cancelButtonText: "驳回",
         type: "warning",
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!",
+          console.log(row);
+          const params = {
+            taskId: row.taskId,
+            approvalStatus: 1,
+          };
+          orderApprovalAPI(params).then((res) => {
+            if (res.code == 200) {
+              this.$message({
+                type: "success",
+                message: res.msg,
+              });
+              this.initList();
+            }
           });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
+          const params = {
+            taskId: row.taskId,
+            approvalStatus: 2,
+          };
+          orderApprovalAPI(params).then((res) => {
+            if (res.code == 200) {
+              this.$message({
+                type: "success",
+                message: res.msg,
+              });
+              this.initList();
+            }
           });
         });
     },
@@ -468,7 +593,7 @@ export default {
     searchTableName(val) {
       this.taskName = val;
       this.pageNum = 1;
-      this.initList()
+      this.initList();
     },
 
     changeVisible() {
@@ -516,6 +641,8 @@ export default {
       }
     },
     pageChange(params) {
+      this.pageNum = params.pageNum;
+      this.pageSize = params.pageSize;
       params.taskName = this.taskName;
       if (this.isWork) {
         workListAPI(params).then((res) => {

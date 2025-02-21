@@ -31,7 +31,8 @@
           style="color: red"
           v-if="
             (row.roleName != '超级管理员' ||
-            row.roleKey === `org_admin_${params.orgId}`) && model == 'role'
+              row.roleKey === `org_admin_${params.orgId}`) &&
+            model == 'role'
           "
           v-permissions="'wrj:role:remove'"
           >删除</el-button
@@ -54,7 +55,11 @@
 <script>
 import RoleDialog from "./Template/RoleDialog.vue";
 import CommonTable from "./CommonTable.vue";
-import { getRoleListAPI, getOrgRoleListAPI } from "@/api/orgModel";
+import {
+  getRoleListAPI,
+  getOrgRoleListAPI,
+  deleteRoleAPI,
+} from "@/api/orgModel";
 export default {
   props: {
     model: {
@@ -118,13 +123,13 @@ export default {
   methods: {
     pageChange(pageNum) {
       console.log(pageNum);
-      
+
       this.params.pageNum = pageNum.pageNum;
-      this.getRoleList()
+      this.getRoleList();
     },
     sizeChange(pageSize) {
       this.params.pageSize = pageSize.pageSize;
-      this.getRoleList()
+      this.getRoleList();
     },
     async getRoleList() {
       if (this.model == "role") {
@@ -148,6 +153,21 @@ export default {
     },
     handleDelete(row) {
       console.log(row);
+      this.$confirm("此操作将永久删除该角色, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          deleteRoleAPI(row.roleId).then((res) => {
+            if (res.code === 200) {
+              this.$message.success(res.msg);
+              this.getRoleList();
+            } else {
+              this.$message.error(res.msg);
+            }
+          });
+        })
     },
     updateDialogVisible(visible) {
       this.dialogVisible = visible;

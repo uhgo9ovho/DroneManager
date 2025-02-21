@@ -151,7 +151,7 @@ export default {
       const res = await getOrgListAPI(params);
       if (res.code === 200) {
         this.tableList = res.rows;
-        this.total = res.total.total;
+        this.total = res.total;
       }
     },
   },
