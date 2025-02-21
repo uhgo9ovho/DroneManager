@@ -137,7 +137,7 @@ export default {
             type: "array",
             required: true,
             validator: validatePass,
-            trigger: "change",
+            trigger: "blur",
           },
         ],
       },
@@ -217,6 +217,7 @@ export default {
     },
     roleMenuTreeselect() {
       roleMenuTreeselectAPI(this.row.roleId).then((res) => {
+        debugger
         if (res.code == 200) {
           const allCheckedKeys = res.checkedKeys || [];
           const menus = res.menus || [];

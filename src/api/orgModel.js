@@ -157,3 +157,14 @@ export const addRoleAPI = (params) => {
     data: params
   })
 }
+
+/**
+ * 
+ */
+export const transferOrgAdminAPI = (params) => {
+  return request({
+    url: '/wrj/user/transferOrgAdmin',
+    method: 'post',
+    data: params
+  })
+}

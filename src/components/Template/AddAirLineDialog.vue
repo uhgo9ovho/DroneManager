@@ -146,6 +146,7 @@ export default {
         if (res.code === 200) {
           this.airLineList = res.rows;
           this.currentId = res.rows[0].taskId;
+          this.checkedItem = res.rows[0];
         }
       });
     },

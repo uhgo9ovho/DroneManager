@@ -77,10 +77,29 @@
           @click="editBtn(scope.row)"
           style="margin-right: 10px"
           v-permissions="'wrj:user:edit'"
+          v-if="scope.row.isOrgAdmin != 1"
           >编辑</el-button
         >
         <!-- <el-button type="text" style="margin-right: 10px">调岗</el-button> -->
-
+        <el-button
+          type="text"
+          style="margin-right: 10px"
+          slot="reference"
+          @click="resetPass(scope.row)"
+          >重置密码</el-button
+        >
+        <el-dropdown trigger="click" @command="command">
+          <span
+            class="el-dropdown-link"
+            style="color: #1890ff; font-size: 14px;"
+            v-if="scope.row.isOrgAdmin == 1"
+          >
+            转移
+          </span>
+          <el-dropdown-menu slot="dropdown" class="dropdown-max">
+            <el-dropdown-item :command="beforeCommand(scope.row, item)" v-for="(item, index) in allUserList" :key="index">{{ item.nickName }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
         <el-popconfirm
           :ref="`popover-${scope.$index}`"
           title="你确定要删除吗？"
@@ -91,17 +110,10 @@
             type="text"
             style="color: red"
             slot="reference"
-            v-show="scope.row.roleName !== '组织管理员'"
+            v-show="scope.row.isOrgAdmin !== 1"
             >删除</el-button
           >
         </el-popconfirm>
-        <el-button
-          type="text"
-          style="margin-left: 10px"
-          slot="reference"
-          @click="resetPass(scope.row)"
-          >重置密码</el-button
-        >
       </template>
     </common-table>
   </div>
@@ -109,7 +121,13 @@
 
 <script>
 import CommonTable from "./CommonTable.vue";
-import { getUserList, deleteUser, searchUser, resetPassAPI } from "@/api/user.js";
+import { transferOrgAdminAPI } from '@/api/orgModel.js';
+import {
+  getUserList,
+  deleteUser,
+  searchUser,
+  resetPassAPI,
+} from "@/api/user.js";
 export default {
   name: "MemberTable",
   data() {
@@ -143,7 +161,7 @@ export default {
           prop: "operate",
           label: "操作",
           showOverflowTooltip: false,
-          width: "200px",
+          width: "250px",
           slot: true,
         },
       ],
@@ -155,6 +173,9 @@ export default {
         orgId: this.$store.getters.orgId,
         nickName: "",
       },
+      transformVisible: false,
+      itemRow: null,
+      allUserList: []
     };
   },
   filters: {
@@ -179,6 +200,36 @@ export default {
     CommonTable,
   },
   methods: {
+    transferOrgAdmin(row) {
+      this.transformVisible = true;
+      this.itemRow = row;
+    },
+    beforeCommand(row, item) {
+      return {
+        'row': row,
+        'command': item
+      }
+    },
+    command(obj) {
+      console.log(obj);
+      
+      const params = {
+        userId: obj.row.userId,
+        orgId: localStorage.getItem('org_id'),
+        toUserId: obj.command.userId
+      }
+      if(params.userId == params.toUserId) return this.$message.error('不能转移给自己');
+      transferOrgAdminAPI(params).then(res => {
+        console.log(res);
+        if(res.code === 200) {
+          this.getList();
+          this.$message.success(res.msg)
+        } else {
+          this.$message.error(res.msg)
+        }
+        
+      })
+    },
     resetPass(row) {
       resetPassAPI(row.userId).then((res) => {
         if (res.code === 200) {
@@ -200,6 +251,19 @@ export default {
     },
     editBtn(row) {
       this.$emit("editMember", row);
+    },
+    getAllUserList() {
+      const params = {
+        pageSize: 1000000,
+        pageNum: 1,
+        orgId: this.$store.getters.orgId,
+        nickName: "",
+      };
+      getUserList(params).then((res) => {
+        if (res.code === 200) {
+          this.allUserList = res.rows;          
+        }
+      });
     },
     getList() {
       getUserList(this.params).then((res) => {
@@ -235,6 +299,7 @@ export default {
   },
   mounted() {
     this.getList();
+    this.getAllUserList()
   },
 };
 </script>

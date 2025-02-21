@@ -10,28 +10,28 @@
   >
     <el-form :model="form" :rules="rules" ref="formRef" label-width="100px">
       <el-form-item label="组织名称" prop="orgName">
-        <el-input v-model="form.orgName" placeholder="请输入组织名称" />
+        <el-input v-model.trim="form.orgName" placeholder="请输入组织名称" />
       </el-form-item>
       <el-form-item label="省市区县" prop="ad">
-        <el-input :disabled="title == '编辑组织'" v-model="form.ad" placeholder="请输入省市区县" />
+        <el-input :disabled="title == '编辑组织'" v-model.trim="form.ad" placeholder="请输入省市区县" />
       </el-form-item>
       <el-form-item label="负责人" prop="head">
-        <el-input :disabled="title == '编辑组织'" v-model="form.head" placeholder="请输入负责人" />
+        <el-input :disabled="title == '编辑组织'" v-model.trim="form.head" placeholder="请输入负责人" />
       </el-form-item>
       <el-form-item label="联系电话" prop="headPhone">
-        <el-input :disabled="title == '编辑组织'" v-model="form.headPhone" placeholder="请输入联系电话" />
+        <el-input :disabled="title == '编辑组织'" v-model.trim="form.headPhone" placeholder="请输入联系电话" />
       </el-form-item>
       <el-form-item label="平台名称" prop="platformName">
-        <el-input :disabled="title == '编辑组织'" v-model="form.platformName" placeholder="请输入平台名称" />
+        <el-input :disabled="title == '编辑组织'" v-model.trim="form.platformName" placeholder="请输入平台名称" />
       </el-form-item>
       <el-form-item label="绑定码" prop="bindCode">
-        <el-input :disabled="title == '编辑组织'" v-model="form.bindCode" placeholder="请输入6位数字的绑定码" />
+        <el-input :disabled="title == '编辑组织'" v-model.trim="form.bindCode" placeholder="请输入6位数字的绑定码" />
       </el-form-item>
       <el-form-item label="经度" prop="lng">
-        <el-input :disabled="title == '编辑组织'" v-model="form.lng" placeholder="请输入经度" />
+        <el-input :disabled="title == '编辑组织'" v-model.trim="form.lng" placeholder="请输入经度" />
       </el-form-item>
       <el-form-item label="纬度" prop="lat">
-        <el-input :disabled="title == '编辑组织'" v-model="form.lat" placeholder="请输入纬度" />
+        <el-input :disabled="title == '编辑组织'" v-model.trim="form.lat" placeholder="请输入纬度" />
       </el-form-item>
       <el-form-item label="平台logo" prop="platformLogo">
         <el-upload

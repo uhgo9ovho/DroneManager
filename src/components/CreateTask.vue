@@ -11,7 +11,7 @@
           :model="ruleForm"
           :rules="rules"
           ref="ruleForm"
-          label-width="100px"
+          label-width="auto"
           class="demo-ruleForm"
           label-position="top"
         >
@@ -106,6 +106,22 @@
             </el-upload>
           </el-form-item>
           <el-form-item label="飞行排期" prop="date">
+            <div slot="label">
+              <span>飞行排期</span>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                placement="top-start"
+              >
+              <div slot="content">
+              1、每天最多6条航线，起飞时间分别为9：00、10:30、12:00、14.30、17:00、19:00；
+              <br/>2、每天执行，判断每天的起飞时间段是否冲突并且所选时间段是否能执行完任务内所有航线，如果有冲突或者无法执行完，则报冲突；<br/>
+              3、每周选定日期（可多选）执行，所选日期当天无法执行任务中的第一条航线，则报冲突；<br/>
+              4、每月选定日期（可多选）执行，所选日期当天无法执行任务中的第一条航线，则报冲突；当月本轮次未执行完，结束本轮次；起止日期内有一月不能执行，则报冲突。
+              </div>
+                <i class="el-icon-question"></i>
+              </el-tooltip>
+            </div>
             <el-button class="date-btn" @click="openSettingDate"
               >排期设置</el-button
             >
@@ -199,7 +215,7 @@ export default {
         taskType: [
           { required: true, message: "请选择任务类型", trigger: "change" },
         ],
-        date: [{ required: true, validator: validatePass2, trigger: "change" }],
+        date: [{ validator: validatePass2, trigger: "change" }],
       },
     };
   },
@@ -259,17 +275,17 @@ export default {
     },
     removeFile(file) {
       this.fileArr = this.fileArr.filter((item) => item.uid != file.uid);
-      if(!this.fileArr.length) {
+      if (!this.fileArr.length) {
         this.hasExist = false;
       }
     },
     beforeUpload(file) {
       console.log(file);
-      const fileType = file.name.split('.')[1];
-      if(fileType != 'kmz') {
-        this.$message.error('只能上传kmz文件')
+      const fileType = file.name.split(".")[1];
+      if (fileType != "kmz") {
+        this.$message.error("只能上传kmz文件");
       }
-      return fileType == 'kmz'
+      return fileType == "kmz";
     },
     successUpload(res, file) {
       if (res.code == 200) {
@@ -277,7 +293,7 @@ export default {
         response["uid"] = file.uid;
         this.fileArr.push(response);
         this.hasExist = false;
-        this.uploadMsg = '操作成功'
+        this.uploadMsg = "操作成功";
       } else {
         this.hasExist = true;
         this.uploadMsg = res.msg;
@@ -388,6 +404,7 @@ export default {
   border-radius: 12px 12px 12px 12px;
   padding: 0 24px;
   z-index: 2;
+
   .task-title {
     width: 100%;
     height: 65px;

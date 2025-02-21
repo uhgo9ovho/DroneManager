@@ -1,9 +1,10 @@
 <template>
   <div class="task-info">
     <div class="taskImage">
-      <p class="calendar">
+      <!-- <p class="calendar">
         {{ row.dateTime.split('-')[2] }} <em>{{ dayOfWeek }}</em>
-      </p>
+      </p> -->
+      <img :src="dayImage" alt="">
     </div>
 
     <div v-if="taskType ==1" class="task-title">{{ row.dateTime }}</div>
@@ -13,6 +14,9 @@
 </template>
 
 <script>
+import dayImage from '@/assets/images/daily.png';
+import MonthlyReport from '@/assets/images/MonthlyReport.png';
+import weekly from '@/assets/images/weekly.png';
 export default {
   name: "DataTime",
   props: {
@@ -26,7 +30,11 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      dayImage: dayImage,
+      MonthlyReport: MonthlyReport,
+      weekly: weekly
+    };
   },
   created() {
     console.log("zheshi shi",this.row,this.taskType)
@@ -48,7 +56,15 @@ export default {
       ];
       return days[dayOfWeek];
     },
-
+    iconImage() {
+      if(this.taskType == 1) {
+        return this.dayImage
+      } else if(this.taskType == 2) {
+        return this.weekly
+      } else {
+        return this.MonthlyReport
+      }
+    }
 
   },
   methods:{
@@ -90,6 +106,7 @@ export default {
   .taskImage {
     margin-right: 4px;
     position: relative;
+    
     .calendar {
       margin: 0.25em 10px 10px 0;
       padding-top: 5px;

@@ -83,7 +83,7 @@
                       item.label == '取消挂起' ||
                       item.label == '排期') &&
                     row.taskStatus == 3
-                  )
+                  ) && ((item.label !== '排期' && item.label !== '挂起') && isWork)
                 "
                 v-permissions="item.permission"
                 ><i class="iconfont" :class="item.icon"></i>
