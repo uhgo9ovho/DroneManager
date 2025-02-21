@@ -205,7 +205,7 @@ export default {
           icon: rwjc,
           number: "",
           unit: "次",
-          tips: "任务架次",
+          tips: "飞行排期",
         },
       ],
       footerOptions: [
@@ -295,7 +295,7 @@ export default {
           case "提交任务数":
             option.number = data.totalSubmitNum;
             break;
-          case "任务架次":
+          case "飞行排期":
             option.number = data.totalTaskNum;
             break;
           default:

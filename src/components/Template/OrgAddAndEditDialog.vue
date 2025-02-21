@@ -41,12 +41,10 @@
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
+          :limit="1"
         >
           <img v-if="imageUrl" :src="imageUrl" class="avatar" />
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          <div slot="tip" class="el-upload__tip">
-            只能上传jpg/png文件，且不超过2M
-          </div>
         </el-upload>
       </el-form-item>
       <el-form-item style="text-align: right">
@@ -117,6 +115,7 @@ export default {
       imageUrl: "",
       uploadUrl: process.env.VUE_APP_BASE_API + "/common/upload",
       loading: false,
+      url: ''
     };
   },
   computed: {
@@ -135,6 +134,7 @@ export default {
         lng: this.editRow.location ? this.editRow.location.split(",")[0] : "",
         lat: this.editRow.location ? this.editRow.location.split(",")[1] : "",
       };
+      this.imageUrl = 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + this.form.platformLogo
     }
   },
   methods: {
@@ -144,7 +144,7 @@ export default {
         ...this.form,
         location: this.form.lng + "," + this.form.lat,
       };
-      if (this.editRow) {
+      if (this.title === '编辑组织') {
         //编辑保存
         this.$refs['formRef'].validate((valid) => {
           if (valid) {
@@ -198,6 +198,7 @@ export default {
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
       console.log(res, file);
+      this.form.platformLogo = res.url;
     },
     beforeAvatarUpload(file) {
       console.log(file);

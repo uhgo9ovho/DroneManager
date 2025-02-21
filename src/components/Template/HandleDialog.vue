@@ -21,15 +21,15 @@
       </el-input>
       <el-upload
         class="upload-demo"
-        action="/prod-api/common/upload"
+        :action="action"
         :headers="headers"
-        multiple
         :limit="3"
         :file-list="fileList"
         :on-success="successUpload"
         list-type="picture-card"
       >
         <i slot="default" class="el-icon-plus"></i>
+        <div slot="tip" class="el-upload__tip">最多上传3张图片</div>
       </el-upload>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog" class="cancel-btn">取 消</el-button>
@@ -64,6 +64,8 @@ export default {
       fileList: [],
       url: "",
       src: image,
+      action: process.env.VUE_APP_BASE_API,
+      fileArr: []
     };
   },
   computed: {

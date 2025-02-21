@@ -1,6 +1,6 @@
 <template>
   <div class="task-wait-card" :class="{ shikuang: info.schedulingStatus == 1 }">
-    <div class="ai-box">
+    <div class="ai-box" v-if="info.aiHosting == 1">
       <img :src="AIImage" alt="">
     </div>
     <div style="flex: 1.7 1 0%">

@@ -6,18 +6,19 @@
   >
     <el-form :model="deviceForm" :rules="rules" ref="ruleForm">
       <el-form-item label="设备id" prop="deviceId">
-        <el-input v-model="deviceForm.deviceId" placeholder="请输入设备名称" />
+        <el-input v-model="deviceForm.deviceId" placeholder="请输入设备名称" :maxlength="128" />
       </el-form-item>
       <el-form-item label="设备名称" prop="deviceName">
         <el-input
           v-model="deviceForm.deviceName"
           placeholder="请输入设备名称"
+          :maxlength="128"
         />
       </el-form-item>
       <el-form-item label="设备描述">
         <el-input
           v-model="deviceForm.deviceDesc"
-          placeholder="请输入设备名称"
+          placeholder="请输入设备描述"
         />
       </el-form-item>
       <el-form-item label="设备类型">
