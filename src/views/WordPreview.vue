@@ -13,7 +13,6 @@
           <p v-if="tableType==2||tableType==3" class="date">日期：{{ formattedDate + '到' + getLastDate }}</p>
           <hr class="date-line"/>
           <hr class="date-line1"/>
-
         </div>
 
         <!-- 描述部分 -->
@@ -682,6 +681,10 @@ export default {
       }
     },
     shouldShowDiv() {
+      // 判断tableType为2（周报）或3（月报），不显示附件
+      if (this.tableType == 2 || this.tableType == 3) {
+        return false
+      }
       // 检查三个列表是否都为 null 或空数组
       if (
         (this.report.problemList == null || this.report.problemList.length === 0) &&
