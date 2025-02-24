@@ -817,10 +817,10 @@ export default {
     },
     reduceCarbonFormatted() {
       const reduceCarbon = this.report.reduceCarbon;
-      if (reduceCarbon >= 1) {
-        return `${reduceCarbon.toFixed(2)} 吨`;  // 大于等于1吨，显示吨
+      if (reduceCarbon >= 1000) {
+        return `${(reduceCarbon / 1000).toFixed(2)} 吨`;  // 大于1000，显示吨
       } else {
-        return `${(reduceCarbon * 1000).toFixed(2)} kg`;  // 小于1吨，显示kg，乘以1000转换为kg
+        return `${reduceCarbon.toFixed(2)} kg`;  // 小于1000，显示kg
       }
     },
 

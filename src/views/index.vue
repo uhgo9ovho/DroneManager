@@ -317,7 +317,17 @@ export default {
             option.number = data.saveCost;
             break;
           case "减少碳排":
-            option.number = data.reduceCarbon;
+            // option.number = data.reduceCarbon;
+            let carbonValue = data.reduceCarbon;
+            // 如果碳排值超过1000，转换为吨，并保留两位小数
+            if (carbonValue >= 1000) {
+              carbonValue = (carbonValue / 1000).toFixed(2); // 转换成吨
+              option.unit = "吨";
+            } else {
+              carbonValue = carbonValue.toFixed(2); // 保留两位小数
+              option.unit = "kg";
+            }
+            option.number = carbonValue;
             break;
           default:
             break;
