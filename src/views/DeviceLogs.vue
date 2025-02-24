@@ -168,7 +168,7 @@ export default {
         
         const [startTime, endTime] = val
         this.startTime = startTime
-        this.endTime = endTime
+        this.endTime = endTime + ' 23:59:59'
         console.log(`开始时间: ${startTime}`)
         console.log(`结束时间: ${endTime}`)
       } else {

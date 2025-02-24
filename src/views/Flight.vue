@@ -31,7 +31,7 @@
     </div>
     <!-- 飞行任务 -->
     <div class="task-list-grid" v-if="currentTab == 'flightTask'">
-      <filght-table ref="tableRef" v-permissions="'mngSide:flight:task'"></filght-table>
+      <filght-table ref="tableRef" v-permissions="'mngSide:flight:task'" :isWork="false"></filght-table>
     </div>
     <!-- 飞行记录 -->
     <div class="flight-log" v-if="currentTab == 'flightLog'">

@@ -28,7 +28,7 @@
       </template>
       <template #status-header>
         <span>任务状态</span>
-        <el-dropdown @command="statusCommand" trigger="click"  v-if="!isWork">
+        <el-dropdown @command="statusCommand" trigger="click" v-if="!isWork">
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
           </span>
           <el-dropdown-menu slot="dropdown">
