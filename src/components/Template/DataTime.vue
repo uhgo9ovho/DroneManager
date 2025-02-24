@@ -19,7 +19,7 @@
       {{ row.dateTime + "-" + this.getLastDate(row, taskType) }}
     </div>
     <div v-if="taskType == 3" class="task-title">
-      {{ row.date + "-" + this.getLastDate(row, taskType) }}
+      {{ formatDateMonth(row.dateTime) }}
     </div>
   </div>
 </template>
