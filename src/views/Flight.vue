@@ -43,7 +43,7 @@
     </div>
     <!-- 工单办结 -->
     <div class="task-list-grid" v-if="currentTab == 'WorkCompleted'">
-      <filght-table ref="tableRef" v-permissions="'mngSide:flight:task'" :isWork="true"></filght-table>
+      <FilghtApprovalStatus ref="tableRef" v-permissions="'mngSide:flight:task'" :isWork="true"></FilghtApprovalStatus>
     </div>
   </div>
 </template>
@@ -52,6 +52,7 @@
 import FilghtTable from "../components/FilghtTable.vue";
 import FlightDate from "../components/FlightDate.vue";
 import FlightLog from '../components/FlightLog.vue';
+import FilghtApprovalStatus from '../components/FilghtApprovalStatus.vue'
 export default {
   name: "Flight",
   data() {
@@ -65,7 +66,8 @@ export default {
   components: {
     FilghtTable,
     FlightDate,
-    FlightLog
+    FlightLog,
+    FilghtApprovalStatus
   },
   computed: {
     checkedTip() {

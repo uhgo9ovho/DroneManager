@@ -171,10 +171,16 @@ export default {
       this.getOrgList();
     },
     async getOrgList() {
-      const res = await getOrgListAPI({
+      const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
-      });
+      };
+      if (this.searchType === 1) {
+        params.orgName = this.searchValue;
+      } else if (this.searchType === 2) {
+        params.head = this.searchValue;
+      }
+      const res = await getOrgListAPI(params);
       if (res.code === 200) {
         this.tableList = res.rows;
         this.total = res.total;
@@ -204,21 +210,20 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-      })
-        .then(() => {
-          deleteOrgAPI(row.orgId)
-            .then((res) => {
-              if (res.code === 200) {
-                this.$message.success("删除成功");
-                this.getOrgList();
-              } else {
-                this.$message.error(res.msg);
-              }
-            })
-            .catch((err) => {
-              this.$message.error("删除失败");
-            });
-        })
+      }).then(() => {
+        deleteOrgAPI(row.orgId)
+          .then((res) => {
+            if (res.code === 200) {
+              this.$message.success("删除成功");
+              this.getOrgList();
+            } else {
+              this.$message.error(res.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error("删除失败");
+          });
+      });
     },
     updateDialogVisible(dialogVisible) {
       this.$emit("updateDialogVisible", dialogVisible);

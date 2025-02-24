@@ -26,22 +26,6 @@
           </el-dropdown-menu>
         </el-dropdown>
       </template>
-      <template #status-header>
-        <span>任务状态</span>
-        <el-dropdown @command="statusCommand" trigger="click" v-if="!isWork">
-          <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item
-              v-for="(item, index) in statusOptions"
-              :key="index"
-              :command="item"
-              :class="{ dropdown_selected: dropdownStatus == item }"
-              >{{ item }}
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </template>
       <!-- 内容插槽 -->
       <template #taskName="{ row }">
         <table-name-info :row="row"></table-name-info>
@@ -49,16 +33,6 @@
       <template #creater="{ row }">
         <div>{{ row.taskCreateTime }}</div>
         <div>{{ row.nickName }}</div>
-      </template>
-      <template #status="{ row }" v-if="!isWork">
-        <el-tag :type="statusType(row.taskStatus)"
-          >{{ row.taskStatus | filterStatus }}
-        </el-tag>
-        <span style="margin-left: 10px"
-          >当前轮次/总轮次({{ row.currentRound ? row.currentRound : 0 }}/{{
-            row.totalRound ? row.totalRound : 0
-          }})</span
-        >
       </template>
       <template #approvalStatus="{ row }" v-if="isWork">
         <el-tag :type="approvalStatusType(row.approvalStatus)"
@@ -112,23 +86,6 @@
             "
             >办结</el-button
           >
-          <el-button
-            type="primary"
-            round
-            size="mini"
-            class="iconfont el-icon-guijifeihang"
-            v-permissions="'wurenji:scheduling:fly'"
-            v-else
-            style="
-              width: 84px;
-              height: 32px;
-              padding: 0;
-              line-height: 32px;
-              font-size: 14px;
-            "
-            @click="flightBtn(row)"
-            >飞行
-          </el-button>
         </div>
       </template>
     </common-table>
@@ -198,81 +155,7 @@ export default {
       default: false,
     },
   },
-  watch: {
-    isWork(val) {
-      if (val) {
-        //工单
-        this.columns = [
-          {
-            prop: "taskName",
-            label: "任务名称/类型",
-            showOverflowTooltip: true,
-            slot: true,
-            minWidth: "220",
-          },
-          {
-            prop: "airportName",
-            label: "机场",
-            showOverflowTooltip: true,
-          },
-          {
-            prop: "creater",
-            label: "创建人/时间",
-            showOverflowTooltip: false,
-            slot: true,
-          },
-          {
-            prop: "approvalStatus",
-            label: "工单状态",
-            showOverflowTooltip: false,
-            slot: true,
-          },
-          {
-            prop: "operate",
-            label: "操作",
-            showOverflowTooltip: false,
-            width: "200px",
-            slot: true,
-          },
-        ];
-      } else {
-        this.columns = [
-          {
-            prop: "taskName",
-            label: "任务名称/类型",
-            showOverflowTooltip: true,
-            slot: true,
-            minWidth: "220",
-          },
-          {
-            prop: "airportName",
-            label: "机场",
-            showOverflowTooltip: true,
-          },
-          {
-            prop: "creater",
-            label: "创建人/时间",
-            showOverflowTooltip: false,
-            slot: true,
-          },
-          {
-            prop: "status",
-            label: "任务状态",
-            showOverflowTooltip: false,
-            slot: true,
-          },
-          {
-            prop: "operate",
-            label: "操作",
-            showOverflowTooltip: false,
-            width: "200px",
-            slot: true,
-          },
-        ];
-      }
-      this.initList();
-    },
-  },
+  watch: {},
   data() {
     return {
       taskId: "",
@@ -307,8 +190,8 @@ export default {
           slot: true,
         },
         {
-          prop: "status",
-          label: "任务状态",
+          prop: "approvalStatus",
+          label: "工单状态",
           showOverflowTooltip: false,
           slot: true,
         },
