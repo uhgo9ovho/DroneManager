@@ -93,6 +93,17 @@ export const heduledListAPI = (date) => {
 }
 
 /**
+ * 排期详情
+ * @returns
+ */
+export const schedulingAPI = (id) => {
+  return request({
+    url: `/wurenji/scheduling?id=${id}`,
+    method: 'get'
+  })
+}
+
+/**
  * 计划飞行列表(月)
  * @returns
  */
@@ -398,6 +409,15 @@ export const AIHostingAPI = (status) => {
         url: `/aiAutomaticHostingController/findAutomaticHosting?org_id=${localStorage.getItem('org_id')}&status=${status}`,
         method: 'get'
     })
+}
+/**
+ * 查询AI托管接口
+ */
+export const selectAIHostingStatusAPI = (status) => {
+  return request({
+    url: `/aiAutomaticHostingController/getAutomaticHosting?org_id=${localStorage.getItem('org_id')}`,
+    method: 'get'
+  })
 }
 
 /**

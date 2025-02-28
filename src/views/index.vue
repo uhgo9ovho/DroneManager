@@ -430,7 +430,7 @@ export default {
       // 根据 period 设置起始日期
       switch (period) {
         case "week": // 一周
-          startDate.setDate(today.getDate() - 6);  // 起始日期提前一天
+          startDate.setDate(today.getDate() - 5);  // 起始日期提前一天
           break;
         case "month": // 一个月
           startDate.setMonth(today.getMonth() - 1);

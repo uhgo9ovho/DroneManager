@@ -7,7 +7,7 @@
       :size="628"
     >
       <div class="ai-setting-search">
-        <el-input placeholder="搜索机场" v-model="value"></el-input>
+<!--        <el-input placeholder="搜索机场" v-model="value"></el-input>-->
       </div>
       <div class="ai-setting-content">
         <div class="ai-area-list">
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { AIHostingAPI } from '@/api/TaskManager.js';
+import { AIHostingAPI, selectAIHostingStatusAPI } from '@/api/TaskManager.js'
 export default {
   name: "AIDialog",
   props: {
@@ -73,6 +73,18 @@ export default {
     };
   },
   methods: {
+
+    selectAIHostingStatus() {
+      selectAIHostingStatusAPI().then(res => {
+        if(res.code === 200) {
+          if(res.msg == '开启') {
+            localStorage.setItem('AIStatus', true);
+          } else {
+            localStorage.setItem('AIStatus', false);
+          }
+        }
+      })
+    },
     handleClose() {
       this.$emit("handleClose");
     },
@@ -90,7 +102,7 @@ export default {
   },
   mounted() {
     const AIStatus = JSON.parse(localStorage.getItem('AIStatus'));
-    
+    this.selectAIHostingStatus();
     if(AIStatus) {
       this.openAI = AIStatus;
     } else {

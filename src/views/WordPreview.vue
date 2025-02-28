@@ -103,7 +103,7 @@
                 </div>
                 <table>
                   <tr>
-                    <th>拍摄时间</th>
+                    <th>发现时间</th>
                     <td>{{ item.foundTime }}</td>
                   </tr>
                   <tr>

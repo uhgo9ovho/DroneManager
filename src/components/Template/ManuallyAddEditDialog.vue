@@ -191,6 +191,7 @@ export default {
               orgDeptId: this.itemRow.orgDeptId,
               orgDeptIdTo: this.ruleForm.department,
               roleIds: this.ruleForm.roleIds,
+              nickName: this.ruleForm.name,
             };
             editUserInfo(params).then((res) => {
               if (res.code === 200) {
