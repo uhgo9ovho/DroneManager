@@ -55,7 +55,7 @@
               </div>
               <div class="introduce">{{ item.createTime | formatTime }}</div>
               <div class="alarm" v-if="item.warnId != null">
-                <img :src="alarm" alt="" class="alarm-img" />1
+                <img :src="alarm" alt="" class="alarm-img" />
               </div>
             </div>
           </div>
@@ -165,6 +165,7 @@
         :currentUrl="currentUrl"
         :warnPhoto="warnPhoto"
         :currentIndex="currentIndex"
+        :subFileType="subFileType"
         :lon="lon"
         :lat="lat"
         :row="row"
@@ -220,6 +221,7 @@ export default {
       timerId: null,
       lon: "",
       lat: "",
+      subFileType:-1,
       alarm: alarm,
       typeOptions: [
         {
@@ -474,6 +476,7 @@ export default {
           createTime: item.createTime,
           lat: item.lat,
           lon: item.lon,
+          subFileType:item.subFileType,
           resultId: item.resultId,
           warnId: item.warnId,
           name: item.fileName,
@@ -507,6 +510,8 @@ export default {
 
       this.lon = item.lon;
       this.lat = item.lat;
+
+      this.subFileType =item.subFileType;
       this.preview = true;
       this.currentIndex = index + 1;
     },

@@ -34,7 +34,6 @@ export default {
       canvas: null,
       isDrawing: false,
       selectionRect: null,
-      isDrawing: false, // 判断是否正在框选
       startX: 0, // 框选起点X
       startY: 0, // 框选起点Y
       backgroundImage: null, // 背景图片对象
@@ -92,7 +91,7 @@ export default {
       if (activeObject && activeObject.type === "rect") {
         // 如果点击在已有的矩形上，启动拖动操作
         console.log(this.textMap.size);
-        
+
         this.isDragging = true;
         this.canvas.setActiveObject(activeObject);
         // 获取矩形的起始位置和结束位置
@@ -219,6 +218,7 @@ export default {
     },
 
     handleMouseWheel(event) {
+      return
       if(!this.isEdit) return;
       const delta = event.e.deltaY;
       const zoomFactor = 1.1;
@@ -305,7 +305,7 @@ export default {
         // 绑定矩形框和文字
         this.textMap.set(activeObject, text);
         this.canvas.renderAll();
-        
+
       } else {
         console.log("请选择一个矩形框进行标注");
       }
@@ -328,7 +328,7 @@ export default {
     // 删除选中的矩形框和标注文字
     removeSelectedBoxAndText() {
       const activeObject = this.canvas.getActiveObject();
-      if (activeObject && activeObject.type === 'rect') {         
+      if (activeObject && activeObject.type === 'rect') {
         // 查找该矩形框的标注文字
         const boundText = this.textMap.get(activeObject);
 
@@ -355,7 +355,7 @@ export default {
   mounted() {
     this.init();
     console.log(this.warnPhoto,'aswdgfdggfh');
-    
+
   },
 };
 </script>
