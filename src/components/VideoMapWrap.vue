@@ -255,7 +255,7 @@
         <span>控制：{{ controler ? controler.userName : "暂无" }}</span>
       </div>
       <div class="monitor_user">
-        <span>监视：{{ "暂无" }}</span>
+        <span>监视：{{ controler ? controler.viewUserList : "暂无" }}</span>
       </div>
     </div>
     <!-- 控制无人机操作界面 -->
@@ -388,6 +388,7 @@ export default {
       "controler",
     ]),
     title() {
+      console.log(controler);
       if (this.controler && this.controler.userName != "暂无")
         return `当前${this.controler.userName}正在控制该设备，是否确认继续申请控制权？`;
       return "当前无人控制该设备，是否确认继续申请控制权？";

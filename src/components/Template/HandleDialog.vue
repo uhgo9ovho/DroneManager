@@ -93,7 +93,8 @@ export default {
       return isJPG;
     },
     successUpload(res) {
-      this.url = res.url;
+      this.url = this.url+res.url+",";
+      console.log(this.url);
     },
     closeDialog() {
       this.$emit("closeHandleDialog");
@@ -103,7 +104,7 @@ export default {
         warnId: this.itemRow.id,
         status: "3", //办结
         remark: `${this.eventName} ${this.textarea}`,
-        photo: this.url,
+        photo: this.url.slice(0,this.url.length-1),
       };
       updateWarningStatusAPI(params).then((res) => {
         if (res.code === 200) {
