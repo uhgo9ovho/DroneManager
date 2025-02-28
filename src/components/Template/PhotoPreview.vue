@@ -28,7 +28,7 @@
         <div class="download" v-else @click="downloadImage">
           <i class="el-icon-download"></i>
         </div>
-        <div class="mark">
+        <div class="mark" v-if="subFileType!=1">
           问题标注
           <el-switch v-model="isChecked"></el-switch>
         </div>
@@ -84,7 +84,7 @@
               <el-tab-pane label="全部" name="all"></el-tab-pane>
             </el-tabs>
 
-              
+
 
           </div> -->
           <div class="typeList_ul">
@@ -136,6 +136,10 @@ export default {
   props: {
     currentUrl: {
       type: String,
+      default: "",
+    },
+    subFileType:{
+      type: Number,
       default: "",
     },
     warnPhoto: {
@@ -322,7 +326,7 @@ export default {
     },
     selectItem(item) {
       console.log(item,'item');
-      
+
       this.$refs.imageZoom.addTextToSelectedBox(item.dictLabel);
       this.currentName = item.dictLabel;
       this.currentTypeName = item.dictLabel;

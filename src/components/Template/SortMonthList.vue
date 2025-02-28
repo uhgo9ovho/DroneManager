@@ -24,17 +24,19 @@
               class="month-task-item"
               :style="{
                 background: changeBg(it.taskType),
-                color: changeColor(it.schedulingStatus, it.taskName),
+                color: changeColor(it.schedulingStatus, it.lineName),
               }"
             >
               <!-- <i class="el-icon-close"></i> -->
-              <div class="task-name" :title="it.taskName">
-                {{ it.taskName }}
+              <div class="task-name" :title="it.lineName" @click="showDetail(it)">
+                {{ it.lineName }}
               </div>
               <div class="task-time">{{ it.scheduledTime.split(" ")[1] }}</div>
             </div>
           </div>
+
         </div>
+
       </template>
     </el-calendar>
     <div class="state-info">
@@ -46,12 +48,25 @@
         <div class="state-text">{{ item.label }}</div>
       </div>
     </div>
+    <!--  详情弹窗 -->
+    <div v-if="visible">
+      <FlightDialog
+        @closeDialog="closeDialog"
+        :detailsShow="true"
+        :taskDetails="true"
+        :row="task"
+      ></FlightDialog>
+    </div>
   </div>
+
 </template>
 
 <script>
+import FlightDialog from '@/components/Template/FlightDialog.vue'
+
 export default {
   name: "MonthList",
+  components: { FlightDialog },
   props: {
     sortMonthList: {
       type: Array,
@@ -71,9 +86,9 @@ export default {
     },
     value(val) {
       console.log(val,'aaasss');
-      
+
       this.$emit('changeDate', val);
-      
+
     }
   },
   data() {
@@ -108,6 +123,8 @@ export default {
         },
       ],
       dayList: [],
+      visible:false,
+      task:null
     };
   },
   computed: {
@@ -165,7 +182,14 @@ export default {
 
         return acc;
       }, []);
-      
+
+    },
+    showDetail(task){
+      this.task = task
+      this.visible = true
+    },
+    closeDialog() {
+      this.visible = false;
     },
   },
   mounted() {

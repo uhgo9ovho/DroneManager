@@ -665,7 +665,6 @@ export default {
     },
     nameCommand(itemCommand) {
       this.dropdownName = itemCommand;
-      console.log(itemCommand);
       const data = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,

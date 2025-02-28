@@ -154,7 +154,7 @@ export default {
       ],
       ruleForm: {
         frequency: "天",
-        inspection: "",
+        inspection: "每天",
         checkedCharacters: [],
         startDate: `${now.getFullYear()}-${(now.getMonth() + 1)
           .toString()
@@ -264,17 +264,17 @@ export default {
       let info = "";
       switch (this.ruleForm.frequency) {
         case "天":
-          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每天 ${this.ruleForm.inspection} 执行1次`;
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每天 ${this.ruleForm.inspection}`;
           break;
         case "周":
           let checkedItemArr = this.characters.filter((item) => item.checked);
           let checkedInfo = checkedItemArr.map((item) => item.label).join(",");
-          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每周${checkedInfo} ${this.ruleForm.inspection} 执行，共执行${this.frequencyLength}次`;
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每周${checkedInfo} ${this.ruleForm.inspection} 执行`;
           break;
         case "月":
           let monthItemArr = this.moonList.filter((item) => item.checked);
           let monthinfo = monthItemArr.map((item) => item.label).join(",");
-          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每月${monthinfo}号 ${this.ruleForm.inspection} 执行，共执行${this.frequencyLength}次`;
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每月${monthinfo}号 ${this.ruleForm.inspection} 执行`;
         default:
           break;
       }
