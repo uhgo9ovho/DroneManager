@@ -55,6 +55,7 @@
             <i class="el-icon-check" v-if="item.airlineId == code"></i>
           </div>
         </div>
+
       </div>
       <div class="add-task-footer">
         <el-button class="btn-close" @click="handleClose">取消</el-button>
@@ -88,6 +89,14 @@ export default {
     currentId(val) {
       if(val) {
         this.code = this.currentList[0].airlineId
+      }
+    },
+    taskName(newVal){
+      if(newVal.length > 0) {
+        this.currentId=null
+
+      }else{
+        this.currentId=this.airLineList[0].taskId
       }
     }
   },
@@ -129,18 +138,20 @@ export default {
         return [];
       }
     },
+
     filteredTasks() {
       const lowerCaseQuery = this.taskName.toLowerCase();
       return this.airLineList.filter((task) =>
         task.taskName.toLowerCase().includes(lowerCaseQuery)
       );
+
     },
   },
   methods: {
     initList() {
       const params = {
-        pageNum: "1",
-        pageSize: "20",
+        pageNum: null,
+        pageSize: null,
       };
       addTaskListAPI(params).then((res) => {
         if (res.code === 200) {
@@ -205,7 +216,7 @@ export default {
       display: flex;
       flex-direction: column;
       width: 100%;
-      height: 100%;
+      height: 50vh;
       .add-task-head {
         display: flex;
         justify-content: space-between;

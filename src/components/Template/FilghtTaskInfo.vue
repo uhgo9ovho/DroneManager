@@ -210,7 +210,7 @@ export default {
           value: "0分钟",
         },
         {
-          label: "预计历程",
+          label: "预计里程",
           value: "0米",
         },
         {
@@ -225,6 +225,22 @@ export default {
   methods: {
     //获取采集信息
     getCollectInformation() {
+      const { taskRuntime, taskTotalDistance, estimatePicNum } = this.row;
+
+      // 预计耗时处理（接口返回单位：秒）
+      this.detailOptions[0].value = taskRuntime !== null && taskRuntime !== undefined
+        ? `${(taskRuntime / 60).toFixed(2)}分钟`  // 秒转分钟
+        : "--";
+
+      // 预计里程处理（接口已返回公里单位）
+      this.detailOptions[1].value = taskTotalDistance !== null && taskTotalDistance !== undefined
+        ? `${taskTotalDistance.toFixed(2)}km`
+        : "--";
+
+      // 照片数量处理
+      this.detailOptions[2].value = estimatePicNum !== null && estimatePicNum !== undefined
+        ? `${estimatePicNum}张`
+        : "--";
       const arr = this.row.wrjAirlineFiles;
       if (arr && arr.length) {
         arr.forEach((item) => {
@@ -232,22 +248,22 @@ export default {
         });
         const pointsList = this.info.map((item) => item.pointsList);
 
-        this.detailOptions[0].value =
-          this.info
-            .reduce(
-              (total, obj) => total + (obj.lineInfo.predictTime || 0) / 60,
-              0
-            )
-            .toFixed(2) + "分钟";
-        this.detailOptions[1].value =
-          this.info
-            .reduce((total, obj) => total + (obj.lineInfo.goAndBackDis || 0), 0)
-            .toFixed(2) + "km";
-        this.detailOptions[2].value =
-          this.info.reduce(
-            (total, obj) => total + (obj.lineInfo.pointCount || 0),
-            0
-          ) + "张";
+        // this.detailOptions[0].value =
+        //   this.info
+        //     .reduce(
+        //       (total, obj) => total + (obj.lineInfo.predictTime || 0) / 60,
+        //       0
+        //     )
+        //     .toFixed(2) + "分钟";
+        // this.detailOptions[1].value =
+        //   this.info
+        //     .reduce((total, obj) => total + (obj.lineInfo.goAndBackDis || 0), 0)
+        //     .toFixed(2) + "km";
+        // this.detailOptions[2].value =
+        //   this.info.reduce(
+        //     (total, obj) => total + (obj.lineInfo.pointCount || 0),
+        //     0
+        //   ) + "张";
         this.lineInfo = {
           centerInfo: this.info[0].center,
           pointsList,
