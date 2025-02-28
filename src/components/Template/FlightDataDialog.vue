@@ -215,7 +215,7 @@ export default {
         },
       ],
       moonList: [],
-      dateArr: [],
+      dateArr: "",
     };
   },
   computed: {
@@ -345,28 +345,24 @@ export default {
         });
       }
     },
+
     checkedItem(item) {
       item.checked = !item.checked;
       this.dateArr = this.characters
-        .filter((item) => {
-          if (item.checked) {
-            return item.value;
-          }
-        })
-        .map((it) => it.value);
+        .filter((item) => item.checked)
+        .map((it) => it.value)
+        .join(",");  // 这里将数组转换为逗号分隔的字符串
     },
+
     checkedMoonItem(item) {
       console.log(item);
-
       item.checked = !item.checked;
       this.dateArr = this.moonList
-        .filter((item) => {
-          if (item.checked) {
-            return item.value;
-          }
-        })
-        .map((it) => it.value);
+        .filter((item) => item.checked)
+        .map((it) => it.value)
+        .join(",");  // 同样转换为逗号分隔的字符串
     },
+
     formatDate(currentDate) {
       const date = new Date(currentDate);
       const formattedDate =
