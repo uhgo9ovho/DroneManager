@@ -8,7 +8,8 @@ const state = {
     type: 3, //1 点  2 线  3 面
     taskType: 0,
     pointsList: [],
-    airlineList: []
+    airlineList: [],
+    lineType: 0, //任务类型
 }
 const mutations = {
     CHANGE_DOWNLOAD_STATUS(state, flag) {
@@ -17,13 +18,10 @@ const mutations = {
     CHANGE_DROC_STATUS(state, flag) {
         state.isDrawText = flag;
     },
+    CLEAR_POINTSLIST(state) {
+        state.pointsList = [];
+    },
     CHANGE_COORDINATESARR(state, arr) {
-        const aaa = gcj02ToWgs84(116.481499, 39.990475)
-        console.log(wgs84ToGcj02(aaa[0], aaa[1]),'asdsadasdasdasd');
-        
-
-
-
         const formatArr = arr.map(item => {
             return gcj02ToWgs84(item[0], item[1]);
         })
@@ -43,6 +41,7 @@ const mutations = {
         }
         getAirLineAPI(params).then(res => {
             if (res.code == 200) {
+                state.lineType = res.requestParam.taskType;
                 state.airlineList = res.airlineList;
                 res.airlineList.forEach(item => {
                     // const pointsArr = item.drawLineInfo.pointsList.map(it => {

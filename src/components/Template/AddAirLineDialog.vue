@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { taskListAPI, addSchedulingAPI } from "@/api/TaskManager.js";
+import { taskListAPI, addSchedulingAPI, addTaskListAPI } from '@/api/TaskManager.js'
 export default {
   name: "AddAirLineDialog",
   props: {
@@ -83,6 +83,13 @@ export default {
       type: String,
       default: "",
     },
+  },
+  watch: {
+    currentId(val) {
+      if(val) {
+        this.code = this.currentList[0].airlineId
+      }
+    }
   },
   data() {
     return {
@@ -132,12 +139,14 @@ export default {
   methods: {
     initList() {
       const params = {
-        pageNum: "",
-        pageSize: "",
+        pageNum: "1",
+        pageSize: "20",
       };
-      taskListAPI(params).then((res) => {
+      addTaskListAPI(params).then((res) => {
         if (res.code === 200) {
           this.airLineList = res.rows;
+          this.currentId = res.rows[0].taskId;
+          this.checkedItem = res.rows[0];
         }
       });
     },
@@ -164,6 +173,8 @@ export default {
         if (res.code === 200) {
           this.$emit("updateData", this.currentDate);
           this.handleClose();
+        } else {
+          this.$message.error(res.msg)
         }
       });
     },

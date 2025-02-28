@@ -72,9 +72,9 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/index'),
         name: 'Index',
-        meta: { title: '首页', icon: 'el-icon-shouye', affix: true, auth: ['mngSide:index'] },
+        meta: { title: '首页', icon: 'el-icon-shouye', affix: true, auth: ['*:*:*'] },
         active: true,
-        permissions: ["mngSide:index"]
+        permissions: ['*:*:*']
       },
       {
         path: 'flight',

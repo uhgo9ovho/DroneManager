@@ -8,7 +8,7 @@
     >
       <div class="report-title">事件名称</div>
       <div class="row">
-        <el-input v-model="eventName"></el-input>
+        <el-input v-model="eventName" :maxlength="32"></el-input>
       </div>
       <div class="report-title">事件描述</div>
       <el-input
@@ -21,14 +21,16 @@
       </el-input>
       <el-upload
         class="upload-demo"
-        action="/dev-api/common/upload"
+        :action="action"
         :headers="headers"
-        multiple
         :limit="3"
         :file-list="fileList"
         :on-success="successUpload"
+        :before-upload="beforeAvatarUpload"
+        list-type="picture-card"
       >
-        <el-button size="small" type="primary">点击上传</el-button>
+        <i slot="default" class="el-icon-plus"></i>
+        <div slot="tip" class="el-upload__tip">最多上传3张图片</div>
       </el-upload>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog" class="cancel-btn">取 消</el-button>
@@ -43,6 +45,7 @@
 <script>
 import { getToken } from "@/utils/auth";
 import { updateWarningStatusAPI } from "@/api/TaskManager.js";
+import image from "@/assets/images/AI.png";
 export default {
   name: "NeglectDialog",
   props: {
@@ -61,6 +64,9 @@ export default {
       textarea: "",
       fileList: [],
       url: "",
+      src: image,
+      action: process.env.VUE_APP_BASE_API + '/common/upload',
+      fileArr: [],
     };
   },
   computed: {
@@ -70,11 +76,22 @@ export default {
         tenant: "test",
       };
     },
+    defaultImg() {
+      return this.src;
+    },
   },
   mounted() {
     this.eventName = this.itemRow.warnName;
   },
   methods: {
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg" || file.type === "image/png";
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG/PNG 格式!");
+      }
+      return isJPG;
+    },
     successUpload(res) {
       this.url = res.url;
     },
@@ -93,7 +110,7 @@ export default {
           this.$message.success("事件状态更新成功！");
           this.$emit("updateList");
           this.closeDialog();
-        }else {
+        } else {
           this.$message.error(res.msg);
         }
       });

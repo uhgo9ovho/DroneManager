@@ -11,30 +11,6 @@
       :pageSize="params.pageSize"
       :pageNum="params.pageNum"
     >
-      <template #dept-header>
-        <span>所属部门</span>
-        <el-dropdown>
-          <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <!-- <el-dropdown-item>黄金糕</el-dropdown-item>
-            <el-dropdown-item>狮子头</el-dropdown-item>
-            <el-dropdown-item>螺蛳粉</el-dropdown-item> -->
-          </el-dropdown-menu>
-        </el-dropdown>
-      </template>
-      <template #auth-header>
-        <span>所属角色</span>
-        <el-dropdown>
-          <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <!-- <el-dropdown-item>黄金糕</el-dropdown-item>
-            <el-dropdown-item>狮子头</el-dropdown-item>
-            <el-dropdown-item>螺蛳粉</el-dropdown-item> -->
-          </el-dropdown-menu>
-        </el-dropdown>
-      </template>
       <template #status-header>
         <span>账号状态</span>
         <el-tooltip
@@ -53,41 +29,17 @@
             <img src="../assets/images/avatar.png" alt="" />
           </div>
           <div class="user_name_phone">
-            <div class="user_name">{{ row.userName }}</div>
+            <div class="user_name">{{ row.nickName }}</div>
             <div class="user_tel">{{ row.phonenumber }}</div>
           </div>
         </div>
       </template>
+      <template #orgDeptName="{ row }">
+        {{ row.orgDeptName }}
+      </template>
       <template #roleName="{ row }">
         {{ row.roleName }}
       </template>
-      <template #orgName="{ row }">
-        {{ row.orgName }}
-      </template>
-      <!-- <template #bind="{ row }">
-        <div class="bind_icon">
-          <div class="wx_icon">
-            <el-tooltip
-              v-if="row.wx_bind == '已绑定'"
-              class="item"
-              effect="dark"
-              content="微信已绑定"
-              placement="top-start"
-            >
-              <i class="iconfont el-icon-weixin"></i>
-            </el-tooltip>
-            <el-tooltip
-              v-else
-              class="item"
-              effect="dark"
-              content="微信未绑定"
-              placement="top-start"
-            >
-              <i class="iconfont el-icon-weixin1"></i>
-            </el-tooltip>
-          </div>
-        </div>
-      </template> -->
       <template #status="{ row }">
         <el-switch v-model="row.status" active-value="0" inactive-value="1">
         </el-switch>
@@ -96,11 +48,45 @@
         {{ row.createTime | filterTime }}
       </template>
       <template #operate="scope">
-        <el-button type="text" @click="editBtn(scope.row)" style="margin-right: 10px" v-permissions="'wrj:user:edit'">编辑</el-button>
+        <el-button
+          type="text"
+          @click="editBtn(scope.row)"
+          style="margin-right: 10px"
+          v-permissions="'wrj:user:edit'"
+          v-if="scope.row.isOrgAdmin != 1"
+          >编辑</el-button
+        >
         <!-- <el-button type="text" style="margin-right: 10px">调岗</el-button> -->
-
-        <el-popconfirm :ref="`popover-${scope.$index}`" title="你确定要删除吗？" @confirm="confirm(scope.row)" v-permissions="'wrj:user:remove'">
-          <el-button type="text" style="color: red" slot="reference" v-show="scope.row.roleName!=='超级管理员'"
+        <el-button
+          type="text"
+          style="margin-right: 10px"
+          slot="reference"
+          @click="resetPass(scope.row)"
+          >重置密码</el-button
+        >
+        <el-dropdown trigger="click" @command="command" v-if="scope.row.isOrgAdmin == 1">
+          <span
+            class="el-dropdown-link"
+            style="color: #1890ff; font-size: 14px;"
+            
+          >
+            转移
+          </span>
+          <el-dropdown-menu slot="dropdown" class="dropdown-max">
+            <el-dropdown-item :command="beforeCommand(scope.row, item)" v-for="(item, index) in allUserList" :key="index">{{ item.nickName }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-popconfirm
+          :ref="`popover-${scope.$index}`"
+          title="你确定要删除吗？"
+          @confirm="confirm(scope.row)"
+          v-permissions="'wrj:user:remove'"
+        >
+          <el-button
+            type="text"
+            style="color: red"
+            slot="reference"
+            v-show="scope.row.isOrgAdmin !== 1"
             >删除</el-button
           >
         </el-popconfirm>
@@ -111,7 +97,13 @@
 
 <script>
 import CommonTable from "./CommonTable.vue";
-import { getUserList, deleteUser, searchUser } from "@/api/user.js";
+import { transferOrgAdminAPI } from '@/api/orgModel.js';
+import {
+  getUserList,
+  deleteUser,
+  searchUser,
+  resetPassAPI,
+} from "@/api/user.js";
 export default {
   name: "MemberTable",
   data() {
@@ -119,14 +111,14 @@ export default {
       columns: [
         {
           prop: "userName",
-          label: "姓名",
+          label: "成员",
           showOverflowTooltip: true,
           slot: true,
           minWidth: "200",
         },
         {
           prop: "orgDeptName",
-          label: "所在部门",
+          label: "部门",
           slot: true,
           showOverflowTooltip: true,
         },
@@ -142,28 +134,10 @@ export default {
           showOverflowTooltip: false,
         },
         {
-          prop: "createTime",
-          label: "创建日期",
-          slot: true,
-          showOverflowTooltip: true,
-        },
-        {
-          prop: "bind",
-          label: "微信",
-          showOverflowTooltip: false,
-          slot: true,
-        },
-        // {
-        //   prop: "status",
-        //   label: "账号状态",
-        //   showOverflowTooltip: false,
-        //   slot: true,
-        // },
-        {
           prop: "operate",
           label: "操作",
           showOverflowTooltip: false,
-          width: "200px",
+          width: "250px",
           slot: true,
         },
       ],
@@ -175,6 +149,9 @@ export default {
         orgId: this.$store.getters.orgId,
         nickName: "",
       },
+      transformVisible: false,
+      itemRow: null,
+      allUserList: []
     };
   },
   filters: {
@@ -192,13 +169,52 @@ export default {
       // 组合成所需格式
       const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
-      return formattedDate
+      return formattedDate;
     },
   },
   components: {
     CommonTable,
   },
   methods: {
+    transferOrgAdmin(row) {
+      this.transformVisible = true;
+      this.itemRow = row;
+    },
+    beforeCommand(row, item) {
+      return {
+        'row': row,
+        'command': item
+      }
+    },
+    command(obj) {
+      console.log(obj);
+      
+      const params = {
+        userId: obj.row.userId,
+        orgId: localStorage.getItem('org_id'),
+        toUserId: obj.command.userId
+      }
+      if(params.userId == params.toUserId) return this.$message.error('不能转移给自己');
+      transferOrgAdminAPI(params).then(res => {
+        console.log(res);
+        if(res.code === 200) {
+          this.getList();
+          this.$message.success(res.msg)
+        } else {
+          this.$message.error(res.msg)
+        }
+        
+      })
+    },
+    resetPass(row) {
+      resetPassAPI(row.userId).then((res) => {
+        if (res.code === 200) {
+          this.$message.success(res.msg);
+        } else {
+          this.$message.error(res.msg);
+        }
+      });
+    },
     confirm(row) {
       deleteUser(row.id).then((res) => {
         if (res.code === 200) {
@@ -211,6 +227,19 @@ export default {
     },
     editBtn(row) {
       this.$emit("editMember", row);
+    },
+    getAllUserList() {
+      const params = {
+        pageSize: 1000000,
+        pageNum: 1,
+        orgId: this.$store.getters.orgId,
+        nickName: "",
+      };
+      getUserList(params).then((res) => {
+        if (res.code === 200) {
+          this.allUserList = res.rows;          
+        }
+      });
     },
     getList() {
       getUserList(this.params).then((res) => {
@@ -231,6 +260,7 @@ export default {
       this.getList();
     },
     searchList() {
+      this.params.pageNum = 1;
       searchUser(this.params).then((res) => {
         if (res.code === 200) {
           this.memberList = res.rows;
@@ -239,12 +269,13 @@ export default {
       });
     },
     handleSelectionChange(ids) {
-      const idStr = ids.map((item) => item.id).join(',');
-      this.$emit('deleteIds',idStr);
+      const idStr = ids.map((item) => item.id).join(",");
+      this.$emit("deleteIds", idStr);
     },
   },
   mounted() {
     this.getList();
+    this.getAllUserList()
   },
 };
 </script>
@@ -259,8 +290,9 @@ export default {
       border-radius: 50%;
       overflow: hidden;
       img {
-        width: 100%;
-        height: 100%;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
       }
     }
     .user_name_phone {

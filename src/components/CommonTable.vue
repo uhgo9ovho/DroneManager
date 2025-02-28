@@ -2,7 +2,7 @@
   <div class="common-table">
     <div class="table-box">
       <el-table :data="tableList" style="width: 100%;" :height="height" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" v-if="showSelection"></el-table-column>
+        <el-table-column type="selection" width="55" v-if="showSelection" :selectable='checkboxT'></el-table-column>
         <el-table-column
           v-for="(item, index) in columns"
           :key="index"
@@ -11,6 +11,7 @@
           :width="item.width"
           :min-width="item.minWidth"
           :show-overflow-tooltip="item.showOverflowTooltip"
+          
           >
         <!-- 表头 slot -->
         <template
@@ -53,7 +54,7 @@
         :layout="pagerLayout"
         :page-size="pageSize"
         :page-sizes="pageSizes"
-        :current-page="curPage"
+        :current-page="pageNum"
         @size-change="handleSizeChange"
         @current-change="handlePageChange"
         @prev-click="handlePageChange"
@@ -125,7 +126,6 @@ export default {
       this.$emit("pageChange", {
         pageNum: page,
         pageSize,
-        sorter: { prop: sortBy, order: sortOrder },
       });
     },
     /**
@@ -138,7 +138,6 @@ export default {
       this.$emit("sizeChange", {
         pageNum: 1,
         pageSize: size,
-        sorter: { prop: sortBy, order: sortOrder },
       });
     },
     /**
@@ -146,6 +145,13 @@ export default {
      */
      handleSelectionChange(e) {
       this.$emit('handleSelectionChange', e)
+     },
+     checkboxT(row) {
+      if(row.roleName && row.roleName == '组织管理员') {
+        return false
+      } else {
+        return true
+      }
      }
   },
 };

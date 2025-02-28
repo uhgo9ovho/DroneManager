@@ -2,8 +2,18 @@
   <div class="org-manager">
     <div class="top">
       <div class="left">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane label="组织" name="org"></el-tab-pane>
+          <el-tab-pane label="角色" name="role"></el-tab-pane>
+        </el-tabs>
+      </div>
+      <div class="right" v-if="activeName == 'org'">
         <div class="search-list-box">
-          <el-select v-model="searchName" placeholder="请选择" @change="handleSearchNameChange">
+          <el-select
+            v-model="searchName"
+            placeholder="请选择"
+            @change="handleSearchNameChange"
+          >
             <el-option
               v-for="item in searchListName"
               :key="item.id"
@@ -21,37 +31,49 @@
             @focus="focus"
             @blur="blur"
             @input="handleInput"
+            :maxlength="20"
           ></el-input>
         </div>
-      </div>
-      <div class="right">
-        <div class="add-btn" v-permisssions="'wrj:org:add'">
+        <div class="add-btn">
           <el-button type="primary" icon="el-icon-plus" @click="handleAdd"
             >新增</el-button
           >
         </div>
       </div>
+      <div class="right" v-else>
+        <!-- <div class="create-task-btn">
+          <el-button round icon="el-icon-plus" @click="addOrgRole"
+            >添加角色</el-button
+          >
+        </div> -->
+      </div>
     </div>
     <div class="list-box">
       <org-table
         ref="orgTable"
+        v-if="activeName == 'org'"
         :dialogVisible="dialogVisible"
         @updateDialogVisible="updateDialogVisible"
         v-permissions="'mngSide:org'"
       ></org-table>
+      <role-table v-if="activeName == 'role'" ref="role" v-permissions="'wrj:role:list'" model="orgRole"></role-table>
     </div>
   </div>
 </template>
 
 <script>
 import OrgTable from "@/components/OrgTable.vue";
+import RoleTable from '@/components/RoleTable.vue'
 export default {
   name: "OrgManager",
   components: {
     OrgTable,
+    RoleTable
   },
   data() {
     return {
+      permissions: JSON.parse(localStorage.getItem("userPermission")),
+      activeName: "org",
       dialogVisible: false,
       title: "新增组织",
       checked: false,
@@ -60,7 +82,7 @@ export default {
       searchListName: [
         {
           id: 1,
-          name: "组织或项目名称",
+          name: "组织名称",
         },
         {
           id: 2,
@@ -73,7 +95,7 @@ export default {
     placeholderTitle() {
       switch (this.searchName) {
         case 1:
-          return "请输入组织或项目名称";
+          return "请输入组织名称";
         case 2:
           return "请输入负责人";
         case 3:
@@ -88,6 +110,13 @@ export default {
     },
   },
   methods: {
+    addOrgRole() {
+      this.$refs.role.title = '添加角色';
+      this.$refs.role.dialogVisible = true;
+    },
+    handleClick() {
+      this.searchName = "";
+    },
     focus() {
       this.checked = true;
     },
@@ -105,15 +134,15 @@ export default {
       this.$refs.orgTable.searchValue = val;
     },
     handleSearchNameChange(val) {
-      this.$refs.orgTable.searchValue = '';
-      this.searchValue = '';
+      this.$refs.orgTable.searchValue = "";
+      this.searchValue = "";
       this.$refs.orgTable.searchType = val;
-    }
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .org-manager {
   height: calc(100vh - 72px);
   margin-top: 20px;
@@ -126,6 +155,32 @@ export default {
     align-items: center;
     margin-bottom: 10px;
     .left {
+      .el-tabs {
+        .el-tabs__item {
+          font-size: 16px;
+          &:hover {
+            color: #000;
+          }
+        }
+        .el-tabs__nav-wrap::after {
+          display: none;
+        }
+        .el-tabs__active-bar {
+          background-color: #000;
+        }
+        .is-active {
+          color: #000;
+        }
+      }
+    }
+    .right {
+      .create-task-btn {
+        .el-button {
+          background-color: #000;
+          color: #fff;
+          border-color: #000;
+        }
+      }
       display: flex;
       .search-list-box {
         margin-right: 20px;
@@ -137,11 +192,8 @@ export default {
       .lang-search-box {
         width: 360px;
       }
-    }
-    .right {
-      display: flex;
       .add-btn {
-        margin-right: 20px;
+        margin-left: 20px;
       }
       .add-btn,
       .export-btn {

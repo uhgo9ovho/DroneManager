@@ -25,21 +25,9 @@
           </el-dropdown-menu>
         </el-dropdown>
       </template>
-      <!-- <template #airPort-header>
-        <span>发现机场</span>
-        <el-dropdown>
-          <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>黄金糕</el-dropdown-item>
-            <el-dropdown-item>狮子头</el-dropdown-item>
-            <el-dropdown-item>螺蛳粉</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </template> -->
       <template #status-header>
         <span>事件状态</span>
-        <el-dropdown @command="statusCommand">
+        <el-dropdown @command="statusCommand" trigger="click">
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
           </span>
           <el-dropdown-menu slot="dropdown">
@@ -47,6 +35,7 @@
               v-for="(item, index) in statusOptions"
               :key="index"
               :command="item"
+              :class="{'dropdown_selected': eventStatus == item}"
               >{{ item }}</el-dropdown-item
             >
           </el-dropdown-menu>
@@ -140,6 +129,7 @@ export default {
   props: {},
   data() {
     return {
+      eventStatus: '全部状态',
       isDisabled: false,
       warningVisible: false,
       neglectVisible: false,
@@ -187,23 +177,9 @@ export default {
         "全覆盖",
       ],
       statusOptions: [
-        // "全部状态",
-        // "已挂起",
-        // "执行终止",
-        // "待审核",
-        // "审核中",
-        // "待执行",
-        // "执行中",
-        // "制作中",
-        // "制作失败",
-        // "已完成",
-        // "已过期",
-        // "执行失败",
+        "全部状态",
         "新发现",
-        "已上报",
-        "已受理",
         "已办结",
-        "已超期",
         "已忽略",
       ],
       operateOptions: [
@@ -221,6 +197,7 @@ export default {
       pageSize: 10,
       warningList: [],
       itemRow: {},
+      warnName: ""
     };
   },
   computed: {
@@ -288,11 +265,14 @@ export default {
   },
   methods: {
     searchWarningName(val) {
+      this.warnName = val;
+      this.pageNum = 1;
       const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
         orgId: localStorage.getItem('org_id'),
-        warnName: val
+        warnName: val,
+        status: this.statusTypes(this.eventStatus)
       };
       warningListAPI(params).then((res) => {
         if (res.code === 200) {
@@ -318,7 +298,8 @@ export default {
       const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
-        orgId: localStorage.getItem('org_id')
+        orgId: localStorage.getItem('org_id'),
+        warnName: this.warnName
       };
       warningListAPI(params).then((res) => {
         if (res.code === 200) {
@@ -334,14 +315,14 @@ export default {
       this.warningVisible = false;
     },
     nameCommand(itemCommand) {
-      console.log(itemCommand);
     },
     statusCommand(itemCommand) {
+      this.eventStatus = itemCommand;
       const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
         orgId: localStorage.getItem('org_id'),
-        warnName:'',
+        warnName: this.warnName,
         status: this.statusTypes(itemCommand)
       };
       warningListAPI(params).then((res) => {

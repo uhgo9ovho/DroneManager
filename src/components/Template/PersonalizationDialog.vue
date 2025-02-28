@@ -12,13 +12,13 @@
       label-position="top"
     >
       <el-form-item prop="orgName" label="平台名称">
-        <el-input v-model="ruleForm.orgName"></el-input>
+        <el-input v-model="ruleForm.platformName"></el-input>
       </el-form-item>
       <el-form-item prop="webLogo" label="平台LOGO图片">
         <div class="upload">
           <el-upload
             class="avatar-uploader"
-            action="/dev-api/common/upload"
+            :action="action"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -26,7 +26,7 @@
           >
             <img
               v-if="ruleForm.webLogo"
-              :src="ruleForm.webLogo"
+              :src="'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + ruleForm.webLogo"
               class="avatar"
             />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -34,7 +34,7 @@
           </el-upload>
           <el-upload
             class="avatar-uploader"
-            action="/dev-api/common/upload"
+            :action="action"
             :show-file-list="false"
             :on-success="handleAvatarSuccess2"
             :before-upload="beforeAvatarUpload2"
@@ -42,7 +42,7 @@
           >
             <img
               v-if="ruleForm.platformLogo"
-              :src="ruleForm.platformLogo"
+              :src="'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + ruleForm.platformLogo"
               class="avatar"
             />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -65,7 +65,7 @@
 
 <script>
 import { getToken } from "@/utils/auth";
-import { imgUrl, editOrgInfo, getDepartmentList } from "@/api/user.js";
+import { imgUrl, editOrgInfo, getDepartmentList,gxhByOrgApi,getOrganizationInfo } from "@/api/user.js";
 export default {
   name: "PersonalizationDialog",
   props: {
@@ -80,11 +80,9 @@ export default {
   },
   data() {
     return {
+      action: process.env.VUE_APP_BASE_API + '/common/upload',
       ruleForm: {
-        orgName: "",
-        logo: "",
-        webLogo: "",
-        platformLogo: "",
+
       },
       webUrl: "",
       palteUrl: "",
@@ -96,6 +94,14 @@ export default {
     };
   },
   methods: {
+    fetchOrganizationInfo(orgId) {
+      getOrganizationInfo(orgId).then((res) => {
+        this.ruleForm = res;
+        console.log('个性化信息', res);
+      }).catch((err) => {
+        this.$message.error('请求失败');
+      });
+    },
     handleClose() {
       this.$emit("personalizationHandle");
     },
@@ -105,11 +111,11 @@ export default {
         orgId: this.itemRow.orgId,
         createId: this.itemRow.createId,
         orgDeptName: this.ruleForm.orgName,
-        webLogo: this.webUrl,
-        platformLogo: this.palteUrl,
-        platformName: this.ruleForm.orgName,
+        webLogo: this.webUrl ? this.webUrl : this.ruleForm.webLogo,
+        platformLogo: this.palteUrl ? this.palteUrl : this.ruleForm.platformLogo,
+        platformName: this.ruleForm.platformName,
       };
-      editOrgInfo(params).then((res) => {
+      gxhByOrgApi(params).then((res) => {
         if (res.code == 200) {
           this.$message.success(res.msg);
           this.$emit("editGXH");
@@ -121,19 +127,21 @@ export default {
     beforeAvatarUpload() {},
     handleAvatarSuccess(res) {
       this.webUrl = res.url;
-      this.ruleForm.webLogo = "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + res.url;
+      this.ruleForm.webLogo =  res.url;
     },
     handleAvatarSuccess2(res) {
       this.palteUrl = res.url;
-      this.ruleForm.platformLogo = "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + res.url;
+      this.ruleForm.platformLogo = res.url;
     },
     beforeAvatarUpload2() {},
     //获取组织列表
+
+
   },
   mounted() {
-    this.ruleForm.orgName = this.itemRow.orgDeptName;
-    this.ruleForm.webLogo = 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + this.itemRow.webLogo;
-    this.ruleForm.platformLogo = 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + this.itemRow.platformLogo;
+
+    this.fetchOrganizationInfo(this.$store.getters.orgId);
+
   },
 };
 </script>

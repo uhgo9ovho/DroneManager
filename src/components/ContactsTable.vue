@@ -69,7 +69,7 @@ import { mockList2 } from "@/utils/mock.js";
 import CommonTable from "./CommonTable.vue";
 import AddAndEditDepartment from "./Template/AddAndEditDepartment.vue";
 import MigrateDialog from "./Template/MigrateDialog.vue";
-import { getDeptList, delDept } from "@/api/user.js";
+import { getDeptList, delDept, getOrganizationInfo } from '@/api/user.js'
 import PersonalizationDialog from "./Template/PersonalizationDialog.vue";
 export default {
   name: "ContactsTable",
@@ -118,6 +118,7 @@ export default {
       },
       list: [],
       itemRow: null,
+
       total: 0,
     };
   },
@@ -127,9 +128,9 @@ export default {
     },
   },
   methods: {
+
     editGXH() {
       this.personalizationShow = false;
-      this.getDepartment();
     },
     personalizationHandle() {
       this.personalizationShow = false;
@@ -185,6 +186,11 @@ export default {
                 message: "删除成功!",
               });
               this.getDepartment();
+            } else {
+              this.$message({
+                type: "error",
+                message: res.msg,
+              });
             }
           });
         })
@@ -202,6 +208,7 @@ export default {
   },
   mounted() {
     this.getDepartment();
+
   },
   components: {
     CommonTable,

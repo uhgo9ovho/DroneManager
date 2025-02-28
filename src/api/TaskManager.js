@@ -26,12 +26,45 @@ export const addAndEditTask = (params) => {
 }
 
 /**
+ * 排期编辑
+ */
+export const EditTaskAPI = (params) => {
+  return request({
+    url: '/wurenji/task/updateSchedule',
+    method: 'post',
+    data: params
+  })
+}
+
+/**
  * 任务列表
  * @returns
  */
 export const taskListAPI = (params) => {
   return request({
-    url: `/wurenji/task/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${localStorage.getItem('org_id')}&taskName=${params.taskName ? params.taskName : ''}`,
+    url: `/wurenji/task/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${localStorage.getItem('org_id')}&taskName=${params.taskName ? params.taskName : ''}&taskType=${params.task_type == undefined ? '' : params.task_type}&taskStatus=${params.taskStatus == undefined ? '' : params.taskStatus}&approvalStatus=1`,
+    method: 'get'
+  })
+}
+
+/**
+ * 添加航线
+ * @returns
+ */
+export const addTaskListAPI = (params) => {
+  return request({
+    url: `/wurenji/task/listTwo?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${localStorage.getItem('org_id')}&taskName=${params.taskName ? params.taskName : ''}&taskType=${params.task_type == undefined ? '' : params.task_type}&taskStatus=${params.taskStatus == undefined ? '' : params.taskStatus}&approvalStatus=1`,
+    method: 'get'
+  })
+}
+
+/**
+ * 工单列表
+ * @returns
+ */
+export const workListAPI = (params) => {
+  return request({
+    url: `/wurenji/task/list?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${localStorage.getItem('org_id')}&taskName=${params.taskName ? params.taskName : ''}&taskType=${params.task_type == undefined ? '' : params.task_type}&taskStatus=${params.taskStatus == undefined ? '' : params.taskStatus}&isWorkOrder=1`,
     method: 'get'
   })
 }
@@ -374,5 +407,27 @@ export const getPlotAPI = () => {
   return request({
     url: `/crm/plot/getPlot?orgId=${localStorage.getItem('org_id')}`,
     method: 'get'
+  })
+}
+
+/**
+ * 办结接口
+ */
+export const orderApprovalAPI = (params) => {
+  return request({
+    url: '/wurenji/task/orderApproval',
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 文件下载
+ */
+export const fileDownloadAPI = (params) => {
+  return request({
+    url: '/wurenji/result/packageDownload',
+    method: 'get',
+    params
   })
 }

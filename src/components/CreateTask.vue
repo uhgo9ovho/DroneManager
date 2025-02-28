@@ -11,7 +11,7 @@
           :model="ruleForm"
           :rules="rules"
           ref="ruleForm"
-          label-width="100px"
+          label-width="auto"
           class="demo-ruleForm"
           label-position="top"
         >
@@ -27,6 +27,7 @@
               v-model="ruleForm.taskType"
               @input="changeType"
               size="small"
+              @change="typeChange"
             >
               <el-radio-button label="拍照"></el-radio-button>
               <el-radio-button label="直播"></el-radio-button>
@@ -97,6 +98,7 @@
               :on-change="fileChange"
               :on-success="successUpload"
               :on-remove="removeFile"
+              :before-upload="beforeUpload"
             >
               <el-button size="small" type="primary" icon="el-icon-plus"
                 >导入文件</el-button
@@ -104,6 +106,22 @@
             </el-upload>
           </el-form-item>
           <el-form-item label="飞行排期" prop="date">
+            <div slot="label">
+              <span>飞行排期</span>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                placement="top-start"
+              >
+              <div slot="content">
+              1、每天最多6条航线，起飞时间分别为9：00、10:30、12:00、14.30、17:00、19:00；
+              <br/>2、每天执行，判断每天的起飞时间段是否冲突并且所选时间段是否能执行完任务内所有航线，如果有冲突或者无法执行完，则报冲突；<br/>
+              3、每周选定日期（可多选）执行，所选日期当天无法执行任务中的第一条航线，则报冲突；<br/>
+              4、每月选定日期（可多选）执行，所选日期当天无法执行任务中的第一条航线，则报冲突；当月本轮次未执行完，结束本轮次；起止日期内有一月不能执行，则报冲突。
+              </div>
+                <i class="el-icon-question"></i>
+              </el-tooltip>
+            </div>
             <el-button class="date-btn" @click="openSettingDate"
               >排期设置</el-button
             >
@@ -137,7 +155,7 @@ export default {
   props: {
     length: {
       type: Number,
-      default: 0
+      default: 0,
     },
     settingInfo: {
       type: String,
@@ -197,10 +215,7 @@ export default {
         taskType: [
           { required: true, message: "请选择任务类型", trigger: "change" },
         ],
-        airLine: [
-          { required: true, validator: this.validatePass, trigger: "change" },
-        ],
-        date: [{ required: true, validator: validatePass2, trigger: "change" }],
+        date: [{ validator: validatePass2, trigger: "change" }],
       },
     };
   },
@@ -228,6 +243,11 @@ export default {
     clearFilesFn() {
       this.$refs.upload.clearFiles();
     },
+    typeChange() {
+      if (this.airlineList.length && !this.isImport) {
+        this.$emit("clearLine", "重绘");
+      }
+    },
     handleChangeHeight(value) {
       console.log(value);
       this.ruleForm.height = value;
@@ -246,11 +266,26 @@ export default {
         if (!this.hasExist) callback(new Error("请选择航线文件"));
         callback(new Error(this.uploadMsg));
       } else {
-        callback();
+        if (this.uploadMsg && this.uploadMsg != "操作成功") {
+          callback(new Error(this.uploadMsg));
+        } else {
+          callback();
+        }
       }
     },
     removeFile(file) {
       this.fileArr = this.fileArr.filter((item) => item.uid != file.uid);
+      if (!this.fileArr.length) {
+        this.hasExist = false;
+      }
+    },
+    beforeUpload(file) {
+      console.log(file);
+      const fileType = file.name.split(".")[1];
+      if (fileType != "kmz") {
+        this.$message.error("只能上传kmz文件");
+      }
+      return fileType == "kmz";
     },
     successUpload(res, file) {
       if (res.code == 200) {
@@ -258,11 +293,11 @@ export default {
         response["uid"] = file.uid;
         this.fileArr.push(response);
         this.hasExist = false;
+        this.uploadMsg = "操作成功";
       } else {
         this.hasExist = true;
         this.uploadMsg = res.msg;
       }
-      this.$refs["ruleForm"].validateField(["airLine"]);
     },
     openSettingDate() {
       this.$emit("openSettingDate");
@@ -303,15 +338,14 @@ export default {
     addTaskBtn() {
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
-          if(!this.length) {
-            return this.$message.error('请选择具体的日期');
+          if (!this.length) {
+            return this.$message.error("请选择具体的日期");
           }
           this.loading = true;
           const params = {
             lineTaskType: this.isImport ? 2 : 1, //绘制1  导入2
             taskName: this.ruleForm.taskName,
             taskType: this.taskTypeValue,
-            taskAddress: "陕西省咸阳市",
             schedulingType: this.inspectionValue,
             timesType: this.frequencyValue,
             airlineNumber: this.isImport
@@ -319,7 +353,7 @@ export default {
               : this.airlineList.length, //航线数量
             startTime: this.starttime,
             endTime: this.endtime,
-            dateArrays: this.valArr.join(','),
+            dateArrays: this.valArr.join(","),
             wrjAirlineFiles: this.fileArr, //导入的时候传这个
             lineFileCache: this.airlineList, //绘制的时候传这个
             note: this.settingInfo,
@@ -370,6 +404,7 @@ export default {
   border-radius: 12px 12px 12px 12px;
   padding: 0 24px;
   z-index: 2;
+
   .task-title {
     width: 100%;
     height: 65px;

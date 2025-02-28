@@ -205,7 +205,7 @@ export default {
           icon: rwjc,
           number: "",
           unit: "次",
-          tips: "任务架次",
+          tips: "飞行排期",
         },
       ],
       footerOptions: [
@@ -295,7 +295,7 @@ export default {
           case "提交任务数":
             option.number = data.totalSubmitNum;
             break;
-          case "任务架次":
+          case "飞行排期":
             option.number = data.totalTaskNum;
             break;
           default:
@@ -317,7 +317,17 @@ export default {
             option.number = data.saveCost;
             break;
           case "减少碳排":
-            option.number = data.reduceCarbon;
+            // option.number = data.reduceCarbon;
+            let carbonValue = data.reduceCarbon;
+            // 如果碳排值超过1000，转换为吨，并保留两位小数
+            if (carbonValue >= 1000) {
+              carbonValue = (carbonValue / 1000).toFixed(2); // 转换成吨
+              option.unit = "吨";
+            } else {
+              carbonValue = carbonValue.toFixed(2); // 保留两位小数
+              option.unit = "kg";
+            }
+            option.number = carbonValue;
             break;
           default:
             break;
@@ -413,13 +423,14 @@ export default {
 
     // 示例调用
     getDateRange(period) {
+
       const today = new Date(); // 当前日期
       const startDate = new Date(); // 起始日期
 
       // 根据 period 设置起始日期
       switch (period) {
         case "week": // 一周
-          startDate.setDate(today.getDate() - 7);
+          startDate.setDate(today.getDate() - 6);  // 起始日期提前一天
           break;
         case "month": // 一个月
           startDate.setMonth(today.getMonth() - 1);
@@ -444,8 +455,12 @@ export default {
         return `${year}.${month}.${day}`;
       };
 
+      // 这里的显示起始日期提前一天
+      const displayStartDate = new Date(startDate);
+      displayStartDate.setDate(displayStartDate.getDate() - 1); // 调整起始日期
+
       // 返回时间范围
-      this.currentDate = `${formatDate(startDate)}-${formatDate(today)}`;
+      this.currentDate = `${formatDate(displayStartDate)}-${formatDate(today)}`;
     },
   },
 };

@@ -109,13 +109,14 @@
 
   .box-code {
     margin-top: 48px;
-    width: 240px;
-    height: 240px;
-    margin-left: 40px;
-
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     img {
-      width: 100%;
-      height: 100%;
+      width: 240px;
+      height: 240px;
       vertical-align: top;
     }
   }
@@ -173,5 +174,20 @@
   border-color: transparent;
   .popper__arrow::after {
       color: block !important;
+  }
+}
+.dropdown_selected {
+  background-color: #f5f7fa;
+  color: #409EFF;
+  font-weight: bold;
+}
+.dropdown-max{
+  top: 150px !important;
+  max-width: 600px;
+  display: flex;
+  flex-flow: row wrap;
+  li{
+    margin-right: 5px;
+    white-space: nowrap;
   }
 }

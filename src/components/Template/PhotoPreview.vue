@@ -120,12 +120,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="quanjing" v-else>
-        <div class="img_box" ref="panorama"></div>
-        <div class="close" @click="closePreview">
-          <i class="el-icon-close"></i>
-        </div>
-      </div> -->
     </div>
     <div id="map"></div>
   </div>
@@ -141,6 +135,10 @@ export default {
   name: "PhotoPreview",
   props: {
     currentUrl: {
+      type: String,
+      default: "",
+    },
+    warnPhoto: {
       type: String,
       default: "",
     },
@@ -323,9 +321,11 @@ export default {
       this.remarkList.forEach((it) => (it.checked = false));
     },
     selectItem(item) {
+      console.log(item,'item');
+      
       this.$refs.imageZoom.addTextToSelectedBox(item.dictLabel);
       this.currentName = item.dictLabel;
-      this.currentTypeName = item.remark;
+      this.currentTypeName = item.dictLabel;
       this.currentId = item.dictValue;
       this.isShow = true;
       this.showSure = true;

@@ -108,7 +108,7 @@
             v-loading="loading"
             @click="updateUrl"
           >
-            <div slot="error" class="image-slot">-->
+            <div slot="error" class="image-slot">
                  <i class="el-icon-loading" style="font-size: 40px"></i>
             </div>
           </el-image>
@@ -207,7 +207,7 @@ export default {
       this.showOrg = false;
       this.loading = false;
       this.loginForm.code = "";
-      this.$refs.loginForm.resetFields();
+      // this.$refs.loginForm.resetFields();
     },
     getCode() {
       getCodeImg().then((res) => {
@@ -257,6 +257,7 @@ export default {
             .then((res) => {
               if (res.code == 200) {
                 this.showOrg = true;
+                Cookies.set('userId', res.userId);
               } else {
                 this.$message.error(res.msg);
                 this.getCode();
@@ -307,7 +308,7 @@ export default {
             this.stopPolling();
             return this.$message.error("二维码过期,请刷新");
           }
-          if (statusResponse.data) {
+          if (statusResponse.data.state) {
             const status = statusResponse.data.state;
 
             // 根据状态更新消息
@@ -322,7 +323,8 @@ export default {
                 this.statusMessage = "等待扫描...";
             }
           } else {
-            setToken(statusResponse.msg);
+            setToken(statusResponse.data.token);
+            Cookies.set('userId', statusResponse.data.userId);
             this.showOrg = true;
             this.stopPolling();
           }

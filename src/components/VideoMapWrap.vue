@@ -252,7 +252,7 @@
     <!-- controlsUser -->
     <div class="controlUserBox">
       <div class="control_user">
-        <span>控制：{{ controler && controler.userName }}</span>
+        <span>控制：{{ controler ? controler.userName : "暂无" }}</span>
       </div>
       <div class="monitor_user">
         <span>监视：{{ "暂无" }}</span>
@@ -292,6 +292,7 @@ import {
 import { getPlotAPI } from "@/api/TaskManager.js";
 import { returnHomeAPI } from "@/api/droneControl.js";
 import { UranusMqtt } from "@/utils/mqtt";
+import { getToken } from '@/utils/auth'
 import Cookies from "js-cookie";
 import { useManualControl } from "@/utils/mqtt/use-manual-control";
 import ElectricQuantity from "@/components/Template/ElectricQuantity.vue";
@@ -346,7 +347,7 @@ export default {
       tempHumidity: "-",
       capacity_percent: "-",
       tempRainfall: "-",
-      tempCapacityPercent: "-",
+      tempCapacityPercent: 0,
       percentage: 0,
       mqttState: null,
       client_id: "",
@@ -457,7 +458,9 @@ export default {
             : host.rainfall == "3"
             ? "大雨"
             : "无雨";
-        this.tempWind_speed = parseFloat(host.wind_speed.toFixed(2));
+        if (host.wind_speed) {
+          this.tempWind_speed = parseFloat(host.wind_speed.toFixed(2));
+        }
         if ("drc_state" in host) {
           this.drcState = host.drc_state;
           console.log(host.drc_state, "drc_status");
@@ -482,13 +485,13 @@ export default {
     this.getEQToken();
     this.getDeviceInfo();
     this.getPlotInfo();
+          
   },
   methods: {
     ...mapActions("droneStatus", [
       "getToicpSubPub",
       "getMqttState",
       "getDeviceSN",
-      "getOutsideStreamUrl",
       "fetchAirPostInfo",
     ]),
     droneEmergencyStop() {
@@ -545,37 +548,39 @@ export default {
         if (res.code === 200) {
           const token = res.data.data["ws-token"];
           this.ws = new WebSocketClient(
-            // `ws://8.136.97.59:6789/api/v1/ws?ws-token=${token}` //线上
             `${process.env.VUE_APP_WS_URL}?ws-token=${token}` //本地
           );
         }
       });
     },
     returnHome() {
-      const params = {
-        sn: this.deviceSN,
-        service_identifier: "return_home",
-      };
-      returnHomeAPI(params).then((res) => {
-        console.log(res, "返航");
-        if (res.code === 0) {
-          this.$message.success("一健返航成功");
-        } else {
-          this.$message.error(res.message);
-        }
-      });
+      if (this.mode_code) {
+        const params = {
+          sn: this.deviceSN,
+          service_identifier: "return_home",
+        };
+        returnHomeAPI(params).then((res) => {
+          if (res.code === 0) {
+            this.$message.success("一健返航成功");
+          } else {
+            this.$message.error(res.message);
+          }
+        });
+      } else {
+        this.$message.warning('飞行画面及飞行信息暂未连接无法一键返航，请查看是否在飞行中')
+      }
     },
     confirm(e) {
       connectDRCAPI({}).then((res) => {
         if (res.code === 0) {
           const { address, client_id, username, password, expire_time } =
             res.data;
-          const userInfo = JSON.parse(Cookies.get("user"));
           this.client_id = client_id;
+          const userInfo = JSON.parse(Cookies.get("user"));
           this.mqttState = new UranusMqtt(address, {
             clientId: client_id,
             username: `hjh`,
-            password: "123123",
+            password: '123123',
           });
           this.getMqttState(this.mqttState);
           this.mqttState.initMqtt();
@@ -736,7 +741,6 @@ export default {
     bottom: 20px;
     height: 80px;
     width: 130px;
-    background-color: lightgray;
     cursor: pointer;
     z-index: 100;
   }

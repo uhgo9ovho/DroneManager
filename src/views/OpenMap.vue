@@ -21,6 +21,7 @@
       :valArr="valArr"
       @openSettingDate="openSettingDate"
       @changeDownContentShow="changeDownContentShow"
+      @clearLine="clearLine"
       ref="createTask"
     ></create-task>
     <!-- 排期设置 -->
@@ -48,6 +49,7 @@ import CreateTask from "../components/CreateTask.vue";
 import MapContainer from "../components/MapContainer.vue";
 import SettingDate from "../components/SettingDate.vue";
 import { mapState, mapMutations, mapActions } from "vuex";
+import { wgs84ToGcj02 } from "@/utils/CoordinateTransformation.js";
 import { getPlotAPI } from "@/api/TaskManager.js";
 const now = new Date();
 export default {
@@ -93,7 +95,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations("changeStatus", ["CHANGE_DROC_STATUS"]),
+    ...mapMutations("changeStatus", ["CHANGE_DROC_STATUS", "CLEAR_POINTSLIST"]),
     ...mapActions("droneStatus", ["fetchAirPostInfo"]),
     changeDownContentShow(flag) {
       this.isShow = flag;
@@ -113,7 +115,10 @@ export default {
     getPlotInfo() {
       getPlotAPI().then((res) => {
         if (res.code === 200) {
-          this.coordinates = JSON.parse(res.rows[0].coordinates);
+          const arr = JSON.parse(res.rows[0].coordinates);
+          this.coordinates = arr.map((it) =>
+            wgs84ToGcj02(it.lon, it.lat)
+          );
         }
       });
     },
@@ -143,13 +148,18 @@ export default {
     schedulingType(val) {
       this.inspectionValue = val;
     },
+    clearLine(text) {
+      this.startDown(text);
+    },
     startDown(text) {
       if (text == "取消") {
         //取消绘制
         this.$refs.AMAP.removePolyline();
+        this.CLEAR_POINTSLIST()
       } else if (text == "重绘") {
         //清除当前绘制重新画
         this.$refs.AMAP.resetPolyline();
+        this.CLEAR_POINTSLIST()
       } else {
         this.$refs.AMAP.renderPolyline();
       }

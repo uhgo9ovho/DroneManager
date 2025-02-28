@@ -5,10 +5,10 @@
       ref="menu"
       node-key="menuId"
       :props="defaultProps"
-      :show-checkbox="showCheckbox"
+      show-checkbox
       highlight-current
-      :default-checked-keys="checkedKeys"
       @check="currentChecked"
+      :check-strictly="isCheck"
     ></el-tree>
   </div>
 </template>
@@ -26,8 +26,15 @@ export default {
     },
     checkedKeys: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
+  },
+  mounted() {
+    this.isCheck = true
+    this.$nextTick(() => {
+      this.$refs.menu.setCheckedKeys(this.checkedKeys); //给树节点赋值回显
+      this.isCheck = false; //重点： 赋值完成后 设置为false
+    });
   },
   data() {
     return {
@@ -35,15 +42,16 @@ export default {
         children: "children",
         label: "menuName",
       },
+      isCheck: false,
     };
   },
   methods: {
     currentChecked(nodeObj, SelectedObj) {
-      let halfCheckedKeys = this.$refs.menu.getHalfCheckedKeys()
+      let halfCheckedKeys = this.$refs.menu.getHalfCheckedKeys();
       console.log(halfCheckedKeys);
-      
-      this.$emit('selectedKeys', SelectedObj.checkedKeys, halfCheckedKeys);
-    }
+
+      this.$emit("selectedKeys", SelectedObj.checkedKeys, halfCheckedKeys);
+    },
   },
 };
 </script>

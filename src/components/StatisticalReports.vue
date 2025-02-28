@@ -53,7 +53,7 @@ export default {
         },
         {
           prop: 'questNum',
-          label: '任务数',
+          label: '执行任务数',
           showOverflowTooltip: false
         },
         {
@@ -74,6 +74,11 @@ export default {
         {
           prop: 'orthographicNum',
           label: '正射',
+          showOverflowTooltip: false
+        },
+        {
+          prop: 'liveNum',
+          label: '直播',
           showOverflowTooltip: false
         },
         {

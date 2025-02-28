@@ -97,6 +97,16 @@ export const getRoleListAPI = (params) => {
 }
 
 /**
+ * 获取组织管理下的角色列表
+ */
+export const getOrgRoleListAPI = (params) => {
+  return request({
+    url: '/system/role/listAdminToOrg',
+    method: 'get',
+    params
+  })
+}
+/**
  * 角色编辑回显
  */
 export const roleMenuTreeselectAPI = (roleId) => {
@@ -143,6 +153,26 @@ export const EditEchoAPI = (id) => {
 export const addRoleAPI = (params) => {
   return request({
     url: '/system/role',
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 角色删除
+ */
+export const deleteRoleAPI = (roleIds) => {
+  return request({
+    url: `/system/role/${roleIds}`,
+    method: 'delete',
+  })
+}
+/**
+ * 
+ */
+export const transferOrgAdminAPI = (params) => {
+  return request({
+    url: '/wrj/user/transferOrgAdmin',
     method: 'post',
     data: params
   })

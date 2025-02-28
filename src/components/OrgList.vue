@@ -47,8 +47,8 @@ export default {
       orgList: [],
       params: {
         pageNum: 1,
-        pageSize: 10,
-        userId: null,
+        pageSize: 100000000,
+        userId: Cookies.get("userId"),
       },
     };
   },
@@ -87,29 +87,37 @@ export default {
         }
       });
     },
-    async selectOrg(row) {
+    selectOrg(row) {
       this.$store.commit("SET_ORG_ID", row.orgId);
       this.$store.commit("SET_ORG_WORKSPACEID", row.workspaceId);
       localStorage.setItem("platformName", row.platformName);
+      localStorage.setItem('platformLogo', 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + row.platformLogo);
+      localStorage.setItem('webLogo', 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + row.webLogo);
       Cookies.set("orgName", row.orgName);
       document.title = row.platformName;
-      await this.fetchAirPostInfo();
-      this.$router.push({ path: this.redirect || "/" }).catch(() => {});
-    },
-    getUserInfo() {
-      getInfo().then((res) => {
+      getInfo(row.orgId, Cookies.get("userId")).then(async (res) => {
         if (res.code === 200) {
-          let userInfo = res.user;
+          let userInfo = res.data;
           Cookies.set("user", JSON.stringify(userInfo), { expires: 30 });
-          this.params.userId = userInfo.userId;
-          localStorage.setItem('userPermission', JSON.stringify(res.permissions))
-          this.getOrgList();
+          // this.params.userId = userInfo.userId;
+          if (res.permissions.length) {
+            localStorage.setItem(
+              "userPermission",
+              JSON.stringify(res.permissions)
+            );
+            await this.fetchAirPostInfo();
+            this.$router.push({ path: this.redirect || "/" }).catch(() => {});
+          } else {
+            this.$message.error('该成员没有权限,请联系管理员')
+          }
         }
       });
     },
+    getUserInfo() {},
   },
   mounted() {
-    this.getUserInfo();
+    // this.getUserInfo();
+    this.getOrgList();
   },
 };
 </script>

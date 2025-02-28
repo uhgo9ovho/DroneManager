@@ -32,9 +32,9 @@ export function register(data) {
 }
 
 // 获取用户userId
-export function getInfo() {
+export function getInfo(orgId, userId) {
   return request({
-    url: '/loginCnt/getInfo',
+    url: `/system/user/${orgId}/${userId}`,
     method: 'get'
   })
 }

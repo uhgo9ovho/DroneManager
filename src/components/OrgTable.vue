@@ -10,10 +10,16 @@
       @sizeChange="sizeChange"
     >
       <template #operate="scope">
-        <el-button type="text" @click="handleAddDevice(scope.row)" v-permissions="'wrj:device:add'"
+        <el-button
+          type="text"
+          @click="handleAddDevice(scope.row)"
+          v-permissions="'wrj:device:add'"
           >新增设备</el-button
         >
-        <el-button type="text" @click="handleDeviceList(scope.row)" v-permissions="'wrj:device:list'"
+        <el-button
+          type="text"
+          @click="handleDeviceList(scope.row)"
+          v-permissions="'wrj:device:list'"
           >设备列表</el-button
         >
         <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
@@ -78,7 +84,7 @@ export default {
   },
   data() {
     return {
-      deviceTitle:"新增设备",
+      deviceTitle: "新增设备",
       searchValue: "",
       searchType: 1,
       columns: [
@@ -136,16 +142,16 @@ export default {
       const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
-      }
-      if(this.searchType === 1) {
+      };
+      if (this.searchType === 1) {
         params.orgName = val;
-      } else if(this.searchType === 2) {
+      } else if (this.searchType === 2) {
         params.head = val;
       }
       const res = await getOrgListAPI(params);
       if (res.code === 200) {
         this.tableList = res.rows;
-        this.total = res.total.total;
+        this.total = res.total;
       }
     },
   },
@@ -156,7 +162,7 @@ export default {
     updateList() {
       this.getOrgList();
     },
-    pageChange(pageNum) {      
+    pageChange(pageNum) {
       this.pageNum = pageNum.pageNum;
       this.getOrgList();
     },
@@ -165,10 +171,16 @@ export default {
       this.getOrgList();
     },
     async getOrgList() {
-      const res = await getOrgListAPI({
+      const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
-      });
+      };
+      if (this.searchType === 1) {
+        params.orgName = this.searchValue;
+      } else if (this.searchType === 2) {
+        params.head = this.searchValue;
+      }
+      const res = await getOrgListAPI(params);
       if (res.code === 200) {
         this.tableList = res.rows;
         this.total = res.total;
@@ -194,18 +206,24 @@ export default {
       this.updateDialogVisible(true);
     },
     handleDelete(row) {
-      deleteOrgAPI(row.orgId)
-        .then((res) => {
-          if (res.code === 200) {
-            this.$message.success("删除成功");
-            this.getOrgList();
-          } else {
+      this.$confirm("此操作将永久删除该组织, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        deleteOrgAPI(row.orgId)
+          .then((res) => {
+            if (res.code === 200) {
+              this.$message.success("删除成功");
+              this.getOrgList();
+            } else {
+              this.$message.error(res.msg);
+            }
+          })
+          .catch((err) => {
             this.$message.error("删除失败");
-          }
-        })
-        .catch((err) => {
-          this.$message.error("删除失败");
-        });
+          });
+      });
     },
     updateDialogVisible(dialogVisible) {
       this.$emit("updateDialogVisible", dialogVisible);

@@ -4,7 +4,12 @@
       <i class="el-icon-close"></i>
     </div>
     <div class="task-info-wrap">
-      <div class="state" :style="{'background-color': statusType(row.taskStatus)}">{{ row.taskStatus | filterStatus }}</div>
+      <div
+        class="state"
+        :style="{ 'background-color': statusType(row.taskStatus) }"
+      >
+        {{ row.taskStatus | filterStatus }}
+      </div>
       <div class="title_wrap">
         <div class="tag">任务</div>
         <div class="titles">{{ taskName }}</div>
@@ -59,26 +64,26 @@
         <div class="top">执行机场</div>
         <div class="data">{{ row.airportName }}</div>
       </div>
-<!--      <div class="item">-->
-<!--        <i-->
-<!--          class="iconfont"-->
-<!--          :class="[taskDetails ? 'el-icon-xiazai20' : 'el-icon-dikuai']"-->
-<!--        ></i>-->
-<!--        <div class="msg">{{ taskDetails ? "任务信息" : "地块信息" }}</div>-->
-<!--        <el-divider></el-divider>-->
-<!--      </div>-->
-<!--      <div class="plot">-->
-<!--        <div class="item" v-for="(item, index) in plotOptions" :key="index">-->
-<!--          <div class="top">{{ item.label }}</div>-->
-<!--          <div class="data">{{ item.value }}</div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="single">-->
-<!--        <div class="top">位置详情</div>-->
-<!--        <div class="data">-->
-<!--          {{ row.taskAddress }}-->
-<!--        </div>-->
-<!--      </div>-->
+      <!--      <div class="item">-->
+      <!--        <i-->
+      <!--          class="iconfont"-->
+      <!--          :class="[taskDetails ? 'el-icon-xiazai20' : 'el-icon-dikuai']"-->
+      <!--        ></i>-->
+      <!--        <div class="msg">{{ taskDetails ? "任务信息" : "地块信息" }}</div>-->
+      <!--        <el-divider></el-divider>-->
+      <!--      </div>-->
+      <!--      <div class="plot">-->
+      <!--        <div class="item" v-for="(item, index) in plotOptions" :key="index">-->
+      <!--          <div class="top">{{ item.label }}</div>-->
+      <!--          <div class="data">{{ item.value }}</div>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--      <div class="single">-->
+      <!--        <div class="top">位置详情</div>-->
+      <!--        <div class="data">-->
+      <!--          {{ row.taskAddress }}-->
+      <!--        </div>-->
+      <!--      </div>-->
       <div class="item">
         <i class="el-icon-document"></i>
         <div class="msg">创建信息</div>
@@ -182,8 +187,7 @@ export default {
             }`,
           },
         ];
-      }
-      else {
+      } else {
         //地块信息
         return [
           {
@@ -227,6 +231,7 @@ export default {
           this.info.push(JSON.parse(item.drawLineData));
         });
         const pointsList = this.info.map((item) => item.pointsList);
+        
         this.detailOptions[0].value =
           this.info
             .reduce(
@@ -434,6 +439,7 @@ export default {
     }
 
     .single {
+      width: 100%;
       .top {
         font-weight: 400;
         font-size: 12px;
@@ -443,13 +449,16 @@ export default {
       }
 
       .data {
+        width: 100%;
+
+        word-wrap: break-word;
+        word-break: break-all;
         font-weight: 400;
         font-size: 14px;
         color: rgb(29, 29, 31);
         line-height: 20px;
         margin-top: 4px;
 
-        white-space: nowrap;
         text-align: left;
       }
     }

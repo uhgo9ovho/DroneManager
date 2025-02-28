@@ -11,13 +11,14 @@
     </div>
     <div class="certification">
       <div class="local">{{ orgName }}</div>
-<!--      <el-tag type="info">未认证</el-tag>-->
     </div>
     <el-divider></el-divider>
     <div class="invite-members" @click="openDialog">
       <div>邀请成员</div>
       <i class="el-icon-arrow-right"></i>
     </div>
+    <el-divider></el-divider>
+    <div class="loginout" @click="resetDialog">修改密码</div>
     <el-divider></el-divider>
     <div class="loginout" @click="logout">退出登录</div>
     <div v-if="dialogVisible">
@@ -26,11 +27,19 @@
         @closeDialog="closeDialog"
       ></invite-dialog>
     </div>
+    <div v-if="resetVisible">
+      <ResetPassDialog
+        :resetVisible="resetVisible"
+        @outLogin="outLogin"
+        @closeResetDialog="closeResetDialog"
+      ></ResetPassDialog>
+    </div>
   </div>
 </template>
 
 <script>
 import InviteDialog from "@/components/InviteDialog.vue";
+import ResetPassDialog from "./ResetPassDialog.vue";
 import { mapMutations } from "vuex";
 import { logout } from "@/api/login.js";
 import { removeToken } from "@/utils/auth.js";
@@ -40,12 +49,14 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      resetVisible: false,
       userInfo: {},
       orgName: "",
     };
   },
   components: {
     InviteDialog,
+    ResetPassDialog,
   },
   mounted() {
     this.userInfo = JSON.parse(Cookies.get("user"));
@@ -53,6 +64,12 @@ export default {
   },
   methods: {
     ...mapMutations("app", ["SET_FILTER_BULR"]),
+    closeResetDialog() {
+      this.resetVisible = false;
+    },
+    resetDialog() {
+      this.resetVisible = true;
+    },
     openDialog() {
       this.dialogVisible = true;
       this.SET_FILTER_BULR(true);
@@ -60,6 +77,27 @@ export default {
     closeDialog() {
       this.dialogVisible = false;
       this.SET_FILTER_BULR(false);
+    },
+    outLogin() {
+      logout().then((res) => {
+        if (res.code === 200) {
+          removeToken("Admin-Token");
+          localStorage.removeItem("org_id");
+          localStorage.removeItem("workspaceId");
+          localStorage.removeItem("vuex");
+          localStorage.removeItem("platformName");
+          localStorage.removeItem("devicesSN");
+          sessionStorage.removeItem("password");
+          Cookies.remove("user");
+          Cookies.remove("orgName");
+          Cookies.remove("orgList");
+          this.$router.push("/login");
+          this.$message({
+            type: "success",
+            message: "退出成功!",
+          });
+        }
+      });
     },
     logout() {
       this.SET_FILTER_BULR(true);
@@ -102,7 +140,7 @@ export default {
 <style lang="scss">
 .details {
   width: 100%;
-  height: 230px;
+  height: 260px;
   border-radius: 5px;
   .photo-user {
     display: flex;

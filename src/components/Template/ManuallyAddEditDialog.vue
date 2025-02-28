@@ -12,22 +12,25 @@
       height="500px"
       ref="ruleForm"
     >
-      <el-form-item label="姓名" prop="name">
-        <el-input placeholder="请输入名称" v-model="ruleForm.name"></el-input>
-      </el-form-item>
       <el-form-item label="联系方式" prop="phone">
         <el-input
           placeholder="请输入联系方式"
           v-model="ruleForm.phone"
           autocomplete="new-password"
+          @change="searchPhone"
         ></el-input>
       </el-form-item>
+      <el-form-item label="昵称" prop="name">
+        <el-input placeholder="请输入名称" v-model="ruleForm.name"></el-input>
+      </el-form-item>
+
       <el-form-item label="密码" prop="password" v-if="title == '添加成员'">
         <el-input
           placeholder="请输入密码"
           v-model="ruleForm.password"
           autocomplete="new-password"
           show-password
+          :disabled="isExist"
         ></el-input>
       </el-form-item>
       <el-form-item label="部门" prop="department">
@@ -60,7 +63,12 @@
 
 <script>
 import { roleOptionsAPI, EditEchoAPI } from "@/api/orgModel";
-import { addUser, editUserInfo, getDeptList } from "@/api/user.js";
+import {
+  addUser,
+  editUserInfo,
+  getDeptList,
+  phoneIsExistAPI,
+} from "@/api/user.js";
 export default {
   name: "ManuallyAddDialog",
   props: {
@@ -103,9 +111,23 @@ export default {
         orgDeptName: "",
       },
       roleList: [],
+      isExist: false,
     };
   },
   methods: {
+    searchPhone(val) {
+      phoneIsExistAPI(val).then((res) => {
+        this.isExist = res.isExist;
+        if (res.isExist) {
+          //手机号已经存在，将返回的信息回显，密码禁止输入
+          this.ruleForm.name = res.user.nickName;
+          this.ruleForm.password = "123123";
+        } else {
+          this.ruleForm.name = "";
+          this.ruleForm.password = "";
+        }
+      });
+    },
     getOrgList() {
       getDeptList(this.page).then((res) => {
         if (res.code === 200) {
@@ -129,8 +151,8 @@ export default {
       if (this.itemRow) {
         EditEchoAPI(this.itemRow.userId).then((res) => {
           console.log(res);
-          if(res.code == 200) {
-            this.ruleForm.roleIds = res.roleIds
+          if (res.code == 200 && this.title == "编辑成员") {
+            this.ruleForm.roleIds = res.roleIds;
           }
         });
       }
@@ -144,7 +166,7 @@ export default {
         if (valid) {
           if (this.title == "添加成员") {
             const params = {
-              userName: this.ruleForm.name,
+              // userName: this.ruleForm.name,
               nickName: this.ruleForm.name,
               phonenumber: this.ruleForm.phone,
               password: this.ruleForm.password,
@@ -168,7 +190,7 @@ export default {
               phonenumber: this.ruleForm.phone,
               orgDeptId: this.itemRow.orgDeptId,
               orgDeptIdTo: this.ruleForm.department,
-              roleIds: this.ruleForm.roleIds
+              roleIds: this.ruleForm.roleIds,
             };
             editUserInfo(params).then((res) => {
               if (res.code === 200) {
@@ -188,18 +210,17 @@ export default {
   },
   mounted() {
     this.ruleForm = {
-        name: "",
-        phone: "",
-        department: "",
-        password: "",
-        roleIds: [],
-    },
-      console.log("33",this.ruleForm)
+      name: "",
+      phone: "",
+      department: "",
+      password: "",
+      roleIds: [],
+    };
     this.getOrgList();
     this.getRoleList();
     this.getRoleSIdList();
     if (this.title == "编辑成员") {
-      this.ruleForm.name = this.itemRow.userName;
+      this.ruleForm.name = this.itemRow.nickName;
       this.ruleForm.phone = this.itemRow.phonenumber;
       this.ruleForm.department = this.itemRow.orgDeptId;
     }

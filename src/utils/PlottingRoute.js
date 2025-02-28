@@ -5,7 +5,7 @@ let polyline = null;
 let polygonCoord = null;
 let editor = []
 let isDraw = false
-export function DronePlottingRoute(map, mouseTool, AMap) {
+export function DronePlottingRoute(map, mouseTool, AMap, marker) {
     AMap.Event.addListener(mouseTool, 'draw', function (e) {
         isDraw = false
         mouseTool.close()
@@ -64,16 +64,27 @@ export function DronePlottingRoute(map, mouseTool, AMap) {
 
     function removeThis() {
         closeEdit()
-        map.remove(polygon)
-        map.remove(polyline)
+        if (polygon) {
+            map.remove(polygon)
+        }
+        if (polyline) {
+            map.remove(polyline)
+        }
+        if(marker) {
+            map.remove(marker)
+        }
+        
         drawPolygon()
     }
     function removeAll() {
-        if(polygon) {
+        if (polygon) {
             map.remove(polygon)
         }
-        if(polyline) {
+        if (polyline) {
             map.remove(polyline)
+        }
+        if(marker) {
+            map.remove(marker)
         }
         closeEdit()
         mouseTool.close(true)

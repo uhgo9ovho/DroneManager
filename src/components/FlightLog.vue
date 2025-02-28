@@ -20,11 +20,24 @@
       <template #createBy="{ row }">
         {{ row.createBy }}
       </template>
-      <template #record_status="{ row }">
-        <el-tag type="success">{{ row.record_status }}</el-tag>
+      <template #failMessage="{ row }">
+        <el-tooltip
+          effect="dark"
+          :content="row.failMessage ? row.failMessage : '任务执行成功'"
+          placement="top-start"
+        >
+          <el-tag :type="row.failMessage ? 'danger' : 'success'">{{
+            row.failMessage ? "失败" : "成功"
+          }}</el-tag>
+        </el-tooltip>
       </template>
       <template #operate="{ row }">
-        <el-button class="look-btn" @click="lookBtn(row)" v-permissions="'wurenji:record:query'">查看</el-button>
+        <el-button
+          class="look-btn"
+          @click="lookBtn(row)"
+          v-permissions="'wurenji:record:query'"
+          >查看</el-button
+        >
       </template>
     </common-table>
     <!-- 查看弹窗 -->
@@ -82,12 +95,12 @@ export default {
         //   label: "标注照片数",
         //   showOverflowTooltip: true,
         // },
-        // {
-        //   prop: "record_status",
-        //   label: "照片状态",
-        //   showOverflowTooltip: true,
-        //   slot: true,
-        // },
+        {
+          prop: "failMessage",
+          label: "飞行状态",
+          // showOverflowTooltip: true,
+          slot: true,
+        },
         {
           prop: "operate",
           label: "操作",
@@ -98,6 +111,7 @@ export default {
       pageNum: 1,
       pageSize: 10,
       row: {},
+      taskName: "",
     };
   },
   methods: {
@@ -126,8 +140,10 @@ export default {
       this.showDialog = false;
     },
     searchLogName(val) {
+      this.taskName = val;
+      this.pageNum = 1;
       const params = {
-        pageNum: this.pageNum,
+        pageNum: 1,
         pageSize: this.pageSize,
         orgId: localStorage.getItem("org_id"),
         taskName: val,
@@ -144,6 +160,7 @@ export default {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
         orgId: localStorage.getItem("org_id"),
+        taskName: this.taskName,
       };
       recordListAPI(params).then((res) => {
         if (res.code === 200) {

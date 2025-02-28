@@ -4,15 +4,15 @@
       :tableList="filghtList"
       :columns="columns"
       :total="total"
-      :pageNum="pageNum"
       :pageSize="pageSize"
+      :pageNum="pageNum"
       @pageChange="pageChange"
       @sizeChange="sizeChange"
     >
       <!-- 自定义表头 -->
       <template #taskName-header>
         <span>任务名称/类型</span>
-        <el-dropdown @command="nameCommand">
+        <el-dropdown @command="nameCommand" trigger="click">
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
           </span>
           <el-dropdown-menu slot="dropdown">
@@ -20,21 +20,23 @@
               v-for="(item, index) in nameOptions"
               :key="index"
               :command="item"
+              :class="{ dropdown_selected: dropdownName == item }"
               >{{ item }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </template>
-      <template #status-header="{ row }">
-        <span>本轮状态</span>
-        <el-dropdown @command="statusCommand">
+      <template #status-header>
+        <span>任务状态</span>
+        <el-dropdown @command="statusCommand" trigger="click" v-if="!isWork">
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
               v-for="(item, index) in statusOptions"
               :key="index"
-              :command="beforeHandleCommand1(row)"
+              :command="item"
+              :class="{ dropdown_selected: dropdownStatus == item }"
               >{{ item }}
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -48,7 +50,7 @@
         <div>{{ row.taskCreateTime }}</div>
         <div>{{ row.nickName }}</div>
       </template>
-      <template #status="{ row }">
+      <template #status="{ row }" v-if="!isWork">
         <el-tag :type="statusType(row.taskStatus)"
           >{{ row.taskStatus | filterStatus }}
         </el-tag>
@@ -58,9 +60,19 @@
           }})</span
         >
       </template>
+      <template #approvalStatus="{ row }" v-if="isWork">
+        <el-tag :type="approvalStatusType(row.approvalStatus)"
+          >{{ row.approvalStatus | filterApprovalStatus }}
+        </el-tag>
+      </template>
       <template #operate="{ row }">
         <div class="operate-box">
-          <el-button type="text" @click="detailsBtn(row)" v-permissions="'wurenji:task:query'">详情</el-button>
+          <el-button
+            type="text"
+            @click="detailsBtn(row)"
+            v-permissions="'wurenji:task:query'"
+            >详情</el-button
+          >
           <el-dropdown @command="operateCommand">
             <span class="el-dropdown-link el-icon-more"></span>
             <el-dropdown-menu slot="dropdown">
@@ -69,7 +81,15 @@
                 :key="index"
                 :command="beforeHandleCommand(row, item.label)"
                 :style="{ color: item.color }"
-                v-show="!(item.label == '成果' && row.taskType !== 2) && !((item.label == '挂起' || item.label =='取消挂起' || item.label == '排期') && row.taskStatus == 3)"
+                v-show="
+                  !(item.label == '成果' && row.taskType !== 2) &&
+                  !(
+                    (item.label == '挂起' ||
+                      item.label == '取消挂起' ||
+                      item.label == '排期') &&
+                    row.taskStatus == 3
+                  )
+                "
                 v-permissions="item.permission"
                 ><i class="iconfont" :class="item.icon"></i>
                 {{ item.label }}
@@ -77,11 +97,28 @@
             </el-dropdown-menu>
           </el-dropdown>
           <el-button
+            v-if="isWork"
+            type="primary"
+            round
+            size="small"
+            class="el-icon-edit-outline"
+            @click="workBtn(row)"
+            style="
+              width: 84px;
+              height: 32px;
+              padding: 0;
+              line-height: 32px;
+              font-size: 14px;
+            "
+            >办结</el-button
+          >
+          <el-button
             type="primary"
             round
             size="mini"
             class="iconfont el-icon-guijifeihang"
             v-permissions="'wurenji:scheduling:fly'"
+            v-else
             style="
               width: 84px;
               height: 32px;
@@ -121,12 +158,7 @@
       ></FlightDataDialog>
     </div>
 
-    <el-dialog
-      title="确定要挂起该任务？"
-      :visible.sync="hangupVisible"
-      center
-      top="60vh"
-    >
+    <el-dialog title="确定要挂起该任务？" :visible.sync="hangupVisible" center>
       <span
         >挂起任务后该任务下所有航线将取消排期，不会被执行。恢复任务后，可能需要重新设置排期！</span
       >
@@ -149,11 +181,93 @@ import {
   taskListAPI,
   deleteTaskAPI,
   upDataTaskStatusAPI,
+  workListAPI,
+  orderApprovalAPI,
 } from "@/api/TaskManager.js";
 
 export default {
   name: "FlightTable",
-  props: {},
+  props: {
+    isWork: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  watch: {
+    isWork(val) {
+      if (val) {
+        //工单
+        this.columns = [
+          {
+            prop: "taskName",
+            label: "任务名称/类型",
+            showOverflowTooltip: true,
+            slot: true,
+            minWidth: "220",
+          },
+          {
+            prop: "airportName",
+            label: "机场",
+            showOverflowTooltip: true,
+          },
+          {
+            prop: "creater",
+            label: "创建人/时间",
+            showOverflowTooltip: false,
+            slot: true,
+          },
+          {
+            prop: "approvalStatus",
+            label: "工单状态",
+            showOverflowTooltip: false,
+            slot: true,
+          },
+          {
+            prop: "operate",
+            label: "操作",
+            showOverflowTooltip: false,
+            width: "200px",
+            slot: true,
+          },
+        ];
+      } else {
+        this.columns = [
+          {
+            prop: "taskName",
+            label: "任务名称/类型",
+            showOverflowTooltip: true,
+            slot: true,
+            minWidth: "220",
+          },
+          {
+            prop: "airportName",
+            label: "机场",
+            showOverflowTooltip: true,
+          },
+          {
+            prop: "creater",
+            label: "创建人/时间",
+            showOverflowTooltip: false,
+            slot: true,
+          },
+          {
+            prop: "status",
+            label: "任务状态",
+            showOverflowTooltip: false,
+            slot: true,
+          },
+          {
+            prop: "operate",
+            label: "操作",
+            showOverflowTooltip: false,
+            width: "200px",
+            slot: true,
+          },
+        ];
+      }
+      this.initList();
+    },
+  },
   data() {
     return {
       taskId: "",
@@ -167,6 +281,7 @@ export default {
       flyDateVisible: false,
       hangupVisible: false,
       filghtList: [],
+      taskName: "",
       columns: [
         {
           prop: "taskName",
@@ -188,7 +303,7 @@ export default {
         },
         {
           prop: "status",
-          label: "本轮状态",
+          label: "任务状态",
           showOverflowTooltip: false,
           slot: true,
         },
@@ -207,25 +322,22 @@ export default {
         "全景",
         "三维",
         "正射",
+        "红外",
         // '全覆盖'
       ],
       statusOptions: [
         "全部状态",
-        "已挂起",
-        "执行终止",
         "待审核",
-        "审核中",
         "待执行",
         "执行中",
-        "制作中",
-        "制作失败",
         "已完成",
-        "已过期",
-        "执行失败",
+        "挂起",
       ],
       pageNum: 1,
       pageSize: 10,
       row: {},
+      dropdownName: "全部类型",
+      dropdownStatus: "全部状态",
     };
   },
   mounted() {
@@ -255,6 +367,20 @@ export default {
       }
       return value;
     },
+    filterApprovalStatus(val) {
+      let value = "";
+      switch (val) {
+        case 1:
+          value = "审核通过";
+          break;
+        case 2:
+          value = "被驳回";
+        default:
+          value = "待审核";
+          break;
+      }
+      return value;
+    },
   },
   computed: {
     statusType(status) {
@@ -273,6 +399,78 @@ export default {
         }
       };
     },
+    taskType(status) {
+      return function (status) {
+        switch (status) {
+          case "拍照":
+            return 0;
+          case "直播":
+            return 1;
+          case "全景":
+            return 2;
+          case "正射":
+            return 3;
+          case "三维":
+            return 4;
+          default:
+            return "";
+        }
+      };
+    },
+    approvalStatusType(status) {
+      return function (status) {
+        let value = "";
+        switch (status) {
+          case 1:
+            value = "success";
+            break;
+          case 2:
+            value = "danger";
+          default:
+            value = "info";
+            break;
+        }
+        return value;
+      };
+    },
+    taskTypeStatus(status) {
+      return function (status) {
+        switch (status) {
+          case "拍照":
+            return 0;
+          case "直播":
+            return 1;
+          case "全景":
+            return 2;
+          case "正射":
+            return 3;
+          case "三维":
+            return 4;
+          case "红外":
+            return 5;
+          default:
+            return "";
+        }
+      };
+    },
+    currentStatus() {
+      return function (status) {
+        switch (status) {
+          case "待审核":
+            return 0;
+          case "待执行":
+            return 1;
+          case "执行中":
+            return 2;
+          case "已完成":
+            return 3;
+          case "挂起":
+            return 4;
+          default:
+            return "";
+        }
+      };
+    },
     operateOptions() {
       return function (taskStatus) {
         if (taskStatus === 4) {
@@ -281,23 +479,23 @@ export default {
             {
               label: "成果",
               icon: "el-icon-zhaochengguo",
-              permission: 'wurenji:task:query'
+              permission: "wurenji:task:query",
             },
             {
               label: "排期",
               icon: "el-icon-paiqi",
-              permission: 'wurenji:task:add'
+              permission: "wurenji:task:edit",
             },
             {
               label: "取消挂起",
               icon: "el-icon-3duihuacopy",
-              permission: 'wurenji:task:guaqi'
+              permission: "wurenji:task:guaqi",
             },
             {
               label: "删除",
               icon: "el-icon-shanchu",
               color: "red",
-              permission: 'wurenji:task:remove'
+              permission: "wurenji:task:remove",
             },
           ];
         } else {
@@ -305,23 +503,23 @@ export default {
             {
               label: "成果",
               icon: "el-icon-zhaochengguo",
-              permission: 'wurenji:task:query'
+              permission: "wurenji:task:query",
             },
             {
               label: "排期",
               icon: "el-icon-paiqi",
-              permission: 'wurenji:task:add'
+              permission: "wurenji:task:edit",
             },
             {
               label: "挂起",
               icon: "el-icon-3duihuacopy",
-              permission: 'wurenji:task:guaqi'
+              permission: "wurenji:task:guaqi",
             },
             {
               label: "删除",
               icon: "el-icon-shanchu",
               color: "red",
-              permission: 'wurenji:task:remove'
+              permission: "wurenji:task:remove",
             },
           ];
         }
@@ -329,6 +527,46 @@ export default {
     },
   },
   methods: {
+    workBtn(row) {
+      this.$confirm("确认驳回吗？", "提示", {
+        confirmButtonText: "通过",
+        cancelButtonText: "驳回",
+        type: "warning",
+        distinguishCancelAndClose: true,
+      })
+        .then(() => {
+          const params = {
+            taskId: row.taskId,
+            approvalStatus: 1,
+          };
+          orderApprovalAPI(params).then((res) => {
+            if (res.code == 200) {
+              this.$message({
+                type: "success",
+                message: res.msg,
+              });
+              this.initList();
+            }
+          });
+        })
+        .catch((action) => {
+          if (action === "cancel") {
+            const params = {
+              taskId: row.taskId,
+              approvalStatus: 2,
+            };
+            orderApprovalAPI(params).then((res) => {
+              if (res.code == 200) {
+                this.$message({
+                  type: "success",
+                  message: res.msg,
+                });
+                this.initList();
+              }
+            });
+          }
+        });
+    },
     upDataTaskStatus() {
       upDataTaskStatusAPI(this.taskId).then((res) => {
         if (res.code === 200) {
@@ -344,32 +582,15 @@ export default {
       });
     },
 
-    // handleClose(done) {
-    //   this.$confirm('确认关闭？')
-    //     .then(_ => {
-    //       done()
-    //     })
-    //     .catch(_ => {
-    //     })
-    // },
-
     handleSuspend() {
       this.hangupVisible = false;
       this.upDataTaskStatus();
     },
 
     searchTableName(val) {
-      const params = {
-        pageNum: this.pageNum,
-        pageSize: this.pageSize,
-        taskName: val,
-      };
-      taskListAPI(params).then((res) => {
-        if (res.code === 200) {
-          this.filghtList = res.rows;
-          this.total = res.total;
-        }
-      });
+      this.taskName = val;
+      this.pageNum = 1;
+      this.initList();
     },
 
     changeVisible() {
@@ -380,38 +601,116 @@ export default {
       const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
+        taskName: this.taskName,
       };
-      taskListAPI(params).then((res) => {
-        if (res.code === 200) {
-          this.filghtList = res.rows;
-          this.total = res.total;
-        }
-      });
+      if (this.isWork) {
+        workListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      } else {
+        taskListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      }
     },
     sizeChange(params) {
-      taskListAPI(params).then((res) => {
-        if (res.code === 200) {
-          this.filghtList = res.rows;
-          this.total = res.total;
-        }
-      });
+      this.pageNum = params.pageNum;
+      this.pageSize = params.pageSize;
+      params.taskName = this.taskName;
+      params.task_type = this.taskTypeStatus(this.dropdownName);
+      params.taskStatus = this.currentStatus(this.dropdownStatus);
+      if (this.isWork) {
+        workListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      } else {
+        taskListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      }
     },
     pageChange(params) {
-      taskListAPI(params).then((res) => {
-        if (res.code === 200) {
-          this.filghtList = res.rows;
-          this.total = res.total;
-        }
-      });
+      this.pageNum = params.pageNum;
+      this.pageSize = params.pageSize;
+      params.taskName = this.taskName;
+      params.task_type = this.taskTypeStatus(this.dropdownName);
+      params.taskStatus = this.currentStatus(this.dropdownStatus);
+      if (this.isWork) {
+        workListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      } else {
+        taskListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      }
     },
     nameCommand(itemCommand) {
+      this.dropdownName = itemCommand;
       console.log(itemCommand);
+      const data = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+        task_type: this.taskTypeStatus(itemCommand),
+        taskName: this.taskName,
+        taskStatus: this.currentStatus(this.dropdownStatus)
+      };
+      if (this.isWork) {
+        workListAPI(data).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      } else {
+        taskListAPI(data).then((res) => {
+          this.filghtList = res.rows;
+          this.total = res.total;
+        });
+      }
     },
-    beforeHandleCommand1(row) {
-      console.log("row:", row);
-      return row;
+    statusCommand(itemCommand) {
+      console.log(itemCommand);
+
+      this.dropdownStatus = itemCommand;
+      const data = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+        taskStatus: this.currentStatus(itemCommand),
+        task_type: this.taskTypeStatus(this.dropdownName)
+    };
+      if (this.isWork) {
+        workListAPI(params).then((res) => {
+          if (res.code === 200) {
+            this.filghtList = res.rows;
+            this.total = res.total;
+          }
+        });
+      } else {
+        taskListAPI(data).then((res) => {
+          this.filghtList = res.rows;
+          this.total = res.total;
+        });
+      }
     },
-    statusCommand(itemCommand) {},
     beforeHandleCommand(row, label) {
       return {
         row,
@@ -436,7 +735,7 @@ export default {
           console.log("挂起被点击");
           break;
         case "取消挂起":
-        this.taskId = itemCommand.row.taskId;
+          this.taskId = itemCommand.row.taskId;
           this.upDataTaskStatus();
           break;
         case "删除":
@@ -512,8 +811,8 @@ export default {
   border-radius: 12px;
   padding: 24px 24px 16px 32px;
   overflow: hidden; /* 防止内容溢出 */
-  top: 40% !important;
-  transform: translateY(-50%) !important;
+  // top: 40% !important;
+  // transform: translateY(-50%) !important;
   width: 470px;
   //height: 230px;
 }

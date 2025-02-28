@@ -3,21 +3,42 @@
     :visible="DeviceDialogVisible"
     @close="handleClose"
     :title="deviceTitle"
+    class="deviceDialog"
   >
-    <el-form :model="deviceForm">
-      <el-form-item label="设备id">
-        <el-input v-model="deviceForm.deviceId" placeholder="请输入设备名称" />
+    <el-form :model="deviceForm" :rules="rules" ref="ruleForm">
+      <el-form-item label="设备id" prop="deviceId">
+        <el-input
+          v-model="deviceForm.deviceId"
+          placeholder="请输入设备id"
+          :maxlength="64"
+        />
       </el-form-item>
-      <el-form-item label="设备名称">
+      <el-form-item label="设备名称" prop="deviceName">
         <el-input
           v-model="deviceForm.deviceName"
           placeholder="请输入设备名称"
+          :maxlength="64"
         />
       </el-form-item>
       <el-form-item label="设备描述">
         <el-input
           v-model="deviceForm.deviceDesc"
-          placeholder="请输入设备名称"
+          placeholder="请输入设备描述"
+          :maxlength="64"
+        />
+      </el-form-item>
+      <el-form-item label="经度" prop="lng">
+        <el-input
+          @input="handleInputLng"
+          v-model.trim="deviceForm.lng"
+          placeholder="请输入经度"
+        />
+      </el-form-item>
+      <el-form-item label="纬度" prop="lat">
+        <el-input
+          v-model.trim="deviceForm.lat"
+          placeholder="请输入纬度"
+          @input="handleInputLat"
         />
       </el-form-item>
       <el-form-item label="设备类型">
@@ -55,18 +76,30 @@ export default {
       type: Object,
       default: null,
     },
-    deviceTitle:{
-      type: Object,
-      default: null,
+    deviceTitle: {
+      type: String,
+      default: "",
     },
   },
   data() {
     return {
+      rules: {
+        deviceId: [
+          { required: true, message: "请输入设备id", trigger: "blur" },
+        ],
+        deviceName: [
+          { required: true, message: "请输入设备名称", trigger: "blur" },
+        ],
+        lng: [{ required: true, message: "请输入经度", trigger: "blur" }],
+        lat: [{ required: true, message: "请输入纬度", trigger: "blur" }],
+      },
       deviceForm: {
         deviceName: "",
         deviceId: "",
         deviceDesc: "",
         deviceType: 0,
+        lng: "",
+        lat: "",
       },
       typeOptions: [
         {
@@ -99,50 +132,86 @@ export default {
     }
   },
   methods: {
+    handleInputLng(value) {
+      // 只允许数字和小数点
+      const validValue = value.replace(/[^0-9.]/g, "");
+
+      // 防止多个小数点
+      const dotCount = validValue.split(".").length - 1;
+      if (dotCount > 1) {
+        this.deviceForm.lng = validValue.slice(0, -1); // 删除最后一个小数点
+      } else {
+        this.deviceForm.lng = validValue;
+      }
+    },
+    handleInputLat(value) {
+      // 只允许数字和小数点
+      const validValue = value.replace(/[^0-9.]/g, "");
+
+      // 防止多个小数点
+      const dotCount = validValue.split(".").length - 1;
+      if (dotCount > 1) {
+        this.deviceForm.lat = validValue.slice(0, -1); // 删除最后一个小数点
+      } else {
+        this.deviceForm.lat = validValue;
+      }
+    },
     handleClose() {
       this.$emit("updateDeviceDialogVisible", false);
     },
     handleSubmit() {
-      if (this.itemRow) {
-        // 编辑设备
-        const params = {
-          ...this.deviceForm,
-        };
-        editDeviceAPI(params)
-          .then((res) => {
-            if (res.code === 200) {
-              this.$message.success("编辑设备成功");
-              this.$emit("updateDeviceList");
-              this.handleClose();
-            } else {
-              this.$message.error("编辑设备失败");
-            }
-          })
-          .catch((err) => {
-            this.$message.error("编辑设备失败");
-          });
-      } else {
-        const params = {
-          ...this.deviceForm,
-          orgId: this.itemOrgId,
-        };
-        addDeviceAPI(params)
-          .then((res) => {
-            if (res.code === 200) {
-              this.$message.success("新增设备成功");
-              this.handleClose();
-            } else {
-              this.$message.error("新增设备失败");
-            }
-          })
-          .catch((err) => {
-            this.$message.error("新增设备失败");
-          });
-      }
+      this.$refs["ruleForm"].validate((valid) => {
+        if (valid) {
+          if (this.itemRow) {
+            // 编辑设备
+            const params = {
+              ...this.deviceForm,
+              location: this.deviceForm.lng + "," + this.deviceForm.lat,
+            };
+            editDeviceAPI(params)
+              .then((res) => {
+                if (res.code === 200) {
+                  this.$message.success("编辑设备成功");
+                  this.$emit("updateDeviceList");
+                  this.handleClose();
+                } else {
+                  this.$message.error("编辑设备失败");
+                }
+              })
+              .catch((err) => {
+                this.$message.error("编辑设备失败");
+              });
+          } else {
+            const params = {
+              ...this.deviceForm,
+              orgId: this.itemOrgId,
+              location: this.deviceForm.lng + "," + this.deviceForm.lat,
+            };
+            addDeviceAPI(params)
+              .then((res) => {
+                if (res.code === 200) {
+                  this.$message.success("新增设备成功");
+                  this.handleClose();
+                } else {
+                  this.$message.error(res.msg);
+                }
+              })
+              .catch((err) => {
+                this.$message.error("新增设备失败");
+              });
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
   },
 };
 </script>
 
 <style>
+.deviceDialog {
+  padding: 0 20px !important;
+}
 </style>

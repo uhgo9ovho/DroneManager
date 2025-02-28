@@ -21,7 +21,7 @@
         >
           <el-input
             prefix-icon="el-icon-search"
-            placeholder=""
+            placeholder="请输入报警信息搜索"
             @focus="focus"
             @blur="blur"
             v-model="searchText"
@@ -159,9 +159,16 @@ export default {
 
     handleDateRangeChange(value) {
       if (value) {
-        const [startTime, endTime] = value
+        console.log(value);
+        const val = value.map(item => {
+          const itemMap = item.split(' ')[0]
+          return itemMap
+        })
+        console.log(val);
+        
+        const [startTime, endTime] = val
         this.startTime = startTime
-        this.endTime = endTime
+        this.endTime = endTime + ' 23:59:59'
         console.log(`开始时间: ${startTime}`)
         console.log(`结束时间: ${endTime}`)
       } else {
@@ -169,6 +176,7 @@ export default {
         this.startTime = ''
         this.endTime = ''
       }
+      this.getDeviceList()
     },
 
     handleSearch(value) {
