@@ -3,7 +3,7 @@
     <thead>
     <tr>
       <th rowspan="2">无人机场</th>
-      <th colspan="5">飞行架次(次)</th>
+      <th colspan="6">飞行架次(次)</th>
       <!--      <th>合计</th>-->
       <!--      <th>飞行时长</th>-->
       <!--      <th>飞行里程</th>-->
@@ -16,6 +16,7 @@
       <th>拍照</th>
       <th>全景</th>
       <th>三维</th>
+      <th>直播</th>
       <th>正射</th>
       <th>合计</th>
       <!--      <th></th>-->
@@ -29,6 +30,7 @@
       <td>{{ task.photoNum }}</td>
       <td>{{ task.panoramaNum }}</td>
       <td>{{ task.threeDNum }}</td>
+      <td>{{ task.liveNum }}</td>
       <td>{{ task.orthoNum }}</td>
       <td>{{ task.photoNum + task.panoramaNum + task.threeDNum + task.orthoNum }}</td>
       <td>{{ task.flyTime.toFixed(0) }}</td>
@@ -39,6 +41,7 @@
       <td>{{ totalPhotoNum }}</td>
       <td>{{ totalPanoramaNum }}</td>
       <td>{{ totalThreeDNum }}</td>
+      <td>{{ totalLiveDNum }}</td>
       <td>{{ totalOrthoNum }}</td>
       <td>{{ totalFlightCount }}</td>
       <td>{{ totalFlyTime.toFixed(0) }}</td>
@@ -71,6 +74,9 @@ export default {
     },
     totalThreeDNum() {
       return this.flyTasks.reduce((sum, task) => sum + task.threeDNum, 0)
+    },
+    totalLiveDNum() {
+      return this.flyTasks.reduce((sum, task) => sum + task.liveNum, 0)
     },
     totalOrthoNum() {
       return this.flyTasks.reduce((sum, task) => sum + task.orthoNum, 0)
