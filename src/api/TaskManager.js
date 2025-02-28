@@ -48,6 +48,17 @@ export const taskListAPI = (params) => {
 }
 
 /**
+ * 添加航线
+ * @returns
+ */
+export const addTaskListAPI = (params) => {
+  return request({
+    url: `/wurenji/task/listTwo?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${localStorage.getItem('org_id')}&taskName=${params.taskName ? params.taskName : ''}&taskType=${params.task_type == undefined ? '' : params.task_type}&taskStatus=${params.taskStatus == undefined ? '' : params.taskStatus}&approvalStatus=1`,
+    method: 'get'
+  })
+}
+
+/**
  * 工单列表
  * @returns
  */

@@ -764,6 +764,7 @@ export default {
       if (this.tableType == 2 || this.tableType == 3) {
         this.dateScope = this.formattedDate + '至' + this.getLastDate
       }
+      const timePeriod = this.tableType == 2 ? '本周' : this.tableType == 3 ? '本月' : '当日';
       return [
         this.dateScope +
         '，共有' +
@@ -777,7 +778,7 @@ export default {
         '、飞行里程' +
         this.report.totalMileage.toFixed(0) +
         '米。',
-        '当日提交任务总数' +
+        `${timePeriod}提交任务总数` +
         this.report.questNum +
         '个，分别为照片任务' +
         this.report.photoQuestNum +

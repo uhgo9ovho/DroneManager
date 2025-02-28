@@ -77,6 +77,11 @@ export default {
           showOverflowTooltip: false
         },
         {
+          prop: 'liveNum',
+          label: '直播',
+          showOverflowTooltip: false
+        },
+        {
           prop: 'operate',
           label: '操作',
           showOverflowTooltip: false,

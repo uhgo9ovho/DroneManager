@@ -12,7 +12,7 @@
       label-position="top"
     >
       <el-form-item prop="orgName" label="平台名称">
-        <el-input v-model="ruleForm.orgName"></el-input>
+        <el-input v-model="ruleForm.platformName"></el-input>
       </el-form-item>
       <el-form-item prop="webLogo" label="平台LOGO图片">
         <div class="upload">
@@ -65,7 +65,7 @@
 
 <script>
 import { getToken } from "@/utils/auth";
-import { imgUrl, editOrgInfo, getDepartmentList } from "@/api/user.js";
+import { imgUrl, editOrgInfo, getDepartmentList,gxhByOrgApi,getOrganizationInfo } from "@/api/user.js";
 export default {
   name: "PersonalizationDialog",
   props: {
@@ -82,10 +82,7 @@ export default {
     return {
       action: process.env.VUE_APP_BASE_API + '/common/upload',
       ruleForm: {
-        orgName: "",
-        logo: "",
-        webLogo: "",
-        platformLogo: "",
+
       },
       webUrl: "",
       palteUrl: "",
@@ -97,6 +94,14 @@ export default {
     };
   },
   methods: {
+    fetchOrganizationInfo(orgId) {
+      getOrganizationInfo(orgId).then((res) => {
+        this.ruleForm = res;
+        console.log('个性化信息', res);
+      }).catch((err) => {
+        this.$message.error('请求失败');
+      });
+    },
     handleClose() {
       this.$emit("personalizationHandle");
     },
@@ -108,9 +113,9 @@ export default {
         orgDeptName: this.ruleForm.orgName,
         webLogo: this.webUrl ? this.webUrl : this.ruleForm.webLogo,
         platformLogo: this.palteUrl ? this.palteUrl : this.ruleForm.platformLogo,
-        platformName: this.ruleForm.orgName,
+        platformName: this.ruleForm.platformName,
       };
-      editOrgInfo(params).then((res) => {
+      gxhByOrgApi(params).then((res) => {
         if (res.code == 200) {
           this.$message.success(res.msg);
           this.$emit("editGXH");
@@ -130,11 +135,13 @@ export default {
     },
     beforeAvatarUpload2() {},
     //获取组织列表
+
+
   },
   mounted() {
-    this.ruleForm.orgName = this.itemRow.orgDeptName;
-    this.ruleForm.webLogo = this.itemRow.webLogo;
-    this.ruleForm.platformLogo = this.itemRow.platformLogo;
+
+    this.fetchOrganizationInfo(this.$store.getters.orgId);
+
   },
 };
 </script>
