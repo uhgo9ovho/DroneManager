@@ -27,7 +27,7 @@ export default {
         let userId = Cookies.get("userId");
         let tenant = 'test';
         new WebSocketClient(
-          `ws://172.16.40.225:9002/websocket/${localStorage.getItem(
+          `wss://jky.szyfu.com:6799/websocket/${localStorage.getItem(
             "workspaceId"
           )}/${userId}/${tenant}?tenant=${tenant}`
         );

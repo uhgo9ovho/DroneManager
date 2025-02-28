@@ -33,11 +33,11 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
-              v-for="(item, index) in statusOptions"
-              :key="index"
-              :command="item"
-              :class="{ dropdown_selected: dropdownStatus == item }"
-              >{{ item }}
+              v-for="(item) in statusOptions"
+              :key="item.index"
+              :command="item.name"
+              :class="{ dropdown_selected: dropdownStatus == item.name }"
+              >{{ item.name }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -326,12 +326,11 @@ export default {
         // '全覆盖'
       ],
       statusOptions: [
-        "全部状态",
-        "待审核",
-        "待执行",
-        "执行中",
-        "已完成",
-        "挂起",
+        {index:0,name:"全部状态"},
+        {index:2,name:"待执行"},
+        {index:3,name:"执行中"},
+        {index:4,name:"已完成"},
+        {index:5,name:"挂起"}
       ],
       pageNum: 1,
       pageSize: 10,
@@ -598,10 +597,12 @@ export default {
       this.initList();
     },
     initList() {
+      console.log(this.dropdownStatus)
       const params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
         taskName: this.taskName,
+        taskStatus:this.currentStatus(this.dropdownStatus)
       };
       if (this.isWork) {
         workListAPI(params).then((res) => {
