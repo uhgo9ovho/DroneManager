@@ -18,6 +18,10 @@ let planeMarker = null;
 let lastPosition = null;
 let polyline = null;
 let marker = null;
+let polylineStart = null;
+let polylineEnd = null;
+let startLine = [];
+let endLine = [];
 export default {
   name: "map-view",
   props: {
@@ -90,7 +94,7 @@ export default {
           } else {
             //全景
             console.log(val[0][0], val[0][1]);
-            
+
             const position = new this.AMap.LngLat(val[0][0], val[0][1]);
             let markerContent =
               "" +
@@ -150,8 +154,6 @@ export default {
         .then((AMap) => {
           this.AMap = AMap;
           let center = [];
-          let startLine = [];
-          let endLine = [];
           let qjMarker = null;
           let val = [];
           if (this.lineInfoObj) {
@@ -168,6 +170,7 @@ export default {
                 wgs84ToGcj02(it.lon, it.lat)
               );
               this.lonlatArr.push(...formarItemArr);
+              console.log(this.lonlatArr, "arr");
             });
             if (this.taskType === 2) {
               //全景
@@ -287,13 +290,13 @@ export default {
             map.add(polyline);
           }
           if (startLine.length && endLine.length) {
-            let polylineStart = new AMap.Polyline({
+            polylineStart = new AMap.Polyline({
               path: this.formatAirLine(AMap, startLine),
               strokeWeight: 2, //线条宽度
               strokeColor: "blue", //线条颜色
               lineJoin: "round", //折线拐点连接处样式
             });
-            let polylineEnd = new AMap.Polyline({
+            polylineEnd = new AMap.Polyline({
               path: this.formatAirLine(AMap, endLine),
               strokeWeight: 2, //线条宽度
               strokeColor: "blue", //线条颜色
@@ -313,10 +316,24 @@ export default {
         strokeColor: "red", //线条颜色
         lineJoin: "round", //折线拐点连接处样式
       });
-      map.add(polyline);
+      polylineStart = new AMap.Polyline({
+        path: this.formatAirLine(AMap, startLine),
+        strokeWeight: 2, //线条宽度
+        strokeColor: "blue", //线条颜色
+        lineJoin: "round", //折线拐点连接处样式
+      });
+      polylineEnd = new AMap.Polyline({
+        path: this.formatAirLine(AMap, endLine),
+        strokeWeight: 2, //线条宽度
+        strokeColor: "blue", //线条颜色
+        lineJoin: "round", //折线拐点连接处样式
+      });
+      map.add([polylineStart, polylineEnd, polyline]);
     },
     polylineVisible() {
       polyline.setMap(null);
+      polylineStart.setMap(null);
+      polylineEnd.setMap(null);
     },
     checkedPolylineColor(formarItemArr) {
       const conArr = formarItemArr.map((item) => {
@@ -340,10 +357,7 @@ export default {
       if (val) {
         //显示禁飞区
         if (this.coordinates.length) {
-          const polygonArr = this.coordinates.map((item) => [
-            item.lon,
-            item.lat,
-          ]);
+          const polygonArr = this.coordinates.map((item) => [item[0], item[1]]);
           addPolygon(polygonArr);
         }
       } else {

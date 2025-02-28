@@ -26,7 +26,7 @@
             </div>
 
             <div class="filter">
-              <el-checkbox @change="filterProblemPhoto">问题照片</el-checkbox>
+              <el-checkbox v-model="checked" @change="filterProblemPhoto">问题照片</el-checkbox>
             </div>
           </div>
           <div class="container">
@@ -205,6 +205,7 @@ export default {
   },
   data() {
     return {
+      checked: false,
       currentIndex: 0,
       videoPreview: false,
       VideoPage: VideoPage,
@@ -479,6 +480,9 @@ export default {
           warnPhoto: item.warnPhoto,
         };
       });
+      if(this.checked) {
+        this.filterProblemPhoto(true)
+      }
       this.warnNumber = this.imgOptions.filter((item) => item.warnId).length;
       this.videoOptions = videoFilterArr.map((item) => {
         return {

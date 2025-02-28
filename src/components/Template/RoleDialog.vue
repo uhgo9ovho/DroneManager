@@ -4,6 +4,8 @@
     :visible.sync="dialogVisible"
     width="50%"
     :before-close="handleClose"
+    class="role_dialog"
+    top="0%"
   >
     <el-form :model="form" label-width="80px" :rules="rules" ref="roleFrom">
       <el-form-item label="角色名称" prop="roleName">
@@ -33,7 +35,7 @@
         </el-tabs>
         <div
           class="role-selector"
-          v-show="activeName == 'miniProgram'"
+          v-if="activeName == 'miniProgram'"
           style="overflow-y: scroll"
         >
           <tree-promission
@@ -42,24 +44,27 @@
             :data="programsPermissions"
             :show-checkbox="true"
             @selectedKeys="selectedKeys"
-          ></tree-promission>
+            :check-strictly="isCheck"
+            ></tree-promission>
         </div>
-        <div class="role-selector" v-show="activeName == 'dashboard'">
+        <div class="role-selector" v-if="activeName == 'dashboard'">
           <tree-promission
             ref="screenRef"
             :data="screenPermissions"
             :checkedKeys="checkedKeysObj.dashboard"
             :show-checkbox="true"
             @selectedKeys="selectedKeys"
-          ></tree-promission>
+            :check-strictly="isCheck"
+            ></tree-promission>
         </div>
-        <div class="role-selector" v-show="activeName == 'admin'">
+        <div class="role-selector" v-if="activeName == 'admin'">
           <tree-promission
             ref="managerRef"
             :data="managerPermissions"
             :show-checkbox="true"
             :checkedKeys="checkedKeysObj.admin"
             @selectedKeys="selectedKeys"
+            :check-strictly="isCheck"
           ></tree-promission>
         </div>
       </el-form-item>
@@ -109,6 +114,7 @@ export default {
       }
     };
     return {
+      isCheck: false,
       form: {
         roleName: "",
         remark: "",
@@ -118,7 +124,7 @@ export default {
         menuIds: [],
       },
       checkedKeys: [],
-      activeName: "admin",
+      activeName: "",
       halfCheckedKeys: [],
       checkedKeysObj: {
         admin: [],
@@ -147,6 +153,8 @@ export default {
     if (this.title === "编辑角色") {
       this.form = Object.assign({}, this.row);
       this.roleMenuTreeselect();
+    } else {
+      this.activeName = "admin";
     }
   },
   methods: {
@@ -175,7 +183,6 @@ export default {
       this.$refs.roleFrom.validate((valid) => {
         if (valid) {
           // 合并所有模块当前选中的权限
-
           if (this.title === "编辑角色") {
             editRoleAPI(this.form)
               .then((res) => {
@@ -217,7 +224,6 @@ export default {
     },
     roleMenuTreeselect() {
       roleMenuTreeselectAPI(this.row.roleId).then((res) => {
-        debugger
         if (res.code == 200) {
           const allCheckedKeys = res.checkedKeys || [];
           const menus = res.menus || [];
@@ -256,6 +262,7 @@ export default {
           };
 
           console.log("初始化各模块权限数据：", this.checkedKeysObj);
+          this.activeName = "admin"
         }
       });
     },
@@ -274,5 +281,10 @@ export default {
 .role-selector {
   margin-top: 10px;
   overflow-y: scroll;
+  max-height: 200px;
+}
+.role_dialog {
+  padding: 10px 20px;
+  margin-top: 0vh;
 }
 </style>

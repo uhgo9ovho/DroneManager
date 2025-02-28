@@ -8,7 +8,7 @@
     >
       <div class="report-title">事件名称</div>
       <div class="row">
-        <el-input v-model="eventName"></el-input>
+        <el-input v-model="eventName" :maxlength="32"></el-input>
       </div>
       <div class="report-title">事件描述</div>
       <el-input
@@ -26,6 +26,7 @@
         :limit="3"
         :file-list="fileList"
         :on-success="successUpload"
+        :before-upload="beforeAvatarUpload"
         list-type="picture-card"
       >
         <i slot="default" class="el-icon-plus"></i>
@@ -64,8 +65,8 @@ export default {
       fileList: [],
       url: "",
       src: image,
-      action: process.env.VUE_APP_BASE_API,
-      fileArr: []
+      action: process.env.VUE_APP_BASE_API + '/common/upload',
+      fileArr: [],
     };
   },
   computed: {
@@ -83,6 +84,14 @@ export default {
     this.eventName = this.itemRow.warnName;
   },
   methods: {
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg" || file.type === "image/png";
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG/PNG 格式!");
+      }
+      return isJPG;
+    },
     successUpload(res) {
       this.url = res.url;
     },

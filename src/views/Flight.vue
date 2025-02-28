@@ -2,10 +2,10 @@
   <div class="flight">
     <div class="top">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="飞行任务" name="flightTask" v-permissions="'mngSide:flight:task'"></el-tab-pane>
-        <el-tab-pane label="飞行排期" name="flightDate"  v-permissions="'mngSide:flight:schedule'"></el-tab-pane>
-        <el-tab-pane label="飞行记录" name="flightLog" v-permissions="'mngSide:flight:records'"></el-tab-pane>
-        <el-tab-pane label="工单办结" name="WorkCompleted" v-permissions="'mngSide:flight:records'"></el-tab-pane>
+        <el-tab-pane label="飞行任务" name="flightTask" v-if="$checkPermission('mngSide:flight:task')"></el-tab-pane>
+        <el-tab-pane label="飞行排期" name="flightDate" v-if="$checkPermission('mngSide:flight:schedule')"></el-tab-pane>
+        <el-tab-pane label="飞行记录" name="flightLog" v-if="$checkPermission('mngSide:flight:records')"></el-tab-pane>
+        <el-tab-pane label="工单审核" name="WorkCompleted" v-if="$checkPermission('mngSide:flight:task')"></el-tab-pane>
       </el-tabs>
       <div class="operate-box">
         <div

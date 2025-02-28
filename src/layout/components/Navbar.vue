@@ -1,19 +1,42 @@
 <template>
   <div class="navbar">
-      <div class="logo" >
-<!--        @click="toHome"-->
-        <img :src="logoImg" alt="" style="width: 80px; height: 32px;margin-right: 50px"/>
-        {{ platformName }}
-      </div>
+    <div class="logo">
+      <!--        @click="toHome"-->
+      <img
+        :src="logoImg"
+        alt=""
+        style="width: 80px; height: 32px; margin-right: 50px"
+      />
+      {{ platformName }}
+    </div>
     <div class="user-info">
-      <el-popover placement="top-start" width="370" trigger="click" popper-class="popper-notification" @after-leave="updateInfoStatus">
-        <notification ref="notification" @updateCount="updateCount"></notification>
-        <el-badge is-dot class="item" slot="reference" :hidden="count ? false : true">
+      <el-popover
+        placement="top-start"
+        width="370"
+        trigger="click"
+        popper-class="popper-notification"
+        @after-leave="updateInfoStatus"
+      >
+        <notification
+          ref="notification"
+          @updateCount="updateCount"
+        ></notification>
+        <el-badge
+          is-dot
+          class="item"
+          slot="reference"
+          :hidden="count ? false : true"
+        >
           <div class="notification iconfont el-icon-icon"></div>
         </el-badge>
       </el-popover>
       <div class="user">
-        <el-popover placement="top-start" width="320" trigger="click" popper-class="user-popover">
+        <el-popover
+          placement="top-start"
+          width="320"
+          trigger="click"
+          popper-class="user-popover"
+        >
           <user-info></user-info>
           <div class="avatar" slot="reference">
             <img
@@ -29,19 +52,19 @@
 </template>
 
 <script>
-import logoImg from '@/assets/images/jky.png'
-import UserInfo from '@/components/Template/UserInfo.vue'
-import Notification from '@/components/Notification.vue'
-import { updateMessageStatusAPI } from '@/api/user'
+import logoImg from "@/assets/images/jky.png";
+import UserInfo from "@/components/Template/UserInfo.vue";
+import Notification from "@/components/Notification.vue";
+import { updateMessageStatusAPI } from "@/api/user";
 export default {
-  name: 'NavBar',
+  name: "NavBar",
   data() {
     return {
-      logoUrl: '/icon.ico',
+      logoUrl: "/icon.ico",
       count: 0,
-      ids: '',
-      logoImg: logoImg
-    }
+      ids: "",
+      logoImg: localStorage.getItem("platformLogo"),
+    };
   },
   components: { UserInfo, Notification },
   computed: {
@@ -49,39 +72,55 @@ export default {
       return localStorage.getItem("platformName");
     },
   },
+  mounted() {
+    this.getWebLogo();
+  },
   methods: {
+    getWebLogo() {
+      const webLogo = localStorage.getItem("webLogo");
+      const favicon = document.getElementById("favicon");
+      console.log(favicon);
+      
+      if (favicon) {
+        favicon.href = webLogo;
+      } else {
+        const link = document.createElement("link");
+        link.id = "favicon";
+        link.rel = "icon";
+        link.href = webLogo;
+        document.head.appendChild(link);
+      }
+    },
     updateInfoStatus() {
       updateMessageStatusAPI(this.ids).then((res) => {
         this.$refs.notification.getMessageList();
       });
-
     },
     updateCount(count, ids) {
       this.count = count;
       this.ids = ids;
     },
     toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
+      this.$store.dispatch("app/toggleSideBar");
     },
     async logout() {
-      this.$confirm('确定注销并退出系统吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.$confirm("确定注销并退出系统吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
       })
         .then(() => {
-          this.$store.dispatch('LogOut').then(() => {
-            location.href = '/index'
-          })
+          this.$store.dispatch("LogOut").then(() => {
+            location.href = "/index";
+          });
         })
-        .catch(() => {
-        })
+        .catch(() => {});
     },
     toHome() {
-      this.$router.push('/index')
-    }
-  }
-}
+      this.$router.push("/index");
+    },
+  },
+};
 </script>
 
 <style lang="scss">

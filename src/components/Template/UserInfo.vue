@@ -18,7 +18,7 @@
       <i class="el-icon-arrow-right"></i>
     </div>
     <el-divider></el-divider>
-    <div class="loginout" @click="resetDialog">重置密码</div>
+    <div class="loginout" @click="resetDialog">修改密码</div>
     <el-divider></el-divider>
     <div class="loginout" @click="logout">退出登录</div>
     <div v-if="dialogVisible">

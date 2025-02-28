@@ -49,6 +49,7 @@ import CreateTask from "../components/CreateTask.vue";
 import MapContainer from "../components/MapContainer.vue";
 import SettingDate from "../components/SettingDate.vue";
 import { mapState, mapMutations, mapActions } from "vuex";
+import { wgs84ToGcj02 } from "@/utils/CoordinateTransformation.js";
 import { getPlotAPI } from "@/api/TaskManager.js";
 const now = new Date();
 export default {
@@ -114,7 +115,10 @@ export default {
     getPlotInfo() {
       getPlotAPI().then((res) => {
         if (res.code === 200) {
-          this.coordinates = JSON.parse(res.rows[0].coordinates);
+          const arr = JSON.parse(res.rows[0].coordinates);
+          this.coordinates = arr.map((it) =>
+            wgs84ToGcj02(it.lon, it.lat)
+          );
         }
       });
     },

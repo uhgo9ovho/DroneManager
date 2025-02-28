@@ -6,7 +6,7 @@
       v-for="(item, index) in routeList"
       :key="index"
       @click="toPath(item)"
-      v-show="!item.hidden && permission(item.permissions)"
+      v-show="!item.hidden && permission(item.permissions) || item.permissions[0] == '*:*:*'"
     >
       <i :class="item.meta.icon" class="iconfont"></i>
       <div class="item-title">{{ item.meta.title }}</div>

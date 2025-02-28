@@ -187,7 +187,6 @@ export default {
               checked: index === 0, // 第一个对象的checked为true
             };
           });
-          console.log(item,this.timeOptions);
         }
       });
     },

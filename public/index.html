@@ -1,17 +1,42 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="renderer" content="webkit">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="icon" href="jky.png">
-    <link rel="stylesheet" href="pannellum/pannellum.css"/>
-    <script type="text/javascript" src="pannellum/pannellum.js"></script>
-    <script src="./EasyWasmPlayer.js"></script>
-    <title><%= webpackConfig.name %></title>
-    <!--[if lt IE 11]><script>window.location.href='/html/ie.html';</script><![endif]-->
-	  <style>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" href="jky.png">
+  <link rel="stylesheet" href="pannellum/pannellum.css" />
+  <script>
+    let ZQLGLOBAL = {
+      token: '',
+      accessKey: '672439f1c3806207f0540f2d', // 修改成你自己的
+      accessSecret: '62960c23-fe35-4449-8780-719ab3c7b9de',// 修改成你自己的
+      serverIp: '192.168.1.88',// 修改成你自己的
+      getDevices: `:9192/ks/proxy/device`,
+      getSources: `:9192/ks/proxy/source`,
+      subscribe: `:9192/stream/live/subscribe`,
+      detect: `:9192/stream/attr`,
+      sysArgs: `:9192/ks/proxy/system/args`,
+      getToken: ':9192/ks/proxy/user/token',
+      resultTopic: 'ks/proxy/result/+',
+      srs_server: 1935,
+      srs_http_api: 1985,
+      srs_http_server: 8080,
+      websocket: 8083,
+      detectSrsTimer: null
+    }
+  </script>
+  <script type="text/javascript" src="pannellum/pannellum.js"></script>
+  <script src="./EasyWasmPlayer.js"></script>
+  <script type="text/javascript" src="jswebrtc.min.js"></script>
+  <title>
+    <%= webpackConfig.name %>
+  </title>
+  <!--[if lt IE 11]><script>window.location.href='/html/ie.html';</script><![endif]-->
+
+  <style>
     html,
     body,
     #app {
@@ -19,6 +44,7 @@
       margin: 0px;
       padding: 0px;
     }
+
     .chromeframe {
       margin: 0.2em 0;
       background: #ccc;
@@ -95,6 +121,7 @@
         -ms-transform: rotate(0deg);
         transform: rotate(0deg);
       }
+
       100% {
         -webkit-transform: rotate(360deg);
         -ms-transform: rotate(360deg);
@@ -108,6 +135,7 @@
         -ms-transform: rotate(0deg);
         transform: rotate(0deg);
       }
+
       100% {
         -webkit-transform: rotate(360deg);
         -ms-transform: rotate(360deg);
@@ -197,15 +225,17 @@
       opacity: 0.5;
     }
   </style>
-  </head>
-  <body>
-    <div id="app">
-	    <div id="loader-wrapper">
-		    <div id="loader"></div>
-		    <div class="loader-section section-left"></div>
-		    <div class="loader-section section-right"></div>
-		    <div class="load_title">正在加载系统资源，请耐心等待</div>
-        </div>
-	</div>
-  </body>
+</head>
+
+<body>
+  <div id="app">
+    <div id="loader-wrapper">
+      <div id="loader"></div>
+      <div class="loader-section section-left"></div>
+      <div class="loader-section section-right"></div>
+      <div class="load_title">正在加载系统资源，请耐心等待</div>
+    </div>
+  </div>
+</body>
+
 </html>

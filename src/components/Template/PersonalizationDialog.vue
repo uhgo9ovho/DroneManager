@@ -18,7 +18,7 @@
         <div class="upload">
           <el-upload
             class="avatar-uploader"
-            action="/prod-api/common/upload"
+            :action="action"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -26,7 +26,7 @@
           >
             <img
               v-if="ruleForm.webLogo"
-              :src="ruleForm.webLogo"
+              :src="'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + ruleForm.webLogo"
               class="avatar"
             />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -34,7 +34,7 @@
           </el-upload>
           <el-upload
             class="avatar-uploader"
-            action="/prod-api/common/upload"
+            :action="action"
             :show-file-list="false"
             :on-success="handleAvatarSuccess2"
             :before-upload="beforeAvatarUpload2"
@@ -42,7 +42,7 @@
           >
             <img
               v-if="ruleForm.platformLogo"
-              :src="ruleForm.platformLogo"
+              :src="'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + ruleForm.platformLogo"
               class="avatar"
             />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -80,6 +80,7 @@ export default {
   },
   data() {
     return {
+      action: process.env.VUE_APP_BASE_API + '/common/upload',
       ruleForm: {
         orgName: "",
         logo: "",
@@ -105,8 +106,8 @@ export default {
         orgId: this.itemRow.orgId,
         createId: this.itemRow.createId,
         orgDeptName: this.ruleForm.orgName,
-        webLogo: this.webUrl,
-        platformLogo: this.palteUrl,
+        webLogo: this.webUrl ? this.webUrl : this.ruleForm.webLogo,
+        platformLogo: this.palteUrl ? this.palteUrl : this.ruleForm.platformLogo,
         platformName: this.ruleForm.orgName,
       };
       editOrgInfo(params).then((res) => {
@@ -121,19 +122,19 @@ export default {
     beforeAvatarUpload() {},
     handleAvatarSuccess(res) {
       this.webUrl = res.url;
-      this.ruleForm.webLogo = "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + res.url;
+      this.ruleForm.webLogo =  res.url;
     },
     handleAvatarSuccess2(res) {
       this.palteUrl = res.url;
-      this.ruleForm.platformLogo = "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + res.url;
+      this.ruleForm.platformLogo = res.url;
     },
     beforeAvatarUpload2() {},
     //获取组织列表
   },
   mounted() {
     this.ruleForm.orgName = this.itemRow.orgDeptName;
-    this.ruleForm.webLogo = 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + this.itemRow.webLogo;
-    this.ruleForm.platformLogo = 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + this.itemRow.platformLogo;
+    this.ruleForm.webLogo = this.itemRow.webLogo;
+    this.ruleForm.platformLogo = this.itemRow.platformLogo;
   },
 };
 </script>

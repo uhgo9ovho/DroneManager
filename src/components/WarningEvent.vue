@@ -271,7 +271,8 @@ export default {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
         orgId: localStorage.getItem('org_id'),
-        warnName: val
+        warnName: val,
+        status: this.statusTypes(this.eventStatus)
       };
       warningListAPI(params).then((res) => {
         if (res.code === 200) {
@@ -321,7 +322,7 @@ export default {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
         orgId: localStorage.getItem('org_id'),
-        warnName:'',
+        warnName: this.warnName,
         status: this.statusTypes(itemCommand)
       };
       warningListAPI(params).then((res) => {

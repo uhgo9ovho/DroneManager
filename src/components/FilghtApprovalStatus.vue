@@ -84,7 +84,7 @@
               line-height: 32px;
               font-size: 14px;
             "
-            >办结</el-button
+            >审核</el-button
           >
         </div>
       </template>
@@ -191,7 +191,7 @@ export default {
         },
         {
           prop: "approvalStatus",
-          label: "工单状态",
+          label: "工单审核",
           showOverflowTooltip: false,
           slot: true,
         },
@@ -256,18 +256,14 @@ export default {
       return value;
     },
     filterApprovalStatus(val) {
-      let value = "";
       switch (val) {
         case 1:
-          value = "审核通过";
-          break;
+          return "审核通过";
         case 2:
-          value = "被驳回";
+          return "被驳回";
         default:
-          value = "待审核";
-          break;
+          return "待审核";
       }
-      return value;
     },
   },
   computed: {
@@ -307,18 +303,14 @@ export default {
     },
     approvalStatusType(status) {
       return function (status) {
-        let value = "";
         switch (status) {
           case 1:
-            value = "success";
-            break;
+            return "success";
           case 2:
-            value = "danger";
+            return "danger";
           default:
-            value = "info";
-            break;
+            return "info";
         }
-        return value;
       };
     },
     taskTypeStatus(status) {
@@ -364,21 +356,21 @@ export default {
         if (taskStatus === 4) {
           //已挂起
           return [
-            {
-              label: "成果",
-              icon: "el-icon-zhaochengguo",
-              permission: "wurenji:task:query",
-            },
-            {
-              label: "排期",
-              icon: "el-icon-paiqi",
-              permission: "wurenji:task:add",
-            },
-            {
-              label: "取消挂起",
-              icon: "el-icon-3duihuacopy",
-              permission: "wurenji:task:guaqi",
-            },
+            // {
+            //   label: "成果",
+            //   icon: "el-icon-zhaochengguo",
+            //   permission: "wurenji:task:query",
+            // },
+            // {
+            //   label: "排期",
+            //   icon: "el-icon-paiqi",
+            //   permission: "wurenji:task:add",
+            // },
+            // {
+            //   label: "取消挂起",
+            //   icon: "el-icon-3duihuacopy",
+            //   permission: "wurenji:task:guaqi",
+            // },
             {
               label: "删除",
               icon: "el-icon-shanchu",
@@ -388,21 +380,21 @@ export default {
           ];
         } else {
           return [
-            {
-              label: "成果",
-              icon: "el-icon-zhaochengguo",
-              permission: "wurenji:task:query",
-            },
-            {
-              label: "排期",
-              icon: "el-icon-paiqi",
-              permission: "wurenji:task:add",
-            },
-            {
-              label: "挂起",
-              icon: "el-icon-3duihuacopy",
-              permission: "wurenji:task:guaqi",
-            },
+            // {
+            //   label: "成果",
+            //   icon: "el-icon-zhaochengguo",
+            //   permission: "wurenji:task:query",
+            // },
+            // {
+            //   label: "排期",
+            //   icon: "el-icon-paiqi",
+            //   permission: "wurenji:task:add",
+            // },
+            // {
+            //   label: "挂起",
+            //   icon: "el-icon-3duihuacopy",
+            //   permission: "wurenji:task:guaqi",
+            // },
             {
               label: "删除",
               icon: "el-icon-shanchu",
@@ -416,10 +408,11 @@ export default {
   },
   methods: {
     workBtn(row) {
-      this.$confirm("确认驳回吗？", "提示", {
+      this.$confirm("确认通过吗？", "提示", {
         confirmButtonText: "通过",
         cancelButtonText: "驳回",
         type: "warning",
+        cancelButtonClass: "cancal_box",
         distinguishCancelAndClose: true,
       })
         .then(() => {
@@ -509,7 +502,10 @@ export default {
       }
     },
     sizeChange(params) {
+      this.pageNum = params.pageNum;
+      this.pageSize = params.pageSize;
       params.taskName = this.taskName;
+      params.task_type = this.taskTypeStatus(this.dropdownName);
       if (this.isWork) {
         workListAPI(params).then((res) => {
           if (res.code === 200) {
@@ -530,6 +526,7 @@ export default {
       this.pageNum = params.pageNum;
       this.pageSize = params.pageSize;
       params.taskName = this.taskName;
+      params.task_type = this.taskTypeStatus(this.dropdownName);
       if (this.isWork) {
         workListAPI(params).then((res) => {
           if (res.code === 200) {
@@ -548,6 +545,7 @@ export default {
     },
     nameCommand(itemCommand) {
       this.dropdownName = itemCommand;
+      
       const data = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
@@ -555,7 +553,7 @@ export default {
         taskName: this.taskName,
       };
       if (this.isWork) {
-        workListAPI(params).then((res) => {
+        workListAPI(data).then((res) => {
           if (res.code === 200) {
             this.filghtList = res.rows;
             this.total = res.total;
@@ -695,5 +693,15 @@ export default {
   transform: translateY(-50%) !important;
   width: 470px;
   //height: 230px;
+}
+.cancal_box {
+  background-color: red;
+  color: #fff;
+  border-color: red;
+  &:hover {
+    background-color: red;
+    color: #fff;
+    border-color: red;
+  }
 }
 </style>

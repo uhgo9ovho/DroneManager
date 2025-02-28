@@ -12,9 +12,6 @@
       height="500px"
       ref="ruleForm"
     >
-      <el-form-item label="昵称" prop="name">
-        <el-input placeholder="请输入名称" v-model="ruleForm.name"></el-input>
-      </el-form-item>
       <el-form-item label="联系方式" prop="phone">
         <el-input
           placeholder="请输入联系方式"
@@ -23,6 +20,10 @@
           @change="searchPhone"
         ></el-input>
       </el-form-item>
+      <el-form-item label="昵称" prop="name">
+        <el-input placeholder="请输入名称" v-model="ruleForm.name"></el-input>
+      </el-form-item>
+
       <el-form-item label="密码" prop="password" v-if="title == '添加成员'">
         <el-input
           placeholder="请输入密码"
@@ -110,7 +111,7 @@ export default {
         orgDeptName: "",
       },
       roleList: [],
-      isExist: false
+      isExist: false,
     };
   },
   methods: {
@@ -120,10 +121,10 @@ export default {
         if (res.isExist) {
           //手机号已经存在，将返回的信息回显，密码禁止输入
           this.ruleForm.name = res.user.nickName;
-          this.ruleForm.password = '123123'
+          this.ruleForm.password = "123123";
         } else {
-          this.ruleForm.name = '';
-          this.ruleForm.password = '';
+          this.ruleForm.name = "";
+          this.ruleForm.password = "";
         }
       });
     },

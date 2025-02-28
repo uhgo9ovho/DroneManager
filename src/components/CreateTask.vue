@@ -244,7 +244,7 @@ export default {
       this.$refs.upload.clearFiles();
     },
     typeChange() {
-      if (this.airlineList.length) {
+      if (this.airlineList.length && !this.isImport) {
         this.$emit("clearLine", "重绘");
       }
     },

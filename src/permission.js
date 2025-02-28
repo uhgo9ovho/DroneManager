@@ -25,9 +25,8 @@ router.beforeEach((to, from, next) => {
   const userPermissions = JSON.parse(localStorage.getItem('userPermission'));
   const currentAuths = to.meta.auth;
   let hasCommonValue = true
-  if (userPermissions && currentAuths) {
+  if ((userPermissions && currentAuths)) {
     hasCommonValue = userPermissions.some(value => currentAuths.includes(value));
-
   }
   const path = to.path.substring(1);
   const orgArr = Cookies.get('orgList');
@@ -42,7 +41,7 @@ router.beforeEach((to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      if (userPermissions[0] == '*:*:*') {
+      if (userPermissions[0] == '*:*:*' || currentAuths[0] == '*:*:*') {
         next()
       } else if (hasCommonValue) {
         next()

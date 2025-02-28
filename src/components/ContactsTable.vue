@@ -185,6 +185,11 @@ export default {
                 message: "删除成功!",
               });
               this.getDepartment();
+            } else {
+              this.$message({
+                type: "error",
+                message: res.msg,
+              });
             }
           });
         })

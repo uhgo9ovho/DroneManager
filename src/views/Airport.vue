@@ -13,6 +13,7 @@
 import { getPlotAPI } from "@/api/TaskManager.js";
 import MapContainer from "../components/MapContainer.vue";
 import { mapActions, mapState } from "vuex";
+import { wgs84ToGcj02 } from "@/utils/CoordinateTransformation.js";
 export default {
   name: "AirPort",
   data() {
@@ -45,12 +46,15 @@ export default {
       this.latitude = +lonlatArr[1];
       this.showMap = true;
       this.getPlotInfo();
-      
     },
     getPlotInfo() {
       getPlotAPI().then((res) => {
         if (res.code === 200) {
-          this.coordinates = JSON.parse(res.rows[0].coordinates);
+          const arr = JSON.parse(res.rows[0].coordinates);
+          this.coordinates = arr.map((it) =>
+            wgs84ToGcj02(it.lon, it.lat)
+          );
+          console.log(this.coordinates);
         }
       });
     },

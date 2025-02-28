@@ -158,12 +158,7 @@
       ></FlightDataDialog>
     </div>
 
-    <el-dialog
-      title="确定要挂起该任务？"
-      :visible.sync="hangupVisible"
-      center
-      top="60vh"
-    >
+    <el-dialog title="确定要挂起该任务？" :visible.sync="hangupVisible" center>
       <span
         >挂起任务后该任务下所有航线将取消排期，不会被执行。恢复任务后，可能需要重新设置排期！</span
       >
@@ -489,7 +484,7 @@ export default {
             {
               label: "排期",
               icon: "el-icon-paiqi",
-              permission: "wurenji:task:add",
+              permission: "wurenji:task:edit",
             },
             {
               label: "取消挂起",
@@ -513,7 +508,7 @@ export default {
             {
               label: "排期",
               icon: "el-icon-paiqi",
-              permission: "wurenji:task:add",
+              permission: "wurenji:task:edit",
             },
             {
               label: "挂起",
@@ -540,7 +535,6 @@ export default {
         distinguishCancelAndClose: true,
       })
         .then(() => {
-          console.log(row);
           const params = {
             taskId: row.taskId,
             approvalStatus: 1,
@@ -626,7 +620,11 @@ export default {
       }
     },
     sizeChange(params) {
+      this.pageNum = params.pageNum;
+      this.pageSize = params.pageSize;
       params.taskName = this.taskName;
+      params.task_type = this.taskTypeStatus(this.dropdownName);
+      params.taskStatus = this.currentStatus(this.dropdownStatus);
       if (this.isWork) {
         workListAPI(params).then((res) => {
           if (res.code === 200) {
@@ -647,6 +645,8 @@ export default {
       this.pageNum = params.pageNum;
       this.pageSize = params.pageSize;
       params.taskName = this.taskName;
+      params.task_type = this.taskTypeStatus(this.dropdownName);
+      params.taskStatus = this.currentStatus(this.dropdownStatus);
       if (this.isWork) {
         workListAPI(params).then((res) => {
           if (res.code === 200) {
@@ -665,14 +665,16 @@ export default {
     },
     nameCommand(itemCommand) {
       this.dropdownName = itemCommand;
+      console.log(itemCommand);
       const data = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
         task_type: this.taskTypeStatus(itemCommand),
         taskName: this.taskName,
+        taskStatus: this.currentStatus(this.dropdownStatus)
       };
       if (this.isWork) {
-        workListAPI(params).then((res) => {
+        workListAPI(data).then((res) => {
           if (res.code === 200) {
             this.filghtList = res.rows;
             this.total = res.total;
@@ -693,7 +695,8 @@ export default {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
         taskStatus: this.currentStatus(itemCommand),
-      };
+        task_type: this.taskTypeStatus(this.dropdownName)
+    };
       if (this.isWork) {
         workListAPI(params).then((res) => {
           if (res.code === 200) {
@@ -808,8 +811,8 @@ export default {
   border-radius: 12px;
   padding: 24px 24px 16px 32px;
   overflow: hidden; /* 防止内容溢出 */
-  top: 40% !important;
-  transform: translateY(-50%) !important;
+  // top: 40% !important;
+  // transform: translateY(-50%) !important;
   width: 470px;
   //height: 230px;
 }

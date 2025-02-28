@@ -6,7 +6,13 @@
   >
     <div class="wrap wrap_window" v-if="showVideo">
       <div :style="{ width: '100%', height: '100%' }">
-        <div id="J_prismPlayer2"></div>
+        <!-- <div id="J_prismPlayer2"></div> -->
+        <video
+          id="jswebrtc"
+          ref="jswebrtc"
+          controls
+          style="width: 100%; height: 100%; object-fit: fill"
+        ></video>
       </div>
     </div>
     <div
@@ -31,6 +37,13 @@ import Aliplayer from "aliyun-aliplayer";
 import "aliyun-aliplayer/build/skins/default/aliplayer-min.css";
 import { mapState } from "vuex";
 import { getStreamAPI } from "@/api/droneControl.js";
+import {
+  getAITokenAPI,
+  getDeviceListAPI,
+  getSourceAPI,
+  subscribeLiveAPI,
+  sysArgsAPI,
+} from "@/api/AIModel.js";
 let player = null;
 export default {
   props: {
@@ -74,6 +87,8 @@ export default {
   data() {
     return {
       showVideo: false,
+      AIToken: "",
+      srsrtc: null,
     };
   },
   watch: {
@@ -87,7 +102,8 @@ export default {
         } else {
           this.showVideo = true;
           this.$nextTick(() => {
-            this.initPlayer();
+            // this.initPlayer();
+            this.initWebRtcPlayer();
           });
         }
       },
@@ -98,12 +114,13 @@ export default {
     ...mapState("droneStatus", ["airPostInfo"]),
   },
   mounted() {
-    // this.initPlayer();
+    // this.initWebRtcPlayer();
   },
   methods: {
     changeVideo() {
       this.$emit("changeVideo", "video2");
     },
+
     initPlayer() {
       let _this = this;
       getStreamAPI(this.airPostInfo.id).then((result) => {
@@ -133,6 +150,149 @@ export default {
         }
       });
     },
+    async initWebRtcPlayer() {
+      if (this.srsrtc) {
+        this.srsrtc.destroy();
+      }
+      try {
+        const resToken = await getAITokenAPI();
+        if (resToken.code === 200) {
+          this.AIToken = resToken.data.data;
+          const sysArgs = await sysArgsAPI({ token: this.AIToken });
+          if (sysArgs.data.error_code == 0) {
+            let map = sysArgs.data.data.map;
+            ZQLGLOBAL = Object.assign(ZQLGLOBAL, map);
+          }
+          const deviceParams = {
+            type: 3,
+            orgId: localStorage.getItem("org_id"),
+          };
+
+          const deviceRes = await getDeviceListAPI(deviceParams);
+          if (deviceRes.code === 200) {
+            const deviceId = deviceRes.data.deviceId;
+            const sourceParams = {
+              token: this.AIToken,
+              deviceId,
+            };
+
+            const result = await getSourceAPI(sourceParams);
+            if (result.code === 500) return this.$message.warning(result.msg);
+            const res = result.data;
+            if (res.error_code != 0) return this.$message.error("设备离线");
+            for (const deviceId in res.data) {
+              for (const sourceId in res.data[deviceId]) {
+                res.data[deviceId][sourceId].sourceId = sourceId;
+                res.data[deviceId][sourceId].deviceId = deviceId;
+              }
+            }
+            const orgDeviceId = localStorage.getItem('devicesSN')
+            const currentObj = res.data[deviceId][orgDeviceId];
+
+            const subParams = {
+              deviceId: currentObj.deviceId,
+              streamId: currentObj.sourceId,
+              token: this.AIToken,
+            };
+
+            const subRes = await subscribeLiveAPI(subParams);
+            const subResData = subRes.data;
+            if (subResData.error_code != 0) {
+              this.initWebRtcPlayer(); // Retry logic
+              this.$message.error(subResData.message.zh);
+              return;
+            }
+
+            if (subResData.data) {
+              this.webRtc = subResData.data;
+
+              let videoDom = document.getElementById("jswebrtc");
+              this.srsrtc = new JSWebrtc.Player(this.webRtc, {
+                video: videoDom,
+                autoplay: true,
+                onPlay: (obj) => {
+                  videoDom.addEventListener("canplay", function () {
+                    videoDom.play().catch((err) => {
+                      console.error("Error playing video: ", err);
+                    });
+                  });
+                },
+                onPause: (obj) => {},
+              });
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error initializing WebRTC player:", error);
+      }
+    },
+    // initWebRtcPlayer() {
+    //   getAITokenAPI().then((res) => {
+    //     if (res.code === 200) {
+    //       this.AIToken = res.data.data;
+    //       console.log(this.AIToken, "token");
+
+    //       const deveiceParams = {
+    //         type: 3,
+    //         orgId: localStorage.getItem("org_id"),
+    //       };
+
+    //       getDeviceListAPI(deveiceParams).then((deviceRes) => {
+    //         if (deviceRes.code === 200) {
+    //           const deviceId = deviceRes.data.deviceId;
+    //           const sourceParams = {
+    //             token: this.AIToken,
+    //             deviceId,
+    //           };
+    //           getSourceAPI(sourceParams).then((result) => {
+    //             if (result.code == 500)
+    //               return this.$message.warning(result.msg);
+    //             const res = result.data;
+    //             if (res.error_code != 0) return this.$message.error("设备离线");
+    //             const serverIp = res.url;
+    //             for (const deviceId in res.data) {
+    //               for (const sourceId in res.data[deviceId]) {
+    //                 res.data[deviceId][sourceId].sourceId = sourceId;
+    //                 res.data[deviceId][sourceId].deviceId = deviceId;
+    //               }
+    //             }
+    //             const currentObj = res.data[deviceId][this.orgDeviceId];
+    //             console.log(currentObj, "currentObj");
+    //             const subParams = {
+    //               deviceId: currentObj.deviceId,
+    //               streamId: currentObj.sourceId,
+    //               token: this.AIToken,
+    //             };
+    //             subscribeLiveAPI(subParams).then((res) => {
+    //               console.log(res);
+    //               const subRes = res.data;
+    //               if (subRes.error_code != 0) {
+    //                 this.initWebRtcPlayer();
+    //                 this.$message.error(subRes.message.zh);
+    //               }
+
+    //               if (subRes.data) {
+    //                 this.webRtc = subRes.data;
+    //                 console.log(this.webRtc, "webrtc");
+    //                 let videoDom = document.getElementById("jswebrtc");
+    //                 this.srsrtc = new JSWebrtc.Player(this.webRtc, {
+    //                   video: videoDom,
+    //                   // autoplay: true,
+    //                   onPlay: (obj) => {
+    //                     videoDom.addEventListener("canplay", function (e) {
+    //                       videoDom.play();
+    //                     });
+    //                   },
+    //                   onPause: (obj) => {},
+    //                 });
+    //               }
+    //             });
+    //           });
+    //         }
+    //       });
+    //     }
+    //   });
+    // },
   },
   components: {
     MapContainer,

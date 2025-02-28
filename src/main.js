@@ -20,6 +20,7 @@ import './permission' // permission control
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree } from "@/utils/ruoyi";
 //引入自定义icon
 import '../font_4643341_t35u7056jsq/iconfont.css'
+import axios from 'axios'
 
 
 // 全局方法挂载
@@ -30,7 +31,7 @@ Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
-
+Vue.prototype.$axios = axios;
 Vue.use(plugins)
 Vue.directive('removeAriaHidden', {
   bind(el, binding) {
@@ -56,11 +57,13 @@ Vue.directive('permissions', {
     }
   }
 })
-// 判断权限的函数
-function checkPermission(permission) {
-  var permissions = JSON.parse(localStorage.getItem('userPermission'))
-  return permissions.includes(permission);
+// ... existing code ...
+Vue.prototype.$checkPermission = function(permissionFlag) {
+  const all_permission = "*:*:*";
+  const permissions = JSON.parse(localStorage.getItem('userPermission'))
+  return permissions.includes(permissionFlag) || all_permission == permissions[0];
 }
+// ... existing code ...
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

@@ -127,7 +127,7 @@ export default {
             this.loading = false;
             this.$router.push("/videoMap");
           } else {
-            this.$message.error("指令下发失败");
+            this.$message.error(res.msg);
             this.loading = false;
           }
         })
