@@ -752,7 +752,7 @@ export default {
                   message: "删除成功!",
                 });
               } else {
-                this.$message.error("删除失败");
+                this.$message.error(res.msg);
               }
             });
           });

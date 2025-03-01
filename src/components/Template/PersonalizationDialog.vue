@@ -118,6 +118,8 @@ export default {
       gxhByOrgApi(params).then((res) => {
         if (res.code == 200) {
           this.$message.success(res.msg);
+          let webLogo= 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + params.webLogo;
+          localStorage.setItem('webLogo',webLogo);
           this.$emit("editGXH");
         } else {
           this.$message.error(res.msg);
