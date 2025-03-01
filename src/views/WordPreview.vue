@@ -853,7 +853,7 @@ export default {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   //border-radius: 8px;
   #content{
-    margin-top: 1vw;
+    // margin-top: 1vw;
     //padding-right: 5vw;
     //padding-left: 5vw;
     height: 45vw;
