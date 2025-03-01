@@ -37,6 +37,7 @@ class WebSocketClient {
             const data = JSON.parse(validJSON);
             if (data.code == 'noticeControl') {
                 // data
+                debugger
                 store.dispatch('droneStatus/getControler', data.data);
             } else {
                 store.dispatch('droneStatus/getDroneInfo', data);

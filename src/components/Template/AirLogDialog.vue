@@ -341,26 +341,25 @@ export default {
       if (this.downloadStatus)
         return this.$message.warning("正在下载，请勿重复点击");
       this.$message.success("开始打包下载，请稍等片刻");
-      // this.CHANGE_DOWNLOAD_STATUS(true);
-      // const imgUrlArr = this.imgOptions.map((item) => item.url);
-      // downloadImagesAsZip(imgUrlArr);
-      const params = {
-        flightRecordId: this.row.recordId,
-        startIndex: 0,
-        endIndex: this.row.resultList.length,
-      };
-      // this.CHANGE_DOWNLOAD_STATUS(true);
-      fileDownloadAPI(params).then(res => {
-        console.log(res);
-        if(res.code == 200) {
+      this.CHANGE_DOWNLOAD_STATUS(true);
+      const imgUrlArr = this.imgOptions.map((item) => item.url);
+      downloadImagesAsZip(imgUrlArr);
+      // const params = {
+      //   flightRecordId: this.row.recordId,
+      //   startIndex: 0,
+      //   endIndex: this.row.resultList.length,
+      // };
+      // fileDownloadAPI(params).then(res => {
+      //   console.log(res);
+      //   if(res.code == 200) {
 
-        }
-      this.CHANGE_DOWNLOAD_STATUS(false);
+      //   }
+      // this.CHANGE_DOWNLOAD_STATUS(false);
 
-      }).catch(err => {
-      this.CHANGE_DOWNLOAD_STATUS(false);
+      // }).catch(err => {
+      // this.CHANGE_DOWNLOAD_STATUS(false);
 
-      })
+      // })
     },
     createVideo() {
       if (!this.row.recordVideo) return;

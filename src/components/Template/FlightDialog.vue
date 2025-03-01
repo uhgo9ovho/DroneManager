@@ -111,8 +111,10 @@ export default {
     } else {
     }
   },
+  
   methods: {
     closeDialog() {
+      this.$refs.mapContainer.destroyMap()
       this.$emit("closeDialog");
     },
     lineInfo(info) {

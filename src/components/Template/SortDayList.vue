@@ -26,6 +26,7 @@
                           @openDialog="openDialog"
                           @updateData="updateDataDel"
                           :isShowAddBtn="isShowAddBtn(item.time)"
+                          :isToday="!isToday(currentDate)"
                           :dateSHowBtn="dateSHowBtn"
                         ></AirItemInfo>
                       </div>

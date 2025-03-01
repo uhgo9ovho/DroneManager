@@ -28,7 +28,7 @@
         ></el-switch>
       </el-form-item>
       <el-form-item label="角色权限" prop="menuIds">
-        <el-tabs v-model="activeName">
+        <el-tabs v-model="activeName" @tab-click="activeChnage">
           <el-tab-pane label="管理侧" name="admin"></el-tab-pane>
           <el-tab-pane label="看板大屏" name="dashboard"></el-tab-pane>
           <el-tab-pane label="小程序" name="miniProgram"> </el-tab-pane>
@@ -45,7 +45,7 @@
             :show-checkbox="true"
             @selectedKeys="selectedKeys"
             :check-strictly="isCheck"
-            ></tree-promission>
+          ></tree-promission>
         </div>
         <div class="role-selector" v-if="activeName == 'dashboard'">
           <tree-promission
@@ -55,7 +55,7 @@
             :show-checkbox="true"
             @selectedKeys="selectedKeys"
             :check-strictly="isCheck"
-            ></tree-promission>
+          ></tree-promission>
         </div>
         <div class="role-selector" v-if="activeName == 'admin'">
           <tree-promission
@@ -152,12 +152,17 @@ export default {
   created() {
     if (this.title === "编辑角色") {
       this.form = Object.assign({}, this.row);
-      this.roleMenuTreeselect();
+      this.roleMenuTreeselect("admin");
     } else {
       this.activeName = "admin";
     }
   },
   methods: {
+    activeChnage(val) {
+      if (this.title === "编辑角色") {
+        this.roleMenuTreeselect(val.name);
+      }
+    },
     selectedKeys(checkedKeys, halfCheckedKeys) {
       // 只更新当前激活标签页的选中状态
       this.checkedKeysObj[this.activeName] = checkedKeys || [];
@@ -222,12 +227,13 @@ export default {
         }
       });
     },
-    roleMenuTreeselect() {
+    roleMenuTreeselect(tabName) {
       roleMenuTreeselectAPI(this.row.roleId).then((res) => {
         if (res.code == 200) {
           const allCheckedKeys = res.checkedKeys || [];
-          const menus = res.menus || [];
+          console.log(allCheckedKeys, "allCheckedKeys");
 
+          const menus = res.menus || [];
           // 找到三个主模块的ID
           const adminModule = menus.find((item) => item.label === "管理侧");
           const dashboardModule = menus.find((item) => item.label === "大屏端");
@@ -262,7 +268,7 @@ export default {
           };
 
           console.log("初始化各模块权限数据：", this.checkedKeysObj);
-          this.activeName = "admin"
+          this.activeName = tabName;
         }
       });
     },

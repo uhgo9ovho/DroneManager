@@ -28,7 +28,7 @@
         <div class="download" v-else @click="downloadImage">
           <i class="el-icon-download"></i>
         </div>
-        <div class="mark" v-if="subFileType!=1">
+        <div class="mark" v-if="row.taskType != 2">
           问题标注
           <el-switch v-model="isChecked"></el-switch>
         </div>
@@ -138,7 +138,7 @@ export default {
       type: String,
       default: "",
     },
-    subFileType:{
+    subFileType: {
       type: Number,
       default: "",
     },
@@ -325,7 +325,7 @@ export default {
       this.remarkList.forEach((it) => (it.checked = false));
     },
     selectItem(item) {
-      console.log(item,'item');
+      console.log(item, "item");
 
       this.$refs.imageZoom.addTextToSelectedBox(item.dictLabel);
       this.currentName = item.dictLabel;

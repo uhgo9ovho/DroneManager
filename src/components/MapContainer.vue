@@ -133,12 +133,17 @@ export default {
       },
     },
   },
-  unmounted() {
+  destroyed() {
     this.destroyMap();
   },
   methods: {
     ...mapMutations("changeStatus", ["CHANGE_DROC_STATUS"]),
     destroyMap() {
+       if(polyline || polylineStart || polylineEnd) {
+        this.polylineVisible()
+        startLine = null
+        endLine = null
+       }
       map?.destroy();
     },
     initAMap() {

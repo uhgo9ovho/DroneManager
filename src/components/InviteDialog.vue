@@ -56,7 +56,7 @@ export default {
     getCode() {
       this.loading = true;
       const page = "pages/scanLogin/invite/invite";
-      const userInfo = JSON.parse(Cookies.get("user"));
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const orgName = Cookies.get("orgName");
       const scene = `${localStorage.getItem("org_id")}_${userInfo.userName}`;
       InvitationCodeAPI(scene, page)
@@ -77,7 +77,6 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.getCode();
-      console.log(JSON.parse(Cookies.get("user")), "asdsadasw");
     });
   },
 };

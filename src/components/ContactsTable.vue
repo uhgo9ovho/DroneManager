@@ -19,7 +19,7 @@
         </div>
       </template>
       <template #operate="{ row }">
-        <div v-if="row.isOrg" v-permissions="'wrj:dept:edit'">
+        <div v-if="row.isOrg" v-permissions="'wrj:dept:gxh'">
           <el-button type="text" @click="openPersonalization(row)"
             >个性化</el-button
           >

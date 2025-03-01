@@ -50,7 +50,7 @@
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="details" v-permissions="'wurenji:scheduling:query'">查看详情</el-dropdown-item>
-          <el-dropdown-item command="delete" v-if="isShowAddBtn" v-permissions="'wurenji:scheduling:remove'">删除</el-dropdown-item>
+          <el-dropdown-item command="delete" v-if="isShowAddBtn || isToday" v-permissions="'wurenji:scheduling:remove'">删除</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -86,6 +86,10 @@ export default {
       default: false
     },
     isShowAddBtn: {
+      type: Boolean,
+      default: false
+    },
+    isToday: {
       type: Boolean,
       default: false
     }

@@ -322,7 +322,6 @@ function setAlarms(data) {
     }
 
     if (bbox.rectangles.length > 0) {
-        debugger
         bbox.rectangles.forEach((item, i) => {
             let color = JSON.parse(JSON.stringify(item.color)).reverse();
             let coordinates = {

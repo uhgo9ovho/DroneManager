@@ -4,9 +4,9 @@
     @click="changeVideo"
     :style="{ width: '100%', height: '100%', background: '#000' }"
   >
-    <div class="wrap wrap_window">
-      <!-- <div class="wrap wrap_window" v-if="showVideo"> -->
-      <div :style="{ width: '100%', height: '100%' }">
+    <div class="wrap wrap_window" v-if="showVideo">
+      <div class="wrap wrap_window">
+        <!-- <div :style="{ width: '100%', height: '100%' }"> -->
         <!-- <div id="J_prismPlayer2"></div> -->
         <video
           id="jswebrtc"
@@ -17,7 +17,7 @@
       </div>
       <canvas class="canvas-shuju" id="canvas_aibox"></canvas>
     </div>
-    <!-- <div
+    <div
       v-else
       style="
         width: 100%;
@@ -29,7 +29,7 @@
       "
     >
       暂无视频流
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -106,7 +106,7 @@ export default {
           this.showVideo = true;
           this.$nextTick(() => {
             // this.initPlayer();
-            // this.initWebRtcPlayer();
+            this.initWebRtcPlayer();
           });
         }
       },
@@ -117,11 +117,11 @@ export default {
     ...mapState("droneStatus", ["airPostInfo"]),
   },
   mounted() {
-    this.initWebRtcPlayer();
+    // this.initWebRtcPlayer();
   },
   methods: {
     clearcanvas() {
-      AIBoxMqtt.clearCanvas()
+      AIBoxMqtt.clearCanvas();
     },
     changeVideo() {
       this.$emit("changeVideo", "video2");
@@ -200,8 +200,8 @@ export default {
 
             const subParams = {
               deviceId: currentObj.deviceId,
-              // streamId: currentObj.sourceId,
-              streamId: 11,
+              streamId: currentObj.sourceId,
+              // streamId: 11,
               token: this.AIToken,
             };
             this.sub(subParams);

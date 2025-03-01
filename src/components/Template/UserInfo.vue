@@ -59,7 +59,7 @@ export default {
     ResetPassDialog,
   },
   mounted() {
-    this.userInfo = JSON.parse(Cookies.get("user"));
+    this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
     this.orgName = Cookies.get("orgName");
   },
   methods: {

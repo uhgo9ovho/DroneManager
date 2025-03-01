@@ -15,7 +15,11 @@
     <!-- 小 div 1，点击后与全屏 div 交换 -->
     <div class="small-div small-div-1" @click="handleClick(0)">
       <KeepAlive>
-        <component ref="flyRef" :is="smallComponent[0]" :mode_code="mode_code" />
+        <component
+          ref="flyRef"
+          :is="smallComponent[0]"
+          :mode_code="mode_code"
+        />
       </KeepAlive>
     </div>
 
@@ -87,7 +91,7 @@
           </div>
           <div class="fly_text">
             <p>电源</p>
-            <p>开机</p>
+            <p>{{ basic_osd ? "开机" : "关机" }}</p>
           </div>
         </div>
         <div class="fly_status">
@@ -96,7 +100,7 @@
           </div>
           <div class="fly_text">
             <p>充电状态</p>
-            <p>断电</p>
+            <p>{{ state ? "充电" : "断电" }}</p>
           </div>
         </div>
         <div class="fly_status">
@@ -105,7 +109,7 @@
           </div>
           <div class="fly_text">
             <p>机场系统</p>
-            <p>空闲中</p>
+            <p>{{ mode_code | filterModeCode }}</p>
           </div>
         </div>
         <div class="fly_status">
@@ -114,7 +118,7 @@
           </div>
           <div class="fly_text">
             <p>舱盖</p>
-            <p>关</p>
+            <p>{{ cover_state | filterCoverStatus }}</p>
           </div>
         </div>
         <!-- aaa -->
@@ -169,7 +173,7 @@
                 <p>湿度</p>
                 <p>{{ tempHumidity }}% RH</p>
               </div>
-              <div>
+              <div v-if="showRemote">
                 <p>相机模式</p>
                 <p>{{ cameraModel }}</p>
               </div>
@@ -292,7 +296,7 @@ import {
 import { getPlotAPI } from "@/api/TaskManager.js";
 import { returnHomeAPI } from "@/api/droneControl.js";
 import { UranusMqtt } from "@/utils/mqtt";
-import { getToken } from '@/utils/auth'
+import { getToken } from "@/utils/auth";
 import Cookies from "js-cookie";
 import { useManualControl } from "@/utils/mqtt/use-manual-control";
 import ElectricQuantity from "@/components/Template/ElectricQuantity.vue";
@@ -364,12 +368,15 @@ export default {
       latitudeLine: 0, //无人机经纬度
       longitudeLine: 0, //无人机经纬度
       payloadIndex: "",
-      cameraModel: "-",
+      cameraModel: "拍照",
       devId: 0,
       insideStreamUrl: "",
       outsideStreamUrl: "",
       droneStreamUrl: "",
       drcState: 0,
+      basic_osd: false,
+      state: false,
+      cover_state: false,
     };
   },
   components: {
@@ -378,6 +385,40 @@ export default {
     AirPortVideo,
     FlyRemote,
     ElectricQuantity,
+  },
+  filters: {
+    filterModeCode(val) {
+      switch (val) {
+        case 0:
+          return "空闲中";
+        case 1:
+          return "现场调试";
+        case 2:
+          return "远程调试";
+        case 3:
+          return "升级中";
+        case 4:
+          return "作业中";
+        case 5:
+          return "待标定";
+        default:
+          return "空闲中";
+      }
+    },
+    filterCoverStatus(val) {
+      switch (val) {
+        case 0:
+          return "关闭";
+        case 1:
+          return "打开";
+        case 2:
+          return "半开";
+        case 3:
+          return "舱盖状态异常";
+        default:
+          return "关闭";
+      }
+    },
   },
   computed: {
     ...mapState("droneStatus", [
@@ -388,7 +429,6 @@ export default {
       "controler",
     ]),
     title() {
-      console.log(controler);
       if (this.controler && this.controler.userName != "暂无")
         return `当前${this.controler.userName}正在控制该设备，是否确认继续申请控制权？`;
       return "当前无人控制该设备，是否确认继续申请控制权？";
@@ -448,6 +488,12 @@ export default {
         //飞行进度
         this.percentage = val.data.output.progress.percent;
       } else if (val.biz_code === "dock_osd") {
+        if (host.cover_state != undefined) {
+          this.cover_state = host.cover_state;
+        }
+        if (host.sub_device) {
+          this.basic_osd = host.sub_device.device_online_status;
+        }
         if (host.humidity) {
           this.tempHumidity = parseFloat(host.humidity.toFixed(2));
         }
@@ -465,6 +511,9 @@ export default {
         if ("drc_state" in host) {
           this.drcState = host.drc_state;
           console.log(host.drc_state, "drc_status");
+        }
+        if (host.drone_charge_state) {
+          this.state = host.drone_charge_state.state;
         }
 
         if (host.network_state && host.network_state.rate) {
@@ -486,7 +535,6 @@ export default {
     this.getEQToken();
     this.getDeviceInfo();
     this.getPlotInfo();
-          
   },
   methods: {
     ...mapActions("droneStatus", [
@@ -538,8 +586,8 @@ export default {
     },
     //获取设备token
     getEQToken() {
-      const userId = JSON.parse(Cookies.get("user")).userId;
-      const username = JSON.parse(Cookies.get("user")).userName;
+      const userId = JSON.parse(localStorage.getItem('userInfo')).userId;
+      const username = JSON.parse(localStorage.getItem('userInfo')).userName;
       const params = {
         workspaceId: localStorage.getItem("workspaceId"),
         userId,
@@ -568,7 +616,9 @@ export default {
           }
         });
       } else {
-        this.$message.warning('飞行画面及飞行信息暂未连接无法一键返航，请查看是否在飞行中')
+        this.$message.warning(
+          "飞行画面及飞行信息暂未连接无法一键返航，请查看是否在飞行中"
+        );
       }
     },
     confirm(e) {
@@ -577,11 +627,11 @@ export default {
           const { address, client_id, username, password, expire_time } =
             res.data;
           this.client_id = client_id;
-          const userInfo = JSON.parse(Cookies.get("user"));
+          const userInfo = JSON.parse(localStorage.getItem('userInfo'));
           this.mqttState = new UranusMqtt(address, {
             clientId: client_id,
             username: `hjh`,
-            password: '123123',
+            password: "123123",
           });
           this.getMqttState(this.mqttState);
           this.mqttState.initMqtt();

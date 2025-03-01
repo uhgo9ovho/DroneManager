@@ -97,8 +97,10 @@ export default {
       document.title = row.platformName;
       getInfo(row.orgId, Cookies.get("userId")).then(async (res) => {
         if (res.code === 200) {
+          debugger
           let userInfo = res.data;
           Cookies.set("user", JSON.stringify(userInfo), { expires: 30 });
+          localStorage.setItem('userInfo', JSON.stringify(userInfo))
           // this.params.userId = userInfo.userId;
           if (res.permissions.length) {
             localStorage.setItem(

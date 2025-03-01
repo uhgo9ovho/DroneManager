@@ -8,6 +8,7 @@
       show-checkbox
       highlight-current
       @check="currentChecked"
+      :default-checked-keys="checkedKeys"
       :check-strictly="isCheck"
     ></el-tree>
   </div>
