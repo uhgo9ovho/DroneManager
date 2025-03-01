@@ -29,6 +29,10 @@
                           :isToday="!isToday(currentDate)"
                           :dateSHowBtn="dateSHowBtn"
                         ></AirItemInfo>
+                        <!-- 添加排期状态显示 -->
+                        <div class="scheduling-status">
+                          {{ getSchedulingStatus(item2.schedulingStatus) }}
+                        </div>
                       </div>
                     </div>
                   </template>
@@ -76,169 +80,189 @@
 </template>
 
 <script>
-import AirItemInfo from "./AirItemInfo.vue";
-import FlightDialog from "./FlightDialog.vue";
-import AddAirLineDialog from "./AddAirLineDialog.vue";
+import AirItemInfo from './AirItemInfo.vue'
+import FlightDialog from './FlightDialog.vue'
+import AddAirLineDialog from './AddAirLineDialog.vue'
+
 export default {
-  name: "DayList",
+  name: 'DayList',
   props: {
     sortList: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     currentDate: {
       type: String,
-      default: "",
-    },
+      default: ''
+    }
   },
   components: {
     AirItemInfo,
     FlightDialog,
-    AddAirLineDialog,
+    AddAirLineDialog
   },
   data() {
     return {
       airLines: [
         {
-          time: "9:00",
+          time: '9:00'
         },
         {
-          time: "10:00",
+          time: '10:00'
         },
         {
-          time: "11:00",
+          time: '11:00'
         },
         {
-          time: "12:00",
+          time: '12:00'
         },
         {
-          time: "13:00",
+          time: '13:00'
         },
         {
-          time: "14:00",
+          time: '14:00'
         },
         {
-          time: "15:00",
+          time: '15:00'
         },
         {
-          time: "16:00",
+          time: '16:00'
         },
         {
-          time: "17:00",
+          time: '17:00'
         },
         {
-          time: "18:00",
+          time: '18:00'
         },
         {
-          time: "19:00",
+          time: '19:00'
         },
         {
-          time: "20:00",
+          time: '20:00'
         },
         {
-          time: "21:00",
-        },
+          time: '21:00'
+        }
       ],
       airInfos: [],
-      currentTime: "",
+      currentTime: '',
       timer: null,
       top: 0,
       shouldMove: false, //是否开始移动
       visible: false,
       addAirShow: false,
-      startTime: "",
-      row: null,
-    };
+      startTime: '',
+      row: null
+    }
   },
   computed: {
     isToday() {
-      return function (dateString) {
+      return function(dateString) {
         // 将传入的字符串转换为日期对象
-        const inputDate = new Date(dateString);
-        const today = new Date();
+        const inputDate = new Date(dateString)
+        const today = new Date()
 
         // 获取当天的年份、月份和日期
-        const currentYear = today.getFullYear();
-        const currentMonth = today.getMonth(); // 月份是从0开始的
-        const currentDate = today.getDate();
+        const currentYear = today.getFullYear()
+        const currentMonth = today.getMonth() // 月份是从0开始的
+        const currentDate = today.getDate()
 
         // 获取输入日期的年份、月份和日期
-        const inputYear = inputDate.getFullYear();
-        const inputMonth = inputDate.getMonth();
-        const inputDateOnly = inputDate.getDate();
+        const inputYear = inputDate.getFullYear()
+        const inputMonth = inputDate.getMonth()
+        const inputDateOnly = inputDate.getDate()
 
         // 比较日期是否一致
         return (
           inputYear === currentYear &&
           inputMonth === currentMonth &&
           inputDateOnly === currentDate
-        );
-      };
+        )
+      }
     },
     topPX() {
       return {
-        top: `${this.top}px`,
-      };
+        top: `${this.top}px`
+      }
     },
     isShowAddBtn() {
-      let that = this;
-      return function (time) {
+      let that = this
+      return function(time) {
         if (that.currentTime) {
-          return that.compareTime(time, that.currentTime);
+          return that.compareTime(time, that.currentTime)
         }
-      };
+      }
     },
     dateSHowBtn() {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0); // 设置时间为当天的0点
-      const currentDateObj = new Date(this.currentDate.replace(/\//g, "-")); // 将 YYYY/MM/DD 转换为日期对象
-      return currentDateObj >= today; // 比较日期对象
-    },
+      const today = new Date()
+      today.setHours(0, 0, 0, 0) // 设置时间为当天的0点
+      const currentDateObj = new Date(this.currentDate.replace(/\//g, '-')) // 将 YYYY/MM/DD 转换为日期对象
+      return currentDateObj >= today // 比较日期对象
+    }
   },
   watch: {
     sortList(arr) {
       if (arr) {
-        this.airInfos = arr;
-        this.getAirLines();
+        this.airInfos = arr
+        this.getAirLines()
       }
-    },
+    }
   },
   methods: {
+    // 将排期状态转换为对应文本
+    getSchedulingStatus(status) {
+      switch (status) {
+        case 0:
+          return '待执行'
+        case 1:
+          return '已执行'
+        case 2:
+          return '起飞失败'
+        case 3:
+          return '飞行完成'
+        case 4:
+          return '飞行任务失败'
+        case 5:
+          return '未飞行'
+        default:
+          return '未知状态'
+      }
+    },
     updateDataDel() {
-      this.$emit("updateData", this.currentDate);
+      this.$emit('updateData', this.currentDate)
     },
     compareTime(time1, time2) {
-      const [hour1, minute1] = time1.split(":").map(Number);
-      const [hour2, minute2] = time2.split(":").map(Number);
+      const [hour1, minute1] = time1.split(':').map(Number)
+      const [hour2, minute2] = time2.split(':').map(Number)
 
       if (hour1 > hour2 || (hour1 === hour2 && minute1 > minute2)) {
-        return true; // time1 大于 time2
+        return true // time1 大于 time2
       } else if (hour1 === hour2 && minute1 === minute2) {
-        return true; // 两个时间相等
+        return true // 两个时间相等
       } else {
-        return false; // time1 小于 time2
+        return false // time1 小于 time2
       }
     },
     updateData(currentDate) {
-      this.$emit("updateData", currentDate);
+      this.$emit('updateData', currentDate)
     },
     addAirBtn(item) {
-      console.log(item);
-      this.startTime = item.time;
-      this.addAirShow = true;
+      console.log(item)
+      this.startTime = item.time
+      this.addAirShow = true
     },
     closeLineDialog() {
-      this.addAirShow = false;
+      this.addAirShow = false
     },
     openDialog(row) {
-      this.row = row;
-      this.visible = true;
+      this.row = row
+      this.visible = true
     },
     closeDialog() {
-      this.visible = false;
+      this.visible = false
     },
     checkTimeAndStart() {
-      const now = new Date();
+      const now = new Date()
       const nineAM = new Date(
         now.getFullYear(),
         now.getMonth(),
@@ -246,110 +270,112 @@ export default {
         9,
         0,
         0
-      );
+      )
 
       if (now >= nineAM) {
-        this.shouldMove = true;
+        this.shouldMove = true
         // 计算已经过去的分钟数
-        const minutesPastNine = Math.floor((now - nineAM) / 60000) * 1.16;
+        const minutesPastNine = Math.floor((now - nineAM) / 60000) * 1.16
 
-        this.top = minutesPastNine; // 根据过去的分钟数设置初始 top 值
-        this.startMoving();
+        this.top = minutesPastNine // 根据过去的分钟数设置初始 top 值
+        this.startMoving()
       } else {
-        const timeUntilNineAM = nineAM - now;
+        const timeUntilNineAM = nineAM - now
         setTimeout(() => {
-          this.shouldMove = true;
-          this.top = 0; // 9点的时候从top: 0px开始
-          this.startMoving();
-        }, timeUntilNineAM);
+          this.shouldMove = true
+          this.top = 0 // 9点的时候从top: 0px开始
+          this.startMoving()
+        }, timeUntilNineAM)
       }
     },
     startMoving() {
-      this.shouldMove = true;
+      this.shouldMove = true
 
       setInterval(() => {
-        this.top += 1.16;
-      }, 60000); // 每60,000毫秒(1分钟) 增加1px
+        this.top += 1.16
+      }, 60000) // 每60,000毫秒(1分钟) 增加1px
     },
 
     updateTime() {
-      var now = new Date();
-      var hours = now.getHours();
-      var minutes = now.getMinutes();
-      var seconds = now.getSeconds();
+      var now = new Date()
+      var hours = now.getHours()
+      var minutes = now.getMinutes()
+      var seconds = now.getSeconds()
 
       // 格式化时间，确保分钟和秒钟总是两位数
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      seconds = seconds < 10 ? "0" + seconds : seconds;
+      minutes = minutes < 10 ? '0' + minutes : minutes
+      seconds = seconds < 10 ? '0' + seconds : seconds
 
       // 显示当前时间
-      this.currentTime = hours + ":" + minutes;
+      this.currentTime = hours + ':' + minutes
     },
     formatTime(timeStr) {
-      return timeStr.replace(/^0/, "").replace(/:00$/, "");
+      return timeStr.replace(/^0/, '').replace(/:00$/, '')
     },
     airTime(time) {
       switch (time) {
-        case "10:30:00":
-          return "10:00";
-        case "14:30:00":
-          return "14:00";
+        case '10:30:00':
+          return '10:00'
+        case '14:30:00':
+          return '14:00'
         default:
-          break;
+          break
       }
     },
     getAirLines() {
       this.airLines.forEach((item1) => {
         const match = this.sortList.find((item2) => {
-          item2.formatTime = item2.scheduledTime.split(" ")[1];
+          item2.formatTime = item2.scheduledTime.split(' ')[1]
           return (
             this.formatTime(item2.formatTime) === item1.time ||
             this.airTime(item2.formatTime) === item1.time
-          );
-        });
+          )
+        })
 
         if (match) {
           // 将 match 对象中的属性复制到 item1 中
           Object.keys(match).forEach((key) => {
-            item1[key] = match[key];
-          });
+            item1[key] = match[key]
+          })
         }
-      });
+      })
     },
     hasTaskForTime(time) {
-      return this.airInfos.some(item => 
-        this.formatTime(item.formatTime) === time || 
+      return this.airInfos.some(item =>
+        this.formatTime(item.formatTime) === time ||
         this.airTime(item.formatTime) === time
-      );
+      )
     },
     getTasksForTime(time) {
-      return this.airInfos.filter(item => 
-        this.formatTime(item.formatTime) === time || 
+      return this.airInfos.filter(item =>
+        this.formatTime(item.formatTime) === time ||
         this.airTime(item.formatTime) === time
-      );
+      )
     }
   },
   mounted() {
-    this.updateTime();
+    this.updateTime()
 
-    this.timer = setInterval(this.updateTime, 1000);
-    this.checkTimeAndStart();
+    this.timer = setInterval(this.updateTime, 1000)
+    this.checkTimeAndStart()
   },
   beforeDestroy() {
-    clearInterval(this.timer);
-  },
-};
+    clearInterval(this.timer)
+  }
+}
 </script>
 
 <style lang="scss">
 .day-list {
   overflow: auto;
   display: flex;
+
   .task-table {
     flex: 1 1 0%;
     height: 100%;
     padding-top: 15px;
     padding-right: 30px;
+
     .task-item-day {
       border-top: 1px solid rgba(226, 226, 228, 0.7);
       padding: 2px 0;
@@ -359,12 +385,14 @@ export default {
       justify-content: center;
       width: 100%;
       position: relative;
+
       .time-flag {
         background: #ff0;
         position: relative;
         width: 74px;
         border-right: 1px solid rgba(226, 226, 228, 0.7);
         height: 100%;
+
         .time-text {
           position: absolute;
           top: -9px;
@@ -376,13 +404,17 @@ export default {
           line-height: 14px;
         }
       }
+
       .task-item {
         flex: 1;
         border-left: 1px solid rgba(226, 226, 228, 0.7);
         padding-left: 17px;
+        position: relative;
+
         .shikuang {
           background: #000 !important;
         }
+
         .task-past-card {
           -webkit-box-flex: 1;
           -ms-flex: 1;
@@ -408,6 +440,24 @@ export default {
           // padding-right: 48px;
           color: rgb(134, 134, 140);
         }
+
+        .scheduling-status {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: #007bff;
+          color: #fff;
+          padding: 5px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          text-align: center;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+
         .task-card3 {
           cursor: pointer;
           -webkit-box-flex: 1;
@@ -422,6 +472,8 @@ export default {
           display: flex;
           justify-content: center;
           align-items: center;
+          position: relative;
+
           .icon-add {
             cursor: pointer !important;
             width: 48px;
@@ -439,6 +491,7 @@ export default {
       }
     }
   }
+
   .time-line-wrap {
     position: absolute;
     left: 0;
@@ -451,6 +504,7 @@ export default {
     width: 100%;
     padding-right: 20px;
     padding-left: 0;
+
     .time-text {
       width: 75px;
       height: 24px;
@@ -460,6 +514,7 @@ export default {
       text-align: center;
       line-height: 24px;
     }
+
     .time-line {
       flex: 1;
       height: 1px;

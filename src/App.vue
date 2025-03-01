@@ -15,24 +15,12 @@ export default {
     ...mapState("app", ["addFilter"]),
   },
   mounted() {
-    this.connectWS();
     document.title = localStorage.getItem("platformName")
       ? localStorage.getItem("platformName")
       : "城市空天智慧管理平台";
   },
   methods: {
-    ...mapActions("droneStatus", ["getAirPostInfo"]),
-    connectWS() {
-      if (Cookies.get('userId')) {
-        let userId = Cookies.get("userId");
-        let tenant = 'test';
-        new WebSocketClient(
-          `ws://172.16.40.225:9002/websocket/${localStorage.getItem(
-            "workspaceId"
-          )}/${userId}/${tenant}?tenant=${tenant}`
-        );
-      }
-    },
+
   },
   metaInfo() {
     return {

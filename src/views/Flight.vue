@@ -20,7 +20,7 @@
             @blur="blur"
             v-model="searchText"
             @input="inputChange"
-            maxlength="20"
+            maxlength="50"
             clearable
           ></el-input>
 <!--          show-word-limit-->
@@ -94,6 +94,7 @@ export default {
       this.$router.push('/openMap')
     },
     inputChange(val) {
+      console.log(val);
       if(this.activeName === 'flightTask' || this.activeName === 'WorkCompleted') {
         //搜索飞行任务
         this.$refs.tableRef.searchTableName(val);

@@ -32,7 +32,7 @@
       <td>{{ task.threeDNum }}</td>
       <td>{{ task.liveNum }}</td>
       <td>{{ task.orthoNum }}</td>
-      <td>{{ task.photoNum + task.panoramaNum + task.threeDNum + task.orthoNum }}</td>
+      <td>{{ task.photoNum + task.panoramaNum + task.threeDNum + task.orthoNum + task.liveNum }}</td>
       <td>{{ task.flyTime.toFixed(0) }}</td>
       <td>{{ task.flyMileage.toFixed(0) }}</td>
     </tr>

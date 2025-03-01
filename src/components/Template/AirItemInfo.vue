@@ -70,7 +70,7 @@
 <script>
 import AIImage from '@/assets/images/AI.png'
 import TakeOffDialog from "./TakeOffDialog.vue";
-import { airLineInfoAPI } from "@/api/TaskManager";
+import { airLineInfoAPI, taskInfoApI } from '@/api/TaskManager'
 export default {
   name: "AirItemInfo",
   components: {
@@ -124,10 +124,11 @@ export default {
     },
     handleCommand(command) {
       if (command == "details") {
-        airLineInfoAPI(this.info.airlineId).then((res) => {
-          console.log(res, "rres");
+        taskInfoApI(this.info.taskId).then((res) => {
+          if (res.code === 200) {
+            this.$emit("openDialog", res.data);
+          }
         });
-        this.$emit("openDialog", this.info);
       } else {
         //删除
         this.dialogVisible = true;

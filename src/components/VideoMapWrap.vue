@@ -259,7 +259,7 @@
         <span>控制：{{ controler ? controler.userName : "暂无" }}</span>
       </div>
       <div class="monitor_user">
-        <span>监视：{{ controler ? controler.viewUserList : "暂无" }}</span>
+        <span>监视：{{ controler ? controler.viewUserList : this.userName }}</span>
       </div>
     </div>
     <!-- 控制无人机操作界面 -->
