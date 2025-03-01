@@ -45,7 +45,7 @@
           </div>
           <div class="sub-section" v-if="isShow && report.quest !== null">
             <h3>(三) 提交任务</h3>
-            <div>
+            <div class="chart-container">
               <PieChart
                 :questData="questData"
                 @chart-exported="handleChartExported"
@@ -269,8 +269,7 @@ export default {
       title: '城市空天智慧管理平台',
       description:
         '本报告根据日常无人机巡检工作包括使用人员提交任务、无人机执行任务、数据生产情况等进行统计汇总。',
-      report: {
-      },
+      report: {},
       isShow: false,
       dateTime: null,
       tableType: null,
@@ -628,7 +627,7 @@ export default {
       if (this.tableType == 2 || this.tableType == 3) {
         this.dateScope = this.formattedDate + '至' + this.getLastDate
       }
-      const timePeriod = this.tableType == 2 ? '本周' : this.tableType == 3 ? '本月' : '当日';
+      const timePeriod = this.tableType == 2 ? '本周' : this.tableType == 3 ? '本月' : '当日'
       return [
         this.dateScope +
         '，共有' +
@@ -685,11 +684,11 @@ export default {
       ]
     },
     reduceCarbonFormatted() {
-      const reduceCarbon = this.report.reduceCarbon;
+      const reduceCarbon = this.report.reduceCarbon
       if (reduceCarbon >= 1000) {
-        return `${(reduceCarbon / 1000).toFixed(2)} 吨`;  // 大于1000，显示吨
+        return `${(reduceCarbon / 1000).toFixed(2)} 吨`  // 大于1000，显示吨
       } else {
-        return `${reduceCarbon.toFixed(2)} kg`;  // 小于1000，显示kg
+        return `${reduceCarbon.toFixed(2)} kg`  // 小于1000，显示kg
       }
     },
 
@@ -824,6 +823,7 @@ export default {
   ::-webkit-scrollbar {
     display: flex;
   }
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -850,13 +850,14 @@ export default {
   padding: 60px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   //border-radius: 8px;
-  #content{
+  #content {
     margin-top: 1vw;
     //padding-right: 5vw;
     //padding-left: 5vw;
     height: 45vw;
     overflow-y: scroll;
   }
+
   .btn {
     position: absolute;
     //position: fixed; /* 固定位置 */
@@ -868,6 +869,11 @@ export default {
     z-index: 999; /* 确保按钮在其他内容之上 */
   }
 }
+
+.chart-container {
+  page-break-before: always; /* 在打印或生成PDF时，强制此部分移到新的一页 */
+}
+
 
 .title-section .title {
   text-align: center;
