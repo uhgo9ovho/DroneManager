@@ -20,7 +20,7 @@
             @blur="blur"
             v-model="searchText"
             @input="inputChange"
-            maxlength="20"
+            maxlength="50"
             clearable
           ></el-input>
 <!--          show-word-limit-->
