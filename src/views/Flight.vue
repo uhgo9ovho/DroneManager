@@ -20,9 +20,11 @@
             @blur="blur"
             v-model="searchText"
             @input="inputChange"
-            maxlength="10"
+            maxlength="20"
             clearable
           ></el-input>
+<!--          show-word-limit-->
+
         </div>
         <div class="create-task-btn" v-if="currentTab == 'flightTask'">
           <el-button round icon="el-icon-plus" @click="addAndEditTask" v-permissions="'wurenji:task:add'">新建任务</el-button>

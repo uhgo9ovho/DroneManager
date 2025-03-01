@@ -48,6 +48,18 @@ export const taskListAPI = (params) => {
 }
 
 /**
+ * 添加航线
+ * @returns
+ */
+export const addTaskListAPI = (params) => {
+  return request({
+    // url: `/wurenji/task/listTwo?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${localStorage.getItem('org_id')}&taskName=${params.taskName ? params.taskName : ''}&taskType=${params.task_type == undefined ? '' : params.task_type}&taskStatus=${params.taskStatus == undefined ? '' : params.taskStatus}&approvalStatus=1`,
+    url: `/wurenji/task/listTwo?pageNum=${params.pageNum}&pageSize=${params.pageSize}&orgId=${localStorage.getItem('org_id')}&taskName=${params.taskName ? params.taskName : ''}&taskType=${params.task_type == undefined ? '' : params.task_type}&taskStatus=${params.taskStatus == undefined ? '' : params.taskStatus}&approvalStatus=1`,
+    method: 'get'
+  })
+}
+
+/**
  * 工单列表
  * @returns
  */
@@ -77,6 +89,17 @@ export const taskInfoApI = (id) => {
 export const heduledListAPI = (date) => {
   return request({
     url: `/wurenji/scheduling/list?date=${date}&orgId=${localStorage.getItem('org_id')}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 排期详情
+ * @returns
+ */
+export const schedulingAPI = (id) => {
+  return request({
+    url: `/wurenji/scheduling?id=${id}`,
     method: 'get'
   })
 }
@@ -387,6 +410,15 @@ export const AIHostingAPI = (status) => {
         url: `/aiAutomaticHostingController/findAutomaticHosting?org_id=${localStorage.getItem('org_id')}&status=${status}`,
         method: 'get'
     })
+}
+/**
+ * 查询AI托管接口
+ */
+export const selectAIHostingStatusAPI = (status) => {
+  return request({
+    url: `/aiAutomaticHostingController/getAutomaticHosting?org_id=${localStorage.getItem('org_id')}`,
+    method: 'get'
+  })
 }
 
 /**

@@ -16,6 +16,15 @@ export const getDepartmentDetails = (id) => {
     })
 };
 
+// 获取个性化详情
+export const getOrganizationInfo = (orgId) => {
+  return request({
+    url: `/wrj/org/${orgId}`,
+    method: "get"
+  });
+};
+
+
 /**
  * 新增组织
  * @param { ad: "地址", head: "负责人姓名", headPhone: "负责人电话", orgName: "组织名称", platformLogo: "平台logo", platformName: "平台名称", webLogo: "网页链接logo" } params
@@ -40,6 +49,19 @@ export const editOrgInfo = (params) => {
         method: "put",
         data: params
     })
+};
+
+/**
+ * 修改个性化
+ * @param { orgId: "组织id", orgName: "组织名称", ad: "地址", head: "负责人姓名", headPhone: "负责人电话",  platformLogo: "平台logo", platformName: "平台名称", webLogo: "网页链接logo" } params
+ * @returns
+ */
+export const gxhByOrgApi = (params) => {
+  return request({
+    url: "/wrj/org/gxhByOrg",
+    method: "post",
+    data: params
+  })
 };
 
 /**

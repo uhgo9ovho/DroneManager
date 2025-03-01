@@ -90,6 +90,10 @@ export default {
               this.$message.success("删除成功");
               this.loading = false;
               this.handleClose();
+            }else{
+              this.$message.error(res.msg);
+              this.loading = false;
+              this.handleClose();
             }
           })
           .catch((err) => {

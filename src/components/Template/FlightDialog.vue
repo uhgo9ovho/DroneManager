@@ -144,6 +144,7 @@ export default {
       this.pointsList.forEach((it) => {
         it.checked = false;
       });
+      this.$refs.mapContainer.polylineVisible();
       if (val) {
         this.$refs.mapContainer.polylineShow();
         // this.$refs.mapContainer.initAMap();

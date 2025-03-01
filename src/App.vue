@@ -25,10 +25,11 @@ export default {
     connectWS() {
       if (Cookies.get('userId')) {
         let userId = Cookies.get("userId");
+        let tenant = 'test';
         new WebSocketClient(
           `ws://172.16.40.225:9002/websocket/${localStorage.getItem(
             "workspaceId"
-          )}/${userId}`
+          )}/${userId}/${tenant}?tenant=${tenant}`
         );
       }
     },

@@ -215,7 +215,7 @@ export default {
         },
       ],
       moonList: [],
-      dateArr: [],
+      dateArr: "",
     };
   },
   computed: {
@@ -259,7 +259,7 @@ export default {
           const inspection = this.pickerOptions.filter(
             (item) => item.value == this.ruleForm.inspection
           )[0].label;
-          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每天 ${inspection} 执行1次`;
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每天 ${inspection}`;
           break;
         case 1:
           let checkedItemArr = this.characters.filter((item) => item.checked);
@@ -267,7 +267,7 @@ export default {
           const inspection1 = this.pickerOptions.filter(
             (item) => item.value == this.ruleForm.inspection
           )[0].label;
-          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每周${checkedInfo} ${inspection1} 执行，共执行${this.frequencyLength}次`;
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每周${checkedInfo} ${inspection1} 执行`;
           break;
         case 2:
           let monthItemArr = this.moonList.filter((item) => item.checked);
@@ -276,7 +276,7 @@ export default {
             (item) => item.value == this.ruleForm.inspection
           )[0].label;
 
-          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每月${monthinfo}号 ${inspection2} 执行，共执行${this.frequencyLength}次`;
+          info = `${this.ruleForm.startDate}到${this.ruleForm.endDate} 每月${monthinfo}号 ${inspection2} 执行`;
         default:
           break;
       }
@@ -345,28 +345,24 @@ export default {
         });
       }
     },
+
     checkedItem(item) {
       item.checked = !item.checked;
       this.dateArr = this.characters
-        .filter((item) => {
-          if (item.checked) {
-            return item.value;
-          }
-        })
-        .map((it) => it.value);
+        .filter((item) => item.checked)
+        .map((it) => it.value)
+        .join(",");  // 这里将数组转换为逗号分隔的字符串
     },
+
     checkedMoonItem(item) {
       console.log(item);
-
       item.checked = !item.checked;
       this.dateArr = this.moonList
-        .filter((item) => {
-          if (item.checked) {
-            return item.value;
-          }
-        })
-        .map((it) => it.value);
+        .filter((item) => item.checked)
+        .map((it) => it.value)
+        .join(",");  // 同样转换为逗号分隔的字符串
     },
+
     formatDate(currentDate) {
       const date = new Date(currentDate);
       const formattedDate =

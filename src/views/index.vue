@@ -423,13 +423,14 @@ export default {
 
     // 示例调用
     getDateRange(period) {
+
       const today = new Date(); // 当前日期
       const startDate = new Date(); // 起始日期
 
       // 根据 period 设置起始日期
       switch (period) {
         case "week": // 一周
-          startDate.setDate(today.getDate() - 7);
+          startDate.setDate(today.getDate() - 5);  // 起始日期提前一天
           break;
         case "month": // 一个月
           startDate.setMonth(today.getMonth() - 1);
@@ -454,8 +455,12 @@ export default {
         return `${year}.${month}.${day}`;
       };
 
+      // 这里的显示起始日期提前一天
+      const displayStartDate = new Date(startDate);
+      displayStartDate.setDate(displayStartDate.getDate() - 1); // 调整起始日期
+
       // 返回时间范围
-      this.currentDate = `${formatDate(startDate)}-${formatDate(today)}`;
+      this.currentDate = `${formatDate(displayStartDate)}-${formatDate(today)}`;
     },
   },
 };

@@ -77,11 +77,12 @@
                 '照片数量',
                 '全景数量',
                 '三维数量',
+                '直播影像数量',
                 '正射影像数量',
               ]"
               :data="productListData"
               :showTotal="true"
-              :totalColumns="[1, 2, 3, 4]"
+              :totalColumns="[1, 2, 3, 4,5,]"
             />
           </div>
         </div>
@@ -103,7 +104,7 @@
                 </div>
                 <table>
                   <tr>
-                    <th>拍摄时间</th>
+                    <th>发现时间</th>
                     <td>{{ item.foundTime }}</td>
                   </tr>
                   <tr>
@@ -269,145 +270,6 @@ export default {
       description:
         '本报告根据日常无人机巡检工作包括使用人员提交任务、无人机执行任务、数据生产情况等进行统计汇总。',
       report: {
-        date: '',
-        reportTime: '',
-        deviceNum: 0,
-        sortieNum: 0,
-        totalTime: 0,
-        totalMileage: 0,
-        questNum: 0,
-        photoQuestNum: 0, //，照片任务数量为0。
-        panoramaQuestNum: 0, //，全景任务数量为1。
-        orthoQuestNum: 0, //，正射任务数量为1。
-        threeDQuestNum: 0, //，三维任务数量为0。
-        executeQuestNum: 0, //，执行的任务总数为15。
-        executePhotoNum: 0, //，执行的照片任务数量为0。
-        executePanoramaQuestNum: 0, //，执行的全景任务数量为9。
-        executeOrthoQuestNum: 0, //，执行的正射任务数量为6。
-        executeThreeDQuestNum: 0, //，执行的三维任务数量为0。
-        executePanoramaPhotoNum: 0, //，执行的全景照片数量为1052张。
-        findProblemNum: 0, //，发现的问题总数为1611个。
-        replaceManualNum: 0, //，需要人工替换的数量为15。
-        flightMileage: 0, //，飞行里程（另一种计算方式）为18.468104066766603公里。
-        saveCost: 0, //，节省的成本为21179.738875374664元。
-        reduceCarbon: 0, //，减少的碳排放量为4986.388098026983千克。
-        // tasks: ['拍照：8'],
-        flyTask: [
-          {
-            flyLine: '陕西-西安',
-            photoNum: 0,
-            panoramaNum: 0,
-            orthoNum: 0,
-            threeDNum: 0,
-            totalNum: 0,
-            flyTime: 0,
-            flyMileage: 0
-          }
-        ],
-        quest: {
-          正射: 0,
-          全景: 0
-        },
-        problem: [
-          {
-            flyName: '裸土未覆盖',
-            flyTypeCount: 0
-          }
-        ],
-        productList: [
-          {
-            productName: '陕西-西安',
-            photoCount: 0,
-            panoramaCount: 0,
-            threeDCoun: 0,
-            orthophotoCount: 0
-          }
-        ],
-        problemList: null,
-        modelList: [
-          {
-            problemName: '1206-0001-裸土未覆盖',
-            foundTime: '2024-12-06 11:07:45',
-            foundLocation: '陕西省西安市未央区谭家街道仁惠路',
-            photoDetail: 'system/1733454465612.png',
-            latitude: 34.34196411580419,
-            longitude: 108.98489432310971
-          },
-          {
-            problemName: '1206-0002-裸土未覆',
-            foundTime: '2024-12-06 11:17:46',
-            foundLocation: '陕西省西安市未央区谭家街道仁惠路',
-            photoDetail: 'system/1733455066051.png',
-            latitude: 34.34196411891683,
-            longitude: 108.9848943227395
-          },
-          {
-            problemName: '1206-0003-裸土未覆盖',
-            foundTime: '2024-12-06 11:17:52',
-            foundLocation: '陕西省西安市未央区谭家街道仁惠路',
-            photoDetail: 'system/1733455072890.png',
-            latitude: 34.34196412736992,
-            longitude: 108.984894321762
-          }
-        ],
-        orthoList: [
-          {
-            problemName: '1206-0057-裸土未覆盖',
-            foundTime: '2024-12-06 14:13:30',
-            foundLocation: '陕西省西安市未央区谭家街道仁惠路',
-            photoDetail: 'system/1733465609778.png',
-            latitude: 34.3419641598145,
-            longitude: 108.9848943183875
-          },
-          {
-            problemName: '1206-0058-裸土未覆盖',
-            foundTime: '2024-12-06 15:22:50',
-            foundLocation: '陕西省西安市未央区谭家街道仁惠路',
-            photoDetail: 'system/1733469770178.png',
-            latitude: 34.341964217754274,
-            longitude: 108.98489431384512
-          },
-          {
-            problemName: '1206-0059-裸土未覆盖',
-            foundTime: '2024-12-06 15:22:55',
-            foundLocation: '陕西省西安市未央区谭家街道仁惠路',
-            photoDetail: 'system/1733469775604.png',
-            latitude: 34.3419642186924,
-            longitude: 108.98489431378718
-          }
-        ],
-        attachments: [
-          {
-            title: '问题详情：积存建筑垃圾',
-            table: {
-              columns: ['属性', '值'],
-              rows: [
-                ['发现时间', '2024-09-06 13:04:16'],
-                [
-                  '发现位置',
-                  '陕西省西安市周至县集贤镇南环路-水寨村东南约289米'
-                ]
-              ]
-            },
-            image: photo,
-            imageMap:
-              'http://api.tianditu.gov.cn/staticimage?center=116.40,39.93&width=500&height=500&zoom=12&layers=vec_c,cva_c%20&markers=116.34867,39.94593&tk=3b33593a6ce1ae84375ec06b89a8aace'
-          },
-          {
-            title: '问题详情：疑似烟火',
-            table: {
-              columns: ['属性', '值'],
-              rows: [
-                ['发现时间', '2024-09-06 19:03:03'],
-                ['发现位置', '陕西省西安市周至县九峰镇九峰派出所西南约243米']
-              ]
-            },
-            image:
-              'http://img.99wenzhangwang.com/d/file/202112/miymotiiz53.jpg',
-            imageMap:
-              'http://img.99wenzhangwang.com/d/file/202112/miymotiiz53.jpg'
-          }
-        ]
       },
       isShow: false,
       dateTime: null,
@@ -662,8 +524,9 @@ export default {
         const now = date
         const monday = new Date(now)
         const sunday = new Date(monday)
-        sunday.setDate(monday.getDate() + 6) // 周天是周一的基础上再加6天
+        sunday.setDate(monday.getDate() + 7) // 周天是周一的基础上再加6天
         const res = sunday.toISOString().split('T')[0]
+        console.log('didi', res)
         return res
       } else if (this.tableType == 3) {
         const firstDayOfMonth = date
@@ -754,6 +617,7 @@ export default {
         item.photoCount,
         item.panoramaCount,
         item.threeDCoun,
+        item.liveCount,
         item.orthophotoCount
       ])
     },
@@ -764,6 +628,7 @@ export default {
       if (this.tableType == 2 || this.tableType == 3) {
         this.dateScope = this.formattedDate + '至' + this.getLastDate
       }
+      const timePeriod = this.tableType == 2 ? '本周' : this.tableType == 3 ? '本月' : '当日';
       return [
         this.dateScope +
         '，共有' +
@@ -777,7 +642,7 @@ export default {
         '、飞行里程' +
         this.report.totalMileage.toFixed(0) +
         '米。',
-        '当日提交任务总数' +
+        `${timePeriod}提交任务总数` +
         this.report.questNum +
         '个，分别为照片任务' +
         this.report.photoQuestNum +
@@ -787,6 +652,8 @@ export default {
         this.report.orthoQuestNum +
         '个、三维任务' +
         this.report.threeDQuestNum +
+        '个、直播任务' +
+        this.report.liveQuestNum +
         '个；当日共执行任务' +
         this.report.executeQuestNum +
         '次，分别执行了照片任务' +
@@ -797,6 +664,8 @@ export default {
         this.report.executeOrthoQuestNum +
         '个、三维任务' +
         this.report.executeThreeDQuestNum +
+        '个、直播任务' +
+        this.report.executeLiveQuestNum +
         '个；共拍摄照片' +
         this.report.executePanoramaPhotoNum +
         '张，发现问题' +
