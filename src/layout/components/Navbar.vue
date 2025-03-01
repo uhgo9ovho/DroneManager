@@ -56,6 +56,9 @@ import logoImg from "@/assets/images/jky.png";
 import UserInfo from "@/components/Template/UserInfo.vue";
 import Notification from "@/components/Notification.vue";
 import { updateMessageStatusAPI } from "@/api/user";
+import { mapActions } from 'vuex'
+import Cookies from 'js-cookie'
+import WebSocketClient from '@/utils/websocket'
 export default {
   name: "NavBar",
   data() {
@@ -74,13 +77,26 @@ export default {
   },
   mounted() {
     this.getWebLogo();
+    this.connectWS();
   },
   methods: {
+    ...mapActions("droneStatus", ["getAirPostInfo"]),
+    connectWS() {
+      if (Cookies.get('userId')) {
+        let userId = Cookies.get("userId");
+        let tenant = 'test';
+        new WebSocketClient(
+          `wss://jky.szyfu.com:6799/websocket/${localStorage.getItem(
+            "workspaceId"
+          )}/${userId}/${tenant}?tenant=${tenant}`
+        );
+      }
+    },
     getWebLogo() {
       const webLogo = localStorage.getItem("webLogo");
       const favicon = document.getElementById("favicon");
       console.log(favicon);
-      
+
       if (favicon) {
         favicon.href = webLogo;
       } else {
