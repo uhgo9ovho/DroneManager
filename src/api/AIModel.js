@@ -50,3 +50,13 @@ export const sysArgsAPI = (params) => {
         params
     })
 } 
+
+/**
+ * 获取状态
+ */
+export const stearmAPI = () => {
+    return request({
+        url: '/aiBox/getStreams',
+        method: 'get'
+    })
+}

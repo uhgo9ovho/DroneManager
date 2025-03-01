@@ -15,7 +15,7 @@
     <!-- 小 div 1，点击后与全屏 div 交换 -->
     <div class="small-div small-div-1" @click="handleClick(0)">
       <KeepAlive>
-        <component :is="smallComponent[0]" :mode_code="mode_code" />
+        <component ref="flyRef" :is="smallComponent[0]" :mode_code="mode_code" />
       </KeepAlive>
     </div>
 
@@ -637,6 +637,7 @@ export default {
         clientId: this.client_id,
         dockSn: this.deviceSN,
       };
+      this.$refs.flyRef.clearcanvas();
       if (this.flightController) {
         exitDRCAPI(params).then((res) => {
           if (res.code === 0) {

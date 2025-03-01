@@ -4,7 +4,8 @@
     @click="changeVideo"
     :style="{ width: '100%', height: '100%', background: '#000' }"
   >
-    <div class="wrap wrap_window" v-if="showVideo">
+    <div class="wrap wrap_window">
+      <!-- <div class="wrap wrap_window" v-if="showVideo"> -->
       <div :style="{ width: '100%', height: '100%' }">
         <!-- <div id="J_prismPlayer2"></div> -->
         <video
@@ -14,8 +15,9 @@
           style="width: 100%; height: 100%; object-fit: fill"
         ></video>
       </div>
+      <canvas class="canvas-shuju" id="canvas_aibox"></canvas>
     </div>
-    <div
+    <!-- <div
       v-else
       style="
         width: 100%;
@@ -27,7 +29,7 @@
       "
     >
       暂无视频流
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -44,6 +46,7 @@ import {
   subscribeLiveAPI,
   sysArgsAPI,
 } from "@/api/AIModel.js";
+import AIBoxMqtt from "@/utils/AIBOX/index.js";
 let player = null;
 export default {
   props: {
@@ -103,7 +106,7 @@ export default {
           this.showVideo = true;
           this.$nextTick(() => {
             // this.initPlayer();
-            this.initWebRtcPlayer();
+            // this.initWebRtcPlayer();
           });
         }
       },
@@ -114,9 +117,12 @@ export default {
     ...mapState("droneStatus", ["airPostInfo"]),
   },
   mounted() {
-    // this.initWebRtcPlayer();
+    this.initWebRtcPlayer();
   },
   methods: {
+    clearcanvas() {
+      AIBoxMqtt.clearCanvas()
+    },
     changeVideo() {
       this.$emit("changeVideo", "video2");
     },
@@ -156,6 +162,7 @@ export default {
       }
       try {
         const resToken = await getAITokenAPI();
+
         if (resToken.code === 200) {
           this.AIToken = resToken.data.data;
           const sysArgs = await sysArgsAPI({ token: this.AIToken });
@@ -179,6 +186,8 @@ export default {
             const result = await getSourceAPI(sourceParams);
             if (result.code === 500) return this.$message.warning(result.msg);
             const res = result.data;
+            ZQLGLOBAL.serverIp = res.url;
+
             if (res.error_code != 0) return this.$message.error("设备离线");
             for (const deviceId in res.data) {
               for (const sourceId in res.data[deviceId]) {
@@ -186,44 +195,49 @@ export default {
                 res.data[deviceId][sourceId].deviceId = deviceId;
               }
             }
-            const orgDeviceId = localStorage.getItem('devicesSN')
+            const orgDeviceId = localStorage.getItem("devicesSN");
             const currentObj = res.data[deviceId][orgDeviceId];
 
             const subParams = {
               deviceId: currentObj.deviceId,
-              streamId: currentObj.sourceId,
+              // streamId: currentObj.sourceId,
+              streamId: 11,
               token: this.AIToken,
             };
-
-            const subRes = await subscribeLiveAPI(subParams);
-            const subResData = subRes.data;
-            if (subResData.error_code != 0) {
-              this.initWebRtcPlayer(); // Retry logic
-              this.$message.error(subResData.message.zh);
-              return;
-            }
-
-            if (subResData.data) {
-              this.webRtc = subResData.data;
-
-              let videoDom = document.getElementById("jswebrtc");
-              this.srsrtc = new JSWebrtc.Player(this.webRtc, {
-                video: videoDom,
-                autoplay: true,
-                onPlay: (obj) => {
-                  videoDom.addEventListener("canplay", function () {
-                    videoDom.play().catch((err) => {
-                      console.error("Error playing video: ", err);
-                    });
-                  });
-                },
-                onPause: (obj) => {},
-              });
-            }
+            this.sub(subParams);
           }
         }
       } catch (error) {
         console.error("Error initializing WebRTC player:", error);
+      }
+    },
+    async sub(subParams) {
+      const subRes = await subscribeLiveAPI(subParams);
+      const subResData = subRes.data;
+      if (subResData.error_code != 0) {
+        // this.sub(subParams); // Retry logic
+        this.$message.error(subResData.message.zh);
+        return;
+      }
+
+      if (subResData.data) {
+        this.webRtc = subResData.data;
+
+        let videoDom = document.getElementById("jswebrtc");
+        AIBoxMqtt.detectSrs();
+        AIBoxMqtt.connectMqtt();
+        this.srsrtc = new JSWebrtc.Player(this.webRtc, {
+          video: videoDom,
+          autoplay: true,
+          onPlay: (obj) => {
+            videoDom.addEventListener("canplay", function () {
+              videoDom.play().catch((err) => {
+                console.error("Error playing video: ", err);
+              });
+            });
+          },
+          onPause: (obj) => {},
+        });
       }
     },
     // initWebRtcPlayer() {
@@ -319,6 +333,13 @@ export default {
     position: absolute;
     display: flex;
     flex-direction: column;
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
   }
   .wrap_window {
     bottom: 0;

@@ -27,10 +27,17 @@
       websocket: 8083,
       detectSrsTimer: null
     }
+    let ZQL_playingSource = {
+      0: null, 1: null, 2: null, 3: null,
+      videoNum: 1,
+      curposition: -1
+    }
+    let ZQL_sources = {};
   </script>
   <script type="text/javascript" src="pannellum/pannellum.js"></script>
   <script src="./EasyWasmPlayer.js"></script>
   <script type="text/javascript" src="jswebrtc.min.js"></script>
+  
   <title>
     <%= webpackConfig.name %>
   </title>
