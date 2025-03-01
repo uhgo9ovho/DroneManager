@@ -451,6 +451,9 @@ export default {
           border-radius: 12px;
           font-size: 12px;
           text-align: center;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
 
 

@@ -438,7 +438,9 @@ export default {
       // 自定义样式，改变PDF样式
       const opt = {
         margin: 20, // 页面边距
-        filename: `${this.dateTime}${
+        filename: `${this.tableType == 2
+          ? `${this.formattedDate}到${this.getLastDate}`  // 周报时使用日期范围
+          : this.dateTime}${
           this.tableType == 1 ? '无人机巡检日报' : this.tableType == 2 ? '无人机巡检周报' : this.tableType == 3 ? '无人机巡检月报' :
             ''
         }.pdf`, // PDF 文件名
@@ -523,7 +525,7 @@ export default {
         const now = date
         const monday = new Date(now)
         const sunday = new Date(monday)
-        sunday.setDate(monday.getDate() + 7) // 周天是周一的基础上再加6天
+        sunday.setDate(monday.getDate() + 6) // 周天是周一的基础上再加6天
         const res = sunday.toISOString().split('T')[0]
         console.log('didi', res)
         return res
