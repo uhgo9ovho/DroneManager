@@ -259,7 +259,8 @@ function setPosition() {
     }
 }
 function connectMqtt() {
-    let mqttclient = connect(`ws://${ZQLGLOBAL.serverIp}:${ZQLGLOBAL.websocket}/mqtt`);
+    // let mqttclient = connect(`ws://${ZQLGLOBAL.serverIp}:${ZQLGLOBAL.websocket}/mqtt`);
+    let mqttclient = connect(`wss://jky.szyfu.com:6799/mqttaa`);
     mqttclient.subscribe(
         ZQLGLOBAL.resultTopic,
         { qos: 0 },
