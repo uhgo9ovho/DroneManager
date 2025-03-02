@@ -25,7 +25,7 @@
       class="task-btn"
       @click="takeOffBtn"
       v-if="
-        (info.schedulingStatus === 3 || info.schedulingStatus === 0) &&
+        (info.schedulingStatus === 5 || info.schedulingStatus === 0) &&
         dateSHowBtn &&
         isShowAddBtn
       "
