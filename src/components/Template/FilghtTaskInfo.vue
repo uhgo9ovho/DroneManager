@@ -4,10 +4,7 @@
       <i class="el-icon-close"></i>
     </div>
     <div class="task-info-wrap">
-      <div
-        class="state"
-        :style="{ 'background-color': statusType(row.taskStatus) }"
-      >
+      <div class="state" :style="{ 'background-color': statusType(row.taskStatus) }">
         {{ row.taskStatus | filterStatus }}
       </div>
       <div class="title_wrap">
@@ -16,17 +13,11 @@
       </div>
       <div class="nest" v-if="!taskDetails">
         <div class="task-name-type" style="cursor: pointer">
-          <el-popover
-            placement="bottom-start"
-            trigger="click"
-            popper-class="fly-task-info"
-          >
-            <span slot="reference"
-              >{{ totalLine }} 条航线 <i class="el-icon-arrow-down"></i>，
+          <el-popover placement="bottom-start" trigger="click" popper-class="fly-task-info">
+            <span slot="reference">{{ totalLine }} 条航线 <i class="el-icon-arrow-down"></i>，
               {{ note }}
             </span>
-            <span
-              style="
+            <span style="
                 display: block;
                 text-overflow: ellipsis;
                 word-break: break-word;
@@ -39,11 +30,7 @@
                 line-height: 22px;
                 margin-bottom: 4px;
                 margin-right: 10px;
-              "
-              v-for="(item, index) in row.wrjAirlineFiles"
-              :key="index"
-              >{{ item.lineName }}</span
-            >
+              " v-for="(item, index) in row.wrjAirlineFiles" :key="index">{{ item.lineName }}</span>
           </el-popover>
         </div>
       </div>
@@ -153,6 +140,12 @@ export default {
         case 4:
           value = "已挂起";
           break;
+        case 5:
+          value = "已中止";
+          break;
+        case 6:
+          value = "已过期";
+          break;
         default:
           break;
       }
@@ -182,9 +175,8 @@ export default {
         return [
           {
             label: "所属任务",
-            value: `【${this.changeType(this.row.taskType)}】 ${
-              this.row.taskName
-            }`,
+            value: `【${this.changeType(this.row.taskType)}】 ${this.row.taskName
+              }`,
           },
         ];
       } else {
@@ -456,6 +448,7 @@ export default {
 
     .single {
       width: 100%;
+
       .top {
         font-weight: 400;
         font-size: 12px;
