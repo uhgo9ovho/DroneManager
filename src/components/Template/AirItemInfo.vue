@@ -27,8 +27,7 @@
       v-if="
         (info.schedulingStatus === 2 ||
           info.schedulingStatus === 0 ||
-          info.schedulingStatus === 4) &&
-        isShowAddBtn
+          info.schedulingStatus === 4)
       "
       v-permissions="'wurenji:scheduling:fly'"
     >
