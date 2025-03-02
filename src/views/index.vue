@@ -434,12 +434,15 @@ export default {
           break;
         case "month": // 一个月
           startDate.setMonth(today.getMonth() - 1);
+          startDate.setDate(startDate.getDate() + 1);  // 加一天
           break;
         case "threeMonths": // 三个月
           startDate.setMonth(today.getMonth() - 3);
+          startDate.setDate(startDate.getDate() + 1);  // 加一天
           break;
         case "year": // 一年
           startDate.setFullYear(today.getFullYear() - 1);
+          startDate.setDate(startDate.getDate() + 1);  // 加一天
           break;
         default:
           throw new Error(

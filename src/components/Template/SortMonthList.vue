@@ -63,6 +63,7 @@
 
 <script>
 import FlightDialog from '@/components/Template/FlightDialog.vue'
+import { taskInfoApI } from '@/api/TaskManager'
 
 export default {
   name: "MonthList",
@@ -185,8 +186,12 @@ export default {
 
     },
     showDetail(task){
-      this.task = task
-      this.visible = true
+      taskInfoApI(task.taskId).then((res)=>{
+        if(res.code === 200){
+          this.task = res.data
+          this.visible = true
+        }
+      })
     },
     closeDialog() {
       this.visible = false;

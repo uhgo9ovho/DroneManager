@@ -1,52 +1,52 @@
 <template>
   <table>
     <thead>
-    <tr>
-      <th rowspan="2">无人机场</th>
-      <th colspan="6">飞行架次(次)</th>
-      <!--      <th>合计</th>-->
-      <!--      <th>飞行时长</th>-->
-      <!--      <th>飞行里程</th>-->
-      <!--      <th rowspan="2">合计</th> &lt;!&ndash; 合并两行 &ndash;&gt;-->
-      <th rowspan="2">飞行时长(分钟)</th> <!-- 合并两行 -->
-      <th rowspan="2">飞行里程(米)</th> <!-- 合并两行 -->
-    </tr>
-    <tr>
-      <!--      <th></th>-->
-      <th>拍照</th>
-      <th>全景</th>
-      <th>三维</th>
-      <th>直播</th>
-      <th>正射</th>
-      <th>合计</th>
-      <!--      <th></th>-->
-      <!--      <th></th>-->
-      <!--      <th></th>-->
-    </tr>
+      <tr>
+        <th rowspan="2">无人机场</th>
+        <th colspan="6">飞行架次(次)</th>
+        <!--      <th>合计</th>-->
+        <!--      <th>飞行时长</th>-->
+        <!--      <th>飞行里程</th>-->
+        <!--      <th rowspan="2">合计</th> &lt;!&ndash; 合并两行 &ndash;&gt;-->
+        <th rowspan="2">飞行时长(分钟)</th> <!-- 合并两行 -->
+        <th rowspan="2">飞行里程(米)</th> <!-- 合并两行 -->
+      </tr>
+      <tr>
+        <!--      <th></th>-->
+        <th>拍照</th>
+        <th>全景</th>
+        <th>三维</th>
+        <th>直播</th>
+        <th>正射</th>
+        <th>合计</th>
+        <!--      <th></th>-->
+        <!--      <th></th>-->
+        <!--      <th></th>-->
+      </tr>
     </thead>
     <tbody>
-    <tr v-for="(task, index) in flyTasks" :key="index">
-      <td>{{ task.flyLine }}</td>
-      <td>{{ task.photoNum }}</td>
-      <td>{{ task.panoramaNum }}</td>
-      <td>{{ task.threeDNum }}</td>
-      <td>{{ task.liveNum }}</td>
-      <td>{{ task.orthoNum }}</td>
-      <td>{{ task.photoNum + task.panoramaNum + task.threeDNum + task.orthoNum + task.liveNum }}</td>
-      <td>{{ task.flyTime.toFixed(0) }}</td>
-      <td>{{ task.flyMileage.toFixed(0) }}</td>
-    </tr>
-    <tr>
-      <td>总计</td>
-      <td>{{ totalPhotoNum }}</td>
-      <td>{{ totalPanoramaNum }}</td>
-      <td>{{ totalThreeDNum }}</td>
-      <td>{{ totalLiveDNum }}</td>
-      <td>{{ totalOrthoNum }}</td>
-      <td>{{ totalFlightCount }}</td>
-      <td>{{ totalFlyTime.toFixed(0) }}</td>
-      <td>{{ totalFlyMileage.toFixed(0) }}</td>
-    </tr>
+      <tr v-for="(task, index) in flyTasks" :key="index">
+        <td>{{ task.flyLine }}</td>
+        <td>{{ task.photoNum }}</td>
+        <td>{{ task.panoramaNum }}</td>
+        <td>{{ task.threeDNum }}</td>
+        <td>{{ task.liveNum }}</td>
+        <td>{{ task.orthoNum }}</td>
+        <td>{{ task.photoNum + task.panoramaNum + task.threeDNum + task.orthoNum + task.liveNum }}</td>
+        <td>{{ task.flyTime.toFixed(0) }}</td>
+        <td>{{ task.flyMileage.toFixed(0) }}</td>
+      </tr>
+      <tr>
+        <td>总计</td>
+        <td>{{ totalPhotoNum }}</td>
+        <td>{{ totalPanoramaNum }}</td>
+        <td>{{ totalThreeDNum }}</td>
+        <td>{{ totalLiveDNum }}</td>
+        <td>{{ totalOrthoNum }}</td>
+        <td>{{ totalFlightCount }}</td>
+        <td>{{ totalFlyTime.toFixed(0) }}</td>
+        <td>{{ totalFlyMileage.toFixed(0) }}</td>
+      </tr>
     </tbody>
   </table>
 </template>
@@ -64,7 +64,7 @@ export default {
       return this.report.flyTask
     },
     totalFlightCount() {
-      return this.flyTasks.reduce((sum, task) => sum + (task.photoNum + task.panoramaNum + task.threeDNum + task.orthoNum), 0)
+      return this.flyTasks.reduce((sum, task) => sum + (task.photoNum + task.panoramaNum + task.threeDNum + task.orthoNum + task.liveNum), 0)
     },
     totalPhotoNum() {
       return this.flyTasks.reduce((sum, task) => sum + task.photoNum, 0)
@@ -97,13 +97,15 @@ table {
   border: 1px solid #dddddd;
   width: 100%;
   margin: 10px 0;
-  border-collapse: collapse; /* 使边框更美观 */
+  border-collapse: collapse;
+  /* 使边框更美观 */
 }
 
 thead th {
   background-color: #efefef;
   font-weight: bold;
-  text-align: center; /* 文本居中 */
+  text-align: center;
+  /* 文本居中 */
   border: 1px solid #dddddd;
 }
 
