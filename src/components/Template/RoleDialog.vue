@@ -35,7 +35,7 @@
         </el-tabs>
         <div
           class="role-selector"
-          v-if="activeName == 'miniProgram'"
+          v-show="activeName == 'miniProgram'"
           style="overflow-y: scroll"
         >
           <tree-promission
@@ -45,9 +45,10 @@
             :show-checkbox="true"
             @selectedKeys="selectedKeys"
             :check-strictly="isCheck"
+            refName="miniProgram"
           ></tree-promission>
         </div>
-        <div class="role-selector" v-if="activeName == 'dashboard'">
+        <div class="role-selector" v-show="activeName == 'dashboard'">
           <tree-promission
             ref="screenRef"
             :data="screenPermissions"
@@ -55,9 +56,10 @@
             :show-checkbox="true"
             @selectedKeys="selectedKeys"
             :check-strictly="isCheck"
+            refName="dashboard"
           ></tree-promission>
         </div>
-        <div class="role-selector" v-if="activeName == 'admin'">
+        <div class="role-selector" v-show="activeName == 'admin'">
           <tree-promission
             ref="managerRef"
             :data="managerPermissions"
@@ -65,6 +67,7 @@
             :checkedKeys="checkedKeysObj.admin"
             @selectedKeys="selectedKeys"
             :check-strictly="isCheck"
+            refName="manager"
           ></tree-promission>
         </div>
       </el-form-item>

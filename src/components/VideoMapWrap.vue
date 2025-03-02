@@ -259,7 +259,9 @@
         <span>控制：{{ controler ? controler.userName : "暂无" }}</span>
       </div>
       <div class="monitor_user">
-        <span>监视：{{ controler ? controler.viewUserList : this.userName }}</span>
+        <span
+          >监视：{{ controler ? controler.viewUserList : this.userName }}</span
+        >
       </div>
     </div>
     <!-- 控制无人机操作界面 -->
@@ -377,6 +379,7 @@ export default {
       basic_osd: false,
       state: false,
       cover_state: false,
+      userName: "暂无",
     };
   },
   components: {
@@ -586,8 +589,8 @@ export default {
     },
     //获取设备token
     getEQToken() {
-      const userId = JSON.parse(localStorage.getItem('userInfo')).userId;
-      const username = JSON.parse(localStorage.getItem('userInfo')).userName;
+      const userId = JSON.parse(localStorage.getItem("userInfo")).userId;
+      const username = JSON.parse(localStorage.getItem("userInfo")).userName;
       const params = {
         workspaceId: localStorage.getItem("workspaceId"),
         userId,
@@ -627,7 +630,7 @@ export default {
           const { address, client_id, username, password, expire_time } =
             res.data;
           this.client_id = client_id;
-          const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+          const userInfo = JSON.parse(localStorage.getItem("userInfo"));
           this.mqttState = new UranusMqtt(address, {
             clientId: client_id,
             username: `hjh`,
@@ -687,7 +690,6 @@ export default {
         clientId: this.client_id,
         dockSn: this.deviceSN,
       };
-      this.$refs.flyRef.clearcanvas();
       if (this.flightController) {
         exitDRCAPI(params).then((res) => {
           if (res.code === 0) {

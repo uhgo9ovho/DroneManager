@@ -29,10 +29,7 @@
                           :isToday="!isToday(currentDate)"
                           :dateSHowBtn="dateSHowBtn"
                         ></AirItemInfo>
-                        <!-- 添加排期状态显示 -->
-                        <div class="scheduling-status">
-                          {{ getSchedulingStatus(item2.schedulingStatus) }}
-                        </div>
+                        
                       </div>
                     </div>
                   </template>
@@ -209,25 +206,6 @@ export default {
     }
   },
   methods: {
-    // 将排期状态转换为对应文本
-    getSchedulingStatus(status) {
-      switch (status) {
-        case 0:
-          return '待执行'
-        case 1:
-          return '已执行'
-        case 2:
-          return '起飞失败'
-        case 3:
-          return '飞行完成'
-        case 4:
-          return '飞行任务失败'
-        case 5:
-          return '未飞行'
-        default:
-          return '未知状态'
-      }
-    },
     updateDataDel() {
       this.$emit('updateData', this.currentDate)
     },
@@ -444,7 +422,7 @@ export default {
         .scheduling-status {
           position: absolute;
           top: 50%;
-          left: 50%;
+          left: 60%;
           transform: translate(-50%, -50%);
           background-color: #007bff;
           color: #fff;

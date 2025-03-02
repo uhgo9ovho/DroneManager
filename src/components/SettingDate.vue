@@ -14,7 +14,6 @@
     >
       <el-form-item label="重复频率" prop="checkedCities">
         <div class="frequency-box">
-          <span>每</span>
           <el-select
             v-model="ruleForm.frequency"
             placeholder="请选择"
@@ -28,10 +27,7 @@
             >
             </el-option>
           </el-select>
-          <span
-            >执行<i>{{ frequencyLength }}</i
-            >次</span
-          >
+          
         </div>
         <div class="week" v-if="ruleForm.frequency == '周'">
           <div

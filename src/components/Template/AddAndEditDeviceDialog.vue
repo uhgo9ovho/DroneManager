@@ -128,7 +128,10 @@ export default {
   mounted() {
     if (this.itemRow) {
       console.log(this.itemRow);
+      let latlonArr = this.itemRow.location.split(',');
       this.deviceForm = this.itemRow;
+      this.deviceForm.lng = latlonArr[0];
+      this.deviceForm.lat = latlonArr[1];
     }
   },
   methods: {

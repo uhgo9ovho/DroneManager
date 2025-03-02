@@ -211,7 +211,7 @@ export default {
         },
       ],
       moonList: [],
-      dateArr: "",
+      dateArr: this.flightDataInfo.dateArrays,
     };
   },
   computed: {

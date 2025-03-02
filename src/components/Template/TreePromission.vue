@@ -29,6 +29,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    miniProgram: {
+      type: String,
+      default: ''
+    }
   },
   mounted() {
     this.isCheck = true
@@ -49,9 +53,10 @@ export default {
   methods: {
     currentChecked(nodeObj, SelectedObj) {
       let halfCheckedKeys = this.$refs.menu.getHalfCheckedKeys();
+      console.log(this.$refs.menu.getCheckedNodes());
       console.log(halfCheckedKeys);
-
-      this.$emit("selectedKeys", SelectedObj.checkedKeys, halfCheckedKeys);
+      const checkedKeysAll = this.$refs.menu.getCheckedNodes().map(item => item.menuId)
+      this.$emit("selectedKeys", SelectedObj.checkedKeys, checkedKeysAll);
     },
   },
 };

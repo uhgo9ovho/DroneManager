@@ -342,7 +342,7 @@ export default {
         return this.$message.warning("正在下载，请勿重复点击");
       this.$message.success("开始打包下载，请稍等片刻");
       this.CHANGE_DOWNLOAD_STATUS(true);
-      const imgUrlArr = this.imgOptions.map((item) => item.url);
+      const imgUrlArr = this.imgOptions.map((item) => item.originUrl);
       downloadImagesAsZip(imgUrlArr);
       // const params = {
       //   flightRecordId: this.row.recordId,
