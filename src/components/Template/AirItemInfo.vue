@@ -25,9 +25,7 @@
       class="task-btn"
       @click="takeOffBtn"
       v-if="
-        (info.schedulingStatus === 3 || info.schedulingStatus === 0) &&
-        dateSHowBtn &&
-        isShowAddBtn
+        (info.schedulingStatus === 2 || info.schedulingStatus === 0 || info.schedulingStatus === 0) && dateSHowBtn
       "
       v-permissions="'wurenji:scheduling:fly'"
     >
