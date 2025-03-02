@@ -1,14 +1,7 @@
 <template>
   <div class="flight-table">
-    <common-table
-      :tableList="filghtList"
-      :columns="columns"
-      :total="total"
-      :pageSize="pageSize"
-      :pageNum="pageNum"
-      @pageChange="pageChange"
-      @sizeChange="sizeChange"
-    >
+    <common-table :tableList="filghtList" :columns="columns" :total="total" :pageSize="pageSize" :pageNum="pageNum"
+      @pageChange="pageChange" @sizeChange="sizeChange">
       <!-- 自定义表头 -->
       <template #taskName-header>
         <span>任务名称/类型</span>
@@ -16,12 +9,8 @@
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item
-              v-for="(item, index) in nameOptions"
-              :key="index"
-              :command="item"
-              :class="{ dropdown_selected: dropdownName == item }"
-              >{{ item }}
+            <el-dropdown-item v-for="(item, index) in nameOptions" :key="index" :command="item"
+              :class="{ dropdown_selected: dropdownName == item }">{{ item }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -32,12 +21,8 @@
           <span class="el-dropdown-link iconfont el-icon-guolv filter-icon">
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item
-              v-for="(item) in statusOptions"
-              :key="item.index"
-              :command="item.name"
-              :class="{ dropdown_selected: dropdownStatus == item.name }"
-              >{{ item.name }}
+            <el-dropdown-item v-for="(item) in statusOptions" :key="item.index" :command="item.name"
+              :class="{ dropdown_selected: dropdownStatus == item.name }">{{ item.name }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -51,117 +36,72 @@
         <div>{{ row.nickName }}</div>
       </template>
       <template #status="{ row }" v-if="!isWork">
-        <el-tag :type="statusType(row.taskStatus)"
-          >{{ row.taskStatus | filterStatus }}
+        <el-tag :type="statusType(row.taskStatus)">{{ row.taskStatus | filterStatus }}
         </el-tag>
-        <span style="margin-left: 10px"
-          >当前轮次/总轮次({{ row.currentRound ? row.currentRound : 0 }}/{{
-            row.totalRound ? row.totalRound : 0
-          }})</span
-        >
+        <span style="margin-left: 10px">当前轮次/总轮次({{ row.currentRound ? row.currentRound : 0 }}/{{
+          row.totalRound ? row.totalRound : 0
+        }})</span>
       </template>
       <template #approvalStatus="{ row }" v-if="isWork">
-        <el-tag :type="approvalStatusType(row.approvalStatus)"
-          >{{ row.approvalStatus | filterApprovalStatus }}
+        <el-tag :type="approvalStatusType(row.approvalStatus)">{{ row.approvalStatus | filterApprovalStatus }}
         </el-tag>
       </template>
       <template #operate="{ row }">
         <div class="operate-box">
-          <el-button
-            type="text"
-            @click="detailsBtn(row)"
-            v-permissions="'wurenji:task:query'"
-            >详情</el-button
-          >
+          <el-button type="text" @click="detailsBtn(row)" v-permissions="'wurenji:task:query'">详情</el-button>
           <el-dropdown @command="operateCommand">
             <span class="el-dropdown-link el-icon-more"></span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                v-for="(item, index) in operateOptions(row.taskStatus)"
-                :key="index"
-                :command="beforeHandleCommand(row, item.label)"
-                :style="{ color: item.color }"
-                v-show="
-                  !(item.label == '成果' && row.taskType !== 2) &&
+              <el-dropdown-item v-for="(item, index) in operateOptions(row.taskStatus)" :key="index"
+                :command="beforeHandleCommand(row, item.label)" :style="{ color: item.color }" v-show="!(item.label == '成果' && row.taskType !== 2) &&
                   !(
                     (item.label == '挂起' ||
                       item.label == '取消挂起' ||
                       item.label == '排期') &&
                     row.taskStatus == 3
                   )
-                "
-                v-permissions="item.permission"
-                ><i class="iconfont" :class="item.icon"></i>
+                  " v-permissions="item.permission"><i class="iconfont" :class="item.icon"></i>
                 {{ item.label }}
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <el-button
-            v-if="isWork"
-            type="primary"
-            round
-            size="small"
-            class="el-icon-edit-outline"
-            @click="workBtn(row)"
+          <el-button v-if="isWork" type="primary" round size="small" class="el-icon-edit-outline" @click="workBtn(row)"
             style="
               width: 84px;
               height: 32px;
               padding: 0;
               line-height: 32px;
               font-size: 14px;
-            "
-            >办结</el-button
-          >
-          <el-button
-            type="primary"
-            round
-            size="mini"
-            class="iconfont el-icon-guijifeihang"
-            v-permissions="'wurenji:scheduling:fly'"
-            v-else
-            style="
+            ">办结</el-button>
+          <el-button type="primary" round size="mini" class="iconfont el-icon-guijifeihang"
+            v-permissions="'wurenji:scheduling:fly'" v-else style="
               width: 84px;
               height: 32px;
               padding: 0;
               line-height: 32px;
               font-size: 14px;
-            "
-            @click="flightBtn(row)"
-            >飞行
+            " @click="flightBtn(row)">飞行
           </el-button>
         </div>
       </template>
     </common-table>
     <!-- 详情弹窗、飞行弹窗 -->
     <div v-if="flightVisible">
-      <flight-dialog
-        @closeDialog="closeDialog"
-        :detailsShow="detailsShow"
-        :filghtShow="filghtShow"
-        :row="row"
-      ></flight-dialog>
+      <flight-dialog @closeDialog="closeDialog" :detailsShow="detailsShow" :filghtShow="filghtShow"
+        :row="row"></flight-dialog>
     </div>
     <!-- 全景预览弹窗 -->
     <div v-if="panoramicVisible">
-      <PanoramicDialog
-        @closeQJDialog="closeQJDialog"
-        :flightDataInfo="flightDataInfo"
-      ></PanoramicDialog>
+      <PanoramicDialog @closeQJDialog="closeQJDialog" :flightDataInfo="flightDataInfo"></PanoramicDialog>
     </div>
     <!-- 飞行排期弹窗 -->
     <div v-if="flyDateVisible">
-      <FlightDataDialog
-        :flyDateVisible="flyDateVisible"
-        :flightDataInfo="flightDataInfo"
-        @closeFlightDateDialog="closeFlightDateDialog"
-        @changeVisible="changeVisible"
-      ></FlightDataDialog>
+      <FlightDataDialog :flyDateVisible="flyDateVisible" :flightDataInfo="flightDataInfo"
+        @closeFlightDateDialog="closeFlightDateDialog" @changeVisible="changeVisible"></FlightDataDialog>
     </div>
 
     <el-dialog title="确定要挂起该任务？" :visible.sync="hangupVisible" center>
-      <span
-        >挂起任务后该任务下所有航线将取消排期，不会被执行。恢复任务后，可能需要重新设置排期！</span
-      >
+      <span>挂起任务后该任务下所有航线将取消排期，不会被执行。恢复任务后，可能需要重新设置排期！</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="hangupVisible = false">取 消</el-button>
         <el-button type="primary" @click="handleSuspend">确 定</el-button>
@@ -326,11 +266,13 @@ export default {
         // '全覆盖'
       ],
       statusOptions: [
-        {index:0,name:"全部状态"},
-        {index:2,name:"待执行"},
-        {index:3,name:"执行中"},
-        {index:4,name:"已完成"},
-        {index:5,name:"挂起"}
+        { index: 0, name: "全部状态" },
+        { index: 1, name: "待执行" },
+        { index: 2, name: "执行中" },
+        { index: 3, name: "已完成" },
+        { index: 4, name: "挂起" },
+        { index: 5, name: "已中止" },  // 新增
+        { index: 6, name: "已过期" }   // 新增
       ],
       pageNum: 1,
       pageSize: 10,
@@ -360,6 +302,12 @@ export default {
           break;
         case 4:
           value = "已挂起";
+          break;
+        case 5:
+          value = "已中止";
+          break;
+        case 6:
+          value = "已过期";
           break;
         default:
           break;
@@ -465,6 +413,10 @@ export default {
             return 3;
           case "挂起":
             return 4;
+          case "已中止":
+            return 5;
+          case "已过期":
+            return 6;
           default:
             return "";
         }
@@ -602,7 +554,7 @@ export default {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
         taskName: this.taskName,
-        taskStatus:this.currentStatus(this.dropdownStatus)
+        taskStatus: this.currentStatus(this.dropdownStatus)
       };
       if (this.isWork) {
         workListAPI(params).then((res) => {
@@ -696,7 +648,7 @@ export default {
         pageSize: this.pageSize,
         taskStatus: this.currentStatus(itemCommand),
         task_type: this.taskTypeStatus(this.dropdownName)
-    };
+      };
       if (this.isWork) {
         workListAPI(params).then((res) => {
           if (res.code === 200) {
@@ -810,7 +762,8 @@ export default {
   background: #fff;
   border-radius: 12px;
   padding: 24px 24px 16px 32px;
-  overflow: hidden; /* 防止内容溢出 */
+  overflow: hidden;
+  /* 防止内容溢出 */
   // top: 40% !important;
   // transform: translateY(-50%) !important;
   width: 470px;
