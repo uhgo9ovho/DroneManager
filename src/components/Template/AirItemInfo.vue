@@ -1,7 +1,7 @@
 <template>
   <div class="task-wait-card" :class="{ shikuang: info.schedulingStatus == 1 }">
     <div class="ai-box" v-if="info.aiHosting == 1">
-      <img :src="AIImage" alt="">
+      <img :src="AIImage" alt="" />
     </div>
     <div style="flex: 1.7 1 0%">
       <div class="task-time">{{ info.formatTime }} 计划起飞</div>
@@ -14,13 +14,21 @@
         info.scheduledType | filterSchedulingType
       }}</span>
     </div>
+    <!-- 添加排期状态显示 -->
+    <div class="scheduling-status">
+      {{ getSchedulingStatus(info.schedulingStatus) }}
+    </div>
     <div class="task-change" :class="[info.operator ? '' : 'hidden']">
       排期调整({{ info.createBy }})
     </div>
     <div
       class="task-btn"
       @click="takeOffBtn"
-      v-if="(info.schedulingStatus === 3 || info.schedulingStatus === 0) && (dateSHowBtn && isShowAddBtn)"
+      v-if="
+        (info.schedulingStatus === 3 || info.schedulingStatus === 0) &&
+        dateSHowBtn &&
+        isShowAddBtn
+      "
       v-permissions="'wurenji:scheduling:fly'"
     >
       <!-- 待执行和已执行 -->
@@ -49,8 +57,17 @@
           <i class="el-icon-more"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="details" v-permissions="'wurenji:scheduling:query'">查看详情</el-dropdown-item>
-          <el-dropdown-item command="delete" v-if="isShowAddBtn || isToday" v-permissions="'wurenji:scheduling:remove'">删除</el-dropdown-item>
+          <el-dropdown-item
+            command="details"
+            v-permissions="'wurenji:scheduling:query'"
+            >查看详情</el-dropdown-item
+          >
+          <el-dropdown-item
+            command="delete"
+            v-if="isShowAddBtn || isToday"
+            v-permissions="'wurenji:scheduling:remove'"
+            >删除</el-dropdown-item
+          >
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -68,9 +85,9 @@
 </template>
 
 <script>
-import AIImage from '@/assets/images/AI.png'
+import AIImage from "@/assets/images/AI.png";
 import TakeOffDialog from "./TakeOffDialog.vue";
-import { airLineInfoAPI, taskInfoApI } from '@/api/TaskManager'
+import { airLineInfoAPI, taskInfoApI } from "@/api/TaskManager";
 export default {
   name: "AirItemInfo",
   components: {
@@ -83,22 +100,22 @@ export default {
     },
     dateSHowBtn: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isShowAddBtn: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isToday: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       dialogVisible: false,
       isDel: false,
-      AIImage: AIImage
+      AIImage: AIImage,
     };
   },
   filters: {
@@ -116,6 +133,25 @@ export default {
     },
   },
   methods: {
+    // 将排期状态转换为对应文本
+    getSchedulingStatus(status) {
+      switch (status) {
+        case 0:
+          return "待执行";
+        case 1:
+          return "已执行";
+        case 2:
+          return "起飞失败";
+        case 3:
+          return "飞行完成";
+        case 4:
+          return "飞行任务失败";
+        case 5:
+          return "未飞行";
+        default:
+          return "未知状态";
+      }
+    },
     toVideoMap() {
       this.$router.push("/videoMap");
     },
