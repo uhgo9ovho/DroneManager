@@ -62,6 +62,11 @@ export default {
           showOverflowTooltip: false
         },
         {
+          prop: 'photoNum',
+          label: '照片',
+          showOverflowTooltip: false
+        },
+        {
           prop: 'panoramicNum',
           label: '全景',
           showOverflowTooltip: false
