@@ -64,7 +64,7 @@
           @click="resetPass(scope.row)"
           >重置密码</el-button
         >
-        <el-dropdown trigger="click" @command="command" v-if="scope.row.isOrgAdmin == 1">
+        <el-dropdown trigger="click" @command="command" v-if="scope.row.isOrgAdmin == 1 && scope.row.userId == userId">
           <span
             class="el-dropdown-link"
             style="color: #1890ff; font-size: 14px;"
@@ -151,7 +151,8 @@ export default {
       },
       transformVisible: false,
       itemRow: null,
-      allUserList: []
+      allUserList: [],
+      userId: JSON.parse(localStorage.getItem('userInfo')).userId
     };
   },
   filters: {
