@@ -53,7 +53,7 @@ export default {
         },
         {
           prop: 'questNum',
-          label: '执行任务数',
+          label: '提交任务数',
           showOverflowTooltip: false
         },
         {
