@@ -9,7 +9,7 @@
       highlight-current
       @check="currentChecked"
       :default-checked-keys="checkedKeys"
-      :check-strictly="isCheck"
+      :check-strictly="true"
     ></el-tree>
   </div>
 </template>
