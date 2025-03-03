@@ -48,7 +48,7 @@ export default {
         },
         {
           prop: 'flightNum',
-          label: '飞行记录',
+          label: '飞行架次',
           showOverflowTooltip: true
         },
         {

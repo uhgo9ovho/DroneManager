@@ -655,7 +655,7 @@ export default {
         this.report.threeDQuestNum +
         '个、直播任务' +
         this.report.liveQuestNum +
-        '个；'+timePeriod+'共执行任务' +
+        '个；' + timePeriod + '共执行任务' +
         this.report.executeQuestNum +
         '次，分别执行了照片任务' +
         this.report.executePhotoNum +
@@ -852,7 +852,7 @@ export default {
   padding: 60px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   //border-radius: 8px;
-  #content{
+  #content {
     // margin-top: 1vw;
     //padding-right: 5vw;
     //padding-left: 5vw;
