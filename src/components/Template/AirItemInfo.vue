@@ -183,16 +183,17 @@ export default {
   },
   computed: {
     isFutureOrToday() {
-      if (!this.info.scheduledTime) return false;
+      if (!this.info.scheduledTime) return false
 
-      const scheduledTime = new Date(this.info.scheduledTime).getTime();
-      const now = new Date().getTime();
+      const scheduledTime = new Date(this.info.scheduledTime).getTime()
+      const scheduledEndTime = scheduledTime + 60 * 60 * 1000 // 任务时间 + 1 小时
+      const now = new Date().getTime()
 
       // 获取当天 00:00:00 的时间戳
-      const todayStart = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
-      const todayEnd = todayStart + 24 * 60 * 60 * 1000 - 1;
+      const todayStart = new Date(new Date().setHours(0, 0, 0, 0)).getTime()
+      const todayEnd = todayStart + 24 * 60 * 60 * 1000 - 1
 
-      return scheduledTime >= now && scheduledTime >= todayStart && scheduledTime <= todayEnd;
+      return (scheduledTime >= now && scheduledTime >= todayStart && scheduledTime <= todayEnd) || (scheduledEndTime >= now && scheduledTime <= now)
     }
   }
 }
