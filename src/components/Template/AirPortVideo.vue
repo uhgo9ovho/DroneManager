@@ -74,7 +74,7 @@ export default {
           // this.url =
           //   "https://jky.szyfu.com:9003" +
           //   result.data.dockStream.outsideStream.flv;
-          this.url = 'https://jky.szyfu.com:9003/video/wrjFlyDock/7CTDLCE00A6Y68.flv'
+          this.url = 'https://ht.aitimp.com:9003/video/wrjFlyDock/7CTDLCE00A6Y68.flv'
           this.initEasyPlayer();
         }
       });

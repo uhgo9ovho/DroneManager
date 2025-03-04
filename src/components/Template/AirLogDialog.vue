@@ -136,7 +136,7 @@
                   crossOrigin="anonymous"
                   autoplay
                   :src="
-                    'https://wurenji02.oss-cn-beijing.aliyuncs.com/' +
+                    'https://htwurenji.oss-cn-beijing.aliyuncs.com' +
                     row.recordVideo
                   "
                   muted
@@ -290,7 +290,7 @@ export default {
       if (this.currentIndex <= 1) return; // 防止索引小于1
       this.currentIndex--;
       this.currentUrl = this.imgOptions[this.currentIndex - 1].warnPhoto
-        ? "https://wurenji02.oss-cn-beijing.aliyuncs.com/" +
+        ? "https://htwurenji.oss-cn-beijing.aliyuncs.com" +
           this.imgOptions[this.currentIndex - 1].warnPhoto
         : this.imgOptions[this.currentIndex - 1].originUrl;
     },
@@ -299,7 +299,7 @@ export default {
       if (this.currentIndex >= this.imgOptions.length) return; // 防止索引超出范围
       this.currentIndex++;
       this.currentUrl = this.imgOptions[this.currentIndex - 1].warnPhoto
-        ? "https://wurenji02.oss-cn-beijing.aliyuncs.com/" +
+        ? "https://htwurenji.oss-cn-beijing.aliyuncs.com" +
           this.imgOptions[this.currentIndex - 1].warnPhoto
         : this.imgOptions[this.currentIndex - 1].originUrl;
     },
@@ -371,7 +371,7 @@ export default {
             isLive: true,
             hasAudio: false,
             url:
-              "https://wurenji02.oss-cn-beijing.aliyuncs.com/" +
+              "https://htwurenji.oss-cn-beijing.aliyuncs.com" +
               this.row.recordVideo, // 自己的flv视频流
             enableWorker: false, //启用 Web Worker 进程来加速视频的解码和处理过程
             stashInitialSize: 32 * 1024, // 初始缓存大小。单位：字节。建议针对直播：调整为1024kb
@@ -466,12 +466,12 @@ export default {
       this.imgOptions = filterImgArr.map((item) => {
         return {
           url:
-            "https://wurenji02.oss-cn-beijing.aliyuncs.com/" +
+            "https://htwurenji.oss-cn-beijing.aliyuncs.com" +
             item.objectKey +
             "?x-oss-process=style/200w",
           originUrl: item.warnPhoto
-            ? "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.warnPhoto
-            : "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
+            ? "https://htwurenji.oss-cn-beijing.aliyuncs.com" + item.warnPhoto
+            : "https://htwurenji.oss-cn-beijing.aliyuncs.com" + item.objectKey,
           createTime: item.createTime,
           lat: item.lat,
           lon: item.lon,
@@ -489,7 +489,7 @@ export default {
       this.videoOptions = videoFilterArr.map((item) => {
         return {
           url:
-            "https://wurenji02.oss-cn-beijing.aliyuncs.com/" + item.objectKey,
+            "https://htwurenji.oss-cn-beijing.aliyuncs.com" + item.objectKey,
           createTime: item.createTime,
           name: item.fileName,
         };

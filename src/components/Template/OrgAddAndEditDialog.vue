@@ -179,7 +179,7 @@ export default {
         lat: this.editRow.location ? this.editRow.location.split(",")[1] : "",
       };
       this.imageUrl =
-        "https://wurenji02.oss-cn-beijing.aliyuncs.com/" +
+        "https://htwurenji.oss-cn-beijing.aliyuncs.com" +
         this.form.platformLogo;
     }
   },

@@ -26,7 +26,7 @@
           >
             <img
               v-if="ruleForm.webLogo"
-              :src="'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + ruleForm.webLogo"
+              :src="'https://htwurenji.oss-cn-beijing.aliyuncs.com' + ruleForm.webLogo"
               class="avatar"
             />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -42,7 +42,7 @@
           >
             <img
               v-if="ruleForm.platformLogo"
-              :src="'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + ruleForm.platformLogo"
+              :src="'https://htwurenji.oss-cn-beijing.aliyuncs.com' + ruleForm.platformLogo"
               class="avatar"
             />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -118,7 +118,7 @@ export default {
       gxhByOrgApi(params).then((res) => {
         if (res.code == 200) {
           this.$message.success(res.msg);
-          let webLogo= 'https://wurenji02.oss-cn-beijing.aliyuncs.com/' + params.webLogo;
+          let webLogo= 'https://htwurenji.oss-cn-beijing.aliyuncs.com' + params.webLogo;
           localStorage.setItem('webLogo',webLogo);
           this.$emit("editGXH");
         } else {
