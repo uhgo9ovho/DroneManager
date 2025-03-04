@@ -8,7 +8,7 @@ const ZQL_multivideo = {
             <div class="tips" id="tip0">
               <div class="icon-dot"></div>
               <div class="deviceoffline">
-                <i class="z-icon-jiankonglixian" style="font-size: 40rem"></i>
+                <i class="z-icon-jiankonglixian" style="font-size: 10rem"></i>
                 <span>离线</span>
               </div>
             </div>
@@ -27,7 +27,7 @@ const ZQL_multivideo = {
     let tipel = document.querySelector("#tip" + index);
     tipel.innerHTML = `
       <div class="deviceoffline">
-        <i class="z-icon-jiankonglixian" style="font-size: 40rem"></i>
+        <i class="z-icon-jiankonglixian" style="font-size: 10rem"></i>
         <span>离线</span>
       </div>
     `
@@ -296,6 +296,8 @@ const ZQL_multivideo = {
       ZQL_sources[id].draw_size[1],
       index, id
     );
+    console.log(ZQL_sources[id,'ZQL_sources']);
+    
   },
   setOrisize(width, height, index, id) {
     let container = document.querySelector(".video-box");

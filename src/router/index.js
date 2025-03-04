@@ -111,7 +111,7 @@ export const constantRoutes = [
         path: 'contacts',
         component: () => import('@/views/Contacts.vue'),
         name: 'Contacts',
-        meta: { title: '通讯录', icon: 'el-icon-tongxunlu', auth: ['mngSide:contacts:*'] },
+        meta: { title: '通讯录', icon: 'el-icon-tongxunlu', auth: ['mngSide:contacts'] },
         active: false,
         permissions: ['mngSide:contacts']
       },
