@@ -91,8 +91,8 @@ export default {
       this.$store.commit("SET_ORG_ID", row.orgId);
       this.$store.commit("SET_ORG_WORKSPACEID", row.workspaceId);
       localStorage.setItem("platformName", row.platformName);
-      localStorage.setItem('platformLogo', 'https://htwurenji.oss-cn-beijing.aliyuncs.com' + row.platformLogo);
-      localStorage.setItem('webLogo', 'https://htwurenji.oss-cn-beijing.aliyuncs.com' + row.webLogo);
+      localStorage.setItem('platformLogo', 'https://htwurenji.oss-cn-beijing.aliyuncs.com/' + row.platformLogo);
+      localStorage.setItem('webLogo', 'https://htwurenji.oss-cn-beijing.aliyuncs.com/' + row.webLogo);
       Cookies.set("orgName", row.orgName);
       document.title = row.platformName;
       getInfo(row.orgId, Cookies.get("userId")).then(async (res) => {

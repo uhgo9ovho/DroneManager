@@ -3,7 +3,7 @@
     <div class="info-left">
       <img
         :src="
-          'https://htwurenji.oss-cn-beijing.aliyuncs.com' + row.identifyPhoto
+          'https://htwurenji.oss-cn-beijing.aliyuncs.com/' + row.identifyPhoto
         "
         alt=""
       />

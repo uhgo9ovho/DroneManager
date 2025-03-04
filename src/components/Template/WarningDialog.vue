@@ -147,7 +147,7 @@ export default {
           this.timeOptions = this.sortPhotoList.map((item, index) => {
             if (index === 0) {
               this.url =
-                "https://htwurenji.oss-cn-beijing.aliyuncs.com" + item.pic;
+                "https://htwurenji.oss-cn-beijing.aliyuncs.com/" + item.pic;
             }
             const photoDate = new Date(item.photodate);
 
@@ -181,7 +181,7 @@ export default {
 
             return {
               time: phototime,
-              url: "https://htwurenji.oss-cn-beijing.aliyuncs.com" + item.pic,
+              url: "https://htwurenji.oss-cn-beijing.aliyuncs.com/" + item.pic,
               text: text,
               // phototime:phototime,
               checked: index === 0, // 第一个对象的checked为true

@@ -115,7 +115,7 @@
                 <div class="image-container">
                   <img
                     :src="
-                      'https://htwurenji.oss-cn-beijing.aliyuncs.com' +
+                      'https://htwurenji.oss-cn-beijing.aliyuncs.com/' +
                       item.photoDetail
                     "
                     alt="Problem Photo"
@@ -154,7 +154,7 @@
                 <div class="image-container">
                   <img
                     :src="
-                      'https://htwurenji.oss-cn-beijing.aliyuncs.com' +
+                      'https://htwurenji.oss-cn-beijing.aliyuncs.com/' +
                       item.photoDetail
                     "
                     alt="Problem Photo"
@@ -189,7 +189,7 @@
                 <div class="image-container">
                   <img
                     :src="
-                      'https://htwurenji.oss-cn-beijing.aliyuncs.com' +
+                      'https://htwurenji.oss-cn-beijing.aliyuncs.com/' +
                       item.photoDetail
                     "
                     alt="Problem Photo"
