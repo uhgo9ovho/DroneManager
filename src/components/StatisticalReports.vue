@@ -48,17 +48,22 @@ export default {
         },
         {
           prop: 'flightNum',
-          label: '飞机架次',
+          label: '飞行架次',
           showOverflowTooltip: true
         },
         {
           prop: 'questNum',
-          label: '执行任务数',
+          label: '提交任务数',
           showOverflowTooltip: false
         },
         {
           prop: 'problemNum',
           label: '发现问题数',
+          showOverflowTooltip: false
+        },
+        {
+          prop: 'photoNum',
+          label: '照片',
           showOverflowTooltip: false
         },
         {

@@ -1,7 +1,7 @@
 <template>
   <div class="task-wait-card" :class="{ shikuang: info.schedulingStatus == 1 }">
     <div class="ai-box" v-if="info.aiHosting == 1">
-      <img :src="AIImage" alt="" />
+      <img :src="AIImage" alt=""/>
     </div>
     <div style="flex: 1.7 1 0%">
       <div class="task-time">{{ info.formatTime }} 计划起飞</div>
@@ -11,8 +11,8 @@
     <div class="task-num">
       {{ info.schedule_text }}
       <span class="task-num-error">{{
-        info.scheduledType | filterSchedulingType
-      }}</span>
+          info.scheduledType | filterSchedulingType
+        }}</span>
     </div>
     <!-- 添加排期状态显示 -->
     <div class="scheduling-status">
@@ -24,11 +24,8 @@
     <div
       class="task-btn"
       @click="takeOffBtn"
-      v-if="
-        (info.schedulingStatus === 2 ||
-          info.schedulingStatus === 0 ||
-          info.schedulingStatus === 4)
-      "
+      v-if="isFutureOrToday"
+
       v-permissions="'wurenji:scheduling:fly'"
     >
       <!-- 待执行和已执行 -->
@@ -60,13 +57,15 @@
           <el-dropdown-item
             command="details"
             v-permissions="'wurenji:scheduling:query'"
-            >查看详情</el-dropdown-item
+          >查看详情
+          </el-dropdown-item
           >
           <el-dropdown-item
             command="delete"
             v-if="isShowAddBtn || isToday"
             v-permissions="'wurenji:scheduling:remove'"
-            >删除</el-dropdown-item
+          >删除
+          </el-dropdown-item
           >
         </el-dropdown-menu>
       </el-dropdown>
@@ -85,102 +84,119 @@
 </template>
 
 <script>
-import AIImage from "@/assets/images/AI.png";
-import TakeOffDialog from "./TakeOffDialog.vue";
-import { airLineInfoAPI, taskInfoApI } from "@/api/TaskManager";
+import AIImage from '@/assets/images/AI.png'
+import TakeOffDialog from './TakeOffDialog.vue'
+import { airLineInfoAPI, taskInfoApI } from '@/api/TaskManager'
+
 export default {
-  name: "AirItemInfo",
+  name: 'AirItemInfo',
   components: {
-    TakeOffDialog,
+    TakeOffDialog
   },
   props: {
     info: {
       type: Object,
-      default: () => {},
+      default: () => {
+      }
     },
     dateSHowBtn: {
       type: Boolean,
-      default: false,
+      default: false
     },
     isShowAddBtn: {
       type: Boolean,
-      default: false,
+      default: false
     },
     isToday: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
       dialogVisible: false,
       isDel: false,
-      AIImage: AIImage,
-    };
+      AIImage: AIImage
+    }
   },
   filters: {
     filterSchedulingType(val) {
       switch (val) {
         case 0:
-          return "";
+          return ''
         case 1:
-          return "手动新增";
+          return '手动新增'
         case 3:
-          return "";
+          return ''
         default:
-          break;
+          break
       }
-    },
+    }
   },
   methods: {
     // 将排期状态转换为对应文本
     getSchedulingStatus(status) {
       switch (status) {
         case 0:
-          return "待执行";
+          return '待执行'
         case 1:
-          return "已执行";
+          return '已执行'
         case 2:
-          return "起飞失败";
+          return '起飞失败'
         case 3:
-          return "飞行完成";
+          return '飞行完成'
         case 4:
-          return "飞行任务失败";
+          return '飞行任务失败'
         case 5:
-          return "未飞行";
+          return '未飞行'
         default:
-          return "未知状态";
+          return '未知状态'
       }
     },
     toVideoMap() {
-      this.$router.push("/videoMap");
+      this.$router.push('/videoMap')
     },
     updateData() {
-      this.$emit("updateData");
+      this.$emit('updateData')
     },
     handleCommand(command) {
-      if (command == "details") {
+      if (command == 'details') {
         taskInfoApI(this.info.taskId).then((res) => {
           if (res.code === 200) {
-            this.$emit("openDialog", res.data);
+            this.$emit('openDialog', res.data)
           }
-        });
+        })
       } else {
         //删除
-        this.dialogVisible = true;
-        this.isDel = true;
+        this.dialogVisible = true
+        this.isDel = true
       }
     },
     takeOffBtn() {
-      this.dialogVisible = true;
-      this.isDel = false;
-      console.log(this.info);
+      this.dialogVisible = true
+      this.isDel = false
+      console.log(this.info)
     },
     handleClose() {
-      this.dialogVisible = false;
-    },
+      this.dialogVisible = false
+    }
   },
-};
+  computed: {
+    isFutureOrToday() {
+      if (!this.info.scheduledTime) return false
+
+      const scheduledTime = new Date(this.info.scheduledTime).getTime()
+      const scheduledEndTime = scheduledTime + 60 * 60 * 1000 // 任务时间 + 1 小时
+      const now = new Date().getTime()
+
+      // 获取当天 00:00:00 的时间戳
+      const todayStart = new Date(new Date().setHours(0, 0, 0, 0)).getTime()
+      const todayEnd = todayStart + 24 * 60 * 60 * 1000 - 1
+
+      return (scheduledTime >= now && scheduledTime >= todayStart && scheduledTime <= todayEnd) || (scheduledEndTime >= now && scheduledTime <= now)
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -188,6 +204,7 @@ export default {
   background: #000 !important;
   color: #fff !important;
 }
+
 .task-wait-card {
   flex: 1;
   height: 60px;
@@ -203,30 +220,36 @@ export default {
   padding-left: 30px;
   padding-right: 48px;
   color: #6e6e73;
+
   .ai-box {
     width: 30px;
     height: 30px;
     margin-right: 30px;
+
     img {
       width: 100%;
       height: 100%;
     }
   }
+
   .task-time {
     font-size: 12px;
     font-weight: 500;
   }
+
   .task-name2 {
     font-weight: 500;
     font-size: 14px;
     margin-top: 4px;
   }
+
   .task-num {
     font-weight: 400;
     font-size: 13px;
     line-height: 13px;
     margin-left: 6px;
     flex: 1.4;
+
     .task-num-error {
       font-weight: 400;
       font-size: 13px;
@@ -235,6 +258,7 @@ export default {
       color: #e30000;
     }
   }
+
   .task-btn {
     cursor: pointer;
     display: flex;
@@ -248,6 +272,7 @@ export default {
     background-color: #fff;
     color: #0271e3;
   }
+
   .task-btn2 {
     cursor: pointer;
     display: flex;
@@ -261,20 +286,24 @@ export default {
     background-color: #000;
     color: #fff;
   }
+
   .task-change {
     font-weight: 400;
     font-size: 13px;
     line-height: 13px;
     flex: 0.8;
   }
+
   .hidden {
     visibility: hidden;
   }
+
   .task-menu {
     color: #0271e3;
     font-size: 22px;
     padding: 20px;
     cursor: pointer;
+
     .el-dropdown-link {
       width: 24px;
       height: 24px;
