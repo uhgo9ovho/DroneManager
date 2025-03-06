@@ -48,6 +48,7 @@ import {
 } from "@/api/AIModel.js";
 import AIBoxMqtt from "@/utils/AIBOX/index.js";
 let player = null;
+let srsrtc = null;
 export default {
   props: {
     droneStreamUrl: {
@@ -91,7 +92,7 @@ export default {
     return {
       showVideo: false,
       AIToken: "",
-      srsrtc: null,
+      
     };
   },
   watch: {
@@ -157,8 +158,8 @@ export default {
       });
     },
     async initWebRtcPlayer() {
-      if (this.srsrtc) {
-        this.srsrtc.destroy();
+      if (srsrtc) {
+        srsrtc.destroy();
       }
       try {
         const resToken = await getAITokenAPI();
@@ -226,7 +227,7 @@ export default {
         let videoDom = document.getElementById("jswebrtc");
         AIBoxMqtt.detectSrs();
         AIBoxMqtt.connectMqtt();
-        this.srsrtc = new JSWebrtc.Player(this.webRtc, {
+        srsrtc = new JSWebrtc.Player(this.webRtc, {
           video: videoDom,
           autoplay: true,
           onPlay: (obj) => {
