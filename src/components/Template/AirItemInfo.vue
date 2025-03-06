@@ -24,7 +24,7 @@
     <div
       class="task-btn"
       @click="takeOffBtn"
-      v-if="isFutureOrToday"
+      v-if="isNowOrToday"
 
       v-permissions="'wurenji:scheduling:fly'"
     >
@@ -182,7 +182,7 @@ export default {
     }
   },
   computed: {
-    isFutureOrToday() {
+    isNowOrToday() {
       if (!this.info.scheduledTime) return false
 
       const scheduledTime = new Date(this.info.scheduledTime).getTime()

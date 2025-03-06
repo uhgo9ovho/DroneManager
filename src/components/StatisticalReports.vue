@@ -72,7 +72,7 @@ export default {
           showOverflowTooltip: false
         },
         {
-          prop: 'threeDimensionalNum',
+          prop: 'threedimensionalNum',
           label: '三维',
           showOverflowTooltip: false
         },
