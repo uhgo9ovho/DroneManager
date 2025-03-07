@@ -141,14 +141,14 @@ export default {
           {
             prop: "taskName",
             label: "任务名称/类型",
-            showOverflowTooltip: true,
+            showOverflowTooltip: false,
             slot: true,
             minWidth: "220",
           },
           {
             prop: "airportName",
             label: "机场",
-            showOverflowTooltip: true,
+            showOverflowTooltip: false,
           },
           {
             prop: "creater",
@@ -175,14 +175,14 @@ export default {
           {
             prop: "taskName",
             label: "任务名称/类型",
-            showOverflowTooltip: true,
+            showOverflowTooltip: false,
             slot: true,
             minWidth: "220",
           },
           {
             prop: "airportName",
             label: "机场",
-            showOverflowTooltip: true,
+            showOverflowTooltip: false,
           },
           {
             prop: "creater",

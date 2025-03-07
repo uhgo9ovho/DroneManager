@@ -25,7 +25,6 @@
       class="task-btn"
       @click="takeOffBtn"
       v-if="isNowOrToday"
-
       v-permissions="'wurenji:scheduling:fly'"
     >
       <!-- 待执行和已执行 -->
@@ -116,7 +115,9 @@ export default {
     return {
       dialogVisible: false,
       isDel: false,
-      AIImage: AIImage
+      AIImage: AIImage,
+      currentTime: new Date().getTime(),
+      timer: null
     }
   },
   filters: {
@@ -140,7 +141,7 @@ export default {
         case 0:
           return '待执行'
         case 1:
-          return '已执行'
+          return '执行中'
         case 2:
           return '起飞失败'
         case 3:
@@ -181,13 +182,28 @@ export default {
       this.dialogVisible = false
     }
   },
+  mounted() {
+    // 创建定时器，每分钟更新一次当前时间
+    this.timer = setInterval(() => {
+      this.currentTime = new Date().getTime();
+    }, 60000); // 60000ms = 1分钟
+  },
+  beforeDestroy() {
+    // 组件销毁前清除定时器
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+  },
   computed: {
     isNowOrToday() {
       if (!this.info.scheduledTime) return false
+      
+      // 如果排期状态为"执行中"，不显示起飞按钮
+      if (this.info.schedulingStatus === 1) return false
 
       const scheduledTime = new Date(this.info.scheduledTime).getTime()
       const scheduledEndTime = scheduledTime + 60 * 60 * 1000 // 任务时间 + 1 小时
-      const now = new Date().getTime()
+      const now = this.currentTime // 使用响应式数据属性
 
       // 获取当天 00:00:00 的时间戳
       const todayStart = new Date(new Date().setHours(0, 0, 0, 0)).getTime()
