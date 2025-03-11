@@ -50,13 +50,6 @@ let ZQL_playingSource = {
     videoNum: 1,
     curposition: -1
 }
-function getCameraSize(id, index) {
-    setOrisize(
-        ZQL_sources[id].draw_size[0],
-        ZQL_sources[id].draw_size[1],
-        index, id
-    );
-}
 function destoryVideoByIndex() {
     ZQL_multivideo.clearCanvas(0);
     if (ZQL_videosInfos[0]) {
@@ -117,71 +110,6 @@ function replayflv(srsrtc, cameraId) {
         }, 3000);
     }
 }
-function playVideo(cameraId) {
-    if (ZQL_videosInfos[0].srsrtc) {
-        return;
-    }
-    ZQL_videosInfos[0].loading = true;
-
-    let video = document.getElementById("jswebrtc");
-    let stream = ZQL_videosInfos[0].stream;
-    var srsrtc;
-    if (stream.indexOf("webrtc") >= 0) {
-        let videosrc =
-            "webrtc://" + ZQLGLOBAL.serverIp + "/live" + stream.split("/live")[1];
-        srsrtc = new JSWebrtc.Player(videosrc, {
-            video: video,
-            autoplay: true,
-            onPlay: (obj) => {
-                ZQL_multivideo.liveStopLoading(0);
-                ZQL_videosInfos[0].loading = false;
-                ZQL_videosInfos[0].playerState = "success";
-
-                if (ZQL_videosInfos[0].refreshTimeInterval) {
-                    clearInterval(ZQL_videosInfos[0].refreshTimeInterval);
-                }
-                ZQL_videosInfos[0].refreshTime =
-                    parseInt((Math.random() * 5 + 5) * 1000) * 60;
-            },
-        });
-    } else if (stream.indexOf(".flv") >= 0) {
-        let videosrc = `http://${ZQLGLOBAL.serverIp}:${ZQLGLOBAL.srs_http_server}/live${stream.split("/live")[1]
-            }`;
-        srsrtc = mpegts.createPlayer(
-            {
-                type: "flv",
-                url: videosrc,
-                isLive: true,
-            },
-            { enableWorker: true }
-        );
-        srsrtc.attachMediaElement(video);
-        srsrtc.load();
-
-        srsrtc
-            .play()
-            .then((res) => {
-                ZQL_multivideo.liveStopLoading(0);
-                ZQL_videosInfos[0].playerState = "success";
-                ZQL_videosInfos[0].loading = false;
-                if (ZQL_videosInfos[0].refreshTimeInterval) {
-                    clearInterval(ZQL_videosInfos[0].refreshTimeInterval);
-                }
-            })
-            .catch((err) => { });
-        if (ZQL_videosInfos[0].replayTimer) {
-            clearTimeout(ZQL_videosInfos[0].replayTimer);
-        }
-        ZQL_videosInfos[0].replayTimer = setTimeout(() => {
-            replayflv(srsrtc, cameraId, 0);
-        }, 3000);
-    } else {
-        video.src = "staticdata/" + stream.split("/home/linaro/ks/")[1];
-    }
-
-    ZQL_videosInfos[0].srsrtc = srsrtc;
-
-}
 function setOrisize(width, height, id) {
     let container = document.querySelector(".wrap_window");
     if (!container) {
@@ -234,10 +162,10 @@ function setOrisize(width, height, id) {
         setPosition(0);
     }
 }
-function setPosition() {
+function setPosition(index) {
     let container = document.querySelector(".wrap_window");
     let video = document.querySelector("#jswebrtc");
-    let canvas = document.getElementById("canvas");
+    let canvas = document.getElementById("canvas_aibox");
     let width = ZQL_videosInfos[0].actualWidth, height = ZQL_videosInfos[index].actualHeight;
     video.style.position = "absolute";
     video.style.width = width + "px";
@@ -260,8 +188,8 @@ function setPosition() {
 }
 function connectMqtt() {
     // let mqttclient = connect(`ws://${ZQLGLOBAL.serverIp}:${ZQLGLOBAL.websocket}/mqtt`);
-    let mqttclient = connect(`wss://jky.szyfu.com:6799/mqttaa`);
-    mqttclient.subscribe(
+    let mqttclient = connect(`ws://47.96.97.42:28083/mqtt`);
+        mqttclient.subscribe(
         ZQLGLOBAL.resultTopic,
         { qos: 0 },
         (error) => {
@@ -282,6 +210,7 @@ function connectMqtt() {
     });
 };
 function setAlarms(data) {
+    
     clearCanvas();
     if (ZQL_videosInfos[0] && !ZQL_videosInfos[0].canvas) {
         ZQL_videosInfos[0].canvas = document.getElementById("canvas_aibox")
@@ -297,30 +226,33 @@ function setAlarms(data) {
     }
     // let bbox = data.result.data.bbox;
     let bbox = data.bbox;
-    if (Object.values(bbox.polygons).length > 0) {
-        Object.values(bbox.polygons).forEach((item) => {
-            let color = JSON.parse(JSON.stringify(item.color)).reverse();
-            let points = item.polygon.map((point) => {
-                return [
-                    Math.round(
-                        (point[0] * ZQL_videosInfos[0].actualWidth) /
-                        ZQL_videosInfos[0].oriWidth
-                    ),
-                    Math.round(
-                        (point[1] * ZQL_videosInfos[0].actualHeight) /
-                        ZQL_videosInfos[0].oriHeight
-                    ),
-                ];
-            });
-            let context = ZQL_videosInfos[0].canvas.getContext("2d");
-            context.font = "20px Arial bolder";
-            context.fillStyle = "transparent";
-            context.strokeStyle = "rgb(" + color.join(",") + ")";
-            context.lineWidth = 2;
-            drawPolygons(points, context);
-            drawPolygonInfo(context, Object.values(bbox.polygons), 0);
-        });
-    }
+    //取消篮框
+    
+    // if (Object.values(bbox.polygons).length > 0) {
+    //     Object.values(bbox.polygons).forEach((item) => {
+    //         let color = JSON.parse(JSON.stringify(item.color)).reverse();
+    //         let points = item.polygon.map((point) => {
+    //             return [
+    //                 Math.round(
+    //                     (point[0] * ZQL_videosInfos[0].actualWidth) /
+    //                     ZQL_videosInfos[0].oriWidth
+    //                 ),
+    //                 Math.round(
+    //                     (point[1] * ZQL_videosInfos[0].actualHeight) /
+    //                     ZQL_videosInfos[0].oriHeight
+    //                 ),
+    //             ];
+    //         });
+    //         let context = ZQL_videosInfos[0].canvas.getContext("2d");
+    //         context.font = "20px Arial bolder";
+    //         context.fillStyle = "transparent";
+    //         context.strokeStyle = "rgb(" + color.join(",") + ")";
+    //         context.lineWidth = 0;
+
+    //         drawPolygons(points, context);
+    //         drawPolygonInfo(context, Object.values(bbox.polygons), 0);
+    //     });
+    // }
 
     if (bbox.rectangles.length > 0) {
         bbox.rectangles.forEach((item, i) => {
@@ -544,5 +476,6 @@ function detectSrs() {
 export default {
     connectMqtt,
     detectSrs,
-    clearCanvas
+    clearCanvas,
+    setOrisize
 };

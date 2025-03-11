@@ -600,7 +600,8 @@ export default {
         if (res.code === 200) {
           const token = res.data.data["ws-token"];
           this.ws = new WebSocketClient(
-            `${process.env.VUE_APP_WS_URL}?ws-token=${token}` //本地
+            // `${process.env.VUE_APP_WS_URL}?ws-token=${token}` //本地
+            `ws://47.96.97.42:6789/api/v1/ws?ws-token=${token}` //本地
           );
         }
       });

@@ -12,7 +12,7 @@
           id="jswebrtc"
           ref="jswebrtc"
           controls
-          style="width: 100%; height: 100%; object-fit: fill"
+          style="width: 100%; height: 100%"
         ></video>
       </div>
       <canvas class="canvas-shuju" id="canvas_aibox"></canvas>
@@ -92,7 +92,6 @@ export default {
     return {
       showVideo: false,
       AIToken: "",
-      
     };
   },
   watch: {
@@ -119,6 +118,7 @@ export default {
   },
   mounted() {
     // this.initWebRtcPlayer();
+    this.clearcanvas();
   },
   methods: {
     clearcanvas() {
@@ -145,7 +145,7 @@ export default {
               playsinline: true,
               preload: true,
               license: {
-                domain: "jky.szyfu.com", // 申请 License 时填写的域名
+                domain: "ht.aitimp.com", // 申请 License 时填写的域名
                 key: "dPzLKTbJSeu1aRyexef24a6e5308f43fc9d495acef1a08f0f", // 申请成功后，在控制台可以看到 License Key
               },
             },
@@ -215,6 +215,7 @@ export default {
     async sub(subParams) {
       const subRes = await subscribeLiveAPI(subParams);
       const subResData = subRes.data;
+      const id = subParams.deviceId + "_" + subParams.streamId;
       if (subResData.error_code != 0) {
         // this.sub(subParams); // Retry logic
         this.$message.error(subResData.message.zh);
@@ -227,6 +228,7 @@ export default {
         let videoDom = document.getElementById("jswebrtc");
         AIBoxMqtt.detectSrs();
         AIBoxMqtt.connectMqtt();
+        AIBoxMqtt.setOrisize(1920, 1080, id);
         srsrtc = new JSWebrtc.Player(this.webRtc, {
           video: videoDom,
           autoplay: true,
@@ -343,6 +345,8 @@ export default {
     }
   }
   .wrap_window {
+    width: 100%;
+    height: 100%;
     bottom: 0;
     right: 0;
     border-radius: 6px;

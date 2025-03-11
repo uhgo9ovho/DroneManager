@@ -72,7 +72,7 @@ export default {
         console.log(result, "result");
         if (result.code === 200) {
           // this.url =
-          //   "https://jky.szyfu.com:9003" +
+          //   "https://ht.aitimp.com:9003" +
           //   result.data.dockStream.outsideStream.flv;
           this.url = 'https://ht.aitimp.com:9003/video/wrjFlyDock/7CTDLCE00A6Y68.flv'
           this.initEasyPlayer();
@@ -98,7 +98,7 @@ export default {
           playsinline: true,
           preload: true,
           license: {
-            domain: "jky.szyfu.com", // 申请 License 时填写的域名
+            domain: "ht.aitimp.com", // 申请 License 时填写的域名
             key: "dPzLKTbJSeu1aRyexef24a6e5308f43fc9d495acef1a08f0f", // 申请成功后，在控制台可以看到 License Key
           },
         },
