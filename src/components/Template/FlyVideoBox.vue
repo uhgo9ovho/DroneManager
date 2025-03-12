@@ -185,7 +185,7 @@ export default {
             };
 
             const result = await getSourceAPI(sourceParams);
-            if (result.code === 500) return this.$message.warning(result.msg);
+            if (result.code === 500) return 
             const res = result.data;
             ZQLGLOBAL.serverIp = res.url;
 
@@ -217,7 +217,6 @@ export default {
       const subResData = subRes.data;
       const id = subParams.deviceId + "_" + subParams.streamId;
       if (subResData.error_code != 0) {
-        // this.sub(subParams); // Retry logic
         this.$message.error(subResData.message.zh);
         return;
       }
@@ -226,20 +225,82 @@ export default {
         this.webRtc = subResData.data;
 
         let videoDom = document.getElementById("jswebrtc");
+        const canvas = document.getElementById("canvas_aibox");
+        
+        // 新的尺寸同步逻辑
+        const syncCanvasSize = () => {
+          // 获取视频原始宽高比
+          const videoRatio = videoDom.videoWidth / videoDom.videoHeight;
+          // 获取容器尺寸
+          const containerWidth = videoDom.clientWidth;
+          const containerHeight = videoDom.clientHeight;
+          const containerRatio = containerWidth / containerHeight;
+
+          let renderWidth, renderHeight, offsetX, offsetY;
+
+          // 计算实际渲染区域
+          if (containerRatio > videoRatio) {
+            // 上下黑边情况
+            renderHeight = containerHeight;
+            renderWidth = containerHeight * videoRatio;
+            offsetX = (containerWidth - renderWidth) / 2;
+            offsetY = 0;
+          } else {
+            // 左右黑边情况
+            renderWidth = containerWidth;
+            renderHeight = containerWidth / videoRatio;
+            offsetX = 0;
+            offsetY = (containerHeight - renderHeight) / 2;
+          }
+
+          // 设置canvas尺寸和位置
+          canvas.style.width = `${renderWidth}px`;
+          canvas.style.height = `${renderHeight}px`;
+          canvas.style.left = `${offsetX}px`;
+          canvas.style.top = `${offsetY}px`;
+          
+          // 设置画布像素尺寸（考虑设备像素比）
+          const dpr = window.devicePixelRatio || 1;
+          canvas.width = renderWidth * dpr;
+          canvas.height = renderHeight * dpr;
+          
+          // 更新AIBox参数（使用视频原始分辨率）
+          AIBoxMqtt.setOrisize(videoDom.videoWidth, videoDom.videoHeight, id);
+        };
+
+        // 初始化同步
+        syncCanvasSize();
+        
+        // 添加事件监听
+        const resizeHandler = () => {
+          syncCanvasSize();
+          // 添加requestAnimationFrame确保在渲染后执行
+          requestAnimationFrame(() => {
+            // AIBoxMqtt.redrawCanvas(); // 需要确保AIBoxMqtt有重绘方法
+          });
+        };
+        
+        window.addEventListener('resize', resizeHandler);
+        videoDom.addEventListener('resize', resizeHandler); // 监听视频尺寸变化
+
         AIBoxMqtt.detectSrs();
         AIBoxMqtt.connectMqtt();
-        AIBoxMqtt.setOrisize(1920, 1080, id);
         srsrtc = new JSWebrtc.Player(this.webRtc, {
           video: videoDom,
           autoplay: true,
           onPlay: (obj) => {
             videoDom.addEventListener("canplay", function () {
+              // 每次播放时重新同步尺寸
+              syncCanvasSize();
               videoDom.play().catch((err) => {
                 console.error("Error playing video: ", err);
               });
             });
           },
-          onPause: (obj) => {},
+          onDestroy: () => {
+            window.removeEventListener('resize', resizeHandler);
+            videoDom.removeEventListener('resize', resizeHandler);
+          }
         });
       }
     },
@@ -360,5 +421,11 @@ export default {
       display: none !important;
     }
   }
+}
+
+.canvas-shuju {
+  position: absolute;
+  pointer-events: none; /* 避免遮挡视频操作 */
+  transform-origin: left top; /* 确保定位基准点 */
 }
 </style>
